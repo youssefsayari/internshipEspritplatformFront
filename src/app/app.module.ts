@@ -12,7 +12,6 @@ import { ComponentsModule } from './components/components.module';
 import { AppComponent } from './app.component';
 
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
-import { MeetingComponent } from './meeting/meeting.component';
 
 @NgModule({
   imports: [
@@ -28,8 +27,7 @@ import { MeetingComponent } from './meeting/meeting.component';
   declarations: [
     AppComponent,
     AdminLayoutComponent,
-    MeetingComponent
-
+    
   ],
   providers: [],
   bootstrap: [AppComponent]
