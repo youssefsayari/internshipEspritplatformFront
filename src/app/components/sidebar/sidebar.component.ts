@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MeetingComponent } from '../meeting/meeting.component';
 
 declare interface RouteInfo {
     path: string;
@@ -8,6 +9,9 @@ declare interface RouteInfo {
 }
 export const ROUTES: RouteInfo[] = [
     { path: '/dashboard', title: 'Dashboard',  icon: 'design_app', class: '' },
+    { path: '/meeting', title: 'Meeting',  icon:'education_atom', class: '' },
+
+
     { path: '/icons', title: 'Icons',  icon:'education_atom', class: '' },
     { path: '/maps', title: 'Maps',  icon:'location_map-big', class: '' },
     { path: '/notifications', title: 'Notifications',  icon:'ui-1_bell-53', class: '' },

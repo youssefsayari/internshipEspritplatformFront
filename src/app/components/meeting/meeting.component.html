@@ -1,0 +1,53 @@
+<div class="panel-header panel-header-sm"></div>
+<div class="main-content">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h4 class="card-title">Meetings List</h4>
+          <button class="btn btn-primary" (click)="showAddMeetingForm()">Add Meeting</button>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead class="text-primary">
+                <th>Date</th>
+                <th>Hour</th>
+                <th>Type</th>
+                <th class="text-right">Action</th>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>2024-02-10</td>
+                  <td>10:00 AM</td>
+                  <td>Team Meeting</td>
+                  <td class="text-right">
+                    <button class="btn btn-success btn-sm">Approve</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>2024-02-11</td>
+                  <td>02:30 PM</td>
+                  <td>Project Review</td>
+                  <td class="text-right">
+                    <button class="btn btn-success btn-sm">Approve</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>2024-02-12</td>
+                  <td>09:00 AM</td>
+                  <td>Client Discussion</td>
+                  <td class="text-right">
+                    <button class="btn btn-success btn-sm">Approve</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <app-add-meeting *ngIf="isFormVisible" (close)="isFormVisible = false"></app-add-meeting>
+    </div>
+  </div>
+</div>
