@@ -8,6 +8,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { MeetingComponent } from './meeting/meeting.component';
 import { AddMeetingComponent } from './add-meeting/add-meeting.component';
+import { TasksListComponent } from './tasks/tasks-list/tasks-list.component';
 
 @NgModule({
   imports: [
@@ -20,7 +21,8 @@ import { AddMeetingComponent } from './add-meeting/add-meeting.component';
     NavbarComponent,
     SidebarComponent,
     MeetingComponent,
-    AddMeetingComponent
+    AddMeetingComponent,
+    TasksListComponent
   ],
   exports: [
     FooterComponent,
