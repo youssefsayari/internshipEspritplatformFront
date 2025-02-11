@@ -1,0 +1,62 @@
+/* Style pour le bouton avec signe plus */
+.btn-circle {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    background-color: #007bff;
+    border: none;
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+.btn-circle:hover {
+    background-color: #0056b3; /* Changer la couleur au survol */
+}
+
+.btn-circle i {
+    font-size: 18px; /* Taille du signe plus */
+}
+
+/* Style pour les cartes des événements */
+.event-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+.event-card .card-body {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    height: 100%;
+}
+
+.event-card .card-content {
+    flex-grow: 1; /* Permet au contenu de grandir et occuper l'espace restant */
+}
+
+.event-card .card-img-top {
+    max-height: 200px;
+    object-fit: cover;
+}
+
+/* Style pour l'en-tête des événements */
+.events-header {
+    font-size: 30px; /* Taille de police plus grande */
+    font-weight: bold; /* Met le texte en gras */
+    text-align: center; /* Centre le texte */
+    color: #343a40; /* Couleur sombre pour un meilleur contraste */
+    background-color: #f1f1f1; /* Fond clair */
+    padding: 15px 0; /* Espacement vertical */
+    border-radius: 8px; /* Bords arrondis */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Ombre douce */
+    margin-bottom: 20px; /* Espace sous le titre */
+    letter-spacing: 1px; /* Espacement des lettres pour une meilleure lisibilité */
+    font-family: 'Arial', sans-serif; /* Police élégante */
+}
