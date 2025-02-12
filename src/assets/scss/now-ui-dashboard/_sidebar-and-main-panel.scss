@@ -180,7 +180,10 @@
         position: relative;
         padding: $padding-base-vertical $padding-base-horizontal;
         z-index: 4;
-
+        display: flex;
+        justify-content: center; /* Centre horizontalement */
+        align-items: center; /* Centre verticalement */
+        height: 100px; /* Ajuste la hauteur si nécessaire */
         a.logo-mini,
         a.logo-normal{
             @extend .animation-transition-general;
@@ -245,8 +248,8 @@
         overflow: hidden;
 
         img{
-            width: 60px;
-            height: 60px;
+          max-width: 100px; /* Ajuste la taille du logo */
+          height: auto;
         }
     }
 

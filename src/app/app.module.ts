@@ -12,6 +12,9 @@ import { ComponentsModule } from './components/components.module';
 import { AppComponent } from './app.component';
 
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
+import { GraduationInternshipComponent } from './internship/graduation-internship/graduation-internship.component';
+import { SummerInternshipComponent } from './internship/summer-internship/summer-internship.component';
+
 
 @NgModule({
   imports: [
@@ -26,7 +29,9 @@ import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.compon
   ],
   declarations: [
     AppComponent,
-    AdminLayoutComponent
+    AdminLayoutComponent,
+    GraduationInternshipComponent,
+    SummerInternshipComponent
 
   ],
   providers: [],
