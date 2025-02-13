@@ -1,0 +1,236 @@
+/* 🔹 Timeline card */
+.timeline-card {
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  transition: all 0.3s ease-in-out;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* Animation d'apparition de la timeline */
+.timeline-card.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Hover effect pour la timeline */
+.timeline-card:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 🔹 Conteneur d'évaluation par étoiles */
+
+.rate-text {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.star-icon {
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, opacity 0.3s ease;
+}
+
+.star-icon:hover {
+  transform: scale(1.2);
+}
+
+.star {
+  transition: transform 0.2s ease-in-out;
+}
+
+.star.active {
+  fill: #f39c12;
+  transition: transform 0.2s ease-in-out, fill 0.3s ease;
+}
+
+.star.inactive {
+  fill: #bdc3c7;
+}
+
+.star-icon:hover .star.inactive {
+  fill: #f39c12;
+}
+
+.star-icon:hover .star.active {
+  fill: #f39c12;
+}
+
+.star-icon:active {
+  transform: scale(0.95);
+}
+
+.rating-container {
+  display: flex;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.rating-container svg {
+  width: 24px;
+  height: 24px;
+  transition: transform 0.2s ease, fill 0.2s ease;
+}
+
+.rating-container svg:hover {
+  transform: scale(1.2);
+  fill: #f39c12;
+}
+/* Style du message de remerciement */
+.feedback-message {
+  padding: 10px 20px;
+  color: red ; /* Texte blanc */
+  border-radius: 8px; /* Bordures arrondies */
+  font-size: 16px; /* Taille du texte */
+  font-weight: bold; /* Texte en gras */
+  text-align: center; /* Centrer le texte */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombre portée */
+  opacity: 0; /* Commence avec une opacité nulle */
+  transform: translateY(-10px); /* Positionnement initial */
+  animation: fadeInUp 0.5s forwards; /* Animation */
+  margin-top: 10px;
+}
+
+/* Animation pour faire apparaître le message */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Option pour ajuster la taille sur les petits écrans */
+@media (max-width: 576px) {
+  .feedback-message {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 🔹 Conteneur des commentaires */
+.comment {
+  background-color: #f9f9f9;
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  border-left: 5px solid #ff0000;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  word-break: break-word;
+  transition: all 0.3s ease;
+}
+
+.comment:hover {
+  background-color: #f1f1f1;
+  transform: translateX(5px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Avatar de l'utilisateur du commentaire */
+.comment img {
+  width: 35px;
+  height: 35px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+/* Contenu du commentaire */
+.comment p {
+  margin-bottom: 0;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+/* Nom de l'utilisateur du commentaire */
+.comment strong {
+  color: #ff1900;
+  font-weight: 600;
+}
+
+/* 🔹 Input et bouton d'ajout de commentaire */
+.comment-input {
+  border-radius: 20px;
+  background-color: #f1f1f1;
+  padding: 12px;
+  border: 1px solid #ddd;
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.comment-input:hover {
+  background-color: #e1e1e1;
+  transform: scale(1.02);
+}
+
+.comment-input textarea {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 1rem;
+  color: #333;
+  width: 100%;
+  resize: vertical;
+  min-height: 40px;
+  max-height: 200px;
+  word-wrap: break-word;
+}
+
+.comment-input button {
+  background-color: #ff0000;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 18px;
+  margin-left: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.comment-input button:hover {
+  background-color: #ff2a00;
+}
+
+.comment-input button:active {
+  transform: scale(0.98);
+}

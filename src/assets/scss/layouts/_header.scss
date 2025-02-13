@@ -1,0 +1,42 @@
+@use "../variables" as *;
+
+html .topbar {
+  background-color: var(--mat-sys-primary);
+  position: sticky;
+  top: 60px;
+  z-index: 9;
+  height: $header-height;
+  box-shadow: var(--mat-sys-level2);
+
+  @media (max-width: 1199px){
+    top: 97px;
+  }
+
+  .mat-mdc-icon-button {
+    color: $white;
+  }
+}
+
+.branding {
+  width: $sidenav-desktop;
+}
+
+.topbar-dd {
+  min-width: 220px !important;
+}
+
+.upgrade-bg {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  height: 100%;
+}
+
+.object-cover {
+  object-fit: cover;
+}
+
+.profile-dd {
+  margin-top: -5px;
+  margin-left: -5px;
+}

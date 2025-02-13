@@ -1,0 +1,108 @@
+
+
+
+
+
+
+
+
+
+
+
+
+/* Style général de la carte */
+.cardWithShadow {
+    border-radius: 8px; /* Bordures arrondies */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre portée légère */
+    background-color: #fff; /* Fond blanc */
+    overflow: hidden; /* Pour gérer les débordements */
+    margin: 20px; /* Espacement autour de la carte */
+    width: 100%; /* Assurez-vous que la carte prend toute la largeur disponible */
+  }
+  
+  /* Style de l'image de fond */
+  .profile-bg-height {
+    width: 100%;
+    height: 200px;
+    object-fit: cover; /* Pour que l'image couvre bien l'espace sans déformer */
+  }
+  
+  /* Contenu de la carte */
+  .card-content {
+    padding: 24px;
+    text-align: center;
+  }
+  
+  /* Style de l'image du profil */
+  .pro-img img {
+    border-radius: 50%;
+    border: 4px solid #fff; /* Bordure blanche autour de l'image */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombre légère autour de l'image */
+  }
+  
+  /* Style des titres */
+  .f-s-20 {
+    font-size: 20px;
+  }
+  
+  .f-s-14 {
+    font-size: 14px;
+  }
+  
+  .f-w-500 {
+    font-weight: 500;
+  }
+  
+  .f-w-400 {
+    font-weight: 400;
+  }
+  
+  .m-t-30 {
+    margin-top: 30px;
+  }
+  
+  .m-b-0 {
+    margin-bottom: 0;
+  }
+  
+  .m-b-4 {
+    margin-bottom: 4px;
+  }
+  
+  /* Style du bouton Follow */
+  .follow-button {
+    background-color: #ff0000;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .follow-button:hover {
+    background-color: #b30000; /* Changement de couleur au survol */
+  }
+  
+  /* Disposition des colonnes */
+  .row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .col-4 {
+    flex: 1;
+    text-align: center;
+  }
+  
+  /* Ajout de l'espacement vertical et horizontal */
+  .m-y-10 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .p-24 {
+    padding: 24px;
+  }
+  
