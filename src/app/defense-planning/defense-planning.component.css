@@ -1,0 +1,9 @@
+.full-width {
+    width: 100%;
+  }
+  
+  mat-form-field {
+    display: block;
+    margin-bottom: 15px;
+  }
+  
