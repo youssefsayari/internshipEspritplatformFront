@@ -8,7 +8,7 @@ declare interface RouteInfo {
     class: string;
 }
 export const ROUTES: RouteInfo[] = [
-    { path: '/dashboard', title: 'Dashboard',  icon: 'design_app', class: '' },
+    /*{ path: '/dashboard', title: 'Dashboard',  icon: 'design_app', class: '' },
     { path: '/meeting', title: 'Meeting',  icon:'education_atom', class: '' },
     { path: '/tasks', title: 'Tasks',  icon:'location_map-big', class: '' },
 
@@ -21,7 +21,12 @@ export const ROUTES: RouteInfo[] = [
     { path: '/user-profile', title: 'User Profile',  icon:'users_single-02', class: '' },
     { path: '/table-list', title: 'Table List',  icon:'design_bullet-list-67', class: '' },
     { path: '/typography', title: 'Typography',  icon:'text_caps-small', class: '' },
-    { path: '/upgrade', title: 'Upgrade to PRO',  icon:'objects_spaceship', class: 'active active-pro' }
+    { path: '/upgrade', title: 'Upgrade to PRO',  icon:'objects_spaceship', class: 'active active-pro' }*/
+    { path: '/My meeting', title: 'My Meeting', icon: 'education_atom', class: '' },
+    { path: '/My Students', title: 'My Students', icon: 'location_map-big', class: '' },
+    { path: '/My internships', title: 'My Internships', icon: 'business_briefcase-24', class: '' },
+    { path: '/My defenses', title: 'My Defenses', icon: 'design_app', class: '' },
+    { path: '/feedback', title: 'Feedback', icon: 'ui-1_bell-53', class: '' },
 
 ];
 

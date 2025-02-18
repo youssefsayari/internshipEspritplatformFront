@@ -12,16 +12,13 @@ import { MeetingComponent } from '../../components/meeting/meeting.component';
 import { TasksListComponent } from '../../components/tasks/tasks-list/tasks-list.component';
 
 export const AdminLayoutRoutes: Routes = [
-    { path: 'dashboard',      component: DashboardComponent },
-    { path: 'user-profile',   component: UserProfileComponent },
-    { path: 'table-list',     component: TableListComponent },
-    { path: 'typography',     component: TypographyComponent },
-    { path: 'icons',          component: IconsComponent },
-    { path: 'maps',           component: MapsComponent },
-    { path: 'notifications',  component: NotificationsComponent },
-    { path: 'upgrade',        component: UpgradeComponent },
-    { path: 'meeting',        component: MeetingComponent },
-    { path: 'tasks',        component: TasksListComponent },
+   
+    { path: 'My meeting',        component: MeetingComponent },
+    { path: 'My Students',        component: TasksListComponent },
+    { path: 'My internships',      component: DashboardComponent },
+    { path: 'My defenses',   component: UserProfileComponent },
+    { path: 'feedback',     component: TableListComponent },
+   
 
 
     
