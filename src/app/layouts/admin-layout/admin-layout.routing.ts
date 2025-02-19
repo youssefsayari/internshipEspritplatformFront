@@ -10,8 +10,10 @@ import { NotificationsComponent } from '../../notifications/notifications.compon
 import { UpgradeComponent } from '../../upgrade/upgrade.component';
 import { AgreementComponent } from '../../agreement/agreement.component';
 import { InternshipComponent } from '../../internship/internship.component';
+import {LoginComponent} from "../../login/login.component";
 
 export const AdminLayoutRoutes: Routes = [
+    { path: 'login',      component: LoginComponent },
     { path: 'dashboard',      component: DashboardComponent },
     { path: 'user-profile',   component: UserProfileComponent },
     { path: 'table-list',     component: TableListComponent },
