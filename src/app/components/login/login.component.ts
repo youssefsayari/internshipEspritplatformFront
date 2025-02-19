@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {IntegrationService} from "../services/integration.service";
+import {IntegrationService} from "../../services/integration.service";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {LoginRequest} from "../models/login-request";
+import {LoginRequest} from "../../models/login-request";
 import {Router} from "@angular/router";
 
 @Component({

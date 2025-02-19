@@ -12,9 +12,7 @@ import { ComponentsModule } from './components/components.module';
 import { AppComponent } from './app.component';
 
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
-import { GraduationInternshipComponent } from './internship/graduation-internship/graduation-internship.component';
-import { SummerInternshipComponent } from './internship/summer-internship/summer-internship.component';
-import { LoginComponent } from './login/login.component';
+import { LoginComponent } from './components/login/login.component';
 
 
 @NgModule({
@@ -32,8 +30,6 @@ import { LoginComponent } from './login/login.component';
   declarations: [
     AppComponent,
     AdminLayoutComponent,
-    GraduationInternshipComponent,
-    SummerInternshipComponent,
     LoginComponent
 
   ],
