@@ -3,6 +3,7 @@ import {IntegrationService} from "../../services/integration.service";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {LoginRequest} from "../../models/login-request";
 import {Router} from "@angular/router";
+import {UserService} from "../../services/user.service";
 
 @Component({
   selector: 'app-login',
@@ -11,7 +12,7 @@ import {Router} from "@angular/router";
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private integrationService: IntegrationService, private router: Router) { }
+  constructor(private integrationService: IntegrationService,private userService: UserService ,private router: Router) { }
 
   userForm : FormGroup= new FormGroup({
     identifiant: new FormControl(''),
@@ -33,13 +34,33 @@ export class LoginComponent implements OnInit {
     this.integrationService.doLogin(this.request).subscribe({
       next:(res) => {
         console.log("Received Response:"+res.token);
-        this.router.navigate(['/dashboard']);
+        localStorage.setItem('Token', res.token);
+        this.fetchUserDetails();
+        this.router.navigate(['/user-profile']);
       }, error: (err) => {
         console.log("Error Received Response:"+err);
       }
     });
   }
 
+  fetchUserDetails() {
+    const token = localStorage.getItem('Token');
+
+    if (token) {
+      this.userService.decodeTokenRole(token).subscribe({
+        next: (userDetails) => {
+          console.log('User Details:', userDetails);
+          if (userDetails.role && userDetails.classe) {
+            localStorage.setItem('userRole', userDetails.role);
+            localStorage.setItem('userClasse', userDetails.classe);
+          }
+        },
+        error: (err) => {
+          console.log('Error fetching user details:', err);
+        }
+      });
+    }
+  }
   ngOnInit(): void {
   }
 

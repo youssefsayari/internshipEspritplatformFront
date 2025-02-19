@@ -95,7 +95,8 @@
                 position: relative;
                 text-transform: uppercase;
                 cursor: pointer;
-                font-size: $font-size-mini;
+                font-size: 0.8em;
+                font-weight: bold;
                 padding: 10px 8px;
                 line-height: $line-height-nav-link;
             }
