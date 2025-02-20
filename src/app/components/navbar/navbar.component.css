@@ -1,0 +1,22 @@
+.stylish-link {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    color: white;
+    transition: color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .stylish-link i {
+    margin-right: 5px;
+    font-size: 18px;
+  }
+  
+  .stylish-link:hover {
+    color: #ffcc00; /* Jaune doré au survol */
+    transform: scale(1.1);
+  }
+  
+  .search-bar {
+    margin-left: 15px;
+  }
+  
