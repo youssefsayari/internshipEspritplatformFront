@@ -10,6 +10,8 @@ import { NotificationsComponent } from '../../components/notifications/notificat
 import { UpgradeComponent } from '../../components/upgrade/upgrade.component';
 import { AgreementComponent } from '../../components/agreement/agreement.component';
 import { InternshipComponent } from '../../components/internship/internship.component';
+import { GraduationInternshipComponent } from '../../components/internship/graduation-internship/graduation-internship.component';
+import { SummerInternshipComponent} from "../../components/internship/summer-internship/summer-internship.component";
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent },
@@ -20,6 +22,9 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'maps',           component: MapsComponent },
     { path: 'notifications',  component: NotificationsComponent },
     { path: 'upgrade',        component: UpgradeComponent },
-    { path: 'internship',        component: InternshipComponent },
+    { path: 'internship',        component: InternshipComponent,
+    children: [
+    { path: 'summer-internship', component: SummerInternshipComponent },
+    { path: 'graduation-internship', component: GraduationInternshipComponent }]},
     { path: 'agreement',        component: AgreementComponent }
 ];
