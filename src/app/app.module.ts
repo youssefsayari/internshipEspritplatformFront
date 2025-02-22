@@ -1,6 +1,6 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -18,6 +18,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
   imports: [
     BrowserAnimationsModule,
     FormsModule,
+    ReactiveFormsModule,
     DragDropModule,
     HttpClientModule,
     ComponentsModule,
@@ -28,7 +29,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
   ],
   declarations: [
     AppComponent,
-    AdminLayoutComponent
+    AdminLayoutComponent,
 
   ],
   providers: [],

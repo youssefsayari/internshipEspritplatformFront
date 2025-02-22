@@ -3,29 +3,43 @@
     <h4 class="card-title">Add New Meeting</h4>
   </div>
   <div class="card-body">
-    <form>
+    <form [formGroup]="meetingForm" (ngSubmit)="onSubmit()">
       <div class="form-group">
         <label for="date">📅 Date</label>
-        <input type="date" id="date" class="form-control">
+        <input type="date" formControlName="date" class="form-control">
+        <div *ngIf="meetingForm.controls.date.errors?.notBeforeToday" class="text-danger">
+          The date cannot be before today.
+        </div>
       </div>
       <div class="form-group">
         <label for="hour">⏰ Hour</label>
-        <input type="time" id="hour" class="form-control">
+        <input type="time" formControlName="heure" class="form-control" required>
+        <div *ngIf="meetingForm.controls.heure.errors?.required && meetingForm.controls.heure.touched">
+          Hour is required.
+        </div>
+        <div *ngIf="meetingForm.controls.heure.errors?.pattern && meetingForm.controls.heure.touched">
+          Please enter a valid hour (HH:mm).
+        </div>
       </div>
       <div class="form-group">
         <label for="type">📝 Meeting Type</label>
-        <input type="text" id="type" class="form-control" placeholder="Enter meeting type">
+        <select formControlName="typeMeeting" class="form-control" required>
+          <option *ngFor="let type of typeMeetings" [value]="type">{{ type }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="description">🗒️ Description</label>
+        <textarea formControlName="description" class="form-control" rows="4" required placeholder="Enter detailed description here..."></textarea>
+        <div *ngIf="meetingForm.controls.description.errors?.required && meetingForm.controls.description.touched">
+          Description is required.
+        </div>
+        <div *ngIf="meetingForm.controls.description.errors?.minLength && meetingForm.controls.description.touched">
+          Description must be at least 5 characters long.
+        </div>
       </div>
       <div class="d-flex justify-content-between mt-3">
-        <!-- Save Meeting Button with Checkmark Emoji -->
-        <button type="submit" class="btn btn-success">
-          ✅ Save Meeting
-        </button>
-        
-        <!-- Cancel Button with Cross Emoji -->
-        <button type="button" class="btn btn-danger" (click)="closeForm()">
-          ❌ Cancel
-        </button>
+        <button type="submit" class="btn btn-success" [disabled]="!meetingForm.valid">✅ Save Meeting</button>
+        <button type="button" class="btn btn-danger" (click)="closeForm()">❌ Cancel</button>
       </div>
     </form>
   </div>

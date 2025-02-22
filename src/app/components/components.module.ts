@@ -9,11 +9,15 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { MeetingComponent } from './meeting/meeting.component';
 import { AddMeetingComponent } from './add-meeting/add-meeting.component';
 import { TasksListComponent } from './tasks/tasks-list/tasks-list.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { UpdateMeetingComponent } from './update-meeting/update-meeting.component';
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule,
+    FormsModule,
+    ReactiveFormsModule,
     NgbModule
   ],
   declarations: [
@@ -22,7 +26,8 @@ import { TasksListComponent } from './tasks/tasks-list/tasks-list.component';
     SidebarComponent,
     MeetingComponent,
     AddMeetingComponent,
-    TasksListComponent
+    TasksListComponent,
+    UpdateMeetingComponent
   ],
   exports: [
     FooterComponent,
