@@ -51,8 +51,8 @@ export class AddMeetingComponent implements OnInit {
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: 'Failed to add meeting!',
-            footer: error.message
+            text: 'Cannot add more meetings with types : Restitution 1 or Restitution 2!',
+            //footer: error.message
           });
         }
       });

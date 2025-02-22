@@ -22,8 +22,8 @@ export class MeetingComponent implements OnInit {
   loadMeetings() {
     this.meetingService.getAllMeetings().subscribe(meetings => this.meetings = meetings);
   }
-  showAddMeetingForm(meeting: Meeting | null) {
-    this.editingMeeting = meeting; 
+  showAddMeetingForm() {
+    this.editingMeeting=null;
     this.isFormVisible = true; 
   }
   showUpdateForm(meeting: Meeting) {
