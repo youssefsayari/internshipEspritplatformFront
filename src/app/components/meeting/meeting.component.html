@@ -25,8 +25,8 @@
                   <td>{{ meeting.typeMeeting }}</td>
                   <td>{{ meeting.description }}</td>
                   <td class="text-right">
-                    <button class="btn btn-info btn-sm" (click)="showAddMeetingForm(meeting)">✏️ Edit</button>
-                    <button class="btn btn-success btn-sm" (click)="approveMeeting(meeting.idMeeting)">✅ Approve</button>
+                    <button class="btn btn-info btn-sm" (click)="showUpdateForm(meeting)">✏️ Edit</button>
+                    <button class="btn btn-success btn-sm">✅ Approve</button>
                     <button class="btn btn-danger btn-sm" (click)="deleteMeeting(meeting.idMeeting)">❌ Delete</button>
                   </td>
                 </tr>
@@ -35,8 +35,8 @@
           </div>
         </div>
       </div>
-      <!-- Conditionally display the add or update form -->
-      <app-add-meeting *ngIf="isFormVisible" [meeting]="editingMeeting" (close)="closeForm()"></app-add-meeting>
+      <app-add-meeting *ngIf="isFormVisible && !editingMeeting" (close)="closeForm()"></app-add-meeting>
+      <app-update-meeting *ngIf="isFormVisible && editingMeeting" [meeting]="editingMeeting" (close)="closeForm()"></app-update-meeting>
     </div>
   </div>
 </div>

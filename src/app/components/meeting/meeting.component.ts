@@ -26,6 +26,10 @@ export class MeetingComponent implements OnInit {
     this.editingMeeting = meeting; 
     this.isFormVisible = true; 
   }
+  showUpdateForm(meeting: Meeting) {
+    this.editingMeeting = meeting;
+    this.isFormVisible = true;
+  }
   
 
   closeForm() {

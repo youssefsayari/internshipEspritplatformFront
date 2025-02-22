@@ -30,7 +30,7 @@ export class UpdateMeetingComponent implements OnInit {
   notBeforeToday(): Validators {
     return (control: AbstractControl): ValidationErrors | null => {
       const today = new Date();
-      today.setHours(0, 0, 0, 0);
+      today.setHours(0, 0, 0, 0);  
       const selectedDate = new Date(control.value);
       return selectedDate < today ? { 'notBeforeToday': true } : null;
     };
@@ -43,7 +43,7 @@ export class UpdateMeetingComponent implements OnInit {
           Swal.fire('Success', 'Meeting updated successfully!', 'success');
           this.close.emit();
         },
-        error: () => Swal.fire('Error', 'Failed to update the meeting.', 'error')
+        error: (error) => Swal.fire('Error', 'Failed to update the meeting.', 'error')
       });
     }
   }
