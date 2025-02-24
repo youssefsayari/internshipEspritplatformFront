@@ -4,3 +4,19 @@ td {
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+
+  /* Make Student label black and aligned properly */
+.student-label {
+  font-weight: bold; /* Make it stand out */
+  font-size: 16px;
+  color: black; /* Change from grey to black */
+  display: flex;
+  align-items: center; /* Align icon with text */
+}
+
+/* Adjust dropdown for better visibility */
+.student-dropdown {
+  width: 200px; /* Adjust width */
+  padding: 5px;
+  font-size: 16px;
+}
