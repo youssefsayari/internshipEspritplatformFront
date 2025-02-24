@@ -1,3 +1,5 @@
+import { UserInfo } from "./User-info.model";
+
 export interface User {
     idUser?: number;
     firstName: string;
@@ -7,4 +9,5 @@ export interface User {
     email: string;
     telephone: number;
     typeUser: string;
+    userInfo:UserInfo
   }

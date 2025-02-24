@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Meeting } from '../Model/Meeting';
+import { User } from '../Model/User';
 
 @Injectable({
   providedIn: 'root'
@@ -34,4 +35,8 @@ export class MeetingService {
   approveMeetingById(idMeeting: number): Observable<Meeting> {
     return this.http.put<Meeting>(`${this.baseUrl}/approveMeetingById/${idMeeting}`, null);
   }
+  getStudentsByTutorId(tutorId: number): Observable<User[]> {
+    return this.http.get<User[]>(`${this.baseUrl}/getStudentsByTutorId/${tutorId}`);
+  }
+  
 }
