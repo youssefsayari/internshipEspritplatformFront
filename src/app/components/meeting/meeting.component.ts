@@ -14,13 +14,13 @@ export class MeetingComponent implements OnInit {
   students: User[] = [];
   editingMeeting: Meeting | null = null;
   isFormVisible = false;
-  selectedStudentId: string = ""; // Default to ALL Meetings
+  selectedStudentId: string = ""; 
 
   constructor(private meetingService: MeetingService) { }
 
   ngOnInit(): void {
     this.loadStudents();
-    this.loadMeetings(); // Load all meetings by default
+    this.loadMeetings(); 
   }
 
   loadMeetings() {
