@@ -1,4 +1,3 @@
-<!-- src/app/components/meeting/meeting.component.html -->
 <div class="panel-header panel-header-sm"></div>
 <div class="main-content">
   <div class="row">
@@ -16,6 +15,7 @@
                 <th>⏰ Hour</th>
                 <th>📝 Type</th>
                 <th>🗒️ Description</th>
+                <th>👨‍🎓 Student</th> <!-- Add this column -->
                 <th class="text-right">⚙️ Actions</th>
               </thead>
               <tbody>
@@ -24,6 +24,9 @@
                   <td>{{ meeting.heure }}</td>
                   <td>{{ meeting.typeMeeting }}</td>
                   <td>{{ meeting.description }}</td>
+                  <td>
+                    {{ meeting.participant?.firstName }} {{ meeting.participant?.lastName }}
+                  </td> <!-- Display student name -->
                   <td class="text-right">
                     <button class="btn btn-info btn-sm" (click)="showUpdateForm(meeting)">✏️ Edit</button>
                     <button class="btn btn-success btn-sm">✅ Approve</button>

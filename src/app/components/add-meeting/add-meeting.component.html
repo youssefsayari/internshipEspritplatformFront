@@ -38,7 +38,7 @@
         </div>
       </div>
       <div class="form-group">
-        <label for="student">Student</label>
+        <label for="student"> 👨‍🎓 Student</label>
         <select formControlName="studentId" class="form-control" required>
           <option value="" disabled selected>Select a student</option>
           <option *ngFor="let student of students" [value]="student.idUser">{{ student.firstName }} {{ student.lastName }}</option>
