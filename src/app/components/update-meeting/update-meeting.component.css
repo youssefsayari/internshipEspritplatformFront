@@ -1,0 +1,11 @@
+/* src/app/components/add-meeting/add-meeting.component.css */
+textarea {
+    resize: none; /* Disables resizing of the textarea */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Adds a subtle shadow around the textarea */
+    padding: 10px; /* Adds padding inside the textarea for text indent */
+}
+
+textarea:focus {
+    border-color: #007bff; /* Changes border color to Bootstrap primary on focus */
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25); /* Adds Bootstrap-like focus shadow */
+}
