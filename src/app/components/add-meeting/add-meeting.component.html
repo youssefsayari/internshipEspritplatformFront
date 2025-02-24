@@ -33,9 +33,16 @@
         <div *ngIf="meetingForm.controls.description.errors?.required && meetingForm.controls.description.touched">
           Description is required.
         </div>
-        <div *ngIf="meetingForm.controls.description.errors?.minLength && meetingForm.controls.description.touched">
-          Description must be at least 5 characters long.
+        <div *ngIf="meetingForm.controls.description.errors?.maxLength && meetingForm.controls.description.touched">
+          Description must be no longer than 255 characters.
         </div>
+      </div>
+      <div class="form-group">
+        <label for="student">Student</label>
+        <select formControlName="studentId" class="form-control" required>
+          <option value="" disabled selected>Select a student</option>
+          <option *ngFor="let student of students" [value]="student.idUser">{{ student.firstName }} {{ student.lastName }}</option>
+        </select>
       </div>
       <div class="d-flex justify-content-between mt-3">
         <button type="submit" class="btn btn-success" [disabled]="!meetingForm.valid">✅ Save Meeting</button>

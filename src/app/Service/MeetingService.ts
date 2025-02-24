@@ -38,5 +38,7 @@ export class MeetingService {
   getStudentsByTutorId(tutorId: number): Observable<User[]> {
     return this.http.get<User[]>(`${this.baseUrl}/getStudentsByTutorId/${tutorId}`);
   }
-  
+  addMeetingAndAffectToParticipant(meeting: Meeting, organiserId: number, participantId: number): Observable<Meeting> {
+    return this.http.post<Meeting>(`${this.baseUrl}/addMeetingAndAffectToParticipant/${organiserId}/${participantId}`, meeting);
+  }
 }
