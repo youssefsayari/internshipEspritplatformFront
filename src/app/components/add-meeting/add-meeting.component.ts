@@ -28,7 +28,7 @@ export class AddMeetingComponent implements OnInit {
       studentId: [null, Validators.required]
     });
 
-    this.loadStudents(4);  // Hardcoded tutorId for now
+    this.loadStudents(1);  
   }
 
   loadStudents(tutorId: number) {
@@ -52,19 +52,19 @@ export class AddMeetingComponent implements OnInit {
 
   onSubmit() {
     if (this.meetingForm.valid) {
-      const organiserId = 4; // Example organiser ID (tutor)
+      const organiserId = 1; 
       const participantId = this.meetingForm.get('studentId')?.value; 
 
-      console.log("Submitting meeting with participantId:", participantId); // Debugging
+      console.log("Submitting meeting with participantId:", participantId); 
 
-      if (!participantId) {
+      /*if (!participantId) {
         Swal.fire({
           icon: 'warning',
           title: 'Missing Information',
           text: 'Please select a student for the meeting.',
         });
         return;
-      }
+      }*/
 
       this.meetingService.addMeetingAndAffectToParticipant(this.meetingForm.value, organiserId, participantId).subscribe({
         next: (result) => {
