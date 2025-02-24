@@ -35,7 +35,7 @@ export class AddMeetingComponent implements OnInit {
     this.meetingService.getStudentsByTutorId(tutorId).subscribe({
       next: (students) => {
         this.students = students;
-        console.log("Loaded students:", this.students);  // Debugging
+        console.log("Loaded students:", this.students);  
       },
       error: (error) => console.error('Failed to load students', error)
     });
@@ -57,14 +57,14 @@ export class AddMeetingComponent implements OnInit {
 
       console.log("Submitting meeting with participantId:", participantId); 
 
-      /*if (!participantId) {
+      if (!participantId) {
         Swal.fire({
           icon: 'warning',
           title: 'Missing Information',
           text: 'Please select a student for the meeting.',
         });
         return;
-      }*/
+      }
 
       this.meetingService.addMeetingAndAffectToParticipant(this.meetingForm.value, organiserId, participantId).subscribe({
         next: (result) => {
@@ -79,7 +79,7 @@ export class AddMeetingComponent implements OnInit {
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: 'Failed to add meeting!',
+            text: 'Failed to add meeting With that Type!',
             footer: error.message
           });
         }

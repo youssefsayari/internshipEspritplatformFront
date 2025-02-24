@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors }
 import { MeetingService } from '../../Service/MeetingService';
 import { Meeting } from '../../Model/Meeting';
 import { TypeMeeting } from '../../Model/TypeMeeting.enum';
+import { User } from '../../Model/User';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -14,6 +15,7 @@ export class UpdateMeetingComponent implements OnInit {
   @Input() meeting: Meeting;
   @Output() close = new EventEmitter<void>();
   meetingForm: FormGroup;
+  students: User[] = [];
   typeMeetings = Object.keys(TypeMeeting).filter(key => isNaN(Number(key))) as Array<TypeMeeting>;
 
   constructor(private fb: FormBuilder, private meetingService: MeetingService) { }
@@ -23,14 +25,27 @@ export class UpdateMeetingComponent implements OnInit {
       date: [this.meeting.date, [Validators.required, this.notBeforeToday()]],
       heure: [this.meeting.heure, [Validators.required, Validators.pattern('^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$')]],
       typeMeeting: [this.meeting.typeMeeting, Validators.required],
-      description: [this.meeting.description, [Validators.required, Validators.maxLength(255)]]
+      description: [this.meeting.description, [Validators.required, Validators.maxLength(255)]],
+      studentId: [this.meeting.participant?.idUser || null, Validators.required] 
+    });
+
+    this.loadStudents(1);  
+  }
+
+  loadStudents(tutorId: number) {
+    this.meetingService.getStudentsByTutorId(tutorId).subscribe({
+      next: (students) => {
+        this.students = students;
+        console.log("Loaded students:", this.students);
+      },
+      error: (error) => console.error('Failed to load students', error)
     });
   }
 
-  notBeforeToday(): Validators {
+  notBeforeToday(): ValidationErrors | null {
     return (control: AbstractControl): ValidationErrors | null => {
       const today = new Date();
-      today.setHours(0, 0, 0, 0);  
+      today.setHours(0, 0, 0, 0);
       const selectedDate = new Date(control.value);
       return selectedDate < today ? { 'notBeforeToday': true } : null;
     };
@@ -38,12 +53,39 @@ export class UpdateMeetingComponent implements OnInit {
 
   onSubmit() {
     if (this.meetingForm.valid) {
-      this.meetingService.updateMeeting({...this.meeting, ...this.meetingForm.value}).subscribe({
+      const organiserId = 1; // Replace with actual organiser ID
+      const participantId = this.meetingForm.get('studentId')?.value;
+
+      console.log("Updating meeting with participantId:", participantId);
+
+      if (!participantId) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Missing Information',
+          text: 'Please select a student for the meeting.',
+        });
+        return;
+      }
+
+      this.meetingService.updateMeetingAndAffectToParticipant(
+        { ...this.meeting, ...this.meetingForm.value }, organiserId, participantId
+      ).subscribe({
         next: () => {
-          Swal.fire('Success', 'Meeting updated successfully!', 'success');
-          this.close.emit();
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: 'Meeting has been updated successfully!',
+          });
+          this.closeForm();
         },
-        error: (error) => Swal.fire('Error', 'Failed to update the meeting.', 'error')
+        error: (error) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to update the meeting!',
+            footer: error.message
+          });
+        }
       });
     }
   }

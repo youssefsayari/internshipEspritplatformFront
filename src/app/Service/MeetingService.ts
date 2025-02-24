@@ -41,4 +41,9 @@ export class MeetingService {
   addMeetingAndAffectToParticipant(meeting: Meeting, organiserId: number, participantId: number): Observable<Meeting> {
     return this.http.post<Meeting>(`${this.baseUrl}/addMeetingAndAffectToParticipant/${organiserId}/${participantId}`, meeting);
   }
+
+  updateMeetingAndAffectToParticipant(meeting: Meeting, organiserId: number, participantId: number): Observable<Meeting> {
+    return this.http.put<Meeting>(`${this.baseUrl}/updateMeetingAndAffectToParticipant/${organiserId}/${participantId}`, meeting);
+  }
+  
 }
