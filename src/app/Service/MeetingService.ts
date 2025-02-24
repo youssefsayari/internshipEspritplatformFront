@@ -45,5 +45,7 @@ export class MeetingService {
   updateMeetingAndAffectToParticipant(meeting: Meeting, organiserId: number, participantId: number): Observable<Meeting> {
     return this.http.put<Meeting>(`${this.baseUrl}/updateMeetingAndAffectToParticipant/${organiserId}/${participantId}`, meeting);
   }
-  
+  getMeetingsByStudent(studentId: number): Observable<Meeting[]> {
+    return this.http.get<Meeting[]>(`${this.baseUrl}/getMeetingsByStudent/${studentId}`);
+  }
 }

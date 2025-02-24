@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Meeting } from '../../Model/Meeting';
 import { MeetingService } from '../../Service/MeetingService';
+import { User } from '../../Model/User';
 import Swal from 'sweetalert2';
+
 @Component({
   selector: 'app-meeting',
   templateUrl: './meeting.component.html',
@@ -9,35 +11,53 @@ import Swal from 'sweetalert2';
 })
 export class MeetingComponent implements OnInit {
   meetings: Meeting[] = [];
+  students: User[] = [];
   editingMeeting: Meeting | null = null;
-
   isFormVisible = false;
+  selectedStudentId: string = ""; // Default to ALL Meetings
 
   constructor(private meetingService: MeetingService) { }
 
   ngOnInit(): void {
-    this.loadMeetings();
+    this.loadStudents();
+    this.loadMeetings(); // Load all meetings by default
   }
 
   loadMeetings() {
-    this.meetingService.getAllMeetings().subscribe(meetings => this.meetings = meetings);
+    if (this.selectedStudentId) {
+      this.meetingService.getMeetingsByStudent(parseInt(this.selectedStudentId)).subscribe(meetings => {
+        this.meetings = meetings;
+      });
+    } else {
+      this.meetingService.getAllMeetings().subscribe(meetings => {
+        this.meetings = meetings;
+      });
+    }
   }
+
+  loadStudents() {
+    this.meetingService.getStudentsByTutorId(1).subscribe({
+      next: (students) => {
+        this.students = students;
+      },
+      error: (error) => console.error('Failed to load students', error)
+    });
+  }
+
   showAddMeetingForm() {
-    this.editingMeeting=null;
-    this.isFormVisible = true; 
+    this.editingMeeting = null;
+    this.isFormVisible = true;
   }
+
   showUpdateForm(meeting: Meeting) {
     this.editingMeeting = meeting;
     this.isFormVisible = true;
   }
-  
 
   closeForm() {
     this.isFormVisible = false;
-    this.loadMeetings(); 
+    this.loadMeetings();
   }
-  
-
 
   deleteMeeting(idMeeting: number) {
     Swal.fire({
@@ -51,20 +71,10 @@ export class MeetingComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         this.meetingService.deleteMeetingById(idMeeting).subscribe(() => {
-          Swal.fire(
-            'Deleted!',
-            'Your meeting has been deleted.',
-            'success'
-          );
-          this.loadMeetings(); 
+          Swal.fire('Deleted!', 'Your meeting has been deleted.', 'success');
+          this.loadMeetings();
         });
       }
     });
   }
-
-
-
-
-
-
 }
