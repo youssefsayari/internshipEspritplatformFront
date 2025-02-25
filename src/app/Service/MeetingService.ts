@@ -35,6 +35,9 @@ export class MeetingService {
   approveMeetingById(idMeeting: number): Observable<Meeting> {
     return this.http.put<Meeting>(`${this.baseUrl}/approveMeetingById/${idMeeting}`, null);
   }
+  disapproveMeetingById(idMeeting: number): Observable<Meeting> {
+    return this.http.put<Meeting>(`${this.baseUrl}/disapproveMeetingById/${idMeeting}`, null);
+  }
   getStudentsByTutorId(tutorId: number): Observable<User[]> {
     return this.http.get<User[]>(`${this.baseUrl}/getStudentsByTutorId/${tutorId}`);
   }

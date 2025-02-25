@@ -14,15 +14,16 @@ export class MeetingComponent implements OnInit {
   students: User[] = [];
   editingMeeting: Meeting | null = null;
   isFormVisible = false;
-  selectedStudentId: string = ""; 
+  selectedStudentId: string = ""; // Default: Show all meetings
 
-  constructor(private meetingService: MeetingService) { }
+  constructor(private meetingService: MeetingService) {}
 
   ngOnInit(): void {
     this.loadStudents();
-    this.loadMeetings(); 
+    this.loadMeetings();
   }
 
+  // ✅ Load all meetings OR filter by student
   loadMeetings() {
     if (this.selectedStudentId) {
       this.meetingService.getMeetingsByStudent(parseInt(this.selectedStudentId)).subscribe(meetings => {
@@ -35,6 +36,7 @@ export class MeetingComponent implements OnInit {
     }
   }
 
+  // ✅ Load students for dropdown (Tutor ID = 1 for now)
   loadStudents() {
     this.meetingService.getStudentsByTutorId(1).subscribe({
       next: (students) => {
@@ -44,21 +46,50 @@ export class MeetingComponent implements OnInit {
     });
   }
 
+  // ✅ Toggle meeting approval/disapproval
+  toggleApproval(meeting: Meeting) {
+    if (meeting.approved) {
+      this.meetingService.disapproveMeetingById(meeting.idMeeting!).subscribe({
+        next: () => {
+          Swal.fire('Disapproved', 'Meeting has been disapproved.', 'warning');
+
+          // Prevent UI flickering
+          setTimeout(() => this.loadMeetings(), 200);
+        },
+        error: () => Swal.fire('Error', 'Failed to disapprove the meeting.', 'error')
+      });
+    } else {
+      this.meetingService.approveMeetingById(meeting.idMeeting!).subscribe({
+        next: () => {
+          Swal.fire('Approved', 'Meeting has been approved successfully!', 'success');
+
+          // Prevent UI flickering
+          setTimeout(() => this.loadMeetings(), 200);
+        },
+        error: () => Swal.fire('Error', 'Failed to approve the meeting.', 'error')
+      });
+    }
+  }
+
+  // ✅ Open add meeting form
   showAddMeetingForm() {
     this.editingMeeting = null;
     this.isFormVisible = true;
   }
 
+  // ✅ Open update meeting form
   showUpdateForm(meeting: Meeting) {
     this.editingMeeting = meeting;
     this.isFormVisible = true;
   }
 
+  // ✅ Close meeting form
   closeForm() {
     this.isFormVisible = false;
     this.loadMeetings();
   }
 
+  // ✅ Delete a meeting
   deleteMeeting(idMeeting: number) {
     Swal.fire({
       title: 'Are you sure?',
@@ -76,5 +107,10 @@ export class MeetingComponent implements OnInit {
         });
       }
     });
+  }
+
+  // ✅ Track meetings by ID to prevent UI issues
+  trackMeeting(index: number, meeting: Meeting) {
+    return meeting.idMeeting;
   }
 }

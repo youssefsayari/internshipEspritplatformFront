@@ -5,17 +5,23 @@
       <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
           <h4 class="card-title">📅 Meetings List</h4>
+          
+          <!-- Dropdown for Student Filter -->
           <div class="d-flex align-items-center">
-            <label for="studentDropdown" class="mr-2 student-label">👨‍🎓 <span>Student:</span></label>
-            <select id="studentDropdown" [(ngModel)]="selectedStudentId" (change)="loadMeetings()" class="form-control">
+            <label for="studentDropdown" class="mr-2 student-label">
+              👨‍🎓 <span class="font-weight-bold text-dark">Student:</span>
+            </label>
+            <select id="studentDropdown" [(ngModel)]="selectedStudentId" (change)="loadMeetings()" class="form-control ml-2" style="width: 200px;">
               <option value="" selected>All Students</option>
               <option *ngFor="let student of students" [value]="student.idUser">
                 {{ student.firstName }} {{ student.lastName }}
               </option>
             </select>
           </div>
+
           <button class="btn btn-primary" (click)="showAddMeetingForm()">➕ Add Meeting</button>
         </div>
+        
         <div class="card-body">
           <div class="table-responsive">
             <table class="table">
@@ -28,7 +34,7 @@
                 <th class="text-right">⚙️ Actions</th>
               </thead>
               <tbody>
-                <tr *ngFor="let meeting of meetings">
+                <tr *ngFor="let meeting of meetings; trackBy: trackMeeting">
                   <td>{{ meeting.date | date }}</td>
                   <td>{{ meeting.heure }}</td>
                   <td>{{ meeting.typeMeeting }}</td>
@@ -37,8 +43,16 @@
                     {{ meeting.participant?.firstName }} {{ meeting.participant?.lastName }}
                   </td>
                   <td class="text-right">
+                    <button 
+                    class="btn btn-sm"
+                    [ngClass]="meeting.approved ? 'btn-warning' : 'btn-success'"
+                    (click)="toggleApproval(meeting)">
+                    {{ meeting.approved ? '❌ Disapprove' : '✅ Approve' }}
+                  </button>
                     <button class="btn btn-info btn-sm" (click)="showUpdateForm(meeting)">✏️ Edit</button>
-                    <button class="btn btn-success btn-sm">✅ Approve</button>
+
+                   
+
                     <button class="btn btn-danger btn-sm" (click)="deleteMeeting(meeting.idMeeting)">❌ Delete</button>
                   </td>
                 </tr>
@@ -48,6 +62,7 @@
         </div>
       </div>
 
+      <!-- Add & Update Meeting Components -->
       <app-add-meeting *ngIf="isFormVisible && !editingMeeting" (close)="closeForm()"></app-add-meeting>
       <app-update-meeting *ngIf="isFormVisible && editingMeeting" [meeting]="editingMeeting" (close)="closeForm()"></app-update-meeting>
     </div>
