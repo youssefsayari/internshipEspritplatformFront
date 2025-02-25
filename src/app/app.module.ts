@@ -29,12 +29,8 @@ import { LoginComponent } from './components/login/login.component';
   ],
   declarations: [
     AppComponent,
-<<<<<<< Updated upstream
-    AdminLayoutComponent
-=======
     AdminLayoutComponent,
     LoginComponent
->>>>>>> Stashed changes
 
   ],
   providers: [],

@@ -141,11 +141,7 @@
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",
-<<<<<<< Updated upstream
-      "styleext": "scss"
-=======
       "style": "scss"
->>>>>>> Stashed changes
     },
     "@schematics/angular:directive": {
       "prefix": "app"
