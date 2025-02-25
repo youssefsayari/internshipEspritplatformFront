@@ -8,7 +8,7 @@
         <label for="date">📅 Date</label>
         <input type="date" formControlName="date" class="form-control">
         <div *ngIf="meetingForm.controls.date.errors?.notBeforeToday" class="text-danger">
-          The date cannot be before today.
+          The date cannot be before tomorrow.
         </div>
       </div>
       <div class="form-group">
