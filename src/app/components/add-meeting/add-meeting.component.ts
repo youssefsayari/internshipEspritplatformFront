@@ -46,7 +46,7 @@ export class AddMeetingComponent implements OnInit {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       const selectedDate = new Date(control.value);
-      return selectedDate < today ? { 'notBeforeToday': true } : null;
+      return selectedDate <= today ? { 'notBeforeToday': true } : null;
     };
   }
 
