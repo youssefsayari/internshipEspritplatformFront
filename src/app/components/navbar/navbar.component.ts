@@ -152,4 +152,10 @@ export class NavbarComponent implements OnInit {
       }
       return titlee;
     }
+  logout() {
+    localStorage.clear();
+    this.router.navigate(['/login']);
+  }
+
+
 }
