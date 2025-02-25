@@ -46,14 +46,12 @@ export class MeetingComponent implements OnInit {
     });
   }
 
-  // ✅ Toggle meeting approval/disapproval
   toggleApproval(meeting: Meeting) {
     if (meeting.approved) {
       this.meetingService.disapproveMeetingById(meeting.idMeeting!).subscribe({
         next: () => {
           Swal.fire('Disapproved', 'Meeting has been disapproved.', 'warning');
 
-          // Prevent UI flickering
           setTimeout(() => this.loadMeetings(), 200);
         },
         error: () => Swal.fire('Error', 'Failed to disapprove the meeting.', 'error')
@@ -63,7 +61,6 @@ export class MeetingComponent implements OnInit {
         next: () => {
           Swal.fire('Approved', 'Meeting has been approved successfully!', 'success');
 
-          // Prevent UI flickering
           setTimeout(() => this.loadMeetings(), 200);
         },
         error: () => Swal.fire('Error', 'Failed to approve the meeting.', 'error')
@@ -71,25 +68,21 @@ export class MeetingComponent implements OnInit {
     }
   }
 
-  // ✅ Open add meeting form
   showAddMeetingForm() {
     this.editingMeeting = null;
     this.isFormVisible = true;
   }
 
-  // ✅ Open update meeting form
   showUpdateForm(meeting: Meeting) {
     this.editingMeeting = meeting;
     this.isFormVisible = true;
   }
 
-  // ✅ Close meeting form
   closeForm() {
     this.isFormVisible = false;
     this.loadMeetings();
   }
 
-  // ✅ Delete a meeting
   deleteMeeting(idMeeting: number) {
     Swal.fire({
       title: 'Are you sure?',
@@ -109,7 +102,6 @@ export class MeetingComponent implements OnInit {
     });
   }
 
-  // ✅ Track meetings by ID to prevent UI issues
   trackMeeting(index: number, meeting: Meeting) {
     return meeting.idMeeting;
   }

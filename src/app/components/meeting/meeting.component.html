@@ -62,7 +62,6 @@
         </div>
       </div>
 
-      <!-- Add & Update Meeting Components -->
       <app-add-meeting *ngIf="isFormVisible && !editingMeeting" (close)="closeForm()"></app-add-meeting>
       <app-update-meeting *ngIf="isFormVisible && editingMeeting" [meeting]="editingMeeting" (close)="closeForm()"></app-update-meeting>
     </div>
