@@ -19,9 +19,10 @@ import {AgreementComponent} from "../../components/agreement/agreement.component
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatTableModule} from "@angular/material/table";
-
 import {MatSortModule} from "@angular/material/sort";
 import {MatInputModule} from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+
 
 @NgModule({
   imports: [
@@ -35,7 +36,8 @@ import {MatInputModule} from '@angular/material/input';
     MatFormFieldModule,
     MatTableModule,
     MatInputModule,
-    MatSortModule
+    MatSortModule,
+    MatSelectModule
 
   ],
   declarations: [

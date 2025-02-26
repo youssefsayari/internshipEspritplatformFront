@@ -5,6 +5,7 @@ import {UserService} from "../../services/user.service";
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-internship',
   templateUrl: './internship.component.html',
@@ -12,7 +13,7 @@ import {MatTableDataSource} from '@angular/material/table';
 })
 export class InternshipComponent implements OnInit {
   internships: any[] = [];
-  displayedColumns: string[] = ['title', 'description', 'state', 'action'];
+  displayedColumns: string[] = ['title', 'description', 'internshipState', 'action'];
   dataSource!: MatTableDataSource<any>;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -23,6 +24,8 @@ export class InternshipComponent implements OnInit {
   constructor(private router: Router, private internshipService: InternshipService,private userService: UserService) {}
 
   ngOnInit() {
+    console.log(document.querySelector('.main-panel'));
+
     const userRole = localStorage.getItem('userRole');
     const userClasse = localStorage.getItem('userClasse');
     const token = localStorage.getItem('Token');
@@ -69,18 +72,28 @@ export class InternshipComponent implements OnInit {
   }
 
   deleteInternship(internshipId: number) {
-    if (confirm("Are you sure you want to delete this internship application?")) {
-      this.internshipService.deleteInternship(internshipId).subscribe({
-        next: () => {
-          this.dataSource.data = this.dataSource.data.filter(i => i.id !== internshipId);
-          alert("Internship application deleted successfully.");
-        },
-        error: (err) => {
-          console.error("Error deleting internship:", err);
-          alert("Failed to delete internship application.");
-        }
-      });
-    }
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this action!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.internshipService.deleteInternship(internshipId).subscribe({
+          next: () => {
+            this.dataSource.data = this.dataSource.data.filter(i => i.id !== internshipId);
+            Swal.fire("Deleted!", "Internship application deleted successfully.", "success");
+          },
+          error: (err) => {
+            console.error("Error deleting internship:", err);
+            Swal.fire("Error!", "Failed to delete internship application.", "error");
+          }
+        });
+      }
+    });
   }
 
   applyFilter(event: Event) {

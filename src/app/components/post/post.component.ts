@@ -5,6 +5,8 @@ import {PostService} from "../../services/post.service";
 import {UserService} from "../../services/user.service";
 import {InternshipService} from "../../services/internship.service";
 import {InternshipAddrequest} from "../../models/internship-addrequest";
+import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-post',
@@ -33,29 +35,52 @@ export class PostComponent implements OnInit {
   addInternship(postId: number): void {
     const token = localStorage.getItem('Token');
     this.userService.decodeTokenRole(token).subscribe({
-        next: (userDetails) => {
-          if (userDetails.id) {
-            const internshipAddRequest = {
-              idUser: userDetails.id,
-              idPost: postId
-            };
-            this.internshipService.addInternship(internshipAddRequest).subscribe({
-              next: (response) => {
-                console.log(response);
-                alert("Votre demande de stage a été soumise avec succès !");
-              },
-              error: (err) => {
-                console.error("Erreur lors de la soumission du stage :", err);
-                alert("Une erreur s'est produite lors de la demande de stage.");
-              }
+      next: (userDetails) => {
+        if (!userDetails.id) return;
+
+        const internshipAddRequest = {
+          idUser: userDetails.id,
+          idPost: postId
+        };
+
+        this.internshipService.addInternship(internshipAddRequest).subscribe({
+          next: () => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Succès !',
+              text: 'Votre demande de stage a été soumise avec succès.',
+              confirmButtonColor: '#3085d6'
+            });
+          },
+          error: (err) => {
+            console.error("Erreur lors de la soumission du stage :", err);
+
+            const errorMessage =
+              err.error && typeof err.error === 'string'
+                ? err.error
+                : "Une erreur inattendue s'est produite.";
+
+            Swal.fire({
+              icon: 'error',
+              title: 'Erreur',
+              text: errorMessage,
+              confirmButtonColor: '#d33'
             });
           }
-        },
-        error: (err) => {
-          console.log('Error fetching user details:', err);
-        }});
-
-
+        });
+      },
+      error: (err) => {
+        console.error('Error fetching user details:', err);
+        Swal.fire({
+          icon: 'error',
+          title: 'Erreur',
+          text: "Impossible de récupérer les informations de l'utilisateur.",
+          confirmButtonColor: '#d33'
+        });
+      }
+    });
   }
+
+
 
 }
