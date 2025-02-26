@@ -10,7 +10,7 @@
             <label for="studentDropdown" class="mr-2 student-label">
               👨‍🎓 <span class="font-weight-bold text-dark">Student:</span>
             </label>
-            <select id="studentDropdown" [(ngModel)]="selectedStudentId" (change)="loadMeetings()" class="form-control ml-2" style="width: 200px;">
+            <select id="studentDropdown" [(ngModel)]="selectedStudentId" (change)="loadMeetings()" class="form-control ml-2 student-dropdown">
               <option value="" selected>All Students</option>
               <option *ngFor="let student of students" [value]="student.idUser">
                 {{ student.firstName }} {{ student.lastName }}
@@ -18,7 +18,7 @@
             </select>
           </div>
 
-          <button class="btn btn-info" (click)="toggleCalendar()">📅 My Calendar</button>
+          <button class="btn btn-info" (click)="toggleCalendar()">📅 Show/Hide Calendar</button>
           <button class="btn btn-primary" (click)="showAddMeetingForm()">➕ Add Meeting</button>
         </div>
 
@@ -43,10 +43,7 @@
                     {{ meeting.participant?.firstName }} {{ meeting.participant?.lastName }}
                   </td>
                   <td class="text-right">
-                    <button 
-                      class="btn btn-sm"
-                      [ngClass]="meeting.approved ? 'btn-warning' : 'btn-success'"
-                      (click)="toggleApproval(meeting)">
+                    <button class="btn btn-sm" [ngClass]="meeting.approved ? 'btn-warning' : 'btn-success'" (click)="toggleApproval(meeting)">
                       {{ meeting.approved ? '❌ Disapprove' : '✅ Approve' }}
                     </button>
                     <button class="btn btn-info btn-sm" (click)="showUpdateForm(meeting)">✏️ Edit</button>
@@ -63,12 +60,10 @@
       <app-update-meeting *ngIf="isFormVisible && editingMeeting" [meeting]="editingMeeting" (close)="closeForm()"></app-update-meeting>
     </div>
   </div>
-</div>
 
-<div *ngIf="isCalendarVisible" class="calendar-modal">
-  <div class="calendar-container">
-    <h3>📅 My Meeting Calendar</h3>
-    <button class="btn btn-danger close-btn" (click)="toggleCalendar()">❌ Close</button>
+  <!-- Calendar appears below the table -->
+  <div *ngIf="isCalendarVisible" class="calendar-container">
+    <h3 class="calendar-title">📅 Meeting Calendar</h3>
     <full-calendar [options]="calendarOptions"></full-calendar>
   </div>
 </div>

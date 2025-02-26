@@ -3,7 +3,6 @@ import { Meeting } from '../../Model/Meeting';
 import { MeetingService } from '../../Service/MeetingService';
 import { User } from '../../Model/User';
 import Swal from 'sweetalert2';
-
 import dayGridPlugin from '@fullcalendar/daygrid';
 import { CalendarOptions } from '@fullcalendar/core';
 
@@ -71,22 +70,16 @@ export class MeetingComponent implements OnInit {
         inputValidator: (value) => (!value ? 'You need to provide a reason!' : null)
       }).then((result) => {
         if (result.isConfirmed) {
-          this.meetingService.disapproveMeetingById(meeting.idMeeting!, result.value).subscribe({
-            next: () => {
-              Swal.fire('Disapproved', 'Meeting has been disapproved.', 'warning');
-              this.loadMeetings();
-            },
-            error: (err) => Swal.fire('Error', 'Failed to disapprove the meeting.', 'error')
+          this.meetingService.disapproveMeetingById(meeting.idMeeting!, result.value).subscribe(() => {
+            Swal.fire('Disapproved', 'Meeting has been disapproved.', 'warning');
+            this.loadMeetings();
           });
         }
       });
     } else {
-      this.meetingService.approveMeetingById(meeting.idMeeting!).subscribe({
-        next: () => {
-          Swal.fire('Approved', 'Meeting has been approved successfully!', 'success');
-          this.loadMeetings();
-        },
-        error: (err) => Swal.fire('Error', 'Failed to approve the meeting.', 'error')
+      this.meetingService.approveMeetingById(meeting.idMeeting!).subscribe(() => {
+        Swal.fire('Approved', 'Meeting has been approved successfully!', 'success');
+        this.loadMeetings();
       });
     }
   }
@@ -94,18 +87,21 @@ export class MeetingComponent implements OnInit {
   toggleCalendar() {
     this.isCalendarVisible = !this.isCalendarVisible;
     if (this.isCalendarVisible) {
-      this.updateCalendarEvents();
+      setTimeout(() => this.updateCalendarEvents(), 100);
     }
   }
 
   updateCalendarEvents() {
-    this.calendarOptions.events = this.meetings
-      .filter(meeting => meeting.approved)
-      .map(meeting => ({
-        title: `${meeting.typeMeeting} - ${meeting.participant?.firstName}`,
-        start: meeting.date,
-        url: meeting.link
-      }));
+    this.calendarOptions = {
+      ...this.calendarOptions,
+      events: this.meetings
+        .filter(meeting => meeting.approved)
+        .map(meeting => ({
+          title: `${meeting.typeMeeting} - ${meeting.participant?.firstName}`,
+          start: meeting.date,
+          url: meeting.link
+        }))
+    };
   }
 
   showAddMeetingForm() {
@@ -134,12 +130,9 @@ export class MeetingComponent implements OnInit {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.meetingService.deleteMeetingById(idMeeting).subscribe({
-          next: () => {
-            Swal.fire('Deleted!', 'Your meeting has been deleted.', 'success');
-            this.loadMeetings();
-          },
-          error: (err) => Swal.fire('Error', 'Failed to delete the meeting.', 'error')
+        this.meetingService.deleteMeetingById(idMeeting).subscribe(() => {
+          Swal.fire('Deleted!', 'Your meeting has been deleted.', 'success');
+          this.loadMeetings();
         });
       }
     });
