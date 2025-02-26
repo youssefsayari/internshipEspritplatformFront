@@ -49,7 +49,6 @@ export class LoginComponent implements OnInit {
     if (token) {
       this.userService.decodeTokenRole(token).subscribe({
         next: (userDetails) => {
-          console.log('User Details:', userDetails);
           if (userDetails.role && userDetails.classe) {
             localStorage.setItem('userRole', userDetails.role);
             localStorage.setItem('userClasse', userDetails.classe);

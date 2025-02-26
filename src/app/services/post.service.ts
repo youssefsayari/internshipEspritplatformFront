@@ -2,18 +2,19 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {User} from "../models/user";
+import {Post} from "../models/post";
 
-const API_URL = "http://localhost:8089/innoxpert/user/decode-token-Role";
 
+const API_URL = "http://localhost:8089/innoxpert/post";
 
 @Injectable({
   providedIn: 'root'
 })
-export class UserService {
+export class PostService {
 
   constructor(private http: HttpClient) { }
 
-  decodeTokenRole(token: string): Observable<User> {
-    return this.http.post<User>(API_URL, token);
+  getAllPosts(): Observable<Post[]> {
+    return this.http.get<Post[]>(`${API_URL}/getAllPosts`);
   }
 }

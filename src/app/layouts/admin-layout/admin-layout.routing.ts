@@ -12,6 +12,7 @@ import { AgreementComponent } from '../../components/agreement/agreement.compone
 import { InternshipComponent } from '../../components/internship/internship.component';
 import { GraduationInternshipComponent } from '../../components/internship/graduation-internship/graduation-internship.component';
 import { SummerInternshipComponent} from "../../components/internship/summer-internship/summer-internship.component";
+import {PostComponent} from "../../components/post/post.component";
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent },
@@ -26,5 +27,6 @@ export const AdminLayoutRoutes: Routes = [
     children: [
     { path: 'summer-internship', component: SummerInternshipComponent },
     { path: 'graduation-internship', component: GraduationInternshipComponent }]},
-    { path: 'agreement',        component: AgreementComponent }
+    { path: 'agreement',        component: AgreementComponent },
+    { path: 'post',        component: PostComponent }
 ];

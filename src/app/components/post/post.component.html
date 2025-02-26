@@ -1,0 +1,23 @@
+<div class="panel-header panel-header-sm"></div>
+<div class="main-content">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          Posts
+        </div>
+        <div class="card-body">
+          <div *ngFor="let post of posts" class="card mb-3">
+            <div class="card-header">
+              <h5>{{ post.title }}</h5>
+            </div>
+            <div class="card-body">
+              <p>{{ post.content }}</p>
+              <button class="btn btn-primary" (click)="addInternship(post.id)">Action</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

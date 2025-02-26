@@ -7,6 +7,7 @@ import { FooterComponent } from './footer/footer.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { NotfoundComponent } from './notfound/notfound.component';
+import { PostComponent } from './post/post.component';
 
 @NgModule({
   imports: [
@@ -18,7 +19,8 @@ import { NotfoundComponent } from './notfound/notfound.component';
     FooterComponent,
     NavbarComponent,
     SidebarComponent,
-    NotfoundComponent
+    NotfoundComponent,
+    PostComponent
   ],
   exports: [
     FooterComponent,
