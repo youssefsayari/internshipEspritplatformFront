@@ -10,4 +10,5 @@ export interface Meeting {
     organiser: User;
     participant: User;
     approved: boolean;
+    link : string;
   }

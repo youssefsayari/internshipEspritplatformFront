@@ -11,6 +11,8 @@ import { AddMeetingComponent } from './add-meeting/add-meeting.component';
 import { TasksListComponent } from './tasks/tasks-list/tasks-list.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UpdateMeetingComponent } from './update-meeting/update-meeting.component';
+import { FullCalendarModule } from '@fullcalendar/angular';
+
 
 @NgModule({
   imports: [
@@ -18,7 +20,8 @@ import { UpdateMeetingComponent } from './update-meeting/update-meeting.componen
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
-    NgbModule
+    NgbModule,
+    FullCalendarModule
   ],
   declarations: [
     FooterComponent,

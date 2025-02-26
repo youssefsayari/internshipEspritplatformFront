@@ -5,8 +5,7 @@
       <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
           <h4 class="card-title">📅 Meetings List</h4>
-          
-          <!-- Dropdown for Student Filter -->
+
           <div class="d-flex align-items-center">
             <label for="studentDropdown" class="mr-2 student-label">
               👨‍🎓 <span class="font-weight-bold text-dark">Student:</span>
@@ -19,9 +18,10 @@
             </select>
           </div>
 
+          <button class="btn btn-info" (click)="toggleCalendar()">📅 My Calendar</button>
           <button class="btn btn-primary" (click)="showAddMeetingForm()">➕ Add Meeting</button>
         </div>
-        
+
         <div class="card-body">
           <div class="table-responsive">
             <table class="table">
@@ -44,15 +44,12 @@
                   </td>
                   <td class="text-right">
                     <button 
-                    class="btn btn-sm"
-                    [ngClass]="meeting.approved ? 'btn-warning' : 'btn-success'"
-                    (click)="toggleApproval(meeting)">
-                    {{ meeting.approved ? '❌ Disapprove' : '✅ Approve' }}
-                  </button>
+                      class="btn btn-sm"
+                      [ngClass]="meeting.approved ? 'btn-warning' : 'btn-success'"
+                      (click)="toggleApproval(meeting)">
+                      {{ meeting.approved ? '❌ Disapprove' : '✅ Approve' }}
+                    </button>
                     <button class="btn btn-info btn-sm" (click)="showUpdateForm(meeting)">✏️ Edit</button>
-
-                   
-
                     <button class="btn btn-danger btn-sm" (click)="deleteMeeting(meeting.idMeeting)">❌ Delete</button>
                   </td>
                 </tr>
@@ -65,5 +62,13 @@
       <app-add-meeting *ngIf="isFormVisible && !editingMeeting" (close)="closeForm()"></app-add-meeting>
       <app-update-meeting *ngIf="isFormVisible && editingMeeting" [meeting]="editingMeeting" (close)="closeForm()"></app-update-meeting>
     </div>
+  </div>
+</div>
+
+<div *ngIf="isCalendarVisible" class="calendar-modal">
+  <div class="calendar-container">
+    <h3>📅 My Meeting Calendar</h3>
+    <button class="btn btn-danger close-btn" (click)="toggleCalendar()">❌ Close</button>
+    <full-calendar [options]="calendarOptions"></full-calendar>
   </div>
 </div>

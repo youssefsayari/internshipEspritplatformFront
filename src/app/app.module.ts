@@ -10,14 +10,18 @@ import { AppRoutingModule } from './app.routing';
 import { ComponentsModule } from './components/components.module';
 
 import { AppComponent } from './app.component';
+import { FullCalendarModule } from '@fullcalendar/angular';
 
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+
+
 
 @NgModule({
   imports: [
     BrowserAnimationsModule,
     FormsModule,
+    FullCalendarModule,
     ReactiveFormsModule,
     DragDropModule,
     HttpClientModule,
