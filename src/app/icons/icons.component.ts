@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';  // Import ViewEncapsulation from @angular/core
+import { Component, HostListener, OnInit, ViewEncapsulation } from '@angular/core';  // Import ViewEncapsulation from @angular/core
 
 @Component({
   selector: 'app-icons',
@@ -22,7 +22,17 @@ export class IconsComponent implements OnInit {
 
 
 
+  
+
+
+
+
+
+
   constructor() {}
 
   ngOnInit(): void {}
+
+ 
+
 }

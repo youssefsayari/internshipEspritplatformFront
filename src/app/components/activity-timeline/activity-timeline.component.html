@@ -1,3 +1,31 @@
+
+
+
+
+<!-- Zone de texte simulée pour écrire un post -->
+<div class="fake-input" (click)="openPostModal()">
+  <img src="assets/images/profile/user-1.jpg" alt="user" />
+  <span>What's New ?</span>
+</div>
+
+<!-- Overlay pour le modal -->
+<div class="modal-overlay" *ngIf="isPostModalOpen" (click)="closePostModal()"></div>
+
+<!-- Fenêtre modale -->
+<div class="modal-post" *ngIf="isPostModalOpen">
+  <h3>Créer un post</h3>
+  <textarea [(ngModel)]="newPostContent" placeholder="Exprimez-vous..."></textarea>
+  <div class="modal-actions">
+    <button class="btn-cancel" (click)="closePostModal()">Annuler</button>
+    <button class="btn-submit" (click)="addNewPost()">Publier</button>
+  </div>
+</div>
+
+
+
+
+
+                              
 <div *ngFor="let timeline of mytimelines; trackBy: trackByFn" class="timeline-card card p-3 mb-3">
   <div class="d-flex align-items-start">
      <!-- Image utilisateur avec clic -->
