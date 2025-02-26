@@ -1,1 +1,111 @@
-<router-outlet></router-outlet>
+<div class="panel-header panel-header-sm">
+</div>
+<div class="main-content">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card ">
+
+
+        <div *ngIf="isSummerInternship">
+          <div class="card-header">
+            Summer Internship
+          </div>
+          <div class="card-body">
+            <mat-form-field appearance="standard">
+              <mat-label>Filter</mat-label>
+              <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
+            </mat-form-field>
+
+            <div class="mat-elevation-z8">
+              <table mat-table [dataSource]="dataSource" matSort>
+
+                <!-- title Column -->
+                <ng-container matColumnDef="title">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Title </th>
+                  <td mat-cell *matCellDef="let row"> {{row.title}} </td>
+                </ng-container>
+
+                <!-- Description Column -->
+                <ng-container matColumnDef="description">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Description </th>
+                  <td mat-cell *matCellDef="let row"> {{row.description}} </td>
+                </ng-container>
+
+                <!-- State Column -->
+                <ng-container matColumnDef="state">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> State </th>
+                  <td mat-cell *matCellDef="let row"> {{row.state}} </td>
+                </ng-container>
+
+                <!-- Action Column -->
+                <ng-container matColumnDef="action">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
+                  <td mat-cell *matCellDef="let row"> <button class="btn btn-danger" (click)="deleteInternship(row.id)">
+                    Delete
+                  </button> </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                <!-- Row shown when there is no matching data. -->
+                <tr class="mat-row" *matNoDataRow>
+                  <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+                </tr>
+              </table>
+
+              <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+            </div>
+
+          </div>
+        </div>
+
+
+
+        <div *ngIf="!isSummerInternship">
+          <div class="card-header">
+            Graduation Internship
+          </div>
+          <div class="card-body">
+            <table id="internshipTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
+              <thead>
+              <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>State</th>
+                <th>Action</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let internship of internships">
+                <td>{{ internship.title }}</td>
+                <td>{{ internship.description }}</td>
+                <td>{{ internship.internshipState }}</td>
+                <td>
+                  <button class="btn btn-danger" (click)="deleteInternship(internship.id)">
+                    Delete
+                  </button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+
+
+
+
+        <div *ngIf="isTutor">
+          <div class="card-header">
+            Student Internship
+          </div>
+          <div class="card-body"></div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -41,7 +41,7 @@ export class PostComponent implements OnInit {
             };
             this.internshipService.addInternship(internshipAddRequest).subscribe({
               next: (response) => {
-                console.log(response); // Affiche "Internship request submitted successfully!"
+                console.log(response);
                 alert("Votre demande de stage a été soumise avec succès !");
               },
               error: (err) => {

@@ -16,4 +16,17 @@ export class InternshipService {
   addInternship(InternshipAddrequest): Observable<string> {
     return this.http.post(`${API_URL}/addInternship`, InternshipAddrequest, { responseType: 'text' });
   }
+
+  getInternships(idUser?: number, idPost?: number): Observable<any[]> {
+    let params: any = {};
+    if (idUser) params.idUser = idUser;
+    if (idPost) params.idPost = idPost;
+
+    return this.http.get<any[]>(`${API_URL}/getInternshipByCriteria`, { params });
+  }
+
+  deleteInternship(id: number): Observable<any> {
+    return this.http.delete(`${API_URL}/removeInternshipById/${id}`, { responseType: 'text' });
+  }
+
 }

@@ -15,6 +15,8 @@ import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.compon
 import { LoginComponent } from './components/login/login.component';
 
 
+
+
 @NgModule({
   imports: [
     BrowserAnimationsModule,
@@ -25,7 +27,8 @@ import { LoginComponent } from './components/login/login.component';
     AppRoutingModule,
     NgbModule,
     ToastrModule.forRoot(),
-    ReactiveFormsModule
+    ReactiveFormsModule,
+
   ],
   declarations: [
     AppComponent,

@@ -10,8 +10,6 @@ import { NotificationsComponent } from '../../components/notifications/notificat
 import { UpgradeComponent } from '../../components/upgrade/upgrade.component';
 import { AgreementComponent } from '../../components/agreement/agreement.component';
 import { InternshipComponent } from '../../components/internship/internship.component';
-import { GraduationInternshipComponent } from '../../components/internship/graduation-internship/graduation-internship.component';
-import { SummerInternshipComponent} from "../../components/internship/summer-internship/summer-internship.component";
 import {PostComponent} from "../../components/post/post.component";
 
 export const AdminLayoutRoutes: Routes = [
@@ -20,13 +18,11 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'table-list',     component: TableListComponent },
     { path: 'typography',     component: TypographyComponent },
     { path: 'icons',          component: IconsComponent },
+    { path: 'icons',          component: IconsComponent },
     { path: 'maps',           component: MapsComponent },
     { path: 'notifications',  component: NotificationsComponent },
     { path: 'upgrade',        component: UpgradeComponent },
-    { path: 'internship',        component: InternshipComponent,
-    children: [
-    { path: 'summer-internship', component: SummerInternshipComponent },
-    { path: 'graduation-internship', component: GraduationInternshipComponent }]},
+    { path: 'internship',        component: InternshipComponent},
     { path: 'agreement',        component: AgreementComponent },
     { path: 'post',        component: PostComponent }
 ];

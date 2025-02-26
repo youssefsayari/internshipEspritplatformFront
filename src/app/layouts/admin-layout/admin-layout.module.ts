@@ -16,6 +16,12 @@ import { ToastrModule } from 'ngx-toastr';
 import { UpgradeComponent } from '../../components/upgrade/upgrade.component';
 import {InternshipComponent} from "../../components/internship/internship.component";
 import {AgreementComponent} from "../../components/agreement/agreement.component";
+import {MatPaginatorModule} from "@angular/material/paginator";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatTableModule} from "@angular/material/table";
+
+import {MatSortModule} from "@angular/material/sort";
+import {MatInputModule} from '@angular/material/input';
 
 @NgModule({
   imports: [
@@ -24,7 +30,13 @@ import {AgreementComponent} from "../../components/agreement/agreement.component
     FormsModule,
     ChartsModule,
     NgbModule,
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(),
+    MatPaginatorModule,
+    MatFormFieldModule,
+    MatTableModule,
+    MatInputModule,
+    MatSortModule
+
   ],
   declarations: [
     DashboardComponent,
