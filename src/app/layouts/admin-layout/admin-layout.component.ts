@@ -6,6 +6,9 @@ import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { Router, NavigationEnd, NavigationStart } from '@angular/router';
 import { Subscription ,  Observable } from 'rxjs';
 import PerfectScrollbar from 'perfect-scrollbar';
+import {DialogComponent} from "../../components/dialog/dialog.component";
+import {MatDialog, MAT_DIALOG_DATA} from '@angular/material/dialog';
+
 
 
 @Component({
@@ -18,7 +21,7 @@ export class AdminLayoutComponent implements OnInit {
   private lastPoppedUrl: string;
   private yScrollStack: number[] = [];
 
-  constructor( public location: Location, private router: Router) {}
+  constructor( public location: Location, private router: Router) { }
 
   ngOnInit() {
       const isWindows = navigator.platform.indexOf('Win') > -1 ? true : false;
@@ -84,5 +87,7 @@ export class AdminLayoutComponent implements OnInit {
       }
       return bool;
   }
+
+
 
 }

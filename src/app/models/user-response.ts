@@ -5,4 +5,5 @@ export class UserResponse {
   email: string;
   classe: string;
   nameTutor: string;
+  idTutor: number;
 }

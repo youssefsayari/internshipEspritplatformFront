@@ -6,6 +6,8 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import Swal from 'sweetalert2';
 import {UserResponse} from "../../models/user-response";
+import {DialogComponent} from "../dialog/dialog.component";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-student',
@@ -19,7 +21,7 @@ export class StudentComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private router: Router, private userService: UserService) {}
+  constructor(private router: Router, private userService: UserService ,private dialog: MatDialog) {}
 
   ngOnInit(): void {
     const token = localStorage.getItem('Token');
@@ -76,5 +78,19 @@ export class StudentComponent implements OnInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  openDialog(student: any) {
+    const dialogRef = this.dialog.open(DialogComponent, {
+      width: '30%',
+      data: student
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('Dialog closed with:', result);
+        this.ngOnInit();
+      }
+    });
   }
 }

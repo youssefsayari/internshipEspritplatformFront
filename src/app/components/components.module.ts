@@ -14,6 +14,11 @@ import {MatInputModule} from "@angular/material/input";
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatSortModule} from "@angular/material/sort";
 import {MatTableModule} from "@angular/material/table";
+import { DialogComponent } from './dialog/dialog.component';
+import {FormsModule} from "@angular/forms";
+import {MatSelectModule} from "@angular/material/select";
+import {MatDialogModule} from "@angular/material/dialog";
+import {MatButtonModule} from "@angular/material/button";
 
 @NgModule({
   imports: [
@@ -24,7 +29,11 @@ import {MatTableModule} from "@angular/material/table";
     MatInputModule,
     MatPaginatorModule,
     MatSortModule,
-    MatTableModule
+    MatTableModule,
+    FormsModule,
+    MatSelectModule,
+    MatDialogModule,
+    MatButtonModule
   ],
   declarations: [
     FooterComponent,
@@ -32,7 +41,8 @@ import {MatTableModule} from "@angular/material/table";
     SidebarComponent,
     NotfoundComponent,
     PostComponent,
-    StudentComponent
+    StudentComponent,
+    DialogComponent
   ],
   exports: [
     FooterComponent,

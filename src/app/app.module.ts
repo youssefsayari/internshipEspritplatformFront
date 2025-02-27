@@ -10,6 +10,7 @@ import { AppRoutingModule } from './app.routing';
 import { ComponentsModule } from './components/components.module';
 
 import { AppComponent } from './app.component';
+import {MatDialogModule} from '@angular/material/dialog';
 
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { LoginComponent } from './components/login/login.component';
@@ -28,6 +29,7 @@ import { LoginComponent } from './components/login/login.component';
     NgbModule,
     ToastrModule.forRoot(),
     ReactiveFormsModule,
+    MatDialogModule,
 
   ],
   declarations: [

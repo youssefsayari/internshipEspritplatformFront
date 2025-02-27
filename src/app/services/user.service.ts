@@ -25,5 +25,9 @@ export class UserService {
   deleteUserById(idUser: number): Observable<void> {
     return this.http.delete<void>(`${API_URL}/deleteUser/${idUser}`);
   }
+  affectTutor(userId: number, tutorId: number): Observable<string> {
+    return this.http.post<string>(`${API_URL}/affectation/${userId}/${tutorId}`, null, { responseType: 'text' as 'json' });
+  }
+
 
 }
