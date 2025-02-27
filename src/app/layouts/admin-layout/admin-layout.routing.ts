@@ -11,6 +11,7 @@ import { UpgradeComponent } from '../../components/upgrade/upgrade.component';
 import { AgreementComponent } from '../../components/agreement/agreement.component';
 import { InternshipComponent } from '../../components/internship/internship.component';
 import {PostComponent} from "../../components/post/post.component";
+import {StudentComponent} from "../../components/student/student.component";
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent },
@@ -24,5 +25,6 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'upgrade',        component: UpgradeComponent },
     { path: 'internship',        component: InternshipComponent},
     { path: 'agreement',        component: AgreementComponent },
-    { path: 'post',        component: PostComponent }
+    { path: 'post',        component: PostComponent },
+    { path: 'student',        component: StudentComponent },
 ];

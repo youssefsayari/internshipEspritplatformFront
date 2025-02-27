@@ -12,7 +12,6 @@ import Swal from 'sweetalert2';
   styleUrls: ['./internship.component.scss']
 })
 export class InternshipComponent implements OnInit {
-  internships: any[] = [];
   displayedColumns: string[] = ['title', 'description', 'internshipState', 'action'];
   dataSource!: MatTableDataSource<any>;
 
@@ -20,6 +19,7 @@ export class InternshipComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   isSummerInternship: boolean = false;
+  isGraduationInternship: boolean = false;
   isTutor: boolean = false;
   constructor(private router: Router, private internshipService: InternshipService,private userService: UserService) {}
 
@@ -39,7 +39,7 @@ export class InternshipComponent implements OnInit {
       if (userClasse && ['1', '2', '3', '4'].includes(userClasse.charAt(0))) {
         this.isSummerInternship = true;
       } else if (userClasse && userClasse.charAt(0) === '5') {
-        this.isSummerInternship = false;
+        this.isGraduationInternship = true;
       }
       this.userService.decodeTokenRole(token).subscribe({
         next: (userDetails) => {

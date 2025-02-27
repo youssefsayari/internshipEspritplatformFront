@@ -36,9 +36,17 @@ export class LoginComponent implements OnInit {
         console.log("Received Response:"+res.token);
         localStorage.setItem('Token', res.token);
         this.fetchUserDetails();
-        this.router.navigate(['/user-profile']);
-      }, error: (err) => {
-        console.log("Error Received Response:"+err);
+        setTimeout(() => {
+          const userRole = localStorage.getItem('userRole');
+          if (userRole === 'Admin') {
+            this.router.navigate(['/dashboard']);
+          } else {
+            this.router.navigate(['/user-profile']);
+          }
+        }, 500);
+      },
+      error: (err) => {
+        console.log("Error Received Response: " + err);
       }
     });
   }
@@ -49,7 +57,7 @@ export class LoginComponent implements OnInit {
     if (token) {
       this.userService.decodeTokenRole(token).subscribe({
         next: (userDetails) => {
-          if (userDetails.role && userDetails.classe) {
+          if (userDetails.role || userDetails.classe) {
             localStorage.setItem('userRole', userDetails.role);
             localStorage.setItem('userClasse', userDetails.classe);
           }

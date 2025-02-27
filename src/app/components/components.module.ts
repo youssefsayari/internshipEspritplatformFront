@@ -8,19 +8,31 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { NotfoundComponent } from './notfound/notfound.component';
 import { PostComponent } from './post/post.component';
+import { StudentComponent } from './student/student.component';
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatInputModule} from "@angular/material/input";
+import {MatPaginatorModule} from "@angular/material/paginator";
+import {MatSortModule} from "@angular/material/sort";
+import {MatTableModule} from "@angular/material/table";
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule,
-    NgbModule
+    NgbModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatTableModule
   ],
   declarations: [
     FooterComponent,
     NavbarComponent,
     SidebarComponent,
     NotfoundComponent,
-    PostComponent
+    PostComponent,
+    StudentComponent
   ],
   exports: [
     FooterComponent,
