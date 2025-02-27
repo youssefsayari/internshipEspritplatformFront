@@ -19,6 +19,7 @@ import {FormsModule} from "@angular/forms";
 import {MatSelectModule} from "@angular/material/select";
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatButtonModule} from "@angular/material/button";
+import { SettingComponent } from './setting/setting.component';
 
 @NgModule({
   imports: [
@@ -42,7 +43,8 @@ import {MatButtonModule} from "@angular/material/button";
     NotfoundComponent,
     PostComponent,
     StudentComponent,
-    DialogComponent
+    DialogComponent,
+    SettingComponent
   ],
   exports: [
     FooterComponent,

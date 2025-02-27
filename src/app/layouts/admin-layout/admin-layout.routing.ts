@@ -12,6 +12,7 @@ import { AgreementComponent } from '../../components/agreement/agreement.compone
 import { InternshipComponent } from '../../components/internship/internship.component';
 import {PostComponent} from "../../components/post/post.component";
 import {StudentComponent} from "../../components/student/student.component";
+import {SettingComponent} from "../../components/setting/setting.component";
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent },
@@ -27,4 +28,5 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'agreement',        component: AgreementComponent },
     { path: 'post',        component: PostComponent },
     { path: 'student',        component: StudentComponent },
+    { path: 'setting',        component: SettingComponent },
 ];
