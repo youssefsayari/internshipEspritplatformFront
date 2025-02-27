@@ -6,4 +6,6 @@ export class UserResponse {
   classe: string;
   nameTutor: string;
   idTutor: number;
+  maxValidatedInternships: number;
+  maxInternshipSupervisions: number;
 }

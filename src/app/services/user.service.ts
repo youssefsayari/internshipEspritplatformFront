@@ -29,5 +29,13 @@ export class UserService {
     return this.http.post<string>(`${API_URL}/affectation/${userId}/${tutorId}`, null, { responseType: 'text' as 'json' });
   }
 
+  updateTutorAdd(key: string, userId: number): Observable<string> {
+    return this.http.put<string>(`${API_URL}/updateAdd/${userId}?key=${key}`, null, { responseType: 'text' as 'json' });
+  }
+
+  updateTutorRem(key: string, userId: number): Observable<string> {
+    return this.http.put<string>(`${API_URL}/updateRem/${userId}?key=${key}`, null, { responseType: 'text' as 'json' });
+  }
+
 
 }

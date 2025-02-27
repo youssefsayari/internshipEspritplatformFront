@@ -23,8 +23,7 @@ export class DialogComponent implements OnInit {
   getTutors() {
     this.userService.getUserBytypeUser("Tutor").subscribe({
       next: (data: any[]) => {
-        this.tutors = data;
-        console.log("Tutors list:", this.tutors);
+        this.tutors = data.sort((a, b) => a.maxInternshipSupervisions - b.maxInternshipSupervisions);
       },
       error: (err) => {
         console.error('Error while fetching tutors:', err);
@@ -33,10 +32,30 @@ export class DialogComponent implements OnInit {
   }
 
   save() {
-    this.userService.affectTutor(this.student.id, this.selectedTutorId).subscribe({
+    const key = "maxInternshipSupervisions";
+    const oldTutorId = this.student.idTutor;
+    const newTutorId = this.selectedTutorId;
+
+    this.userService.affectTutor(this.student.id, newTutorId).subscribe({
       next: () => {
-        Swal.fire('Success', 'Tutor assigned successfully', 'success');
-        this.dialogRef.close(true);
+        this.userService.updateTutorAdd(key, newTutorId).subscribe({
+          next: () => {
+            this.userService.updateTutorRem(key, oldTutorId).subscribe({
+              next: () => {
+                Swal.fire('Success', 'Tutor assigned successfully', 'success');
+                this.dialogRef.close(true);
+              },
+              error: (err) => {
+                console.error('Error updating old tutor:', err);
+                Swal.fire('Error', 'Failed to update old tutor', 'error');
+              }
+            });
+          },
+          error: (err) => {
+            console.error('Error updating new tutor:', err);
+            Swal.fire('Error', 'Failed to update new tutor', 'error');
+          }
+        });
       },
       error: (err) => {
         console.error('Error assigning tutor:', err);
@@ -44,6 +63,7 @@ export class DialogComponent implements OnInit {
       }
     });
   }
+
 
 
 }
