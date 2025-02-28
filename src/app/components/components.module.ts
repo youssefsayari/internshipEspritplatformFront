@@ -12,6 +12,8 @@ import { TasksListComponent } from './tasks/tasks-list/tasks-list.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UpdateMeetingComponent } from './update-meeting/update-meeting.component';
 import { FullCalendarModule } from '@fullcalendar/angular';
+import { NgxPaginationModule } from 'ngx-pagination';
+
 
 
 @NgModule({
@@ -20,7 +22,7 @@ import { FullCalendarModule } from '@fullcalendar/angular';
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
-    NgbModule,
+    NgbModule,NgxPaginationModule,
     FullCalendarModule
   ],
   declarations: [

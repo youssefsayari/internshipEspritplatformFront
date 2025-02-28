@@ -25,6 +25,9 @@ export class MeetingComponent implements OnInit {
     events: []
   };
 
+
+  p: number = 1;  
+
   constructor(private meetingService: MeetingService) {}
 
   ngOnInit(): void {
