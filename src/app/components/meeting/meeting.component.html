@@ -34,7 +34,7 @@
                 <th class="text-right">⚙️ Actions</th>
               </thead>
               <tbody>
-                <tr *ngFor="let meeting of meetings | paginate: { itemsPerPage: 3, currentPage: p } ; trackBy: trackMeeting">
+                <tr *ngFor="let meeting of meetings | paginate: { itemsPerPage: 5, currentPage: p } ; trackBy: trackMeeting">
                   <td>{{ meeting.date | date }}</td>
                   <td>{{ meeting.heure }}</td>
                   <td>{{ meeting.typeMeeting }}</td>
@@ -55,7 +55,9 @@
           </div>
 
           <!-- Pagination controls -->
-          <pagination-controls (pageChange)="p = $event"></pagination-controls>
+          <div class="pagination-controls">
+            <pagination-controls (pageChange)="p = $event"></pagination-controls>
+          </div>
         </div>
       </div>
 
