@@ -25,7 +25,6 @@ export class MeetingComponent implements OnInit {
     events: []
   };
 
-
   p: number = 1;  
 
   constructor(private meetingService: MeetingService) {}
@@ -100,12 +99,38 @@ export class MeetingComponent implements OnInit {
       events: this.meetings
         .filter(meeting => meeting.approved)
         .map(meeting => ({
-          title: `${meeting.typeMeeting} - ${meeting.participant?.firstName}`,
+          title: `${meeting.typeMeeting ?? 'Unknown'} - ${meeting.participant?.firstName ?? 'N/A'}`,
           start: meeting.date,
-          url: meeting.link
-        }))
+          extendedProps: {
+            description: meeting.description ?? 'No description',
+            typeMeeting: meeting.typeMeeting ?? 'Unknown',
+            heure: meeting.heure ?? 'N/A',
+            participant: `${meeting.participant?.firstName ?? ''} ${meeting.participant?.lastName ?? ''}`,
+            link: meeting.link ?? '#'
+          }
+        })),
+      eventClick: (info) => {
+        const meeting = info.event.extendedProps;
+        
+        Swal.fire({
+          title: '📅 Meeting Details',
+          html: `
+          <strong>👨‍🎓 Student:</strong> ${meeting.participant}<br>  
+          <strong>📌 Type:</strong> ${info.event.title}<br>
+            <strong>📅 Date:</strong> ${info.event.start?.toLocaleDateString()}<br>
+            <strong>⏰ Time:</strong> ${meeting.heure}<br>
+            <strong>🗒️ Description:</strong> ${meeting.description}<br>
+            <strong>🔗 Meeting Link:</strong> <a href="${meeting.link}" target="_blank">Join Meeting</a>
+          `,
+          confirmButtonText: 'OK',
+          icon: 'info'
+        });
+        
+        info.jsEvent.preventDefault();
+      }
     };
   }
+  
 
   showAddMeetingForm() {
     this.editingMeeting = null;
