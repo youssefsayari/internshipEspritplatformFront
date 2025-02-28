@@ -63,4 +63,16 @@ textarea:focus {
     background-color: #ccc;
     cursor: not-allowed;
   }
-  
+  /* Styling for the card header */
+/* Styling for the title of the Add New Meeting section */
+.card-title {
+  background-color: #ff3636; /* Tomato red background */
+  color: white; /* White text color */
+  padding: 10px 20px; /* Add padding for spacing */
+  border-radius: 5px; /* Rounded corners for a softer appearance */
+  font-size: 2rem; /* Increase font size for better visibility */
+  font-weight: 700; /* Bold text */
+  text-align: center; /* Center the title */
+  text-transform: uppercase; /* Capitalize the text */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+}
