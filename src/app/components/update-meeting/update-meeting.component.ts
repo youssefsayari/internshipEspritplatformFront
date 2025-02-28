@@ -22,7 +22,7 @@ export class UpdateMeetingComponent implements OnInit {
 
   ngOnInit(): void {
     this.meetingForm = this.fb.group({
-      date: [this.meeting.date, [Validators.required, this.notBeforeToday()]],
+      date: [this.meeting.date, [Validators.required]],
       heure: [this.meeting.heure, [Validators.required, Validators.pattern('^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$')]],
       typeMeeting: [this.meeting.typeMeeting, Validators.required],
       description: [this.meeting.description, [Validators.required, Validators.maxLength(255)]],
@@ -36,7 +36,6 @@ export class UpdateMeetingComponent implements OnInit {
     this.meetingService.getStudentsByTutorId(tutorId).subscribe({
       next: (students) => {
         this.students = students;
-        console.log("Loaded students:", this.students);
       },
       error: (error) => console.error('Failed to load students', error)
     });
@@ -53,10 +52,8 @@ export class UpdateMeetingComponent implements OnInit {
 
   onSubmit() {
     if (this.meetingForm.valid) {
-      const organiserId = 1; // Replace with actual organiser ID
+      const organiserId = 1; 
       const participantId = this.meetingForm.get('studentId')?.value;
-
-      console.log("Updating meeting with participantId:", participantId);
 
       if (!participantId) {
         Swal.fire({
