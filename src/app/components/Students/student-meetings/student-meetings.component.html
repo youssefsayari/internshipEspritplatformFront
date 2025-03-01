@@ -60,7 +60,7 @@
       </div>
 
       <!-- Form to add new meeting -->
-      <app-add-meeting *ngIf="isFormVisible" (close)="closeForm()"></app-add-meeting>
+      <app-student-add-meeting *ngIf="isFormVisible" (close)="closeForm()" (meetingAdded)="loadMeetings()"></app-student-add-meeting>
 
     </div>
   </div>

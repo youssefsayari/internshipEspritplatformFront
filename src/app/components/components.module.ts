@@ -14,6 +14,7 @@ import { UpdateMeetingComponent } from './update-meeting/update-meeting.componen
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { StudentMeetingsComponent } from './Students/student-meetings/student-meetings.component';
+import { StudentAddMeetingComponent } from './Students/student-add-meeting/student-add-meeting.component';
 
 
 
@@ -34,7 +35,8 @@ import { StudentMeetingsComponent } from './Students/student-meetings/student-me
     AddMeetingComponent,
     TasksListComponent,
     UpdateMeetingComponent,
-    StudentMeetingsComponent
+    StudentMeetingsComponent,
+    StudentAddMeetingComponent
   ],
   exports: [
     FooterComponent,
