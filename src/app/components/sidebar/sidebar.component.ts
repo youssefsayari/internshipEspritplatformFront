@@ -23,6 +23,8 @@ export const ROUTES: RouteInfo[] = [
     { path: '/typography', title: 'Typography',  icon:'text_caps-small', class: '' },
     { path: '/upgrade', title: 'Upgrade to PRO',  icon:'objects_spaceship', class: 'active active-pro' }*/
     { path: '/My meeting', title: 'My Meeting', icon: 'education_atom', class: '' },
+    { path: '/StudentMeeting', title: 'StudentMeeting', icon: 'education_atom', class: '' },
+
     { path: '/My Students', title: 'My Students', icon: 'location_map-big', class: '' },
     { path: '/My internships', title: 'My Internships', icon: 'business_briefcase-24', class: '' },
     { path: '/My defenses', title: 'My Defenses', icon: 'design_app', class: '' },

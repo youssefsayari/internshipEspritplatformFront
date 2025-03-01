@@ -10,10 +10,12 @@ import { NotificationsComponent } from '../../notifications/notifications.compon
 import { UpgradeComponent } from '../../upgrade/upgrade.component';
 import { MeetingComponent } from '../../components/meeting/meeting.component';
 import { TasksListComponent } from '../../components/tasks/tasks-list/tasks-list.component';
+import { StudentMeetingsComponent } from '../../components/Students/student-meetings/student-meetings.component';
 
 export const AdminLayoutRoutes: Routes = [
    
     { path: 'My meeting',        component: MeetingComponent },
+    { path: 'StudentMeeting', component: StudentMeetingsComponent },
     { path: 'My Students',        component: TasksListComponent },
     { path: 'My internships',      component: DashboardComponent },
     { path: 'My defenses',   component: UserProfileComponent },

@@ -13,6 +13,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UpdateMeetingComponent } from './update-meeting/update-meeting.component';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { StudentMeetingsComponent } from './Students/student-meetings/student-meetings.component';
 
 
 
@@ -32,7 +33,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
     MeetingComponent,
     AddMeetingComponent,
     TasksListComponent,
-    UpdateMeetingComponent
+    UpdateMeetingComponent,
+    StudentMeetingsComponent
   ],
   exports: [
     FooterComponent,
