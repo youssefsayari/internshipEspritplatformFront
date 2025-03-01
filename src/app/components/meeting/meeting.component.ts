@@ -18,6 +18,7 @@ export class MeetingComponent implements OnInit {
   isFormVisible = false;
   selectedStudentId: string = "";
   isCalendarVisible = false;
+  tutorId=1;
 
   calendarOptions: CalendarOptions = {
     initialView: 'dayGridMonth',
@@ -36,7 +37,7 @@ export class MeetingComponent implements OnInit {
 
   loadMeetings() {
     if (this.selectedStudentId) {
-      this.meetingService.getMeetingsByStudent(parseInt(this.selectedStudentId)).subscribe({
+      this.meetingService.getMeetingsByStudentAndTutor(parseInt(this.selectedStudentId),this.tutorId).subscribe({
         next: (meetings) => {
           this.meetings = meetings;
           this.updateCalendarEvents();
@@ -44,7 +45,7 @@ export class MeetingComponent implements OnInit {
         error: (err) => console.error('Error fetching meetings:', err)
       });
     } else {
-      this.meetingService.getAllMeetings().subscribe({
+      this.meetingService.getMeetingsByTutor(this.tutorId).subscribe({
         next: (meetings) => {
           this.meetings = meetings;
           this.updateCalendarEvents();
@@ -55,7 +56,7 @@ export class MeetingComponent implements OnInit {
   }
 
   loadStudents() {
-    this.meetingService.getStudentsByTutorId(1).subscribe({
+    this.meetingService.getStudentsByTutorId(this.tutorId).subscribe({
       next: (students) => (this.students = students),
       error: (err) => console.error('Failed to load students', err)
     });
