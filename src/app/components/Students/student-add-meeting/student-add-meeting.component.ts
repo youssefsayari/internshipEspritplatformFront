@@ -17,12 +17,21 @@ export class StudentAddMeetingComponent implements OnInit {
 
   @Output() close = new EventEmitter<void>();
 
-  tutorId: number = 1; 
-  participantId: number = 3; 
+  participantId: number = 3;
+  tutorId: number ;
+ 
 
   constructor(private fb: FormBuilder, private meetingService: MeetingService) { }
 
   ngOnInit(): void {
+    this.meetingService.findTutorIdByStudentId(this.participantId).subscribe(
+      (tutorId: number) => {
+        this.tutorId = tutorId; 
+      },
+      (error) => {
+        console.error('Error fetching tutorId:', error);
+      }
+    );
     this.meetingForm = this.fb.group({
       date: ['', [Validators.required, this.notBeforeToday()]],
       heure: ['', [Validators.required, Validators.pattern('^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$')]],
