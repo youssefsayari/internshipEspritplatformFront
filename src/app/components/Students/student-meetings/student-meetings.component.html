@@ -61,7 +61,12 @@
 
       <!-- Form to add new meeting -->
       <app-student-add-meeting *ngIf="isFormVisible" (close)="closeForm()" (meetingAdded)="loadMeetings()"></app-student-add-meeting>
-
+      <app-student-update-meeting 
+      *ngIf="isUpdateFormVisible && editingMeeting" 
+      [meeting]="editingMeeting" 
+      (close)="closeForm()" 
+      (meetingUpdated)="loadMeetings()">
+    </app-student-update-meeting>
     </div>
   </div>
 

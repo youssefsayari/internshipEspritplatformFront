@@ -1,0 +1,77 @@
+/* src/app/components/add-meeting/add-meeting.component.css */
+textarea {
+    resize: none; /* Disables resizing of the textarea */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Adds a subtle shadow around the textarea */
+    padding: 10px; /* Adds padding inside the textarea for text indent */
+}
+
+textarea:focus {
+    border-color: #007bff; /* Changes border color to Bootstrap primary on focus */
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25); /* Adds Bootstrap-like focus shadow */
+}
+/* Styling for Form Fields */
+.form-group label {
+    font-weight: bold;
+  }
+  
+  input, select, textarea {
+    border-radius: 5px;
+    padding: 8px;
+    font-size: 16px;
+    width: 100%;
+  }
+  
+  textarea {
+    resize: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  textarea:focus, input:focus, select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+  }
+  
+  /* Align Date & Hour in One Row */
+  .form-row {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .form-group {
+    flex: 1;
+  }
+  
+  /* Styling for Buttons */
+  .btn {
+    padding: 10px 16px;
+    font-size: 16px;
+    border-radius: 5px;
+    font-weight: bold;
+  }
+  
+  .btn-success {
+    background-color: #28a745;
+    border: none;
+  }
+  
+  .btn-danger {
+    background-color: #dc3545;
+    border: none;
+  }
+  
+  .btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  .card-title {
+    background-color: #ff3636; /* Tomato red background */
+    color: white; /* White text color */
+    padding: 10px 20px; /* Add padding for spacing */
+    border-radius: 5px; /* Rounded corners for a softer appearance */
+    font-size: 2rem; /* Increase font size for better visibility */
+    font-weight: 700; /* Bold text */
+    text-align: center; /* Center the title */
+    text-transform: uppercase; /* Capitalize the text */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+  }
+  
