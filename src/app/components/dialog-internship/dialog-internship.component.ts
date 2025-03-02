@@ -43,10 +43,8 @@ export class DialogInternshipComponent implements OnInit {
     const newTutorId = this.selectedTutorId;
     const newValidatorId = this.selectedValidatorId;
 
-    // ================================
-    // 🔥 Affectation du Nouveau Tutor
     if (newTutorId != null) {
-      this.userService.affectTutor(this.internship.idInternship, newTutorId).subscribe({
+      this.userService.affectTutor(this.internship.idStudent, newTutorId).subscribe({
         next: () => {
           console.log("Nouveau Tutor Affecté");
         },
@@ -66,7 +64,6 @@ export class DialogInternshipComponent implements OnInit {
       });
     }
 
-    // 🔥 Décrémentation de l'ancien Tutor
     if (oldTutorId != null) {
       this.userService.updateTutorRem(key, oldTutorId).subscribe({
         next: () => {

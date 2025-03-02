@@ -174,7 +174,7 @@ export class PostComponent implements OnInit {
     });
   }
 
-  openDialog(internship: any) {
+  openDialog(internship: any, post: Post) {
     const dialogRef = this.dialog.open(DialogInternshipComponent, {
       width: '30%',
       data: internship
@@ -183,7 +183,7 @@ export class PostComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         console.log('Dialog closed with:', result);
-        this.ngOnInit();
+        this.getInternships(post.id, post);
       }
     });
   }
