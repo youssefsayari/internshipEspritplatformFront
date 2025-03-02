@@ -1,4 +1,11 @@
-<h2 mat-dialog-title>Edit Internship</h2>
+<h2 mat-dialog-title class="d-flex align-items-center justify-content-between">
+  Edit Internship
+  <div *ngIf="post.skills?.length > 0" class="d-flex flex-wrap" style="gap: 10px;">
+    <span class="badge bg-primary p-2" *ngFor="let skill of post.skills">
+      {{ skill.name }}
+    </span>
+  </div>
+</h2>
 <mat-dialog-content class="mat-typography">
   <mat-form-field>
     <mat-label>Student Name</mat-label>
@@ -17,17 +24,22 @@
 
   <mat-form-field>
     <mat-label>Select Tutor</mat-label>
-    <mat-select [(value)]="selectedTutorId">
+    <mat-select [(value)]="selectedTutorId" (selectionChange)="onTutorChange()">
       <mat-option *ngFor="let tutor of tutors1" [value]="tutor.id">
         {{ tutor.firstName }} {{ tutor.lastName }}
       </mat-option>
     </mat-select>
   </mat-form-field>
 
-  <mat-form-field>
+  <mat-form-field *ngIf="post.typeInternship === 'Graduation'">
     <mat-label>Select Validator</mat-label>
     <mat-select [(value)]="selectedValidatorId">
-      <mat-option *ngFor="let tutor1 of tutors2" [value]="tutor1.id">{{ tutor1.firstName }} {{ tutor1.lastName }}</mat-option>
+      <mat-option *ngFor="let tutor1 of tutors2" [value]="tutor1.id">
+        {{ tutor1.firstName }} {{ tutor1.lastName }}
+        <span class="expertise-badge" matTooltip="{{ tutor1.expertise }}">
+        {{ tutor1.expertise }}
+      </span>
+      </mat-option>
     </mat-select>
   </mat-form-field>
 

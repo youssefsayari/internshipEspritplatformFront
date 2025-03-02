@@ -21,6 +21,8 @@ import {MatDialogModule} from "@angular/material/dialog";
 import {MatButtonModule} from "@angular/material/button";
 import { SettingComponent } from './setting/setting.component';
 import { DialogInternshipComponent } from './dialog-internship/dialog-internship.component';
+import {MatIconModule} from "@angular/material/icon";
+import {MatTooltipModule} from "@angular/material/tooltip";
 
 @NgModule({
   imports: [
@@ -35,7 +37,9 @@ import { DialogInternshipComponent } from './dialog-internship/dialog-internship
     FormsModule,
     MatSelectModule,
     MatDialogModule,
-    MatButtonModule
+    MatButtonModule,
+    MatIconModule,
+    MatTooltipModule
   ],
   declarations: [
     FooterComponent,

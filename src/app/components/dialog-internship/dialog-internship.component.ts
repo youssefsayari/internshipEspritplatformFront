@@ -12,14 +12,20 @@ import {InternshipService} from "../../services/internship.service";
 export class DialogInternshipComponent implements OnInit {
   tutors1: any[] = [];
   tutors2: any[] = [];
+  post: any;
+  internship: any;
   selectedTutorId: number;
   selectedValidatorId: number;
   constructor(public dialogRef: MatDialogRef<DialogInternshipComponent>,
-              @Inject(MAT_DIALOG_DATA) public internship: any,
-              private userService: UserService, private internshipService: InternshipService) { }
+              @Inject(MAT_DIALOG_DATA) public data: any,
+              private userService: UserService, private internshipService: InternshipService) {
+    this.internship = data.internship;
+    this.post = data.post;
+  }
 
   ngOnInit(): void {
     this.selectedTutorId = this.internship.idTutor || null;
+    this.selectedValidatorId = this.internship.validator_id || null;
     this.getTutors();
   }
 
@@ -28,12 +34,28 @@ export class DialogInternshipComponent implements OnInit {
       next: (data: any[]) => {
         this.tutors1 = data.sort((a, b) => a.maxInternshipSupervisions - b.maxInternshipSupervisions);
         this.tutors2 = data.sort((a, b) => a.maxValidatedInternships - b.maxValidatedInternships);
+        this.filterValidators();
       },
       error: (err) => {
         console.error('Error while fetching tutors:', err);
       }
     });
   }
+
+  filterValidators() {
+    if (this.selectedTutorId != null) {
+      this.tutors2 = this.tutors2.filter(tutor => tutor.id !== this.selectedTutorId);
+    }
+    if (this.selectedValidatorId != null) {
+      this.tutors1 = this.tutors1.filter(tutor => tutor.id !== this.selectedValidatorId);
+    }
+  }
+
+  onTutorChange() {
+    this.filterValidators();
+  }
+
+
 
   save() {
     const key = "maxInternshipSupervisions";
@@ -42,6 +64,12 @@ export class DialogInternshipComponent implements OnInit {
     const oldValidatorId = this.internship.validator_id;
     const newTutorId = this.selectedTutorId;
     const newValidatorId = this.selectedValidatorId;
+
+    if (this.selectedTutorId === this.selectedValidatorId) {
+      Swal.fire('Error', 'You cannot select the same person as Tutor and Validator', 'error');
+      return;
+    }
+
 
     if (newTutorId != null) {
       this.userService.affectTutor(this.internship.idStudent, newTutorId).subscribe({

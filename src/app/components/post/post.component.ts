@@ -174,10 +174,10 @@ export class PostComponent implements OnInit {
     });
   }
 
-  openDialog(internship: any, post: Post) {
+  openDialog(internship: any, post: any) {
     const dialogRef = this.dialog.open(DialogInternshipComponent, {
       width: '30%',
-      data: internship
+      data: {internship: internship, post : post}
     });
 
     dialogRef.afterClosed().subscribe(result => {

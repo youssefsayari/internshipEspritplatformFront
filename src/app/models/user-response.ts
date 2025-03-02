@@ -8,4 +8,5 @@ export class UserResponse {
   idTutor: number;
   maxValidatedInternships: number;
   maxInternshipSupervisions: number;
+  expertise: string;
 }
