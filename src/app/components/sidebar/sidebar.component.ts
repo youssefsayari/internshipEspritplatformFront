@@ -11,6 +11,7 @@ declare interface RouteInfo {
 export const ROUTES: RouteInfo[] = [
   { path: '/dashboard', title: 'Dashboard', icon: 'business_chart-bar-32', class: '', roles: ['Admin'] },
   { path: '/student', title: 'Students', icon: 'education_glasses', class: '', roles: ['Admin'] },
+  { path: '/post', title: 'Posts', icon: 'education_paper', class: '', roles: ['Admin'] },
   { path: '/user-profile', title: 'My Profile', icon: 'users_single-02', class: '', roles: ['Student', 'Tutor'] },
   { path: '/agreement', title: 'My Agreement', icon: 'education_paper', class: '', roles: ['Student'] },
   { path: '/internship', title: 'My Internship', icon: 'business_briefcase-24', class: '', roles: ['Student','Tutor'] },
@@ -19,7 +20,7 @@ export const ROUTES: RouteInfo[] = [
   { path: '/task', title: 'My Tasks', icon: 'design_vector', class: '', roles: ['Student', 'Admin'] },
   { path: '/quiz', title: 'My Quizzes', icon: 'ui-2_chat-round', class: '', roles: ['Student'] },
   { path: '/defence', title: 'My Defences', icon: 'education_hat', class: '', roles: ['Student'] },
-  { path: '/setting', title: 'Setting', icon: 'ui-1_settings-gear-63', class: '', roles: ['Admin'] },
+  { path: '/settings', title: 'Settings', icon: 'ui-1_settings-gear-63', class: '', roles: ['Admin'] },
   { path: '/feedback', title: 'Feedback', icon: 'ui-1_send', class: 'active active-pro', roles: ['Student','Admin'] },
 ];
 

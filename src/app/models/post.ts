@@ -1,9 +1,11 @@
+import {Skill} from "./skill";
+
 export class Post {
   id!: number;
   title!: string;
   content!: string;
   createdAt!: Date;
-  companyId!: number;
-  comments!: any[];
-  ratings!: any[];
+  companyName!: string;
+  typeInternship!: string;
+  skills!: Skill[];
 }
