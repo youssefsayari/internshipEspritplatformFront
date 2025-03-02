@@ -47,12 +47,13 @@
                       </button>
                     </div>
                     <span
-                      (click)="toggleInternships(post.id)"
+                      (click)="toggleInternships(post.id, post)"
                       class="arrow-icon ms-4"
                       [ngClass]="{'rotate-arrow': openedPostId === post.id}"
                       style="cursor: pointer; margin-left: 20px;">
                       <i class="fa-solid fa-chevron-down fs-4"></i>
                     </span>
+
                   </div>
                 </div>
 
@@ -89,14 +90,15 @@
 
                         <ng-container matColumnDef="validatorName">
                           <th mat-header-cell *matHeaderCellDef mat-sort-header> Validator Name </th>
-                          <td mat-cell *matCellDef="let row"> {{ row.validatorName }} </td>
+                          <td mat-cell *matCellDef="let row"> {{ row.validatorName || 'No tutor assigned' }} </td>
                         </ng-container>
+
 
                         <ng-container matColumnDef="action">
                           <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
                           <td mat-cell *matCellDef="let row">
                             <div class="action-buttons d-flex gap-2">
-                              <button class="btn btn-danger" (click)="deleteUser(row.id)">Delete</button>
+                              <button class="btn btn-danger" (click)="deleteInternship(row.id)">Delete</button>
                               <button class="btn btn-warning" (click)="openDialog(row)">Edit</button>
                             </div>
                           </td>

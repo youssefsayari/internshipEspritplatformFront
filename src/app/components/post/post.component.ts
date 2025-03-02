@@ -9,6 +9,9 @@ import {InternshipAdminResponse} from "../../models/internship-admin-response";
 import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
+import {DialogComponent} from "../dialog/dialog.component";
+import {MatDialog} from "@angular/material/dialog";
+import {DialogInternshipComponent} from "../dialog-internship/dialog-internship.component";
 
 
 @Component({
@@ -19,7 +22,7 @@ import {MatSort} from "@angular/material/sort";
 export class PostComponent implements OnInit {
   posts: Post[] = [];
   internships: InternshipAdminResponse[] = [];
-  displayedColumns: string[] = ['studentName', 'classe', 'tutorName', 'internshipState', 'validatorName', 'action'];
+  displayedColumns: string[];
   dataSource: MatTableDataSource<InternshipAdminResponse>;
   openedPostId: number | null = null;
   id: number;
@@ -28,7 +31,7 @@ export class PostComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private router: Router, private postService: PostService, private userService: UserService, private internshipService: InternshipService) { }
+  constructor(private router: Router, private postService: PostService, private userService: UserService, private internshipService: InternshipService,private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.postService.getAllPosts().subscribe((data: Post[]) => {
@@ -44,6 +47,13 @@ export class PostComponent implements OnInit {
     }
     if (userRole === 'Admin') {
       this.isAdmin = true;
+    }
+  }
+  adjustColumns(post: Post): void {
+    if (post.typeInternship === 'Summer') {
+      this.displayedColumns = ['studentName', 'classe', 'tutorName', 'internshipState', 'action'];
+    } else {
+      this.displayedColumns = ['studentName', 'classe', 'tutorName', 'internshipState', 'validatorName', 'action'];
     }
   }
 
@@ -108,21 +118,21 @@ export class PostComponent implements OnInit {
     console.log('Showing details for:', post);
   }
 
-  toggleInternships(postId: number) {
+  toggleInternships(postId: number, post: Post) {
     this.openedPostId = this.openedPostId === postId ? null : postId;
     if (this.openedPostId !== null) {
-      this.getInternships(this.openedPostId);
+      this.getInternships(this.openedPostId, post);
     }
   }
 
-
-  getInternships(openedPostId): void {
+  getInternships(openedPostId: number, post: Post): void {
     this.internshipService.getInternshipsForAdmin(openedPostId).subscribe(
       (data) => {
         this.internships = data;
         this.dataSource = new MatTableDataSource(this.internships);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+        this.adjustColumns(post);
       },
       (error) => {
         console.error('Erreur lors de la récupération des internships:', error);
@@ -139,14 +149,43 @@ export class PostComponent implements OnInit {
     }
   }
 
-  deleteUser(id: number): void {
-    console.log('Delete user with ID: ', id);
-    // Logic to delete a user
+  deleteInternship(internshipId: number) {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this action!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.internshipService.deleteInternship(internshipId).subscribe({
+          next: () => {
+            this.dataSource.data = this.dataSource.data.filter(i => i.idInternship !== internshipId);
+            Swal.fire("Deleted!", "Internship application deleted successfully.", "success");
+          },
+          error: (err) => {
+            console.error("Error deleting internship:", err);
+            Swal.fire("Error!", "Failed to delete internship application.", "error");
+          }
+        });
+      }
+    });
   }
 
-  openDialog(row: any): void {
-    console.log('Edit user: ', row);
-    // Logic to edit user
+  openDialog(internship: any) {
+    const dialogRef = this.dialog.open(DialogInternshipComponent, {
+      width: '30%',
+      data: internship
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('Dialog closed with:', result);
+        this.ngOnInit();
+      }
+    });
   }
 
 }

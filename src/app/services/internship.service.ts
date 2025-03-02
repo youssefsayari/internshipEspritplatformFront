@@ -38,4 +38,8 @@ export class InternshipService {
     return this.http.get<InternshipAdminResponse[]>(`${API_URL}/getInternshipsForAdmin`, { params });
   }
 
+  affectValidator(internshipId: number, tutorId: number): Observable<string> {
+    return this.http.post<string>(`${API_URL}/affectationV/${internshipId}/${tutorId}`, null, { responseType: 'text' as 'json' });
+  }
+
 }

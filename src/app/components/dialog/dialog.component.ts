@@ -36,33 +36,43 @@ export class DialogComponent implements OnInit {
     const oldTutorId = this.student.idTutor;
     const newTutorId = this.selectedTutorId;
 
-    this.userService.affectTutor(this.student.id, newTutorId).subscribe({
-      next: () => {
-        this.userService.updateTutorAdd(key, newTutorId).subscribe({
-          next: () => {
-            this.userService.updateTutorRem(key, oldTutorId).subscribe({
-              next: () => {
+    if (newTutorId !== null) {
+      this.userService.affectTutor(this.student.id, newTutorId).subscribe({
+        next: () => {
+          this.userService.updateTutorAdd(key, newTutorId).subscribe({
+            next: () => {
+              if (oldTutorId !== null) {
+                this.userService.updateTutorRem(key, oldTutorId).subscribe({
+                  next: () => {
+                    Swal.fire('Success', 'Tutor assigned successfully', 'success');
+                    this.dialogRef.close(true);
+                  },
+                  error: (err) => {
+                    console.error('Error updating old tutor:', err);
+                    Swal.fire('Error', 'Failed to update old tutor', 'error');
+                  }
+                });
+              } else {
                 Swal.fire('Success', 'Tutor assigned successfully', 'success');
                 this.dialogRef.close(true);
-              },
-              error: (err) => {
-                console.error('Error updating old tutor:', err);
-                Swal.fire('Error', 'Failed to update old tutor', 'error');
               }
-            });
-          },
-          error: (err) => {
-            console.error('Error updating new tutor:', err);
-            Swal.fire('Error', 'Failed to update new tutor', 'error');
-          }
-        });
-      },
-      error: (err) => {
-        console.error('Error assigning tutor:', err);
-        Swal.fire('Error', 'Failed to assign tutor', 'error');
-      }
-    });
+            },
+            error: (err) => {
+              console.error('Error updating new tutor:', err);
+              Swal.fire('Error', 'Failed to update new tutor', 'error');
+            }
+          });
+        },
+        error: (err) => {
+          console.error('Error assigning tutor:', err);
+          Swal.fire('Error', 'Failed to assign tutor', 'error');
+        }
+      });
+    } else {
+      Swal.fire('Error', 'New tutor ID cannot be null', 'error');
+    }
   }
+
 
 
 

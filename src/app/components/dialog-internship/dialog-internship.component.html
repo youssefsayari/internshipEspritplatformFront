@@ -1,0 +1,39 @@
+<h2 mat-dialog-title>Edit Internship</h2>
+<mat-dialog-content class="mat-typography">
+  <mat-form-field>
+    <mat-label>Student Name</mat-label>
+    <input matInput [(ngModel)]="internship.studentName" disabled>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Classroom</mat-label>
+    <input matInput [(ngModel)]="internship.classe" disabled>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>State</mat-label>
+    <input matInput [(ngModel)]="internship.internshipState" disabled>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Select Tutor</mat-label>
+    <mat-select [(value)]="selectedTutorId">
+      <mat-option *ngFor="let tutor of tutors1" [value]="tutor.id">
+        {{ tutor.firstName }} {{ tutor.lastName }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Select Validator</mat-label>
+    <mat-select [(value)]="selectedValidatorId">
+      <mat-option *ngFor="let tutor1 of tutors2" [value]="tutor1.id">{{ tutor1.firstName }} {{ tutor1.lastName }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="dialogRef.close()">Cancel</button>
+  <button mat-button color="primary" (click)="save()">Save</button>
+</mat-dialog-actions>

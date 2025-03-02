@@ -20,6 +20,7 @@ import {MatSelectModule} from "@angular/material/select";
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatButtonModule} from "@angular/material/button";
 import { SettingComponent } from './setting/setting.component';
+import { DialogInternshipComponent } from './dialog-internship/dialog-internship.component';
 
 @NgModule({
   imports: [
@@ -44,7 +45,8 @@ import { SettingComponent } from './setting/setting.component';
     PostComponent,
     StudentComponent,
     DialogComponent,
-    SettingComponent
+    SettingComponent,
+    DialogInternshipComponent
   ],
   exports: [
     FooterComponent,

@@ -1,4 +1,6 @@
 export class InternshipAdminResponse {
+  idInternship!: number;
+  idTutor!: number;
   studentName!: string;
   classe!: string;
   tutorName!: string;
