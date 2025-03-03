@@ -46,4 +46,8 @@ export class InternshipService {
     return this.http.post<string>(`${API_URL}/approveInternship/${internshipId}`, null, { responseType: 'text' as 'json' });
   }
 
+  rejectInternship(internshipId: number): Observable<string> {
+    return this.http.post<string>(`${API_URL}/rejectInternship/${internshipId}`, null, { responseType: 'text' as 'json' });
+  }
+
 }

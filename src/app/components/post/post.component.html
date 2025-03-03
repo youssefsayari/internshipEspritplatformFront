@@ -212,14 +212,14 @@
                             <div class="action-buttons d-flex gap-2">
                               <button
                                 class="btn btn-success"
-                                (click)="AcceptInternship(row.idInternship)"
+                                (click)="AcceptInternship(row.idInternship,post)"
                                 [disabled]="row.internshipState === 'APPROVED' || row.internshipState === 'APPROVEDBYCOMPANY' || row.internshipState === 'REJECTED'">
                                 Accepted
                               </button>
                               <button
                                 class="btn btn-danger"
-                                (click)="DeniedInternship(row.idInternship)"
-                                [disabled]="row.internshipState === 'APPROVED' || row.internshipState === 'APPROVEDBYCOMPANY'">
+                                (click)="DeniedInternship(row.idInternship,post)"
+                                [disabled]="row.internshipState === 'APPROVED' || row.internshipState === 'APPROVEDBYCOMPANY'|| row.internshipState === 'REJECTED'">
                                 Denied
                               </button>
                             </div>

@@ -202,7 +202,7 @@ export class PostComponent implements OnInit {
     });
   }
 
-  AcceptInternship(internshipId: number) {
+  AcceptInternship(internshipId: number,post: any) {
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this action!",
@@ -231,6 +231,7 @@ export class PostComponent implements OnInit {
                   next: () => {
                     this.dataSource.data = this.dataSource.data.filter(i => i.idInternship !== internshipId);
                     Swal.fire("Approved!", "Internship application approved successfully.", "success");
+                    this.getInternships(post.id, post);
                   },
                   error: (err) => {
                     console.error("Error approving internship:", err);
@@ -253,7 +254,7 @@ export class PostComponent implements OnInit {
 
 
 
-  DeniedInternship(internshipId: number) {
+  DeniedInternship(internshipId: number,post: any) {
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this action!",
@@ -261,17 +262,40 @@ export class PostComponent implements OnInit {
       showCancelButton: true,
       confirmButtonColor: "#d33",
       cancelButtonColor: "#3085d6",
-      confirmButtonText: "Yes, delete it!"
+      confirmButtonText: "Yes, denied it!"
     }).then((result) => {
       if (result.isConfirmed) {
-        this.internshipService.deleteInternship(internshipId).subscribe({
-          next: () => {
-            this.dataSource.data = this.dataSource.data.filter(i => i.idInternship !== internshipId);
-            Swal.fire("Deleted!", "Internship application deleted successfully.", "success");
-          },
-          error: (err) => {
-            console.error("Error deleting internship:", err);
-            Swal.fire("Error!", "Failed to delete internship application.", "error");
+        Swal.fire({
+          title: 'Why do you deny this internship?',
+          input: 'textarea',
+          inputPlaceholder: 'Write your reason here...',
+          showCancelButton: true,
+          confirmButtonText: 'Approve',
+          preConfirm: (remark) => {
+            const internshipRemark: InternshipRemark = {
+              remark: remark,
+              idInternship: internshipId
+            };
+
+            this.internshipRemarkService.addInternshipRemark(internshipRemark).subscribe({
+              next: () => {
+                this.internshipService.rejectInternship(internshipId).subscribe({
+                  next: () => {
+                    this.dataSource.data = this.dataSource.data.filter(i => i.idInternship !== internshipId);
+                    Swal.fire("Denied!", "Internship application denied.", "success");
+                    this.getInternships(post.id, post);
+                  },
+                  error: (err) => {
+                    console.error("Error approving internship:", err);
+                    Swal.fire("Error!", "Failed to deny internship application.", "error");
+                  }
+                });
+              },
+              error: (err) => {
+                console.error("Error adding remark:", err);
+                Swal.fire("Error!", "Failed to add remark.", "error");
+              }
+            });
           }
         });
       }
