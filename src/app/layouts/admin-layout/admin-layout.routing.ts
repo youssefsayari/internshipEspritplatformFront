@@ -29,4 +29,5 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'post',        component: PostComponent },
     { path: 'student',        component: StudentComponent },
     { path: 'setting',        component: SettingComponent },
+    { path: 'internship-request',        component: PostComponent },
 ];

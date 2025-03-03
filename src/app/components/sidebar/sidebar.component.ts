@@ -13,7 +13,7 @@ export const ROUTES: RouteInfo[] = [
   { path: '/user-profile', title: 'My Profile', icon: 'users_single-02', class: '', roles: ['Student', 'Tutor','Company'] },
   { path: '/student', title: 'Students', icon: 'education_glasses', class: '', roles: ['Admin'] },
   { path: '/post', title: 'Posts', icon: 'education_paper', class: '', roles: ['Admin'] },
-  { path: '/post', title: 'My Posts', icon: 'education_paper', class: '', roles: ['Company'] },
+  { path: '/internship-request', title: 'Internship Request', icon: 'education_paper', class: '', roles: ['Company'] },
   { path: '/agreement', title: 'My Agreement', icon: 'education_paper', class: '', roles: ['Student'] },
   { path: '/internship', title: 'My Internship', icon: 'business_briefcase-24', class: '', roles: ['Student'] },
   { path: '/internship', title: 'Internship', icon: 'business_briefcase-24', class: '', roles: ['Tutor'] },

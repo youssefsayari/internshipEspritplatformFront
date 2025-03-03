@@ -16,4 +16,8 @@ export class PostService {
   getAllPosts(): Observable<Post[]> {
     return this.http.get<Post[]>(`${API_URL}/getAllPosts`);
   }
+  getPostsByCompany(companyId: number): Observable<Post[]> {
+    return this.http.get<Post[]>(`${API_URL}/getPostsByCompany/${companyId}`);
+  }
+
 }

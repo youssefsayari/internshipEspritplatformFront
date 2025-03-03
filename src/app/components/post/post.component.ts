@@ -9,9 +9,10 @@ import {InternshipAdminResponse} from "../../models/internship-admin-response";
 import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
-import {DialogComponent} from "../dialog/dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {DialogInternshipComponent} from "../dialog-internship/dialog-internship.component";
+import {InternshipRemarkService} from "../../services/internship-remark.service";
+import {InternshipRemark} from "../../models/internship-remark";
 
 
 @Component({
@@ -27,19 +28,18 @@ export class PostComponent implements OnInit {
   openedPostId: number | null = null;
   id: number;
   isAdmin: boolean = false;
+  isCompany: boolean = false;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private router: Router, private postService: PostService, private userService: UserService, private internshipService: InternshipService,private dialog: MatDialog) { }
+  constructor(private router: Router, private postService: PostService, private userService: UserService,
+              private internshipService: InternshipService,private dialog: MatDialog, private internshipRemarkService: InternshipRemarkService) { }
 
   ngOnInit(): void {
-    this.postService.getAllPosts().subscribe((data: Post[]) => {
-      this.posts = data;
-    });
     const userRole = localStorage.getItem('userRole');
     const token = localStorage.getItem('Token');
-
+    const classe = localStorage.getItem('userClasse');
     if (!token || !userRole) {
       localStorage.clear();
       this.router.navigate(['/login']);
@@ -47,6 +47,20 @@ export class PostComponent implements OnInit {
     }
     if (userRole === 'Admin') {
       this.isAdmin = true;
+      this.postService.getAllPosts().subscribe((data: Post[]) => {
+        this.posts = data;
+      });
+    }
+    else if (userRole === 'Company') {
+      this.isCompany = true;
+      this.postService.getPostsByCompany(Number(classe)).subscribe((data: Post[]) => {
+        this.posts = data;
+      });
+    }
+    else {
+      this.postService.getAllPosts().subscribe((data: Post[]) => {
+        this.posts = data;
+      });
     }
   }
   adjustColumns(post: Post): void {
@@ -187,5 +201,99 @@ export class PostComponent implements OnInit {
       }
     });
   }
+
+  AcceptInternship(internshipId: number) {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this action!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, approve it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: 'Why do you approve this internship?',
+          input: 'textarea',
+          inputPlaceholder: 'Write your reason here...',
+          showCancelButton: true,
+          confirmButtonText: 'Approve',
+          preConfirm: (remark) => {
+            const internshipRemark: InternshipRemark = {
+              remark: remark,
+              idInternship: internshipId
+            };
+
+            this.internshipRemarkService.addInternshipRemark(internshipRemark).subscribe({
+              next: () => {
+                this.internshipService.approveInternship(internshipId).subscribe({
+                  next: () => {
+                    this.dataSource.data = this.dataSource.data.filter(i => i.idInternship !== internshipId);
+                    Swal.fire("Approved!", "Internship application approved successfully.", "success");
+                  },
+                  error: (err) => {
+                    console.error("Error approving internship:", err);
+                    Swal.fire("Error!", "Failed to approve internship application.", "error");
+                  }
+                });
+              },
+              error: (err) => {
+                console.error("Error adding remark:", err);
+                Swal.fire("Error!", "Failed to add remark.", "error");
+              }
+            });
+          }
+        });
+      }
+    });
+  }
+
+
+
+
+
+  DeniedInternship(internshipId: number) {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this action!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.internshipService.deleteInternship(internshipId).subscribe({
+          next: () => {
+            this.dataSource.data = this.dataSource.data.filter(i => i.idInternship !== internshipId);
+            Swal.fire("Deleted!", "Internship application deleted successfully.", "success");
+          },
+          error: (err) => {
+            console.error("Error deleting internship:", err);
+            Swal.fire("Error!", "Failed to delete internship application.", "error");
+          }
+        });
+      }
+    });
+  }
+
+  getStateLabel(state: string): string {
+    switch (state) {
+      case 'APPROVEDBYCOMPANY':
+        return 'Approved by Company';
+      case 'REJECTEDBYTUTOR':
+        return 'Rejected by Tutor';
+      case 'APPROVED':
+        return 'Approved';
+      case 'REJECTED':
+        return 'Rejected';
+      case 'PENDING':
+        return 'Pending';
+      default:
+        return state;
+    }
+  }
+
 
 }

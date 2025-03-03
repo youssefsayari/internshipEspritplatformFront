@@ -105,5 +105,22 @@ export class InternshipComponent implements OnInit {
     }
   }
 
+  getStateLabel(state: string): string {
+    switch (state) {
+      case 'APPROVEDBYCOMPANY':
+        return 'Approved by Company';
+      case 'REJECTEDBYTUTOR':
+        return 'Rejected by Tutor';
+      case 'APPROVED':
+        return 'Approved';
+      case 'REJECTED':
+        return 'Rejected';
+      case 'PENDING':
+        return 'Pending';
+      default:
+        return state;
+    }
+  }
+
 
 }

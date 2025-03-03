@@ -34,7 +34,9 @@
                 <!-- State Column -->
                 <ng-container matColumnDef="internshipState">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header> State </th>
-                  <td mat-cell *matCellDef="let row"> {{row.internshipState}} </td>
+                  <td mat-cell *matCellDef="let row">
+                    {{ getStateLabel(row.internshipState) }}
+                  </td>
                 </ng-container>
 
                 <!-- Action Column -->
@@ -93,7 +95,9 @@
                 <!-- State Column -->
                 <ng-container matColumnDef="internshipState">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header> State </th>
-                  <td mat-cell *matCellDef="let row"> {{row.internshipState}} </td>
+                  <td mat-cell *matCellDef="let row">
+                    {{ getStateLabel(row.internshipState) }}
+                  </td>
                 </ng-container>
 
                 <!-- Action Column -->
@@ -154,7 +158,9 @@
                 <!-- State Column -->
                 <ng-container matColumnDef="internshipState">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header> State </th>
-                  <td mat-cell *matCellDef="let row"> {{row.internshipState}} </td>
+                  <td mat-cell *matCellDef="let row">
+                    {{ getStateLabel(row.internshipState) }}
+                  </td>
                 </ng-container>
 
                 <!-- Action Column -->
