@@ -21,6 +21,7 @@ import {InternshipRemark} from "../../models/internship-remark";
   styleUrls: ['./post.component.scss']
 })
 export class PostComponent implements OnInit {
+  displayedColumnsCompany: string[] = ['studentName', 'classe', 'internshipState', 'action'];
   posts: Post[] = [];
   internships: InternshipAdminResponse[] = [];
   displayedColumns: string[];

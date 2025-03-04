@@ -24,6 +24,7 @@ import { DialogInternshipComponent } from './dialog-internship/dialog-internship
 import {MatIconModule} from "@angular/material/icon";
 import {MatTooltipModule} from "@angular/material/tooltip";
 import { DialogInternshipTutorComponent } from './dialog-internship-tutor/dialog-internship-tutor.component';
+import { DialogRemarkComponent } from './dialog-remark/dialog-remark.component';
 
 @NgModule({
   imports: [
@@ -52,7 +53,8 @@ import { DialogInternshipTutorComponent } from './dialog-internship-tutor/dialog
     DialogComponent,
     SettingComponent,
     DialogInternshipComponent,
-    DialogInternshipTutorComponent
+    DialogInternshipTutorComponent,
+    DialogRemarkComponent
   ],
   exports: [
     FooterComponent,

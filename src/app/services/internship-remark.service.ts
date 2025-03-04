@@ -16,4 +16,7 @@ export class InternshipRemarkService {
   addInternshipRemark(internshipRemark: InternshipRemark): Observable<any> {
     return this.http.post<any>(`${API_URL}/add`, internshipRemark,{ responseType: 'text' as 'json' });
   }
+  getInternshipRemarksByInternshipId(internshipId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${API_URL}/getByInternshipId/${internshipId}`,{ responseType: 'text' as 'json' });
+  }
 }

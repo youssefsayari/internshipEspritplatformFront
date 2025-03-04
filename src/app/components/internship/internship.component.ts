@@ -8,6 +8,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import Swal from 'sweetalert2';
 import {DialogInternshipTutorComponent} from "../dialog-internship-tutor/dialog-internship-tutor.component";
 import {MatDialog} from "@angular/material/dialog";
+import {DialogRemarkComponent} from "../dialog-remark/dialog-remark.component";
 @Component({
   selector: 'app-internship',
   templateUrl: './internship.component.html',
@@ -174,6 +175,22 @@ export class InternshipComponent implements OnInit {
     const dialogRef = this.dialog.open(DialogInternshipTutorComponent, {
       width: '30%',
       data: {internship: internship}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('Dialog closed with:', result);
+        const token = localStorage.getItem('Token');
+        this.fetchInternshipsTutor(token);
+      }
+    });
+  }
+
+
+  showRemark(internshipId: number) {
+    const dialogRef = this.dialog.open(DialogRemarkComponent, {
+      width: '30%',
+      data: { remark: { idInternship: internshipId } }
     });
 
     dialogRef.afterClosed().subscribe(result => {
