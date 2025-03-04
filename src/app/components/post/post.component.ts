@@ -120,17 +120,6 @@ export class PostComponent implements OnInit {
     });
   }
 
-  deletePost(id: number) {
-    console.log(`Post deleted with ID: ${id}`);
-  }
-
-  editPost(post: any) {
-    console.log('Editing post:', post);
-  }
-
-  showDetails(post: any) {
-    console.log('Showing details for:', post);
-  }
 
   toggleInternships(postId: number, post: Post) {
     this.openedPostId = this.openedPostId === postId ? null : postId;
@@ -249,9 +238,6 @@ export class PostComponent implements OnInit {
       }
     });
   }
-
-
-
 
 
   DeniedInternship(internshipId: number,post: any) {

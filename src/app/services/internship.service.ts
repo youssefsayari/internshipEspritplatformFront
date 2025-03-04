@@ -4,6 +4,7 @@ import {Observable} from "rxjs";
 import {Post} from "../models/post";
 import {InternshipAddrequest} from "../models/internship-addrequest";
 import {InternshipAdminResponse} from "../models/internship-admin-response";
+import {InternshipTutorResponse} from "../models/internship-tutor-response";
 
 
 const API_URL = "http://localhost:8089/innoxpert/internship";
@@ -24,6 +25,13 @@ export class InternshipService {
     if (idPost) params.idPost = idPost;
 
     return this.http.get<any[]>(`${API_URL}/getInternshipByCriteria`, { params });
+  }
+
+  getInternshipsForTutor(idUser?: number): Observable<InternshipTutorResponse[]> {
+    let params: any = {};
+    if (idUser) params.idUser = idUser;
+
+    return this.http.get<InternshipTutorResponse[]>(`${API_URL}/getInternshipsForTutor`, { params });
   }
 
   deleteInternship(id: number): Observable<any> {

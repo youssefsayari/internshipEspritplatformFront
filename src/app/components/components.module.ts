@@ -23,6 +23,7 @@ import { SettingComponent } from './setting/setting.component';
 import { DialogInternshipComponent } from './dialog-internship/dialog-internship.component';
 import {MatIconModule} from "@angular/material/icon";
 import {MatTooltipModule} from "@angular/material/tooltip";
+import { DialogInternshipTutorComponent } from './dialog-internship-tutor/dialog-internship-tutor.component';
 
 @NgModule({
   imports: [
@@ -50,7 +51,8 @@ import {MatTooltipModule} from "@angular/material/tooltip";
     StudentComponent,
     DialogComponent,
     SettingComponent,
-    DialogInternshipComponent
+    DialogInternshipComponent,
+    DialogInternshipTutorComponent
   ],
   exports: [
     FooterComponent,

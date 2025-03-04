@@ -35,19 +35,6 @@
                     </span>
                   </div>
                   <div class="d-flex align-items-center">
-                    <div class="d-flex gap-3">
-                      <button class="btn btn-danger" (click)="deletePost(post.id)">
-                        <i class="fa-solid fa-trash"></i> Delete
-                      </button>
-
-                      <button class="btn btn-warning" (click)="editPost(post)">
-                        <i class="fa-solid fa-pen-to-square"></i> Edit
-                      </button>
-
-                      <button class="btn btn-info" (click)="showDetails(post)">
-                        <i class="fa-solid fa-circle-info"></i> Details
-                      </button>
-                    </div>
                     <span
                       (click)="toggleInternships(post.id, post)"
                       class="arrow-icon ms-4"
