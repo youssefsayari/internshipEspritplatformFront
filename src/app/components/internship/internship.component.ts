@@ -9,6 +9,8 @@ import Swal from 'sweetalert2';
 import {DialogInternshipTutorComponent} from "../dialog-internship-tutor/dialog-internship-tutor.component";
 import {MatDialog} from "@angular/material/dialog";
 import {DialogRemarkComponent} from "../dialog-remark/dialog-remark.component";
+import {InternshipRemarkService} from "../../services/internship-remark.service";
+import {Remark} from "../../models/remark";
 @Component({
   selector: 'app-internship',
   templateUrl: './internship.component.html',
@@ -28,10 +30,13 @@ export class InternshipComponent implements OnInit {
   isSummerInternship: boolean = false;
   isGraduationInternship: boolean = false;
   isTutor: boolean = false;
-  constructor(private router: Router, private internshipService: InternshipService,private userService: UserService,private dialog: MatDialog) {}
+  remarks: Remark[] = [];
+  constructor(private router: Router, private internshipService: InternshipService,private userService: UserService,private dialog: MatDialog,
+  private internshipRemarkService: InternshipRemarkService,) {}
 
   ngOnInit() {
     console.log(document.querySelector('.main-panel'));
+
 
     const userRole = localStorage.getItem('userRole');
     const userClasse = localStorage.getItem('userClasse');
@@ -185,12 +190,24 @@ export class InternshipComponent implements OnInit {
       }
     });
   }
+  fetchRemarks(internshipId: number): void {
+    this.internshipRemarkService.getInternshipRemarksByInternshipId(internshipId).subscribe(
+      (data: Remark[]) => {
+        console.log(data);
+        this.remarks = data;
+        this.showRemark(this.remarks);
+      },
+      (error) => {
+        console.error('Error fetching remarks:', error);
+      }
+    );
+  }
 
-
-  showRemark(internshipId: number) {
+  showRemark(remarks) {
+    console.log('Showing remarks:', remarks); // Check the structure of remarks here
     const dialogRef = this.dialog.open(DialogRemarkComponent, {
       width: '30%',
-      data: { remark: { idInternship: internshipId } }
+      data: { remarks: this.remarks }
     });
 
     dialogRef.afterClosed().subscribe(result => {

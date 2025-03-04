@@ -43,6 +43,9 @@ export class DialogInternshipTutorComponent implements OnInit {
           showCancelButton: true,
           confirmButtonText: 'Approve',
           preConfirm: (remark) => {
+            if (remark) {
+              remark = `Tutor[Accepted]: ${remark} - ${new Date().toLocaleDateString()}`;
+            }
             const internshipRemark: InternshipRemark = {
               remark: remark,
               idInternship: internshipId
@@ -91,6 +94,9 @@ export class DialogInternshipTutorComponent implements OnInit {
           showCancelButton: true,
           confirmButtonText: 'Approve',
           preConfirm: (remark) => {
+            if (remark) {
+              remark = `Tutor[Denied]: ${remark} - ${new Date().toLocaleDateString()}`;
+            }
             const internshipRemark: InternshipRemark = {
               remark: remark,
               idInternship: internshipId

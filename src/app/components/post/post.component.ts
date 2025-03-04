@@ -210,6 +210,9 @@ export class PostComponent implements OnInit {
           showCancelButton: true,
           confirmButtonText: 'Approve',
           preConfirm: (remark) => {
+            if (remark) {
+              remark = `Company[Accepted]: ${remark} - ${new Date().toLocaleDateString()}`;
+            }
             const internshipRemark: InternshipRemark = {
               remark: remark,
               idInternship: internshipId
@@ -259,6 +262,9 @@ export class PostComponent implements OnInit {
           showCancelButton: true,
           confirmButtonText: 'Approve',
           preConfirm: (remark) => {
+            if (remark) {
+              remark = `Company[Denied]: ${remark} - ${new Date().toLocaleDateString()}`;
+            }
             const internshipRemark: InternshipRemark = {
               remark: remark,
               idInternship: internshipId

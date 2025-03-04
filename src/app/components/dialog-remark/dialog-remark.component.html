@@ -3,11 +3,11 @@
 </h2>
 
 <mat-dialog-content class="mat-typography">
-  <div *ngIf="remarks.length > 0; else noRemarks">
-    <mat-form-field *ngFor="let remark of remarks">
-      <mat-label>Remark</mat-label>
-      <textarea matInput [(ngModel)]="remark.remark" disabled></textarea>
-    </mat-form-field>
+  <div *ngIf="remarks?.length > 0; else noRemarks">
+    <div *ngFor="let remark of remarks" class="remark-item">
+      <p><strong>Remark:</strong></p>
+      <p class="remark-text">{{ remark.remark }}</p>
+    </div>
   </div>
   <ng-template #noRemarks>
     <p>No remarks available.</p>
