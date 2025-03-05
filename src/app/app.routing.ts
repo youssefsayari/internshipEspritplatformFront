@@ -7,7 +7,13 @@ import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.compon
 
 
 
+
+import { ImageComponent } from './image/image.component';
+
+
+
 const routes: Routes =[
+  { path: 'upload', component: ImageComponent },
   {
     path: '',
     redirectTo: 'dashboard',
@@ -37,6 +43,7 @@ const routes: Routes =[
     RouterModule.forRoot(routes)
   ],
   exports: [
+    RouterModule
   ],
 })
 export class AppRoutingModule { }

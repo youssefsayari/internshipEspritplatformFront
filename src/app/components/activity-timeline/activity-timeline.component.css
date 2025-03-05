@@ -758,7 +758,25 @@
 
 
 
+.text-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
+.btn-apply {
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  background-color: #cd362e;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-apply:hover {
+  background-color: #bd5a5a;
+}
 
 
 

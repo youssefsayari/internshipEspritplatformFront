@@ -47,6 +47,9 @@ interface Timeline {
   averageRating?: number;  // Ajouter une propriété pour la note moyenne
   sector?: string;  // Ajouter une propriété pour l'entreprise
 
+  expiryDateTime?: string; // ISO Date string (nullable)
+
+
 }
 
 @Component({
@@ -60,7 +63,7 @@ export class ActivityTimelineComponent implements OnInit {
   mytimelines: Timeline[] = [];
 
   // Utilisateur connecté, statique à 1 pour l'instant
-  userConnecte: number = 8; // A modifier plus tard pour correspondre à l'ID de l'utilisateur connecté
+  userConnecte: number = 1; // A modifier plus tard pour correspondre à l'ID de l'utilisateur connecté
 
   stars = [1, 2, 3, 4, 5]; // Liste des étoiles à afficher
 
@@ -69,6 +72,10 @@ export class ActivityTimelineComponent implements OnInit {
   isPostEditModalOpen = false;    // Modal pour édition
   newPostContent = '';
   newPostTitle = '';
+  newPostExpiryDateTime?: string; // Optionnel, peut être null
+   // Retourne la date actuelle formatée pour le champ datetime-local
+   
+
 
   selectedPostId: number | null = null; // Stocker l'ID du post sélectionné
   companyId: number | null = null; // Déclare une variable pour stocker l'ID de l'entreprise
@@ -281,8 +288,47 @@ clearFilters() {
   window.location.reload();
 }
 
+
+
+
+
+
+
+
+
   
-  
+    // Méthode pour vérifier si la date d'expiration est dans le futur
+    isExpired(expiryDateTime: string): boolean {
+      return new Date(expiryDateTime) > new Date();
+    }
+
+
+
+
+
+
+
+
+
+
+    minDateTime(): string {
+      const now = new Date();
+    
+      // Récupérer les composants de la date locale
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0'); // Mois commence à 0
+      const day = String(now.getDate()).padStart(2, '0');
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+    
+      // Retourner au format "YYYY-MM-DDTHH:MM"
+      return `${year}-${month}-${day}T${hours}:${minutes}`;
+    }
+    
+
+
+
+
   
 
   /**
@@ -315,6 +361,8 @@ clearFilters() {
       ownerId: post.company.id,
       ratings: post.ratings,  // Directly assign the entire Rating[] array
       sector: post.company?.sector,
+      expiryDateTime: post.expiryDateTime, // ISO Date string (nullable)
+
     
     };
   }
@@ -358,6 +406,34 @@ clearFilters() {
       return date.toLocaleString();
     }
 }
+
+getTimeRemaining(expiryDateTime: string): string {
+  const expiryDate = new Date(expiryDateTime);
+  const now = new Date();
+  const diffMs = expiryDate.getTime() - now.getTime(); // Différence en millisecondes
+
+  if (diffMs <= 0) {
+    return "Expired !";
+  }
+
+  const diffMinutes = Math.floor(diffMs / 60000);
+  const diffHours = Math.floor(diffMinutes / 60);
+  const diffDays = Math.floor(diffHours / 24);
+  const diffWeeks = Math.floor(diffDays / 7);
+
+  if (diffMinutes < 1) {
+    return "Less than a minute left";
+  } else if (diffMinutes < 60) {
+    return `Expires in ${diffMinutes} minute${diffMinutes > 1 ? "s" : ""}`;
+  } else if (diffHours < 24) {
+    return `Expires in ${diffHours} hour${diffHours > 1 ? "s" : ""}`;
+  } else if (diffDays < 7) {
+    return `Expires in ${diffDays} day${diffDays > 1 ? "s" : ""}`;
+  } else {
+    return `Expires in ${diffWeeks} week${diffWeeks > 1 ? "s" : ""}`;
+  }
+}
+
 
 
 
@@ -618,7 +694,9 @@ clearFilters() {
      // createdAt: new Date().toISOString(),
       company: { id: this.companyId } as Company,
       comments: [],
-      ratings: []
+      ratings: [],
+      expiryDateTime: this.newPostExpiryDateTime ? new Date(this.newPostExpiryDateTime).toISOString() : undefined
+
     };
 
     this.postService.addPostAndAffectToCompany(this.companyId, newPost).subscribe(
@@ -630,6 +708,7 @@ clearFilters() {
         }, 0);
         this.newPostTitle = '';
         this.newPostContent = '';
+        this.newPostExpiryDateTime = '';
 
         this.closePostModal();
       },
@@ -696,40 +775,45 @@ clearFilters() {
     const postToEdit = this.mytimelines.find(post => post.id === postId);
   
     if (postToEdit) {
-      this.selectedPostId = postToEdit.id; // Stocke l'ID du post sélectionné
-      this.newPostTitle = postToEdit.title; // Remplir le titre avec les données du post à éditer
-      this.newPostContent = postToEdit.content; // Remplir le contenu avec les données du post à éditer
-
+      this.selectedPostId = postToEdit.id; 
+      this.newPostTitle = postToEdit.title; 
+      this.newPostContent = postToEdit.content; 
+      this.newPostExpiryDateTime = postToEdit.expiryDateTime 
+        ? new Date(postToEdit.expiryDateTime).toISOString().slice(0, 16) 
+        : '';
+  
       this.isPostCreateModalOpen = false;
       this.isPostEditModalOpen = true;
     }
   }
+  
   
 
   updatePost(): void {
     if (this.newPostTitle.trim() === '' || this.newPostContent.trim() === '' || !this.selectedPostId) {
       return;
     }
-
+  
     const updatedPost: Post = {
       id: this.selectedPostId,
       title: this.newPostTitle,
       content: this.newPostContent,
+      expiryDateTime: this.newPostExpiryDateTime ? new Date(this.newPostExpiryDateTime).toISOString() : undefined
     };
-
+  
     this.postService.updatePost(updatedPost).subscribe(
       (savedPost: Post) => {
         // Recherche du post mis à jour et remplacement
         const index = this.mytimelines.findIndex(post => post.id === updatedPost.id);
         if (index !== -1) {
-          // Remplace le post modifié dans le tableau mytimelines
           this.mytimelines[index] = this.transformPostToTimeline(savedPost);
         }
-
+  
         // Réinitialise l'état des modaux et des champs
         this.selectedPostId = null;
         this.newPostTitle = '';
         this.newPostContent = '';
+        this.newPostExpiryDateTime = '';
         this.closePostModal();
       },
       (error) => {
@@ -737,6 +821,7 @@ clearFilters() {
       }
     );
   }
+  
 
   
   

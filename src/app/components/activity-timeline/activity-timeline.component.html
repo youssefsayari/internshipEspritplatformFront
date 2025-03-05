@@ -39,6 +39,7 @@
   <h3>Post Creation</h3>
 
   <form #postForm="ngForm" (ngSubmit)="addNewPost()">
+    <!-- Title input -->
     <input [(ngModel)]="newPostTitle" name="title" placeholder="Title" class="title-input" required minlength="3" maxlength="255" #title="ngModel" />
     <div *ngIf="title.invalid && (title.dirty || title.touched)" class="error-message">
       <div *ngIf="title.errors?.['required']">Title is required.</div>
@@ -46,14 +47,26 @@
       <div *ngIf="title.errors?.['maxlength']">Title must be at most 255 characters long.</div>
     </div>
 
+    <!-- Content input -->
     <textarea [(ngModel)]="newPostContent" name="content" placeholder="Content..." required minlength="10" #content="ngModel"></textarea>
     <div *ngIf="content.invalid && (content.dirty || content.touched)" class="error-message">
       <div *ngIf="content.errors?.['required']">Content is required.</div>
       <div *ngIf="content.errors?.['minlength']">Content must be at least 10 characters long.</div>
     </div>
 
-    
-
+    <!-- Expiry DateTime input -->
+    <label for="expiryDateTime">Expiry Date & Time:</label>
+    <input 
+      type="datetime-local" 
+      id="expiryDateTime" 
+      [(ngModel)]="newPostExpiryDateTime" 
+      name="expiryDateTime" 
+      #expiryDateTime="ngModel"
+      [min]="minDateTime()"
+    />
+    <div *ngIf="expiryDateTime.invalid && (expiryDateTime.dirty || expiryDateTime.touched)" class="error-message">
+      <div *ngIf="expiryDateTime.errors?.['min']">Expiry date must be in the future.</div>
+    </div>
 
     <div class="modal-actions">
       <button class="btn-cancel" (click)="closePostModal()">Cancel</button>
@@ -64,12 +77,14 @@
 
 
 
+
 <!-- Modal pour l'édition -->
 <div class="modal-overlay" *ngIf="isPostEditModalOpen" (click)="closePostModal()"></div>
 <div class="modal-post" *ngIf="isPostEditModalOpen">
   <h3>Post Edit</h3>
 
   <form #editForm="ngForm" (ngSubmit)="updatePost()">
+    <!-- Title input -->
     <input [(ngModel)]="newPostTitle" name="title" placeholder="Title" class="title-input" required minlength="3" maxlength="255" #title="ngModel" />
     <div *ngIf="title.invalid && (title.dirty || title.touched)" class="error-message">
       <div *ngIf="title.errors?.['required']">Title is required.</div>
@@ -77,10 +92,25 @@
       <div *ngIf="title.errors?.['maxlength']">Title must be no longer than 255 characters.</div>
     </div>
 
+    <!-- Content input -->
     <textarea [(ngModel)]="newPostContent" name="content" placeholder="Content..." required minlength="10" #content="ngModel"></textarea>
     <div *ngIf="content.invalid && (content.dirty || content.touched)" class="error-message">
       <div *ngIf="content.errors?.['required']">Content is required.</div>
       <div *ngIf="content.errors?.['minlength']">Content must be at least 10 characters long.</div>
+    </div>
+
+    <!-- Expiry DateTime input -->
+    <label for="expiryDateTime">Expiry Date & Time:</label>
+    <input 
+      type="datetime-local" 
+      id="expiryDateTime" 
+      [(ngModel)]="newPostExpiryDateTime" 
+      name="expiryDateTime" 
+      #expiryDateTime="ngModel"
+      [min]="minDateTime()"
+    />
+    <div *ngIf="expiryDateTime.invalid && (expiryDateTime.dirty || expiryDateTime.touched)" class="error-message">
+      <div *ngIf="expiryDateTime.errors?.['min']">Expiry date must be in the future.</div>
     </div>
 
     <div class="modal-actions">
@@ -89,6 +119,8 @@
     </div>
   </form>
 </div>
+
+
 
 
 
@@ -127,7 +159,9 @@
     <div class="w-100">
       <!-- Informations utilisateur -->
       <h5 class="fw-bold mb-1" (click)="onProfileClick(timeline)" style="cursor: pointer;">{{ timeline.from }}</h5>
-      <small class="text-muted">{{ timeline.time }}</small>
+      <div><small class="text-muted">Posted : {{ timeline.time }}</small></div>
+      <div><small class="text-muted"> {{ getTimeRemaining(timeline.expiryDateTime) }} </small></div>
+
 
       <!-- 🔥 Affichage du titre du post -->
       <h6 class="fw-semibold text-dark mt-2">{{ timeline.title }}</h6>
@@ -215,7 +249,15 @@
           <i class="fas fa-paper-plane"></i> <!-- Icône Font Awesome -->
         </button>
       </div>
+      <!-- Bouton de candidature stylé -->
+      <div *ngIf="isExpired(timeline.expiryDateTime)" class="text-center mt-4">
+        <button class="btn-apply">
+          <i class="fas fa-file-alt"></i> Postuler à cette offre
+        </button>
+      </div>
       
     </div>
+
   </div>
+
 </div>

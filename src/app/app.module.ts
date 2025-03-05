@@ -19,6 +19,15 @@ import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.compon
 
 
 
+import { ImageComponent } from './image/image.component';
+
+
+
+
+
+
+
+
 
 
 
@@ -38,6 +47,8 @@ import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.compon
   declarations: [
     AppComponent,
     AdminLayoutComponent,
+    ImageComponent,
+
     
   ],
   providers: [],

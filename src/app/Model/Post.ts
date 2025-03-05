@@ -11,4 +11,8 @@ export interface Post {
   comments?: Comment[];
   ratings?: Rating[];
 
+  
+  expiryDateTime?: string; // ISO Date string (nullable)
+
+
 }
