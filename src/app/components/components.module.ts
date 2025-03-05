@@ -44,7 +44,7 @@ import { DialogRemarkComponent } from './dialog-remark/dialog-remark.component';
     FormsModule,
     ReactiveFormsModule,
     NgbModule,NgxPaginationModule,
-    FullCalendarModule
+    FullCalendarModule,
     NgbModule,
     MatFormFieldModule,
     MatInputModule,
@@ -67,15 +67,15 @@ import { DialogRemarkComponent } from './dialog-remark/dialog-remark.component';
     UpdateMeetingComponent,
     StudentMeetingsComponent,
     StudentAddMeetingComponent,
-    StudentUpdateMeetingComponent
-    NotfoundComponent,
+    StudentUpdateMeetingComponent,
     PostComponent,
     StudentComponent,
     DialogComponent,
     SettingComponent,
     DialogInternshipComponent,
     DialogInternshipTutorComponent,
-    DialogRemarkComponent
+    DialogRemarkComponent,
+    NotfoundComponent
   ],
   exports: [
     FooterComponent,
