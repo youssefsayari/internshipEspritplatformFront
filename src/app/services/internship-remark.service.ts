@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {Post} from "../models/post";
+import {Post} from "../Model/Post";
 import {InternshipRemark} from "../models/internship-remark";
 import {Remark} from "../models/remark";
 import {tap} from "rxjs/operators";

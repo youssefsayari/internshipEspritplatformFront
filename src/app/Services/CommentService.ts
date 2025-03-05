@@ -7,7 +7,7 @@ import { Comment } from '../Model/Comment'; // Assure-toi d'avoir le modèle Com
   providedIn: 'root'
 })
 export class CommentService {
-  private baseUrl = 'http://localhost:8090/innoxpert/comments'; // URL du backend Spring Boot
+  private baseUrl = 'http://localhost:8089/innoxpert/comments'; // URL du backend Spring Boot
 
   constructor(private http: HttpClient) {}
 

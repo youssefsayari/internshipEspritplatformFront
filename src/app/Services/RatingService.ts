@@ -8,7 +8,7 @@ import { Rating } from '../Model/Rating'; // Assure-toi d'avoir le modèle Ratin
   providedIn: 'root'
 })
 export class RatingService {
-  private baseUrl = 'http://localhost:8090/innoxpert/rating'; // URL du backend Spring Boot
+  private baseUrl = 'http://localhost:8089/innoxpert/rating'; // URL du backend Spring Boot
 
   constructor(private http: HttpClient) {}
 

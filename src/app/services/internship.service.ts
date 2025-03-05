@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {Post} from "../models/post";
+import {Post} from "../Model/Post";
 import {InternshipAddrequest} from "../models/internship-addrequest";
 import {InternshipAdminResponse} from "../models/internship-admin-response";
 import {InternshipTutorResponse} from "../models/internship-tutor-response";

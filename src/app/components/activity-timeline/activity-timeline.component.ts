@@ -1,9 +1,9 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
-import { PostService } from '../../Services/PostService'; // Assure-toi que le chemin est correct
-import { CommentService } from '../../Services/CommentService'; // Assure-toi que le chemin est correct
-import { CompanyService } from '../../Services/CompanyService'; // Assure-toi que le chemin est correct
-import { RatingService } from '../../Services/RatingService'; // Assure-toi que le chemin est correct
-import { UserService } from '../../Services/UserService';
+import { PostService } from '../../services/PostService'; // Assure-toi que le chemin est correct
+import { CommentService } from '../../services/CommentService'; // Assure-toi que le chemin est correct
+import { CompanyService } from '../../services/CompanyService'; // Assure-toi que le chemin est correct
+import { RatingService } from '../../services/RatingService'; // Assure-toi que le chemin est correct
+
 
 
 
@@ -100,34 +100,11 @@ export class ActivityTimelineComponent implements OnInit {
 
  
 
-  constructor(private postService: PostService   ,private commentService: CommentService ,private companyService: CompanyService ,private ratingService: RatingService,private cdr: ChangeDetectorRef,private toastr: ToastrService ,private userService: UserService  ) {}
+  constructor(private postService: PostService   ,private commentService: CommentService ,private companyService: CompanyService ,private ratingService: RatingService,private cdr: ChangeDetectorRef,private toastr: ToastrService   ) {}
 
   ngOnInit(): void {
     this.loadPosts();
-
-       
-
-
-    
-
-    this.userService.getUserType(this.userConnecte).subscribe(
-      (type) => {
-        this.userType = type;
-        console.log("Type d'utilisateur :", this.userType);
-      },
-      (error) => {
-        console.error("Erreur lors de la récupération du type d'utilisateur", error);
-      }
-    );
- 
-  
-
-
-
-
-
-
-
+    this.userType = localStorage.getItem('userRole');
   // Appel pour vérifier si l'utilisateur appartient à une entreprise
   this.companyService.isUserInCompany(this.userConnecte).subscribe(
     (isInCompany: boolean) => {

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ImageService } from '../Services/image.service';
+import { ImageService } from '../services/image.service';
 import { Image } from '../Model/image';
 import Swal from 'sweetalert2';
 

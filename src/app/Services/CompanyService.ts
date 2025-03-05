@@ -7,7 +7,7 @@ import { Company } from '../Model/Company'; // Assure-toi d'avoir le modèle Com
   providedIn: 'root'
 })
 export class CompanyService {
-  private baseUrl = 'http://localhost:8090/innoxpert/company'; // URL du backend Spring Boot
+  private baseUrl = 'http://localhost:8089/innoxpert/company'; // URL du backend Spring Boot
 
   constructor(private http: HttpClient) {}
 

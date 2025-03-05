@@ -11,21 +11,21 @@ declare interface RouteInfo {
     roles: string[];
 }
 export const ROUTES: RouteInfo[] = [
-    //AMEN
-    { path: '/MyMeeting', title: 'My Meeting', icon: 'education_atom', class: '' ,roles:['Tutor']},
-    { path: '/StudentMeeting', title: 'StudentMeeting', icon: 'education_atom', class: '' ,roles:['Student']},
+
   //sayariiii
-    { path: '/Posts', title: 'Post Management',  icon:'education_atom', class: '', roles: ['Student', 'Tutor','Company'] },
   { path: '/dashboard', title: 'Dashboard', icon: 'business_chart-bar-32', class: '', roles: ['Admin'] },
   { path: '/user-profile', title: 'My Profile', icon: 'users_single-02', class: '', roles: ['Student', 'Tutor','Company'] },
   { path: '/student', title: 'Students', icon: 'education_glasses', class: '', roles: ['Admin'] },
+  //{ path: '/Posts', title: 'Post Management',  icon:'education_atom', class: '', roles: ['Tutor','Company'] },
   { path: '/post', title: 'Posts', icon: 'education_paper', class: '', roles: ['Admin'] },
   { path: '/internship-request', title: 'Internship Request', icon: 'education_paper', class: '', roles: ['Company'] },
   { path: '/agreement', title: 'My Agreement', icon: 'education_paper', class: '', roles: ['Student'] },
   { path: '/internship', title: 'My Internship', icon: 'business_briefcase-24', class: '', roles: ['Student'] },
+  //AMEN
+  { path: '/MyMeeting', title: 'My Meeting', icon: 'education_atom', class: '' ,roles:['Tutor']},
+  { path: '/StudentMeeting', title: 'My Meeting', icon: 'education_atom', class: '' ,roles:['Student']},
   { path: '/internship', title: 'Internship', icon: 'business_briefcase-24', class: '', roles: ['Tutor'] },
   { path: '/document', title: 'My Documents', icon: 'files_single-copy-04', class: '', roles: ['Student', 'Admin'] },
-  { path: '/meeting', title: 'My Meetings', icon: 'ui-1_calendar-60', class: '', roles: ['Student', 'Admin','Company'] },
   { path: '/task', title: 'My Tasks', icon: 'design_vector', class: '', roles: ['Student', 'Admin'] },
   { path: '/quiz', title: 'My Quizzes', icon: 'ui-2_chat-round', class: '', roles: ['Student','Company'] },
   { path: '/defence', title: 'My Defences', icon: 'education_hat', class: '', roles: ['Student'] },

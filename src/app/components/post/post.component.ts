@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {Router} from "@angular/router";
-import {Post} from "../../models/post";
-import {PostService} from "../../services/post.service";
+import {Post} from "../../Model/Post";
+import {PostService} from "../../services/PostService";
 import {UserService} from "../../services/user.service";
 import {InternshipService} from "../../services/internship.service";
 import Swal from 'sweetalert2';
