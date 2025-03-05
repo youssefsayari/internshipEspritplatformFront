@@ -10,13 +10,23 @@ import { MeetingComponent } from './components/meeting/meeting.component';
 import {NotfoundComponent} from "./components/notfound/notfound.component";
 import {LoginComponent} from "./components/login/login.component";
 
+
+
+
+import { ImageComponent } from './image/image.component';
+
+
+
 const routes: Routes =[
+
   { path: 'login', component: LoginComponent },
   {path: '', redirectTo: '/user-profile', pathMatch: 'full',},
   {path: '', component: AdminLayoutComponent, children: [{path: '',
       loadChildren: () => import('./layouts/admin-layout/admin-layout.module').then(x=>x.AdminLayoutModule)
   }]},
   {path: '**', component:NotfoundComponent},
+  { path: 'upload', component: ImageComponent }
+
 ];
 
 @NgModule({
@@ -26,6 +36,7 @@ const routes: Routes =[
     RouterModule.forRoot(routes)
   ],
   exports: [
+    RouterModule
   ],
 })
 export class AppRoutingModule { }

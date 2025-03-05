@@ -1,0 +1,112 @@
+/* Style général de la carte */
+.cardWithShadow {
+    border-radius: 8px; /* Bordures arrondies */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre portée légère */
+    background-color: #fff; /* Fond blanc */
+    overflow: hidden; /* Pour gérer les débordements */
+    margin: 20px; /* Espacement autour de la carte */
+  }
+  
+  /* Style de l'en-tête de la carte */
+  .cardWithShadow header {
+    background-color: #ff0000; /* Fond bleu pour l'en-tête */
+    padding: 24px; /* Espacement interne */
+    color: white; /* Texte en blanc */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Bordure légère sous l'en-tête */
+  }
+  
+  .cardWithShadow header h3 {
+    margin: 0; /* Suppression des marges */
+    font-size: 24px; /* Taille du titre */
+    font-weight: bold; /* Gras */
+  }
+  
+  .cardWithShadow header p {
+    margin-top: 8px; /* Espacement entre le titre et le sous-titre */
+    font-size: 14px; /* Taille du sous-titre */
+  }
+  
+  /* Style de la boîte de messages */
+  .msg-box {
+    padding: 16px; /* Espacement interne */
+  }
+  
+  /* Style des éléments de message */
+  .msg-box .p-x-24 {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+  
+  .msg-box .p-y-16 {
+    padding-top: 16px;
+    padding-bottom: 16px;
+  }
+  
+  /* Mise en page des messages */
+  .d-flex {
+    display: flex;
+  }
+  
+  .align-items-center {
+    align-items: center; /* Alignement vertical centré */
+  }
+  
+  .w-100 {
+    width: 100%; /* Occupe toute la largeur disponible */
+  }
+  
+  .m-l-16 {
+    margin-left: 16px; /* Espacement à gauche */
+  }
+  
+  /* Style des images des utilisateurs */
+  .rounded-circle {
+    border-radius: 50%; /* Image ronde */
+    border: 2px solid #f0f0f0; /* Bordure subtile autour de l'image */
+  }
+  
+  /* Style du titre de chaque message */
+  .f-s-14 {
+    font-size: 14px; /* Taille de police */
+  }
+  
+  .f-w-600 {
+    font-weight: 600; /* Poids de la police */
+  }
+  
+  .m-0 {
+    margin: 0; /* Suppression des marges par défaut */
+  }
+  
+  /* Style des sous-titres de chaque message */
+  .f-s-14 {
+    font-size: 14px; /* Taille du texte */
+    color: #555; /* Couleur de texte plus sombre pour le sous-titre */
+  }
+  
+  /* Effet de survol (hover) pour chaque message */
+  .msg-box .msg-item {
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Animation douce */
+  }
+  
+  .msg-box .msg-item:hover {
+    background-color: #f0f0f0; /* Changer la couleur de fond au survol */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Ajouter une ombre portée */
+    cursor: pointer; /* Changer le curseur pour indiquer l'interactivité */
+  }
+  
+  /* Option responsive */
+  @media (max-width: 768px) {
+    .cardWithShadow {
+      margin: 10px; /* Réduire l'espacement sur les petits écrans */
+    }
+  
+    .cardWithShadow header h3 {
+      font-size: 20px; /* Taille de titre plus petite sur mobile */
+    }
+  
+    .cardWithShadow header p {
+      font-size: 12px; /* Taille de sous-titre plus petite sur mobile */
+    }
+  }
+  

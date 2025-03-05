@@ -40,8 +40,13 @@ import {MatDialogModule} from '@angular/material/dialog';
     MatSortModule,
     MatSelectModule,
     MatDialogModule,
+    ComponentsModule
 
   ],
+
+
+
+
   declarations: [
     DashboardComponent,
     UserProfileComponent,

@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-
+import { FormsModule } from '@angular/forms';
 import { FooterComponent } from './footer/footer.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
@@ -16,8 +16,6 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { StudentMeetingsComponent } from './Students/student-meetings/student-meetings.component';
 import { StudentAddMeetingComponent } from './Students/student-add-meeting/student-add-meeting.component';
 import { StudentUpdateMeetingComponent } from './Students/student-update-meeting/student-update-meeting.component';
-
-
 import { NotfoundComponent } from './notfound/notfound.component';
 import { PostComponent } from './post/post.component';
 import { StudentComponent } from './student/student.component';
@@ -36,6 +34,11 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatTooltipModule} from "@angular/material/tooltip";
 import { DialogInternshipTutorComponent } from './dialog-internship-tutor/dialog-internship-tutor.component';
 import { DialogRemarkComponent } from './dialog-remark/dialog-remark.component';
+import { ActivityTimelineComponent } from './activity-timeline/activity-timeline.component';
+import { MyContactsComponent } from './my-contacts/my-contacts.component';
+import { ProfileCardComponent } from './profile-card/profile-card.component';
+
+
 
 @NgModule({
   imports: [
@@ -56,6 +59,7 @@ import { DialogRemarkComponent } from './dialog-remark/dialog-remark.component';
     MatButtonModule,
     MatIconModule,
     MatTooltipModule
+
   ],
   declarations: [
     FooterComponent,
@@ -76,11 +80,18 @@ import { DialogRemarkComponent } from './dialog-remark/dialog-remark.component';
     DialogInternshipTutorComponent,
     DialogRemarkComponent,
     NotfoundComponent
+    ActivityTimelineComponent,
+    MyContactsComponent,
+    ProfileCardComponent
+
   ],
   exports: [
     FooterComponent,
     NavbarComponent,
-    SidebarComponent
+    SidebarComponent,
+    ActivityTimelineComponent, // Ajout pour pouvoir l'utiliser ailleurs
+    MyContactsComponent,
+    ProfileCardComponent
   ]
 })
 export class ComponentsModule { }

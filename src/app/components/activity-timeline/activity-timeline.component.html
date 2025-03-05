@@ -1,0 +1,263 @@
+
+
+
+
+<!-- Zone de texte simulée pour écrire un post -->
+<div class="fake-input" (click)="openPostModal()" *ngIf="isUserInCompany|| userType === 'Admin'">
+  <img src="assets/images/profile/pngtree-3d-realistic-red-portable-megaphone-speaker.png" alt="user" />
+  <span>What's New ?</span>
+</div>
+
+<!-- Filter Section -->
+<div class="filter-section d-flex justify-content-between p-3 mb-3">
+  <!-- Search Bar -->
+  <input type="text" [(ngModel)]="searchText" (ngModelChange)="filterPosts()" placeholder="Search posts..." class="form-control" style="max-width: 300px;">
+
+  <!-- Sector Filter -->
+  <select [(ngModel)]="selectedSector" (ngModelChange)="filterPosts()" class="form-select" style="max-width: 200px;">
+    <option value="">All Sectors</option>
+    <option value="TECHNOLOGY">Technology</option>
+    <option value="FINANCE">Finance</option>
+    <option value="HEALTHCARE">Healthcare</option>
+    <option value="EDUCATION">Education</option>
+  </select>
+
+<!-- Filter by Company Button -->
+ 
+<button *ngIf="isUserInCompany|| userType === 'Admin'" (click)="getPostsAndFilterByCompany(companyId)" class="btn btn-primary">My Posts</button>
+
+
+  <!-- Clear Filters Button -->
+  <button (click)="clearFilters()" class="btn btn-secondary">Clear Filters</button>
+</div>
+
+
+
+<!-- Modal for creation -->
+<div class="modal-overlay" *ngIf="isPostCreateModalOpen" (click)="closePostModal()"></div>
+<div class="modal-post" *ngIf="isPostCreateModalOpen">
+  <h3>Post Creation</h3>
+
+  <form #postForm="ngForm" (ngSubmit)="addNewPost()">
+    <!-- Title input -->
+    <input [(ngModel)]="newPostTitle" name="title" placeholder="Title" class="title-input" required minlength="3" maxlength="255" #title="ngModel" />
+    <div *ngIf="title.invalid && (title.dirty || title.touched)" class="error-message">
+      <div *ngIf="title.errors?.['required']">Title is required.</div>
+      <div *ngIf="title.errors?.['minlength']">Title must be at least 3 characters long.</div>
+      <div *ngIf="title.errors?.['maxlength']">Title must be at most 255 characters long.</div>
+    </div>
+
+    <!-- Content input -->
+    <textarea [(ngModel)]="newPostContent" name="content" placeholder="Content..." required minlength="10" #content="ngModel"></textarea>
+    <div *ngIf="content.invalid && (content.dirty || content.touched)" class="error-message">
+      <div *ngIf="content.errors?.['required']">Content is required.</div>
+      <div *ngIf="content.errors?.['minlength']">Content must be at least 10 characters long.</div>
+    </div>
+
+    <!-- Expiry DateTime input -->
+    <label for="expiryDateTime">Expiry Date & Time:</label>
+    <input 
+      type="datetime-local" 
+      id="expiryDateTime" 
+      [(ngModel)]="newPostExpiryDateTime" 
+      name="expiryDateTime" 
+      #expiryDateTime="ngModel"
+      [min]="minDateTime()"
+    />
+    <div *ngIf="expiryDateTime.invalid && (expiryDateTime.dirty || expiryDateTime.touched)" class="error-message">
+      <div *ngIf="expiryDateTime.errors?.['min']">Expiry date must be in the future.</div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" (click)="closePostModal()">Cancel</button>
+      <button class="btn-submit" type="submit" [disabled]="postForm.invalid">Post</button>
+    </div>
+  </form>
+</div>
+
+
+
+
+<!-- Modal pour l'édition -->
+<div class="modal-overlay" *ngIf="isPostEditModalOpen" (click)="closePostModal()"></div>
+<div class="modal-post" *ngIf="isPostEditModalOpen">
+  <h3>Post Edit</h3>
+
+  <form #editForm="ngForm" (ngSubmit)="updatePost()">
+    <!-- Title input -->
+    <input [(ngModel)]="newPostTitle" name="title" placeholder="Title" class="title-input" required minlength="3" maxlength="255" #title="ngModel" />
+    <div *ngIf="title.invalid && (title.dirty || title.touched)" class="error-message">
+      <div *ngIf="title.errors?.['required']">Title is required.</div>
+      <div *ngIf="title.errors?.['minlength']">Title must be at least 3 characters long.</div>
+      <div *ngIf="title.errors?.['maxlength']">Title must be no longer than 255 characters.</div>
+    </div>
+
+    <!-- Content input -->
+    <textarea [(ngModel)]="newPostContent" name="content" placeholder="Content..." required minlength="10" #content="ngModel"></textarea>
+    <div *ngIf="content.invalid && (content.dirty || content.touched)" class="error-message">
+      <div *ngIf="content.errors?.['required']">Content is required.</div>
+      <div *ngIf="content.errors?.['minlength']">Content must be at least 10 characters long.</div>
+    </div>
+
+    <!-- Expiry DateTime input -->
+    <label for="expiryDateTime">Expiry Date & Time:</label>
+    <input 
+      type="datetime-local" 
+      id="expiryDateTime" 
+      [(ngModel)]="newPostExpiryDateTime" 
+      name="expiryDateTime" 
+      #expiryDateTime="ngModel"
+      [min]="minDateTime()"
+    />
+    <div *ngIf="expiryDateTime.invalid && (expiryDateTime.dirty || expiryDateTime.touched)" class="error-message">
+      <div *ngIf="expiryDateTime.errors?.['min']">Expiry date must be in the future.</div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" (click)="closePostModal()">Cancel</button>
+      <button class="btn-submit" type="submit" [disabled]="editForm.invalid">Update</button>
+    </div>
+  </form>
+</div>
+
+
+
+
+
+
+
+                              
+<div *ngFor="let timeline of mytimelines; trackBy: trackByFn" class="timeline-card card p-3 mb-3 shadow-sm rounded"        [id]="'post-' + timeline.id">
+  
+  
+  <div class="btn-container" *ngIf="timeline.ownerId === companyId || userType === 'Admin'">
+    
+    <!-- Bouton de modification moderne -->
+    <button (click)="openPostModal(true, timeline.id)" class="edit-btn">
+      <i class="fas fa-edit"></i>
+    </button>
+    
+<!-- Bouton de suppression moderne -->
+<button (click)="deletePost(timeline.id)" class="btn-danger">
+  <i class="fas fa-trash"></i> 
+</button>
+
+
+</div>
+
+
+
+  <div class="d-flex align-items-start">   
+    <!-- Image utilisateur avec clic -->
+    <img *ngIf="timeline.image" 
+         [src]="timeline.image" 
+         width="50" height="50"
+         alt="user" 
+         class="rounded-circle me-3 border shadow-sm" 
+         (click)="onProfileClick(timeline)" />
+
+    <div class="w-100">
+      <!-- Informations utilisateur -->
+      <h5 class="fw-bold mb-1" (click)="onProfileClick(timeline)" style="cursor: pointer;">{{ timeline.from }}</h5>
+      <div><small class="text-muted">Posted : {{ timeline.time }}</small></div>
+      <div><small class="text-muted"> {{ getTimeRemaining(timeline.expiryDateTime) }} </small></div>
+
+
+      <!-- 🔥 Affichage du titre du post -->
+      <h6 class="fw-semibold text-dark mt-2">{{ timeline.title }}</h6>
+      <hr class="my-2">
+
+      <!-- Contenu du post (texte ou image) -->
+      <div *ngIf="isImage(timeline.content); else textContent">
+        <img [src]="timeline.content" class="img-fluid mt-2 rounded" alt="timeline-image" />
+      </div>
+      <ng-template #textContent>
+        <p class="mt-2">{{ timeline.content }}</p>
+
+      </ng-template>
+
+
+
+
+<!-- ⭐ Évaluation par étoiles -->
+<div class="d-flex align-items-center gap-3 mt-3">
+  <span class="rate-text text-secondary">⭐ Rate Us</span>
+  <div class="rating-container">
+    <span *ngFor="let star of stars; let i = index" 
+          (click)="setRating(timeline, i+1)" 
+          (mouseenter)="timeline.hoverRating = i+1"
+          (mouseleave)="timeline.hoverRating = 0"
+          [ngClass]="{
+            'star-icon': true,
+            'hover': timeline.hoverRating >= i+1,
+            'selected': timeline.selectedRating >= i+1
+          }">
+      <!-- Icône étoile active -->
+      <svg *ngIf="timeline.selectedRating >= i+1 || timeline.hoverRating >= i+1" 
+           xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" 
+           [attr.fill]="timeline.selectedRating >= i+1 || timeline.hoverRating >= i+1 ? '#f39c12' : '#bdc3c7'">
+        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path>
+      </svg>
+      <!-- Icône étoile inactive -->
+      <svg *ngIf="timeline.selectedRating < i+1 && timeline.hoverRating < i+1" 
+           xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" 
+           fill="#bdc3c7" class="star inactive">
+        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path>
+      </svg>
+    </span>
+  </div>
+  
+ <!-- Affichage de la moyenne des étoiles -->
+<span class="avg-rating-text text-secondary">
+  Stars Average: {{ timeline.averageRating ? (timeline.averageRating | number: '1.1-1') : 'No ratings yet' }}
+</span>
+
+</div>
+
+<!-- ✅ Message "Merci pour votre retour" -->
+<div *ngIf="timeline.feedbackGiven" class="feedback-message mt-2 text-success fw-semibold">
+  <p class="mb-0">✅ Thank for your feedback !</p>
+</div>
+
+
+
+
+     <!-- 💬 Affichage des commentaires -->
+<div *ngFor="let comment of timeline.comments" class="comment mt-2 p-2 rounded bg-light" [ngClass]="{ 'other-user': comment.userId !== userConnecte }"[attr.id]="'comment-' + comment.id">
+  <div class="d-flex align-items-center justify-content-between">
+    <!-- User Image -->
+    <div class="d-flex align-items-center">
+      <img src="assets/images/profile/user-1.jpg" width="30" height="30" 
+           alt="user" class="rounded-circle me-2 border shadow-sm" />
+      <p class="mb-0"><strong>{{ comment.user }} </strong>: {{ comment.text }}</p>
+    </div>
+    
+    <!-- Delete Button -->
+    <button class="btn btn-danger btn-sm ms-3 delete-btn" *ngIf="comment.userId === userConnecte|| userType === 'Admin'" (click)="deleteComment(comment.id)">
+      <i class="fas fa-trash"></i> <!-- Using Font Awesome icon for trash -->
+    </button>
+  </div>
+</div>
+
+
+      <!-- ➕ Ajouter un commentaire -->
+      <div class="mt-3 comment-input d-flex align-items-center">
+        <textarea placeholder="Ajouter un commentaire..." 
+                  [(ngModel)]="timeline.newComment" 
+                  rows="2" class="form-control me-2 rounded"></textarea>
+        <button (click)="addComment(timeline)" class="btn btn-primary">
+          <i class="fas fa-paper-plane"></i> <!-- Icône Font Awesome -->
+        </button>
+      </div>
+      <!-- Bouton de candidature stylé -->
+      <div *ngIf="isExpired(timeline.expiryDateTime)" class="text-center mt-4">
+        <button class="btn-apply">
+          <i class="fas fa-file-alt"></i> Postuler à cette offre
+        </button>
+      </div>
+      
+    </div>
+
+  </div>
+
+</div>
