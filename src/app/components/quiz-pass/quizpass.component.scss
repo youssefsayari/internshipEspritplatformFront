@@ -12,7 +12,7 @@
 
 /* Timer */
 .timer {
-  background-color: #00bcd4; /* Bleu clair */
+  background-color: #222222; /* Noir */
   color: white;
   border-radius: 50px;
   padding: 15px 25px;
@@ -29,6 +29,35 @@
 .timer i {
   font-size: 1.5rem;
   color: #ffffff;
+}
+
+/* Progress bar (Timer) */
+.progress-bar {
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+  line-height: 20px;
+  color: #ffffff;
+  background-color: #222222; /* Noir pour la barre de progression du timer */
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}
+
+.progress-bar .progress-text {
+  color: #ffffff;
+  font-size: 0.9rem;
+}
+
+/* Progress bar (Réponses) */
+.progress-bar {
+  background-color: #222222; /* Noir pour la barre de progression des réponses */
+  transition: width 0.3s ease;
+}
+
+.progress-bar .progress-text {
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 600;
 }
 
 /* Style des cartes des questions */
@@ -80,23 +109,23 @@
 
 /* Style du bouton de validation */
 .btn-success {
-  background-color: #00bcd4; /* Bleu clair */
-  border: 1px solid #00bcd4;
+  background-color: #0066cc; /* Bleu clair */
+  border: 1px solid #0066cc;
   padding: 15px 40px;
   font-size: 1.2rem;
   font-weight: bold;
   border-radius: 10px;
-  box-shadow: 0 5px 20px rgba(0, 188, 212, 0.1);
+  box-shadow: 0 5px 20px rgba(0, 102, 204, 0.1);
   color: white;
 }
 
 .btn-success:hover {
-  background-color: #0097a7; /* Bleu plus foncé */
+  background-color: #004c99; /* Bleu plus foncé */
 }
 
 .btn-success:focus {
   outline: none;
-  box-shadow: 0 0 15px rgba(0, 188, 212, 0.5);
+  box-shadow: 0 0 15px rgba(0, 102, 204, 0.5);
 }
 
 /* Espacement entre les cartes */

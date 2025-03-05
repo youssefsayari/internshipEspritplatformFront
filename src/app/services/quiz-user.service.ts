@@ -23,4 +23,8 @@ export class QuizUserService {
         return throwError(() => new Error(error));
       })
     );
-  } }
+  } 
+  hasUserTakenQuiz(userId: number, quizId: number): Observable<boolean> {
+    return this.http.get<boolean>(`${this.baseUrl}/exists/${userId}/${quizId}`);
+  }
+  }

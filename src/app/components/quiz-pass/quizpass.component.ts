@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { QuizService } from '../../services/quiz.service';
 import { QuestionService } from '../../services/question.service';
 import { Quiz } from '../../models/quiz';
 import { QuestionReponse } from '../../models/questionreponse';
 import { QuizUserService } from '../../services/quiz-user.service';
+import Swal from 'sweetalert2'; // Import de SweetAlert2
 
 @Component({
   selector: 'app-quiz-pass',
@@ -14,16 +15,16 @@ import { QuizUserService } from '../../services/quiz-user.service';
 export class QuizPassComponent implements OnInit {
   quiz: Quiz;
   questions: QuestionReponse[] = [];
-  userId: number;
-  selectedAnswers: { [key: string]: number } = {}; // Enregistre la réponse sélectionnée (index de l'option)
+  userId: number = 1;
+  selectedAnswers: { [key: string]: number } = {};
 
-  // Timer variables
-  timeLeft: number = 15; // 60 secondes
-  timer: any; // Pour stocker l'intervalle du timer
-  isQuizValidated: boolean = false; // Flag pour vérifier si le quiz a déjà été validé
+  timeLeft: number = 15; // 15 secondes
+  timer: any;
+  isQuizValidated: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private quizService: QuizService,
     private questionService: QuestionService,
     private quizUserService: QuizUserService
@@ -32,10 +33,31 @@ export class QuizPassComponent implements OnInit {
   ngOnInit(): void {
     const idQuiz = +this.route.snapshot.paramMap.get('id');
     console.log('ID du quiz:', idQuiz);
-    this.loadQuiz(idQuiz);
-    this.loadQuestions(idQuiz);
-    this.userId = 1;
-    this.startTimer(); // Démarrer le timer quand le quiz commence
+    this.checkIfQuizAlreadyTaken(idQuiz);
+  }
+
+  checkIfQuizAlreadyTaken(idQuiz: number): void {
+    this.quizUserService.hasUserTakenQuiz(this.userId, idQuiz).subscribe(
+      (hasTaken: boolean) => {
+        if (hasTaken) {
+          Swal.fire({
+            icon: 'warning',
+            title: 'Quiz déjà passé !',
+            text: 'Vous avez déjà passé ce quiz.',
+            confirmButtonText: 'OK'
+          }).then(() => {
+            this.router.navigate(['/quiz-list']);
+          });
+        } else {
+          this.loadQuiz(idQuiz);
+          this.loadQuestions(idQuiz);
+          this.startTimer();
+        }
+      },
+      (error) => {
+        console.error("Erreur lors de la vérification du quiz:", error);
+      }
+    );
   }
 
   loadQuiz(idQuiz: number): void {
@@ -55,75 +77,149 @@ export class QuizPassComponent implements OnInit {
     );
   }
 
-  // Démarre le timer
   startTimer(): void {
     this.timer = setInterval(() => {
       if (this.timeLeft > 0) {
-        this.timeLeft--; // Réduire le temps chaque seconde
+        this.timeLeft--;
       } else {
-        clearInterval(this.timer); // Arrêter le timer quand il atteint 0
-        if (!this.isQuizValidated) { // Appeler saveScore uniquement si le quiz n'a pas encore été validé
-          this.saveScore(0); // Sauvegarder le score à 0 lorsque le temps est écoulé
+        clearInterval(this.timer);
+        if (!this.isQuizValidated) {
+          this.saveScoreWithPenalty();
         }
       }
     }, 1000);
   }
 
-  // Sélectionner la réponse, chaque option a un index (1, 2, 3, ou 4)
   selectAnswer(questionId: number, optionIndex: number): void {
-    this.selectedAnswers[questionId] = optionIndex; // Enregistre la réponse sélectionnée
+    this.selectedAnswers[questionId] = optionIndex;
   }
 
-  // Valider le quiz et calculer le score
   validateQuiz(): void {
-    if (this.isQuizValidated) return; // Ne pas valider deux fois
+    if (this.isQuizValidated) return;
 
     let score = 0;
     let unansweredQuestions = 0;
 
     this.questions.forEach(question => {
-      const selectedAnswer = this.selectedAnswers[question.idQuestionReponse]; // Récupère la réponse sélectionnée (index 1, 2, 3 ou 4)
+      const selectedAnswer = this.selectedAnswers[question.idQuestionReponse];
 
       if (selectedAnswer === undefined) {
-        unansweredQuestions += 1; // Si la question n'a pas de réponse
-      } else {
-        // Vérification si la réponse sélectionnée est correcte
-        console.log(`Question ID: ${question.idQuestionReponse}, Réponse sélectionnée: ${selectedAnswer}, Réponse correcte: ${question.reponse_correcte}`);
-
-        // Comparer correctement les réponses (en s'assurant que les valeurs sont bien comparées)
-        if (Number(selectedAnswer) === Number(question.reponse_correcte)) {
-          score++; // Ajoute au score si la réponse est correcte
-        }
+        unansweredQuestions++;
+      } else if (Number(selectedAnswer) === Number(question.reponse_correcte)) {
+        score++;
       }
     });
-    console.log(`Score calculé: ${score}`);
 
-    // Alerte si des questions n'ont pas été répondues
     if (unansweredQuestions > 0) {
-      alert("Veuillez répondre à toutes les questions !");
+      Swal.fire({
+        icon: 'info',
+        title: 'Réponse incomplète',
+        text: 'Veuillez répondre à toutes les questions avant de valider !',
+        confirmButtonText: 'OK'
+      });
       return;
     }
 
-    // Sauvegarder le score
     this.saveScore(score);
   }
 
-  // Sauvegarder le score
   saveScore(score: number): void {
-    if (this.isQuizValidated) return; // Empêcher la double sauvegarde
+    if (this.isQuizValidated) return;
 
     this.quizUserService.saveQuizResult({
       idUser: this.userId,
       idQuiz: +this.route.snapshot.paramMap.get('id'),
       score: score
     }).subscribe(response => {
-      console.log('Score:', score);
       console.log('Score enregistré avec succès:', response);
-      alert(`Quiz terminé ! Votre score est de ${score}/${this.questions.length}`);
-      this.isQuizValidated = true; // Marquer le quiz comme validé pour éviter la double sauvegarde
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Quiz terminé !',
+        html: `Votre score est de <b>${score}/${this.questions.length}</b>`,
+        confirmButtonText: 'OK'
+      }).then(() => {
+        this.isQuizValidated = true;
+        this.router.navigate(['/quiz-list']);
+      });
+
     }, error => {
       console.error('Erreur lors de l’enregistrement du score:', error);
-      alert("Erreur lors de l’enregistrement du score !");
+
+      Swal.fire({
+        icon: 'error',
+        title: 'Erreur',
+        text: 'Une erreur est survenue lors de l’enregistrement du score.',
+        confirmButtonText: 'OK'
+      });
     });
+  }
+
+  saveScoreWithPenalty(): void {
+    let score = 0;
+    let answeredQuestions = 0;
+    let penaltyPoints = 0;  // Initialiser la variable de pénalité
+  
+    this.questions.forEach(question => {
+      const selectedAnswer = this.selectedAnswers[question.idQuestionReponse];
+  
+      if (selectedAnswer === undefined) {
+        return; // Question non répondue
+      } else if (Number(selectedAnswer) === Number(question.reponse_correcte)) {
+        score++; // Question correcte
+      }
+  
+      answeredQuestions++;
+    });
+  
+    // Appliquer une pénalité de -1 pour chaque question non répondue
+    if (answeredQuestions < this.questions.length) {
+      penaltyPoints = this.questions.length - answeredQuestions;  // Nombre de questions non répondues
+      score -= penaltyPoints;  // Réduire le score par la pénalité
+    }
+  
+    // Empêcher que le score ne soit inférieur à 0
+    if (score < 0) {
+      score = 0;
+    }
+  
+    // Générer le message pour SweetAlert en fonction de la pénalité
+    let penaltyMessage = '';
+    if (penaltyPoints > 0) {
+      penaltyMessage = `Vous avez reçu une pénalité de <b>${penaltyPoints}</b> point${penaltyPoints > 1 ? 's' : ''} en raison du temps écoulé sans validation.`;
+    }
+  
+    this.quizUserService.saveQuizResult({
+      idUser: this.userId,
+      idQuiz: +this.route.snapshot.paramMap.get('id'),
+      score: score
+    }).subscribe(response => {
+      console.log('Score enregistré avec succès:', response);
+  
+      Swal.fire({
+        icon: 'warning',
+        title: 'Temps écoulé !',
+        html: `Le temps est écoulé. Votre score est de <b>${score}/${this.questions.length}</b>. ${penaltyMessage}`,
+        confirmButtonText: 'OK'
+      }).then(() => {
+        this.isQuizValidated = true;
+        this.router.navigate(['/quiz-list']);
+      });
+      
+    }, error => {
+      console.error('Erreur lors de l’enregistrement du score:', error);
+  
+      Swal.fire({
+        icon: 'error',
+        title: 'Erreur',
+        text: 'Une erreur est survenue lors de l’enregistrement du score.',
+        confirmButtonText: 'OK'
+      });
+    });
+  }
+
+  // Calcul du nombre de questions répondues
+  get answeredQuestionsCount(): number {
+    return Object.keys(this.selectedAnswers).length;
   }
 }

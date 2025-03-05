@@ -17,8 +17,9 @@ export class QuizListComponent implements OnInit {
   }
 
   loadQuizzes(): void {
-    this.quizService.getAllQuizzes().subscribe((data: Quiz[]) => {
-      this.quizzes = data;
+    this.quizService.getAllQuizzes().subscribe((response: any) => {
+      console.log('Quizzes récupérés:', response);
+      this.quizzes = response;
     });
   }
 }

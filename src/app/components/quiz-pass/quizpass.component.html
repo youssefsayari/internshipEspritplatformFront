@@ -1,8 +1,29 @@
 <div class="quiz-container">
-  <!-- Affichage du timer -->
-  <div class="timer mb-3 d-flex align-items-center justify-content-center">
-    <i class="fas fa-clock me-2 text-primary"></i>
-    <p class="mb-0">Temps restant : <span class="fw-bold">{{ timeLeft }}</span> secondes</p>
+  <!-- Affichage du timer visuel -->
+  
+
+  <!-- Affichage de la barre de progression du timer -->
+  <div class="progress mb-4" style="height: 20px;">
+    <div class="progress-bar" 
+         role="progressbar" 
+         [style.width.%]="(timeLeft / 15) * 100" 
+         [attr.aria-valuenow]="timeLeft" 
+         aria-valuemin="0" 
+         aria-valuemax="15">
+      <span class="progress-text">{{ timeLeft }} secondes restantes</span>
+    </div>
+  </div>
+
+  <!-- Affichage de la barre de progression des réponses -->
+  <div class="progress mb-4" style="height: 20px;">
+    <div class="progress-bar" 
+         role="progressbar" 
+         [style.width.%]="(answeredQuestionsCount / questions.length) * 100" 
+         [attr.aria-valuenow]="answeredQuestionsCount" 
+         [attr.aria-valuemin]="0" 
+         [attr.aria-valuemax]="questions.length">
+      <span class="progress-text">{{ answeredQuestionsCount }} / {{ questions.length }} questions répondues</span>
+    </div>
   </div>
 
   <div class="quiz-box card mb-4 shadow-sm p-3" *ngFor="let question of questions">
