@@ -145,11 +145,11 @@ export class LoginComponent implements OnInit {
           Swal.showValidationMessage('⚠️ Please enter the OTP');
           return false;
         }
-  
+
         try {
           console.log(`Verifying OTP: ${otp} for email: ${email}`);
           const response = await this.userService.verifyOtp(email, +otp).toPromise();
-  
+
           if (response === true) { // ✅ Ensure response is true before proceeding
             return email;
           } else {
@@ -163,12 +163,12 @@ export class LoginComponent implements OnInit {
         }
       }
     });
-  
+
     if (otp) {
-      await this.changePassword(email); 
+      await this.changePassword(email);
     }
   }
-  
+
   async changePassword(email: string) {
     const { value: newPassword } = await Swal.fire({
       title: '🔒 Change Password',
