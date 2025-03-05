@@ -6,7 +6,100 @@
   transition: all 0.3s ease-in-out;
   opacity: 0;
   transform: translateY(20px);
+
+  position: relative; /* nécessaire pour positionner le bouton en absolu */
+  padding: 20px;
+
+
 }
+
+
+/* Conteneur pour les boutons (edit et delete) */
+.timeline-card .btn-container {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  gap: 10px; /* Espacement entre les boutons */
+  z-index: 1; /* Assurer que les boutons sont au-dessus des autres éléments */
+}
+/* Button de delete */
+.timeline-card .btn-danger {
+  background-color: transparent;
+  border: none;
+  color: #666;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: color 0.3s, background-color 0.3s;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.timeline-card .btn-danger i {
+  font-size: 16px;
+}
+
+.timeline-card .btn-danger:hover {
+  color: #e74c3c;
+  background-color: rgba(231, 76, 60, 0.1);
+}
+
+/* Button de edit */
+.timeline-card .edit-btn {
+  background-color: transparent;
+  border: none;
+  color: #666;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: color 0.3s, background-color 0.3s;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.timeline-card .edit-btn i {
+  font-size: 16px;
+}
+
+.timeline-card .edit-btn:hover {
+  color: #f39c12;
+  background-color: rgba(243, 156, 18, 0.1);
+}
+
+/* Style du contenu du post */
+.timeline-card img {
+  max-width: 100%;
+  border-radius: 8px;
+}
+
+/* Titre du post */
+.timeline-card h5 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Section du contenu du post */
+.timeline-card .content {
+  margin-top: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+
+
+
+
+
+
+
+
+
 
 /* Animation d'apparition de la timeline */
 .timeline-card.show {
@@ -220,15 +313,24 @@
   background-color: #ff0000;
   color: white;
   border: none;
-  border-radius: 20px;
-  padding: 10px 18px;
+  border-radius: 50%;
+  padding: 10px ;
   margin-left: 10px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .comment-input button:hover {
   background-color: #ff2a00;
+  transform: scale(1.1);
+
+}
+.comment-input button i {
+  color: white;
+  font-size: 1.2em;
+}
+.comment-input button:hover i {
+  color: #fff;
 }
 
 .comment-input button:active {
@@ -362,4 +464,302 @@
 .btn-submit:hover {
   background: #ff3b1b;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* title field */
+
+.title-input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Animation de fondu avant la suppression */
+.fade-out {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+.fade-out.hidden {
+  opacity: 0;
+  transform: scale(0.9); /* Rétrécir l'élément avant qu'il ne disparaisse */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+.delete-btn {
+  background-color: transparent;
+  border: none;
+  color: #666;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: color 0.3s, background-color 0.3s;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.delete-btn i {
+  font-size: 16px;
+}
+
+.delete-btn:hover {
+  color: #e74c3c; /* Rouge clair au survol */
+  background-color: rgba(231, 76, 60, 0.1);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+.error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.btn-submit:disabled {
+  background-color: gray;
+}
+
+
+
+
+
+
+
+
+@keyframes highlight {
+  0% { background-color: #c51f13; } /* Jaune clair */
+  100% { background-color: transparent; }
+}
+
+.highlight {
+  animation: highlight 1s ease-out;
+}
+
+
+/* Pour l'utilisateur connecté */
+.comment.user-connected {
+  border-left: 5px solid #ff0000; /* Rouge pour l'utilisateur connecté */
+}
+
+/* Pour les autres utilisateurs */
+.comment.other-user {
+  border-left: 5px solid #808080; /* Gris pour les autres utilisateurs */
+}
+
+
+
+
+
+
+
+
+
+
+
+/* Conteneur général de l'évaluation par étoiles */
+.rating-container {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* Icone d'étoile (active ou inactive) */
+.star-icon {
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  transition: transform 0.2s ease;
+}
+
+.star-icon:hover {
+  transform: scale(1.2);
+}
+
+/* Icône d'étoile en état hover */
+.star-icon.hover {
+  fill: #f39c12;
+}
+
+/* Icône d'étoile sélectionnée */
+.star-icon.selected {
+  fill: #f39c12;
+}
+
+/* Icône d'étoile inactive */
+.star-icon.inactive {
+  fill: #bdc3c7;
+}
+
+/* Texte pour la moyenne des étoiles */
+.avg-rating-text {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Message de retour après l'évaluation */
+.feedback-message {
+  font-size: 14px;
+  font-weight: bold;
+  color: #28a745;
+  margin-top: 5px;
+}
+
+/* Texte pour le label "Rate Us" */
+.rate-text {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+
+
+
+
+
+
+
+/* Styles du filtre */
+.filter-container {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.filter-wrapper {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  background-color: #f5f5f5;
+  padding: 10px 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.filter-input {
+  padding: 8px 15px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  width: 250px;
+}
+
+.filter-select {
+  padding: 8px 15px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+}
+
+.clear-btn {
+  background-color: #e74c3c;
+  color: white;
+  padding: 8px 15px;
+  border-radius: 5px;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.clear-btn:hover {
+  background-color: #c0392b;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* Button Style */
+.delete-btn {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  font-size: 14px;
+  border-radius: 20px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+/* Hover effect */
+.delete-btn:hover {
+  background-color: #c82333;
+  transform: scale(1.1); /* Slightly grow the button on hover */
+  cursor: pointer;
+}
+
+/* Icon Style */
+.delete-btn i {
+  margin-right: 5px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
