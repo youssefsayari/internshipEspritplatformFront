@@ -1,0 +1,96 @@
+/* General Layout Fixes */
+.container {
+  max-width: 800px; /* Increased form width */
+  margin: auto; /* Centers it */
+}
+
+.card {
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.card-header {
+  background: linear-gradient(to right, #007bff, #00c6ff);
+  color: white;
+  padding: 20px;
+  font-size: 1.4rem; /* Slightly larger title */
+  font-weight: bold;
+  text-align: center;
+}
+
+.card-body {
+  padding: 35px; /* More padding for a spacious look */
+  background-color: #f8f9fa;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.form-group {
+  margin-bottom: 1.5rem; /* More space between fields */
+}
+
+.form-label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #495057;
+}
+
+.form-control {
+  padding: 14px; /* Bigger inputs for better usability */
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ced4da;
+  transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
+}
+
+/* Larger Preview Frame */
+.preview-frame {
+  width: 100%;
+  height: 400px; /* Increased height for better visibility */
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Button Styling */
+button[type="submit"],
+button.back-button {
+  padding: 14px 24px; /* Bigger button */
+  font-size: 1.1rem;
+  font-weight: 600;
+  background-color: #007bff;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  transition: background 0.3s ease;
+}
+
+button[type="submit"]:hover,
+button.back-button:hover {
+  background-color: #0056b3;
+}
+
+button[type="submit"]:disabled,
+button.back-button:disabled {
+  background-color: #6c757d;
+}
+
+/* Responsive Fixes */
+@media (max-width: 768px) {
+  .container {
+    max-width: 95%; /* Slightly smaller on mobile */
+    padding: 0 15px;
+  }
+
+  .card-body {
+    padding: 25px;
+  }
+
+  .preview-frame {
+    height: 300px; /* Adjusted for smaller screens */
+  }
+}

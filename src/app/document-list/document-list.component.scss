@@ -1,0 +1,218 @@
+// General Page Styles
+.main-content {
+  background: #f7f9fc;
+  padding-top: 30px;
+}
+
+.card {
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  background: linear-gradient(135deg, #6e7cfc, #5f6bf5);
+  padding: 20px;
+  border-radius: 15px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.card-body {
+  padding: 30px 20px;
+}
+
+// Document Card Styling
+.document-card {
+  background: #fff;
+  border-radius: 12px;
+  text-align: center;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.document-header {
+  background: #f3f4f7;
+  padding: 15px;
+  border-radius: 50%;
+  margin-bottom: 15px;
+  display: inline-block;
+}
+
+.document-icon {
+  font-size: 30px;
+  color: #007bff;
+}
+
+.document-body {
+  margin-bottom: 15px;
+}
+
+.document-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+}
+
+.document-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+// Badge Styling
+.badge-info {
+  background-color: #17a2b8;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+}
+
+// Buttons Styling
+.btn-details {
+  background-color: #5f6bf5;
+  color: white;
+  border-radius: 25px;
+  padding: 8px 18px;
+  font-weight: 600;
+  transition: background 0.3s ease, transform 0.3s ease;
+
+  &:hover {
+    background-color: #3b4bdb;
+    transform: translateY(-3px);
+  }
+
+  i {
+    margin-right: 8px;
+  }
+}
+
+.btn-danger {
+  background-color: #d33;
+  color: white;
+  border-radius: 25px;
+  padding: 8px 18px;
+  font-weight: 600;
+  transition: background 0.3s ease, transform 0.3s ease;
+
+  &:hover {
+    background-color: #b32d2b;
+    transform: translateY(-3px);
+  }
+
+  i {
+    margin-right: 8px;
+  }
+}
+
+// Floating Add Document Button
+.btn-floating {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #28a745;
+  color: white;
+  padding: 12px 20px;  // Adjusted padding for a more rectangular shape
+  border-radius: 25px;  // Rounded corners, but not fully circular
+  font-size: 18px;      // Slightly smaller font size to fit better
+  font-weight: 600;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+  transition: background 0.3s ease, transform 0.3s ease;
+
+  &:hover {
+    background-color: #218838;
+    transform: translateY(-3px);
+  }
+
+  i {
+    margin-right: 8px;
+  }
+}
+
+// Custom SweetAlert2 Styling
+.custom-popup {
+  border-radius: 15px !important;
+  padding: 25px !important;
+}
+
+.custom-confirm-button {
+  background-color: #d33 !important;
+  border-radius: 8px !important;
+  padding: 12px 22px !important;
+  font-weight: bold;
+  color: white !important;
+}
+
+.custom-cancel-button {
+  background-color: #3085d6 !important;
+  border-radius: 8px !important;
+  padding: 12px 22px !important;
+  font-weight: bold;
+  color: white !important;
+}
+
+.swal2-toast {
+  background: #28a745 !important;
+  color: white !important;
+  font-size: 16px !important;
+}
+
+.pagination-controls button {
+  margin: 5px;
+  padding: 8px 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 5px;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+  // Pagination Controls
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  gap: 10px;
+
+  button {
+    padding: 10px 15px;
+    background-color: #5f6bf5;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 8px;
+    transition: background 0.3s ease, transform 0.2s ease;
+
+    &:hover {
+      background-color: #3b4bdb;
+      transform: translateY(-2px);
+    }
+
+    &:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+  }
+
+  .pagination-info {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+  }
+}
+
+}

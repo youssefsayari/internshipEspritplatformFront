@@ -7,19 +7,16 @@ declare interface RouteInfo {
     class: string;
 }
 export const ROUTES: RouteInfo[] = [
-  { path: '/dashboard', title: 'Dashboard',  icon: 'design_app', class: '' },
-  { path: '/icons', title: 'Icons',  icon:'education_atom', class: '' },
-  { path: '/maps', title: 'Maps',  icon:'location_map-big', class: '' },
-  { path: '/notifications', title: 'Notifications',  icon:'ui-1_bell-53', class: '' },
-  { path: '/user-profile', title: 'User Profile',  icon:'users_single-02', class: '' },
-  { path: '/table-list', title: 'Table List',  icon:'design_bullet-list-67', class: '' },
-  { path: '/typography', title: 'Typography',  icon:'text_caps-small', class: '' },
+    { path: '/user-profile', title: 'My Profile',  icon:'users_single-02', class: '' },
+    { path: '/agreement', title: 'My Agreement',  icon:'education_paper', class: '' },
+    { path: '/internship', title: 'My Internship',  icon:'business_briefcase-24', class: '' },
+    { path: '/predefined-documents', title: 'My Documents',  icon:'files_single-copy-04', class: '' },
+    { path: '/meeting', title: 'My Meetings',  icon:'ui-1_calendar-60', class: '' },
+    { path: '/task', title: 'My Tasks',  icon:'design_vector', class: '' },
+    { path: '/quiz', title: 'My Quizzes',  icon:'ui-2_chat-round', class: '' },
+    { path: '/document-list', title: 'Document List',  icon:'files_paper', class: '' },  // Added new route
+    { path: '/feedback', title: 'Feed Back',  icon:'ui-1_send', class: 'active active-pro' }
 
-  // NEW: Defense Planning Route
-  { path: '/defense-planning', title: 'Planification Soutenance', icon: 'business_badge', class: '' },
-  { path: '/document-stage', title: 'Télécharger Documents Stage', icon: 'files_paper', class: '' },  // Lien ajouté
-
-  { path: '/upgrade', title: 'Upgrade to PRO',  icon:'objects_spaceship', class: 'active active-pro' }
 ];
 
 @Component({

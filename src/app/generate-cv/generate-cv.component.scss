@@ -1,0 +1,87 @@
+/* Main Card */
+.card {
+  border: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease-in-out;
+  background-color: #fff;
+}
+
+.card:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.08);
+}
+
+.card-header {
+  background: linear-gradient(to right, #007bff, #6610f2);
+  padding: 30px;
+  border-radius: 10px 10px 0 0;
+  color: #fff;
+}
+
+.card-header h3 {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.card-header p {
+  font-size: 16px;
+}
+
+.card-body {
+  padding: 50px;
+}
+
+.text-primary {
+  color: #007bff;
+}
+
+.text-muted {
+  color: #6c757d;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mb-3 {
+  margin-bottom: 20px;
+}
+
+.mb-5 {
+  margin-bottom: 40px;
+}
+
+.preview-section iframe {
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  border: none;
+  border-radius: 10px;
+}
+
+.shadow-sm {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* Buttons */
+.btn-lg {
+  font-size: 18px;
+  padding: 12px 35px;
+}
+
+.btn-success {
+  background-color: #28a745;
+  border-color: #28a745;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.btn:hover {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.rounded-pill {
+  border-radius: 50px;
+}
+

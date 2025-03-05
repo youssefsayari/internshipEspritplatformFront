@@ -1,0 +1,76 @@
+<div class="panel-header panel-header-sm"></div>
+<div class="main-content">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-10">
+        <div class="card shadow-lg">
+          <div class="card-header text-center bg-gradient-primary text-white">
+            <h3><i class="fas fa-folder-open"></i> Internship Documents</h3>
+            <p class="text-light">Download or preview your essential internship documents</p>
+          </div>
+
+          <div class="card-body">
+            <div class="row d-flex justify-content-center">
+              <div class="col-md-4" *ngFor="let document of predefinedDocuments">
+                <div class="document-card shadow-sm"
+                    style="cursor: pointer; transition: 0.3s;"
+                    (mouseover)="hoveredDoc = document.fileName" 
+                    (mouseleave)="hoveredDoc = null"
+                    [ngStyle]="{'transform': hoveredDoc === document.fileName ? 'scale(1.05)' : 'scale(1)'}">
+                  
+                  <div class="document-header">
+                    <i class="fas fa-file-pdf document-icon"></i>
+                  </div>
+
+                  <div class="document-body">
+                    <h5 class="document-title">{{ document.displayName }}</h5>
+                    <span class="badge badge-primary">{{ document.type }}</span>
+                  </div>
+
+                  <div class="document-footer">
+                    <button class="btn btn-info btn-sm" (click)="previewDocument(document.fileName, $event)">
+                      <i class="fas fa-eye"></i> Preview
+                    </button>
+                    <button class="btn btn-success btn-sm" (click)="downloadDocument(document.fileName, $event)">
+                      <i class="fas fa-download"></i> Download
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Button Group for Download All, Upload Documents, and Generate CV -->
+          <div class="card-footer text-center mt-4">
+            <div class="row justify-content-center">
+              <div class="col-md-4">
+                <button class="btn btn-warning btn-lg btn-block shadow" (click)="downloadAll()">
+                  <i class="fas fa-cloud-download-alt"></i> Download All
+                </button>
+              </div>
+              <div class="col-md-4 mt-3 mt-md-0">
+                <button class="btn btn-primary btn-lg btn-block shadow" (click)="goToDocumentUpload()">
+                  <i class="fas fa-upload"></i> Upload Documents
+                </button>
+              </div>
+              <div class="col-md-4 mt-3 mt-md-0">
+                <button class="btn btn-info btn-lg btn-block shadow" (click)="goToGenerateCV()">
+                  <i class="fas fa-file-alt"></i> Generate CV
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PDF Preview Modal -->
+<div class="modal" *ngIf="showPreview">
+  <div class="modal-content">
+    <span class="close" (click)="closePreview()">&times;</span>
+    <h3>Document Preview</h3>
+    <iframe *ngIf="previewUrl" [src]="previewUrl" width="100%" height="500px"></iframe>
+  </div>
+</div>

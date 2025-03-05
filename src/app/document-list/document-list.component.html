@@ -1,0 +1,54 @@
+<div class="panel-header panel-header-sm"></div>
+<div class="main-content">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header text-center bg-gradient text-white">
+            <h3><i class="fas fa-folder-open"></i> My Documents</h3>
+          </div>
+
+          <div class="card-body">
+            <div class="row d-flex justify-content-center">
+              <div class="col-md-4 col-lg-3" *ngFor="let document of paginatedDocuments">
+                <div class="document-card shadow-lg" 
+                    (click)="viewDocumentDetails(document.id)" 
+                    style="cursor: pointer; transition: 0.3s; transform: scale(1);"
+                    (mouseover)="hover=true" (mouseleave)="hover=false"
+                    [ngStyle]="{'transform': hover ? 'scale(1.05)' : 'scale(1)'}">
+                  <div class="document-header">
+                    <i class="fas fa-file-alt document-icon"></i>
+                  </div>
+                  <div class="document-body">
+                    <h5 class="document-title">{{ document.name }}</h5>
+                    <span class="badge badge-info">{{ document.typeDocument }}</span>
+                  </div>
+                  <div class="document-footer">
+                    <button class="btn btn-details" (click)="viewDocumentDetails(document.id)">
+                      <i class="fas fa-info-circle"></i> Details
+                    </button>
+                    <button class="btn btn-danger btn-sm" (click)="onDelete(document.id); $event.stopPropagation();">
+                      <i class="fas fa-trash"></i> Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pagination Controls -->
+            <div class="pagination-controls mt-4 d-flex justify-content-center">
+              <button class="btn btn-primary mx-2" (click)="onPageChange(page - 1)" [disabled]="page <= 1">Previous</button>
+              <span class="align-self-center">Page {{ page }} of {{ totalPages }}</span>
+              <button class="btn btn-primary mx-2" (click)="onPageChange(page + 1)" [disabled]="page >= totalPages">Next</button>
+            </div>
+          </div>
+
+          <!-- Floating Add Button -->
+          <a [routerLink]="'/add-document'" class="btn btn-floating">
+            <i class="fas fa-plus"></i> Add Document
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

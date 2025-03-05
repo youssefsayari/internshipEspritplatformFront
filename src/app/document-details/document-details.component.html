@@ -1,0 +1,43 @@
+<div class="container mt-5 d-flex justify-content-center">
+  <div class="document-card">
+    <!-- 📄 Document Header -->
+    <div class="header">
+      <h3 class="title">📄 Document Details</h3>
+      <span *ngIf="document" class="document-type">{{ document.typeDocument }}</span>
+    </div>
+
+    <!-- 📝 Document Content -->
+    <div *ngIf="document; else notFound">
+      <h4 class="document-name">{{ document.name }}</h4>
+
+      <!-- 🌟 Preview Section -->
+      <div class="preview-container">
+        <div *ngIf="pdfPreviewUrl; else loading">
+          <iframe [src]="pdfPreviewUrl" class="preview-frame"></iframe>
+        </div>
+        <ng-template #loading>
+          <div class="loading-spinner"></div>
+          <p class="text-secondary">Loading preview...</p>
+        </ng-template>
+      </div>
+
+      <!-- 📥 Action Buttons -->
+      <div class="actions">
+        <button class="btn download-btn" (click)="downloadDocument(document.id)">⬇️ Download</button>
+        <button class="btn preview-btn" (click)="previewDocument(document.id)">👀 Preview Again</button>
+      </div>
+
+      <!-- 🔙 Back Button -->
+      <div class="back-button-container text-center mt-4">
+        <button class="btn btn-secondary" (click)="goBack()">
+          ⬅️ Back to Document List
+        </button>
+      </div>
+    </div>
+
+    <!-- ❌ Document Not Found -->
+    <ng-template #notFound>
+      <p class="text-danger text-center">⚠️ Document not found.</p>
+    </ng-template>
+  </div>
+</div>
