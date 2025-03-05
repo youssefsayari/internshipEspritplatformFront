@@ -98,3 +98,51 @@ body {
 .extra-links a:hover {
   text-decoration: underline;
 }
+.swal-custom-popup {
+  width: 40vh !important;
+  height: 40vh !important;
+  max-width: 90vw !important;
+  max-height: 90vh !important;
+  border-radius: 20px !important;
+  padding: 20px !important;
+  font-size: 18px !important;
+  background: #f8f9fa !important;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center !important;
+}
+
+.swal-custom-button {
+  background-color: #007bff !important;
+  color: white !important;
+  font-size: 16px !important;
+  padding: 12px 20px !important;
+  border-radius: 6px !important;
+}
+
+.swal-custom-input {
+  font-size: 16px !important;
+  padding: 10px !important;
+  border-radius: 6px !important;
+  border: 1px solid #ccc !important;
+  text-align: center !important;
+}
+.forgot-password-btn {
+  background: none;
+  border: none;
+  color: #991528;
+  font-size: 14px;
+  text-decoration: underline;
+  cursor: pointer;
+  transition: color 0.3s ease, transform 0.2s;
+  padding: 0;
+}
+
+.forgot-password-btn:hover {
+  color: #c30808;
+  text-decoration: none;
+  transform: scale(1.1); /* Slight enlargement on hover */
+}

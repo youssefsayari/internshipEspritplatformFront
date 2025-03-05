@@ -18,6 +18,12 @@
             </select>
           </div>
 
+          <!-- Display the most active student -->
+          <div *ngIf="mostActiveStudent" class="most-active-student">
+            <h5>🏅 Most Active Student:</h5>
+            <p>{{ mostActiveStudent.firstName }} {{ mostActiveStudent.lastName }}</p>
+          </div>
+
           <button class="btn btn-info" (click)="toggleCalendar()">📅 Show/Hide Calendar</button>
           <button class="btn btn-primary" (click)="showAddMeetingForm()">➕ Add Meeting</button>
         </div>

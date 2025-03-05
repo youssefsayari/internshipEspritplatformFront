@@ -65,5 +65,7 @@ export class MeetingService {
   findTutorIdByStudentId(studentId: number): Observable<number> {
     return this.http.get<number>(`${this.baseUrl}/findTutorIdByStudentId/${studentId}`);
   }
-  
+  getMostActiveStudents(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.baseUrl}/getMostActiveStudents`);
+  }
 }
