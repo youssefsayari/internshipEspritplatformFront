@@ -5,6 +5,7 @@ import { Meeting } from '../../../Model/Meeting';
 import { TypeMeeting } from '../../../Model/TypeMeeting.enum';
 import { User } from '../../../Model/User';
 import Swal from 'sweetalert2';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-student-update-meeting',
@@ -19,12 +20,37 @@ export class StudentUpdateMeetingComponent implements OnInit {
 
 
   meetingForm: FormGroup;
+   participantId : number;
+
+  
   students: User[] = [];
   typeMeetings = Object.keys(TypeMeeting).filter(key => isNaN(Number(key))) as Array<TypeMeeting>;
 
-  constructor(private fb: FormBuilder, private meetingService: MeetingService) { }
+  constructor(private fb: FormBuilder, private meetingService: MeetingService,private userService : UserService) { }
+
+  fetchUserDetails() {
+    const token = localStorage.getItem('Token');
+
+    if (token) {
+      this.userService.decodeTokenRole(token).subscribe({
+        next: (userDetails) => {
+          if (userDetails.role || userDetails.classe) {
+            localStorage.setItem('userRole', userDetails.role);
+            localStorage.setItem('userClasse', userDetails.classe);
+            this.participantId=userDetails.id;
+            console.log("the student is ", this.participantId);
+
+          }
+        },
+        error: (err) => {
+          console.log('Error fetching user details:', err);
+        }
+      });
+    }
+  }
 
   ngOnInit(): void {
+    this.fetchUserDetails();
     this.meetingForm = this.fb.group({
       date: [this.meeting.date, [Validators.required]],
       heure: [this.meeting.heure, [Validators.required, Validators.pattern('^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$')]],
@@ -44,12 +70,11 @@ export class StudentUpdateMeetingComponent implements OnInit {
 
   onSubmit() {
     if (this.meetingForm.valid) {
-      const participantId = 3;
       
-      this.meetingService.findTutorIdByStudentId(participantId).subscribe(
+      this.meetingService.findTutorIdByStudentId(this.participantId).subscribe(
         (tutorId: number) => {
           this.meetingService.updateMeetingAndAffectToParticipant(
-            { ...this.meeting, ...this.meetingForm.value }, tutorId, participantId
+            { ...this.meeting, ...this.meetingForm.value }, tutorId, this.participantId
           ).subscribe({
             next: () => {
               Swal.fire({
