@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import Swal from 'sweetalert2';
 import { IntegrationService } from "../../Services/integration.service";
-import { UserService } from "../../services/user.service";
+import { UserService } from "../../Services/user.service";
 import { LoginRequest } from "../../models/login-request";
 
 @Component({

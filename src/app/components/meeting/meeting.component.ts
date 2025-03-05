@@ -5,7 +5,7 @@ import { User } from '../../Model/User';
 import Swal from 'sweetalert2';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import { CalendarOptions } from '@fullcalendar/core';
-import { UserService } from '../../services/user.service';
+import { UserService } from '../../Services/user.service';
 
 @Component({
   selector: 'app-meeting',
@@ -15,21 +15,20 @@ import { UserService } from '../../services/user.service';
 export class MeetingComponent implements OnInit {
   meetings: Meeting[] = [];
   students: User[] = [];
+  mostActiveStudent: User | null = null;  // Store the most active student
   editingMeeting: Meeting | null = null;
   isFormVisible = false;
   selectedStudentId: string = "";
   isCalendarVisible = false;
-  tutorId=1;
-
+  tutorId = 1;
   calendarOptions: CalendarOptions = {
     initialView: 'dayGridMonth',
     plugins: [dayGridPlugin],
     events: []
   };
+  p: number = 1;
 
-  p: number = 1;  
-
-  constructor(private meetingService: MeetingService,private userService: UserService ) { }
+  constructor(private meetingService: MeetingService, private userService: UserService) { }
 
   ngOnInit(): void {
     this.loadStudents();
@@ -46,8 +45,8 @@ export class MeetingComponent implements OnInit {
           if (userDetails.role || userDetails.classe) {
             localStorage.setItem('userRole', userDetails.role);
             localStorage.setItem('userClasse', userDetails.classe);
-            this.tutorId=userDetails.id;
-            console.log("the tutor is ", userDetails.id);
+            this.tutorId = userDetails.id;
+            console.log("The tutor is ", userDetails.id);
           }
         },
         error: (err) => {
@@ -59,10 +58,11 @@ export class MeetingComponent implements OnInit {
 
   loadMeetings() {
     if (this.selectedStudentId) {
-      this.meetingService.getMeetingsByStudentAndTutor(parseInt(this.selectedStudentId),this.tutorId).subscribe({
+      this.meetingService.getMeetingsByStudentAndTutor(parseInt(this.selectedStudentId), this.tutorId).subscribe({
         next: (meetings) => {
           this.meetings = meetings;
           this.updateCalendarEvents();
+          this.findMostActiveStudent();  // Call to update the most active student
         },
         error: (err) => console.error('Error fetching meetings:', err)
       });
@@ -71,6 +71,7 @@ export class MeetingComponent implements OnInit {
         next: (meetings) => {
           this.meetings = meetings;
           this.updateCalendarEvents();
+          this.findMostActiveStudent();  // Call to update the most active student
         },
         error: (err) => console.error('Error fetching meetings:', err)
       });
@@ -79,9 +80,32 @@ export class MeetingComponent implements OnInit {
 
   loadStudents() {
     this.meetingService.getStudentsByTutorId(this.tutorId).subscribe({
-      next: (students) => (this.students = students),
+      next: (students) => {
+        this.students = students;
+        this.findMostActiveStudent();  // Call to update the most active student
+      },
       error: (err) => console.error('Failed to load students', err)
     });
+  }
+
+  findMostActiveStudent() {
+    if (this.students.length > 0 && this.meetings.length > 0) {
+      const studentMeetingCount: { [key: number]: number } = {};
+
+      this.meetings.forEach((meeting) => {
+        if (meeting.participant) {
+          const studentId = meeting.participant.idUser;
+          studentMeetingCount[studentId] = (studentMeetingCount[studentId] || 0) + 1;
+        }
+      });
+
+      // Find the student with the maximum number of meetings
+      const mostActiveStudentId = Object.keys(studentMeetingCount).reduce((a, b) =>
+        studentMeetingCount[a] > studentMeetingCount[b] ? a : b
+      );
+
+      this.mostActiveStudent = this.students.find(student => student.idUser === +mostActiveStudentId) || null;
+    }
   }
 
   toggleApproval(meeting: Meeting) {
@@ -134,7 +158,6 @@ export class MeetingComponent implements OnInit {
         })),
       eventClick: (info) => {
         const meeting = info.event.extendedProps;
-        
         Swal.fire({
           title: '📅 Meeting Details',
           html: `
@@ -148,12 +171,10 @@ export class MeetingComponent implements OnInit {
           confirmButtonText: 'OK',
           icon: 'info'
         });
-        
         info.jsEvent.preventDefault();
       }
     };
   }
-  
 
   showAddMeetingForm() {
     this.editingMeeting = null;
