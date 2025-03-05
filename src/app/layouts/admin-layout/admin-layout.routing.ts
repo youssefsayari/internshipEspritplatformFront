@@ -32,6 +32,6 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'student',        component: StudentComponent },
     { path: 'setting',        component: SettingComponent },
     { path: 'internship-request',        component: PostComponent },
-      { path: 'My meeting',        component: MeetingComponent },
+      { path: 'MyMeeting',        component: MeetingComponent },
     { path: 'StudentMeeting', component: StudentMeetingsComponent },
 ];

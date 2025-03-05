@@ -8,7 +8,7 @@ import { User } from '../Model/User';
   providedIn: 'root'
 })
 export class MeetingService {
-  private baseUrl = 'http://localhost:8090/innoxpert/meeting';
+  private baseUrl = 'http://localhost:8089/innoxpert/meeting';
 
   constructor(private http: HttpClient) {}
 

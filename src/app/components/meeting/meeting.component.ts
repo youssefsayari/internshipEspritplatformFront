@@ -5,6 +5,7 @@ import { User } from '../../Model/User';
 import Swal from 'sweetalert2';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import { CalendarOptions } from '@fullcalendar/core';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-meeting',
@@ -28,11 +29,32 @@ export class MeetingComponent implements OnInit {
 
   p: number = 1;  
 
-  constructor(private meetingService: MeetingService) {}
+  constructor(private meetingService: MeetingService,private userService: UserService ) { }
 
   ngOnInit(): void {
     this.loadStudents();
     this.loadMeetings();
+    this.fetchUserDetails();
+  }
+
+  fetchUserDetails() {
+    const token = localStorage.getItem('Token');
+
+    if (token) {
+      this.userService.decodeTokenRole(token).subscribe({
+        next: (userDetails) => {
+          if (userDetails.role || userDetails.classe) {
+            localStorage.setItem('userRole', userDetails.role);
+            localStorage.setItem('userClasse', userDetails.classe);
+            this.tutorId=userDetails.id;
+            console.log("the tutor is ", userDetails.id);
+          }
+        },
+        error: (err) => {
+          console.log('Error fetching user details:', err);
+        }
+      });
+    }
   }
 
   loadMeetings() {

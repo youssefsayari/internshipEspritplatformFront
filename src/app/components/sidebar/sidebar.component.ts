@@ -12,7 +12,7 @@ declare interface RouteInfo {
 }
 export const ROUTES: RouteInfo[] = [
     //AMEN
-    { path: '/My meeting', title: 'My Meeting', icon: 'education_atom', class: '' ,roles:['Tutor']},
+    { path: '/MyMeeting', title: 'My Meeting', icon: 'education_atom', class: '' ,roles:['Tutor']},
     { path: '/StudentMeeting', title: 'StudentMeeting', icon: 'education_atom', class: '' ,roles:['Student']},
 
    

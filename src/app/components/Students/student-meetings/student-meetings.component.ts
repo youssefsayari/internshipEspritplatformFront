@@ -15,7 +15,7 @@ export class StudentMeetingsComponent implements OnInit {
   selectedStudentId: number = 3;  
   errorMessage: string = '';  
   isFormVisible: boolean = false;
-  isUpdateFormVisible: boolean = false; // New flag for update form visibility
+  isUpdateFormVisible: boolean = false; 
   editingMeeting: Meeting | null = null;
 
   isCalendarVisible: boolean = false;
