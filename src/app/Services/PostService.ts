@@ -14,7 +14,7 @@ export class PostService {
 
   // Récupérer tous les posts
   getAllPosts(): Observable<Post[]> {
-    return this.http.get<Post[]>(`${this.baseUrl}/getAllPosts`);
+    return this.http.get<Post[]>(`${this.baseUrl}/getAllPostsDTO`);
   }
 
   // Récupérer un post par ID
@@ -24,7 +24,7 @@ export class PostService {
 
   // Récupérer les posts d'une entreprise spécifique
   getPostsByCompany(companyId: number): Observable<Post[]> {
-    return this.http.get<Post[]>(`${this.baseUrl}/getPostsByCompany/${companyId}`);
+    return this.http.get<Post[]>(`${this.baseUrl}/getPostsByCompanyDTO/${companyId}`);
   }
 
    // Ajouter un post et l'affecter à une entreprise avec une image
@@ -48,8 +48,8 @@ export class PostService {
     return this.http.get<Post[]>(`${this.baseUrl}/getHomeFeed/${userId}`);
   }
 
- 
- 
- 
-  
+
+
+
+
 }
