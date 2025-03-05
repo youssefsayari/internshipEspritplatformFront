@@ -1,0 +1,67 @@
+<div class="card">
+  <div class="card">
+    <div class="card-header">
+      <h4 class="card-title">📅 Edit Meeting</h4>
+    </div>
+  <div class="card-body">
+    <form [formGroup]="meetingForm" (ngSubmit)="onSubmit()">
+      
+      <!-- Date & Hour Row -->
+      <div class="form-row d-flex justify-content-between">
+        <div class="form-group flex-grow-1 mr-2">
+          <label for="date">📅 Date</label>
+          <input type="date" formControlName="date" class="form-control">
+        </div>
+        <div class="form-group flex-grow-1">
+          <label for="heure">⏰ Hour</label>
+          <input type="time" formControlName="heure" class="form-control" required>
+          <div *ngIf="meetingForm.controls.heure.errors?.required && meetingForm.controls.heure.touched" class="text-danger">
+            Hour is required.
+          </div>
+          <div *ngIf="meetingForm.controls.heure.errors?.pattern && meetingForm.controls.heure.touched" class="text-danger">
+            Please enter a valid hour (HH:mm).
+          </div>
+        </div>
+      </div>
+
+      <!-- Type of Meeting & Student Row -->
+      <div class="form-row d-flex justify-content-between">
+        <div class="form-group flex-grow-1 mr-2">
+          <label for="typeMeeting">📝 Meeting Type</label>
+          <select formControlName="typeMeeting" class="form-control" required>
+            <option *ngFor="let type of typeMeetings" [value]="type">{{ type }}</option>
+          </select>
+        </div>
+
+        <div class="form-group flex-grow-1">
+          <label for="studentId">👨‍🎓 Student</label>
+          <select formControlName="studentId" class="form-control" required>
+            <option value="" disabled>Select a student</option>
+            <option *ngFor="let student of students" [value]="student.idUser">
+              {{ student.firstName }} {{ student.lastName }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div class="form-group">
+        <label for="description">🗒️ Description</label>
+        <textarea formControlName="description" class="form-control" rows="3" required placeholder="Enter detailed description here..."></textarea>
+        <div *ngIf="meetingForm.controls.description.errors?.required && meetingForm.controls.description.touched" class="text-danger">
+          Description is required.
+        </div>
+        <div *ngIf="meetingForm.controls.description.errors?.maxLength && meetingForm.controls.description.touched" class="text-danger">
+          Description must be no longer than 255 characters.
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="d-flex justify-content-between mt-3">
+        <button type="submit" class="btn btn-success" [disabled]="!meetingForm.valid">✅ Save Meeting</button>
+        <button type="button" class="btn btn-danger" (click)="closeForm()">❌ Cancel</button>
+      </div>
+      
+    </form>
+  </div>
+</div>

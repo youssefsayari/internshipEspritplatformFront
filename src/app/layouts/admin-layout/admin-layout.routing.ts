@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-
 import { DashboardComponent } from '../../components/dashboard/dashboard.component';
 import { UserProfileComponent } from '../../components/user-profile/user-profile.component';
 import { TableListComponent } from '../../components/table-list/table-list.component';
@@ -13,6 +12,9 @@ import { InternshipComponent } from '../../components/internship/internship.comp
 import {PostComponent} from "../../components/post/post.component";
 import {StudentComponent} from "../../components/student/student.component";
 import {SettingComponent} from "../../components/setting/setting.component";
+import { MeetingComponent } from '../../components/meeting/meeting.component';
+import { TasksListComponent } from '../../components/tasks/tasks-list/tasks-list.component';
+import { StudentMeetingsComponent } from '../../components/Students/student-meetings/student-meetings.component';
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent },
@@ -30,4 +32,6 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'student',        component: StudentComponent },
     { path: 'setting',        component: SettingComponent },
     { path: 'internship-request',        component: PostComponent },
+      { path: 'My meeting',        component: MeetingComponent },
+    { path: 'StudentMeeting', component: StudentMeetingsComponent },
 ];

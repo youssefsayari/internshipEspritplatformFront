@@ -6,6 +6,18 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FooterComponent } from './footer/footer.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
+import { MeetingComponent } from './meeting/meeting.component';
+import { AddMeetingComponent } from './add-meeting/add-meeting.component';
+import { TasksListComponent } from './tasks/tasks-list/tasks-list.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { UpdateMeetingComponent } from './update-meeting/update-meeting.component';
+import { FullCalendarModule } from '@fullcalendar/angular';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { StudentMeetingsComponent } from './Students/student-meetings/student-meetings.component';
+import { StudentAddMeetingComponent } from './Students/student-add-meeting/student-add-meeting.component';
+import { StudentUpdateMeetingComponent } from './Students/student-update-meeting/student-update-meeting.component';
+
+
 import { NotfoundComponent } from './notfound/notfound.component';
 import { PostComponent } from './post/post.component';
 import { StudentComponent } from './student/student.component';
@@ -15,7 +27,6 @@ import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatSortModule} from "@angular/material/sort";
 import {MatTableModule} from "@angular/material/table";
 import { DialogComponent } from './dialog/dialog.component';
-import {FormsModule} from "@angular/forms";
 import {MatSelectModule} from "@angular/material/select";
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatButtonModule} from "@angular/material/button";
@@ -30,13 +41,16 @@ import { DialogRemarkComponent } from './dialog-remark/dialog-remark.component';
   imports: [
     CommonModule,
     RouterModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgbModule,NgxPaginationModule,
+    FullCalendarModule
     NgbModule,
     MatFormFieldModule,
     MatInputModule,
     MatPaginatorModule,
     MatSortModule,
     MatTableModule,
-    FormsModule,
     MatSelectModule,
     MatDialogModule,
     MatButtonModule,
@@ -47,6 +61,13 @@ import { DialogRemarkComponent } from './dialog-remark/dialog-remark.component';
     FooterComponent,
     NavbarComponent,
     SidebarComponent,
+    MeetingComponent,
+    AddMeetingComponent,
+    TasksListComponent,
+    UpdateMeetingComponent,
+    StudentMeetingsComponent,
+    StudentAddMeetingComponent,
+    StudentUpdateMeetingComponent
     NotfoundComponent,
     PostComponent,
     StudentComponent,

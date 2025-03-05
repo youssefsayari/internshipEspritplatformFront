@@ -1,0 +1,78 @@
+<div class="panel-header panel-header-sm"></div>
+<div class="main-content">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h4 class="card-title">📅 Meetings List</h4>
+
+         <!-- <div class="d-flex align-items-center">
+            <label for="studentDropdown" class="mr-2 student-label">
+              👨‍🎓 <span class="font-weight-bold text-dark">Student:</span>
+            </label>
+          </div>-->
+
+          <button class="btn btn-info" (click)="toggleCalendar()">📅 Show/Hide Calendar</button>
+          <button class="btn btn-primary" (click)="showAddMeetingForm()">➕ Add Meeting</button>
+        </div>
+
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead class="text-primary">
+                <th>📅 Date</th>
+                <th>⏰ Hour</th>
+                <th>📝 Type</th>
+                <th>🗒️ Description</th>
+                <th>👨‍🎓 Tutor</th>
+                <th>✅ Status</th>
+                <th class="text-right">⚙️ Actions</th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let meeting of meetings | paginate: { itemsPerPage: 5, currentPage: p } ; trackBy: trackMeeting">
+                  <td>{{ meeting.date | date }}</td>
+                  <td>{{ meeting.heure }}</td>
+                  <td>{{ meeting.typeMeeting }}</td>
+                  <td>{{ meeting.description }}</td>
+                  <td>
+                    {{ meeting.organiser?.firstName }} {{ meeting.organiser?.lastName }}
+                  </td>
+                  <td>
+                    <!-- Conditional emoji based on approval status -->
+                    <span *ngIf="meeting.approved; else notApproved">✅</span>
+                    <ng-template #notApproved>❌</ng-template>
+                  </td>
+
+                  <td class="text-right">
+                    <button class="btn btn-info btn-sm" (click)="showUpdateForm(meeting)">✏️ Edit</button>
+                    <button class="btn btn-danger btn-sm" (click)="deleteMeeting(meeting.idMeeting)">❌ Delete</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pagination controls -->
+          <div class="pagination-controls">
+            <pagination-controls (pageChange)="p = $event"></pagination-controls>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form to add new meeting -->
+      <app-student-add-meeting *ngIf="isFormVisible" (close)="closeForm()" (meetingAdded)="loadMeetings()"></app-student-add-meeting>
+      <app-student-update-meeting 
+      *ngIf="isUpdateFormVisible && editingMeeting" 
+      [meeting]="editingMeeting" 
+      (close)="closeForm()" 
+      (meetingUpdated)="loadMeetings()">
+    </app-student-update-meeting>
+    </div>
+  </div>
+
+  <!-- Calendar appears below the table -->
+  <div *ngIf="isCalendarVisible" class="calendar-container">
+    <h3 class="calendar-title">📅 Meeting Calendar</h3>
+    <full-calendar [options]="calendarOptions"></full-calendar>
+  </div>
+</div>

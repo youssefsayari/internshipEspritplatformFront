@@ -4,6 +4,9 @@ import { BrowserModule  } from '@angular/platform-browser';
 import { Routes, RouterModule } from '@angular/router';
 
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
+import { MeetingComponent } from './components/meeting/meeting.component';
+
+
 import {NotfoundComponent} from "./components/notfound/notfound.component";
 import {LoginComponent} from "./components/login/login.component";
 

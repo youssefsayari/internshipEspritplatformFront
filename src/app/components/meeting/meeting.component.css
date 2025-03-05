@@ -1,0 +1,147 @@
+/* Basic styling for table cells */
+td {
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Make Student label black and aligned properly */
+.student-label {
+  font-weight: bold;
+  font-size: 16px;
+  color: black;
+  display: flex;
+  align-items: center;
+}
+
+/* Adjust dropdown for better visibility */
+.student-dropdown {
+  width: 200px;
+  padding: 5px;
+  font-size: 16px;
+}
+
+/* Calendar Modal Styling */
+.calendar-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  width: 80%;
+  max-width: 900px;
+  z-index: 1050;
+}
+
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Calendar Container */
+.calendar-container {
+  margin-top: 30px;
+  padding: 20px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.calendar-title {
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  color: #007bff;
+  margin-bottom: 10px;
+}
+
+/* Pagination Controls Styling */
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.pagination-controls ul {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.pagination-controls li {
+  margin: 0 5px;
+}
+
+.pagination-controls button {
+  background-color: #007bff;
+  color: #fff;
+  border: 1px solid #007bff;
+  border-radius: 5px;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  text-align: center;
+}
+
+.pagination-controls button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+.pagination-controls button:disabled {
+  background-color: #e0e0e0;
+  cursor: not-allowed;
+}
+
+.pagination-controls .page-number {
+  padding: 8px 16px;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.pagination-controls .page-number.active {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.pagination-controls .page-number:hover {
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+}
+
+.pagination-controls .page-prev,
+.pagination-controls .page-next {
+  background-color: #007bff;
+  color: #fff;
+  padding: 8px 16px;
+  font-size: 14px;
+}
+
+.pagination-controls .page-prev:hover,
+.pagination-controls .page-next:hover {
+  background-color: #0056b3;
+}
+
+.pagination-controls .page-prev[disabled],
+.pagination-controls .page-next[disabled] {
+  background-color: #e0e0e0;
+  cursor: not-allowed;
+}

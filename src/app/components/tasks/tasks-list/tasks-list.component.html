@@ -1,0 +1,14 @@
+<div class="panel-header panel-header-sm">
+</div>
+
+<div class="task-container">
+    <div class="task-box" *ngFor="let status of ['ToDo', 'InProgress', 'Done']">
+      <h3><i class="{{ iconForStatus(status) }}"></i> {{ status }}</h3>
+      <div class="task" *ngFor="let task of getTasksByStatus(status)">
+        <h4>{{ task.title }}</h4>
+        <p>{{ task.description }}</p>
+      </div>
+    </div>
+  </div>
+  
+  

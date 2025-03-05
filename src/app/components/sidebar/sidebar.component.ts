@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { MeetingComponent } from '../meeting/meeting.component';
+
 import {UserService} from "../../services/user.service";
 
 declare interface RouteInfo {
@@ -9,6 +11,12 @@ declare interface RouteInfo {
     roles: string[];
 }
 export const ROUTES: RouteInfo[] = [
+    //AMEN
+    { path: '/My meeting', title: 'My Meeting', icon: 'education_atom', class: '' },
+    { path: '/StudentMeeting', title: 'StudentMeeting', icon: 'education_atom', class: '' },
+
+   
+
   { path: '/dashboard', title: 'Dashboard', icon: 'business_chart-bar-32', class: '', roles: ['Admin'] },
   { path: '/user-profile', title: 'My Profile', icon: 'users_single-02', class: '', roles: ['Student', 'Tutor','Company'] },
   { path: '/student', title: 'Students', icon: 'education_glasses', class: '', roles: ['Admin'] },
