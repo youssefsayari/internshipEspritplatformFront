@@ -15,7 +15,7 @@ export const ROUTES: RouteInfo[] = [
     { path: '/MyMeeting', title: 'My Meeting', icon: 'education_atom', class: '' ,roles:['Tutor']},
     { path: '/StudentMeeting', title: 'StudentMeeting', icon: 'education_atom', class: '' ,roles:['Student']},
   //sayariiii
-    { path: '/Posts', title: 'Post Management',  icon:'education_atom', class: '' },
+    { path: '/Posts', title: 'Post Management',  icon:'education_atom', class: '', roles: ['Student', 'Tutor','Company'] },
   { path: '/dashboard', title: 'Dashboard', icon: 'business_chart-bar-32', class: '', roles: ['Admin'] },
   { path: '/user-profile', title: 'My Profile', icon: 'users_single-02', class: '', roles: ['Student', 'Tutor','Company'] },
   { path: '/student', title: 'Students', icon: 'education_glasses', class: '', roles: ['Admin'] },

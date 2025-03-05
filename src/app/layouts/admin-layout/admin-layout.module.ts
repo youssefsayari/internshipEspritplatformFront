@@ -23,6 +23,7 @@ import {MatSortModule} from "@angular/material/sort";
 import {MatInputModule} from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import {MatDialogModule} from '@angular/material/dialog';
+import { ComponentsModule } from "../../components/components.module";
 
 
 @NgModule({
@@ -40,7 +41,9 @@ import {MatDialogModule} from '@angular/material/dialog';
     MatSortModule,
     MatSelectModule,
     MatDialogModule,
-    ComponentsModule
+    ComponentsModule,
+
+
 
   ],
 

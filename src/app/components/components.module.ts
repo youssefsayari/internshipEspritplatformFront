@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { FormsModule } from '@angular/forms';
 import { FooterComponent } from './footer/footer.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
@@ -37,6 +36,8 @@ import { DialogRemarkComponent } from './dialog-remark/dialog-remark.component';
 import { ActivityTimelineComponent } from './activity-timeline/activity-timeline.component';
 import { MyContactsComponent } from './my-contacts/my-contacts.component';
 import { ProfileCardComponent } from './profile-card/profile-card.component';
+import { IconsComponent } from '../icons/icons.component'; // Vérifie le chemin exact
+
 
 
 
@@ -46,7 +47,7 @@ import { ProfileCardComponent } from './profile-card/profile-card.component';
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
-    NgbModule,NgxPaginationModule,
+    NgxPaginationModule,
     FullCalendarModule,
     NgbModule,
     MatFormFieldModule,
@@ -58,7 +59,11 @@ import { ProfileCardComponent } from './profile-card/profile-card.component';
     MatDialogModule,
     MatButtonModule,
     MatIconModule,
-    MatTooltipModule
+    MatTooltipModule,
+
+
+
+
 
   ],
   declarations: [
@@ -79,10 +84,13 @@ import { ProfileCardComponent } from './profile-card/profile-card.component';
     DialogInternshipComponent,
     DialogInternshipTutorComponent,
     DialogRemarkComponent,
-    NotfoundComponent
+    NotfoundComponent,
     ActivityTimelineComponent,
     MyContactsComponent,
-    ProfileCardComponent
+    ProfileCardComponent,
+
+    IconsComponent, // Assurez-vous que IconsComponent est bien ici
+
 
   ],
   exports: [
@@ -91,7 +99,9 @@ import { ProfileCardComponent } from './profile-card/profile-card.component';
     SidebarComponent,
     ActivityTimelineComponent, // Ajout pour pouvoir l'utiliser ailleurs
     MyContactsComponent,
-    ProfileCardComponent
+    ProfileCardComponent,
+
+
   ]
 })
 export class ComponentsModule { }

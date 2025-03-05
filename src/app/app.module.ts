@@ -40,7 +40,7 @@ import { ImageComponent } from './image/image.component';
   declarations: [
     AppComponent,
     AdminLayoutComponent,
-    LoginComponent
+    LoginComponent,
     ImageComponent,
 
   ],
