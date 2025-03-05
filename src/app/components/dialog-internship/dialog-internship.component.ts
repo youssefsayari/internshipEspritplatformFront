@@ -1,8 +1,8 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {UserService} from "../../services/user.service";
+import {UserService} from "../../Services/user.service";
 import Swal from "sweetalert2";
-import {InternshipService} from "../../services/internship.service";
+import {InternshipService} from "../../Services/internship.service";
 
 @Component({
   selector: 'app-dialog-internship',

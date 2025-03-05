@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MeetingComponent } from '../meeting/meeting.component';
 
-import {UserService} from "../../services/user.service";
+import {UserService} from "../../Services/user.service";
 
 declare interface RouteInfo {
     path: string;

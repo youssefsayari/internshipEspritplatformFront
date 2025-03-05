@@ -1,11 +1,11 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {UserService} from "../../services/user.service";
-import {InternshipService} from "../../services/internship.service";
+import {UserService} from "../../Services/user.service";
+import {InternshipService} from "../../Services/internship.service";
 import {DialogInternshipComponent} from "../dialog-internship/dialog-internship.component";
 import Swal from "sweetalert2";
 import {InternshipRemark} from "../../models/internship-remark";
-import {InternshipRemarkService} from "../../services/internship-remark.service";
+import {InternshipRemarkService} from "../../Services/internship-remark.service";
 
 
 

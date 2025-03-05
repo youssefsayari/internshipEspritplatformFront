@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Meeting } from '../../Model/Meeting';
-import { MeetingService } from '../../Service/MeetingService';
+import { MeetingService } from '../../Services/MeetingService';
 import { User } from '../../Model/User';
 import Swal from 'sweetalert2';
 import dayGridPlugin from '@fullcalendar/daygrid';

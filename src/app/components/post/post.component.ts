@@ -1,9 +1,9 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {Router} from "@angular/router";
 import {Post} from "../../Model/Post";
-import {PostService} from "../../services/PostService";
-import {UserService} from "../../services/user.service";
-import {InternshipService} from "../../services/internship.service";
+import {PostService} from "../../Services/PostService";
+import {UserService} from "../../Services/user.service";
+import {InternshipService} from "../../Services/internship.service";
 import Swal from 'sweetalert2';
 import {InternshipAdminResponse} from "../../models/internship-admin-response";
 import {MatTableDataSource} from "@angular/material/table";
@@ -11,7 +11,7 @@ import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {MatDialog} from "@angular/material/dialog";
 import {DialogInternshipComponent} from "../dialog-internship/dialog-internship.component";
-import {InternshipRemarkService} from "../../services/internship-remark.service";
+import {InternshipRemarkService} from "../../Services/internship-remark.service";
 import {InternshipRemark} from "../../models/internship-remark";
 
 

@@ -1,10 +1,10 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
-import { MeetingService } from '../../Service/MeetingService';
+import { MeetingService } from '../../Services/MeetingService';
 import { TypeMeeting } from '../../Model/TypeMeeting.enum';
 import { User } from '../../Model/User'; 
 import Swal from 'sweetalert2';
-import { UserService } from '../../services/user.service';
+import { UserService } from '../../Services/user.service';
 
 @Component({
   selector: 'app-add-meeting',

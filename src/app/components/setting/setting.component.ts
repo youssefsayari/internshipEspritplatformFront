@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 import {Setting} from "../../models/setting";
-import {SettingService} from "../../services/setting.service";
+import {SettingService} from "../../Services/setting.service";
 
 @Component({
   selector: 'app-setting',

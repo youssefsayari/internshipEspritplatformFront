@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserService } from '../../services/user.service'; // Remplace par ton service User si nécessaire
+import { UserService } from '../../Services/user.service'; // Remplace par ton service User si nécessaire
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';

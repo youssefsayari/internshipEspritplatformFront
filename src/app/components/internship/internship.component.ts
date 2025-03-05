@@ -1,7 +1,7 @@
 import { Component, OnInit , ViewChild} from '@angular/core';
 import {Router} from "@angular/router";
-import {InternshipService} from "../../services/internship.service";
-import {UserService} from "../../services/user.service";
+import {InternshipService} from "../../Services/internship.service";
+import {UserService} from "../../Services/user.service";
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
@@ -9,7 +9,7 @@ import Swal from 'sweetalert2';
 import {DialogInternshipTutorComponent} from "../dialog-internship-tutor/dialog-internship-tutor.component";
 import {MatDialog} from "@angular/material/dialog";
 import {DialogRemarkComponent} from "../dialog-remark/dialog-remark.component";
-import {InternshipRemarkService} from "../../services/internship-remark.service";
+import {InternshipRemarkService} from "../../Services/internship-remark.service";
 import {Remark} from "../../models/remark";
 @Component({
   selector: 'app-internship',

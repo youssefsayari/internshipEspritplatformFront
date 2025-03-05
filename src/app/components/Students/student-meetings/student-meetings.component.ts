@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { MeetingService } from '../../../Service/MeetingService'; 
+import { MeetingService } from '../../../Services/MeetingService'; 
 import Swal from 'sweetalert2';  
 import dayGridPlugin from '@fullcalendar/daygrid';
 import { CalendarOptions } from '@fullcalendar/core';
 import { Meeting } from '../../../Model/Meeting';
-import { UserService } from '../../../services/user.service';
+import { UserService } from '../../../Services/user.service';
 
 @Component({
   selector: 'app-student-meetings',

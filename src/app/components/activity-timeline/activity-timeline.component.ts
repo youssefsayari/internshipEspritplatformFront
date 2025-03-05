@@ -1,8 +1,8 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
-import { PostService } from '../../services/PostService'; // Assure-toi que le chemin est correct
-import { CommentService } from '../../services/CommentService'; // Assure-toi que le chemin est correct
-import { CompanyService } from '../../services/CompanyService'; // Assure-toi que le chemin est correct
-import { RatingService } from '../../services/RatingService'; // Assure-toi que le chemin est correct
+import { PostService } from '../../Services/PostService'; // Assure-toi que le chemin est correct
+import { CommentService } from '../../Services/CommentService'; // Assure-toi que le chemin est correct
+import { CompanyService } from '../../Services/CompanyService'; // Assure-toi que le chemin est correct
+import { RatingService } from '../../Services/RatingService'; // Assure-toi que le chemin est correct
 
 
 
