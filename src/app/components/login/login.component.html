@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" href="login.component.scss">
+</head>
+<body>
+
+<!-- Image de fond -->
+<img src="./assets/img/loogo.png" class="background-image">
+
+<div class="login-container">
+  <h2>Login</h2>
+  <form [formGroup]="userForm">
+    <div class="input-group">
+      <label>ID Number</label>
+      <input type="text" formControlName="identifiant" placeholder="Enter your ID number" required>
+    </div>
+    <div class="input-group">
+      <label>Password</label>
+      <input type="password" formControlName="password" placeholder="Enter your password" required>
+    </div>
+    <button class="login-btn" (click)="login()">Login</button>
+  </form>
+  <div class="extra-links">
+    <a href="#">Forgot password ?</a>
+  </div>
+</div>
+
+</body>
+</html>

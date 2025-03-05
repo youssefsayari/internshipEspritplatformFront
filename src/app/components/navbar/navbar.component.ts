@@ -150,6 +150,12 @@ export class NavbarComponent implements OnInit {
               return this.listTitles[item].title;
           }
       }
-      return 'Dashboard';
+      return titlee;
     }
+  logout() {
+    localStorage.clear();
+    this.router.navigate(['/login']);
+  }
+
+
 }

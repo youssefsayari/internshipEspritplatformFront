@@ -1,0 +1,19 @@
+<h2 mat-dialog-title class="d-flex align-items-center justify-content-between">
+  Remarks
+</h2>
+
+<mat-dialog-content class="mat-typography">
+  <div *ngIf="remarks?.length > 0; else noRemarks">
+    <div *ngFor="let remark of remarks" class="remark-item">
+      <p><strong>Remark:</strong></p>
+      <p class="remark-text">{{ remark.remark }}</p>
+    </div>
+  </div>
+  <ng-template #noRemarks>
+    <p>No remarks available.</p>
+  </ng-template>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="closeDialog()">Close</button>
+</mat-dialog-actions>

@@ -1,0 +1,19 @@
+<div class="panel-header panel-header-sm"></div>
+<div class="main-content">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">Settings</h4>
+        </div>
+        <div class="card-body">
+          <div *ngFor="let setting of settings" class="mb-3">
+            <label>{{ setting.key }}</label>
+            <input type="text" [(ngModel)]="setting.value" class="form-control">
+            <button class="btn btn-primary mt-2" (click)="saveSetting(setting)">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
