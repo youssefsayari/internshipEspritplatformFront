@@ -4,6 +4,7 @@ import Swal from 'sweetalert2';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import { CalendarOptions } from '@fullcalendar/core';
 import { Meeting } from '../../../Model/Meeting';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-student-meetings',
@@ -12,7 +13,7 @@ import { Meeting } from '../../../Model/Meeting';
 })
 export class StudentMeetingsComponent implements OnInit {
   meetings: any[] = [];  
-  selectedStudentId: number = 3;  
+  selectedStudentId: number ;  
   errorMessage: string = '';  
   isFormVisible: boolean = false;
   isUpdateFormVisible: boolean = false; 
@@ -26,10 +27,32 @@ export class StudentMeetingsComponent implements OnInit {
     events: []
   };
 
-  constructor(private meetingService: MeetingService) { }
+  constructor(private meetingService: MeetingService,private userService : UserService) { }
 
   ngOnInit(): void {
-    this.loadMeetings();  
+    this.fetchUserDetails();
+    console.log("SelectedStudent :" , this.selectedStudentId);
+  }
+  fetchUserDetails() {
+    const token = localStorage.getItem('Token');
+
+    if (token) {
+      this.userService.decodeTokenRole(token).subscribe({
+        next: (userDetails) => {
+          if (userDetails.role || userDetails.classe) {
+            localStorage.setItem('userRole', userDetails.role);
+            localStorage.setItem('userClasse', userDetails.classe);
+            this.selectedStudentId=userDetails.id;
+            console.log("the student is ", userDetails.id);
+            this.loadMeetings();
+
+          }
+        },
+        error: (err) => {
+          console.log('Error fetching user details:', err);
+        }
+      });
+    }
   }
 
   loadMeetings(): void {

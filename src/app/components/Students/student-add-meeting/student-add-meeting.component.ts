@@ -4,6 +4,7 @@ import { MeetingService } from '../../../Service/MeetingService';
 import { TypeMeeting } from '../../../Model/TypeMeeting.enum';
 import { User } from '../../../Model/User'; 
 import Swal from 'sweetalert2';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-student-add-meeting',
@@ -16,33 +17,62 @@ export class StudentAddMeetingComponent implements OnInit {
   typeMeetings = Object.keys(TypeMeeting).filter(key => isNaN(Number(key))) as Array<TypeMeeting>;
 
   @Output() close = new EventEmitter<void>();
+  @Output() meetingAdded = new EventEmitter<void>();  
 
-  participantId: number = 3;
-  tutorId: number ;
- 
+  participantId: number;
+  tutorId: number;
 
-  constructor(private fb: FormBuilder, private meetingService: MeetingService) { }
+  constructor(private fb: FormBuilder, private meetingService: MeetingService, private userService: UserService) { }
 
   ngOnInit(): void {
-    this.meetingService.findTutorIdByStudentId(this.participantId).subscribe(
-      (tutorId: number) => {
-        this.tutorId = tutorId; 
-      },
-      (error) => {
-        console.error('Error fetching tutorId:', error);
+    this.initializeForm();
+    this.fetchUserDetails()
+      .then(() => {
+        console.log("SelectedStudent:", this.participantId);
+        if (this.participantId) {
+          return this.meetingService.findTutorIdByStudentId(this.participantId).toPromise();
+        }
+        return Promise.reject("Participant ID is undefined");
+      })
+      .then((tutorId: number) => {
+        this.tutorId = tutorId;
+        console.log("Tutor ID:", this.tutorId);
+        this.loadStudents(this.tutorId);
+      })
+      .catch((error) => console.error('Error initializing meeting:', error));
+  }
+
+  async fetchUserDetails(): Promise<void> {
+    const token = localStorage.getItem('Token');
+
+    if (!token) {
+      console.error("No token found");
+      return;
+    }
+
+    try {
+      const userDetails = await this.userService.decodeTokenRole(token).toPromise();
+      if (userDetails.role || userDetails.classe) {
+        localStorage.setItem('userRole', userDetails.role);
+        localStorage.setItem('userClasse', userDetails.classe);
+        this.participantId = userDetails.id;
+        console.log("The student is:", this.participantId);
       }
-    );
+    } catch (err) {
+      console.log('Error fetching user details:', err);
+    }
+  }
+
+  initializeForm(): void {
     this.meetingForm = this.fb.group({
       date: ['', [Validators.required, this.notBeforeToday()]],
       heure: ['', [Validators.required, Validators.pattern('^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$')]],
       typeMeeting: [TypeMeeting.OTHER, Validators.required],
       description: ['', [Validators.required, Validators.maxLength(255)]]
     });
-
-    this.loadStudents(this.tutorId);  
   }
 
-  loadStudents(tutorId: number) {
+  loadStudents(tutorId: number): void {
     this.meetingService.getStudentsByTutorId(tutorId).subscribe({
       next: (students) => {
         this.students = students;
@@ -51,7 +81,7 @@ export class StudentAddMeetingComponent implements OnInit {
     });
   }
 
-  notBeforeToday(): ValidationErrors | null {
+  notBeforeToday(): (control: AbstractControl) => ValidationErrors | null {
     return (control: AbstractControl): ValidationErrors | null => {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
@@ -60,37 +90,33 @@ export class StudentAddMeetingComponent implements OnInit {
     };
   }
 
-  @Output() meetingAdded = new EventEmitter<void>();  
+  onSubmit(): void {
+    if (this.meetingForm.valid) {
+      const organiserId = this.tutorId;
 
-onSubmit() {
-  if (this.meetingForm.valid) {
-    const organiserId = this.tutorId; 
-
-    this.meetingService.addMeetingAndAffectToParticipant(this.meetingForm.value, organiserId, this.participantId).subscribe({
-      next: () => {
-        Swal.fire({
-          icon: 'success',
-          title: 'Success',
-          text: 'Meeting has been added successfully!',
-        });
-        this.closeForm();
-        this.meetingAdded.emit();  
-      },
-      error: (error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Failed to add meeting!',
-          footer: error.message
-        });
-      }
-    });
+      this.meetingService.addMeetingAndAffectToParticipant(this.meetingForm.value, organiserId, this.participantId).subscribe({
+        next: () => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: 'Meeting has been added successfully!',
+          });
+          this.closeForm();
+          this.meetingAdded.emit();  
+        },
+        error: (error) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to add meeting!',
+            footer: error.message
+          });
+        }
+      });
+    }
   }
-}
 
-
-  closeForm() {
+  closeForm(): void {
     this.close.emit();
   }
-
 }

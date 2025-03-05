@@ -4,6 +4,7 @@ import { MeetingService } from '../../Service/MeetingService';
 import { TypeMeeting } from '../../Model/TypeMeeting.enum';
 import { User } from '../../Model/User'; 
 import Swal from 'sweetalert2';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-add-meeting',
@@ -14,10 +15,11 @@ export class AddMeetingComponent implements OnInit {
   meetingForm: FormGroup;
   students: User[] = [];
   typeMeetings = Object.keys(TypeMeeting).filter(key => isNaN(Number(key))) as Array<TypeMeeting>;
+  tutorId!: number; // Ensure tutorId is always defined
 
   @Output() close = new EventEmitter<void>();
 
-  constructor(private fb: FormBuilder, private meetingService: MeetingService) { }
+  constructor(private fb: FormBuilder, private meetingService: MeetingService, private userService: UserService) { }
 
   ngOnInit(): void {
     this.meetingForm = this.fb.group({
@@ -28,10 +30,38 @@ export class AddMeetingComponent implements OnInit {
       studentId: [null, Validators.required]
     });
 
-    this.loadStudents(1);  
+    this.fetchUserDetails();
+  }
+
+  fetchUserDetails() {
+    const token = localStorage.getItem('Token');
+
+    if (token) {
+      this.userService.decodeTokenRole(token).subscribe({
+        next: (userDetails) => {
+          if (userDetails.role || userDetails.classe) {
+            localStorage.setItem('userRole', userDetails.role);
+            localStorage.setItem('userClasse', userDetails.classe);
+            this.tutorId = userDetails.id;
+            console.log("The tutor is", this.tutorId);
+
+            // Call loadStudents AFTER tutorId is set
+            this.loadStudents(this.tutorId);
+          }
+        },
+        error: (err) => {
+          console.log('Error fetching user details:', err);
+        }
+      });
+    }
   }
 
   loadStudents(tutorId: number) {
+    if (!tutorId) {
+      console.error("Tutor ID is undefined. Cannot fetch students.");
+      return;
+    }
+
     this.meetingService.getStudentsByTutorId(tutorId).subscribe({
       next: (students) => {
         this.students = students;
@@ -40,7 +70,7 @@ export class AddMeetingComponent implements OnInit {
     });
   }
 
-  notBeforeToday(): ValidationErrors | null {
+  notBeforeToday(): (control: AbstractControl) => ValidationErrors | null {
     return (control: AbstractControl): ValidationErrors | null => {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
@@ -51,7 +81,7 @@ export class AddMeetingComponent implements OnInit {
 
   onSubmit() {
     if (this.meetingForm.valid) {
-      const organiserId = 1;
+      const organiserId = this.tutorId; // Use tutorId as the organiser
       const participantId = this.meetingForm.get('studentId')?.value;
 
       if (!participantId) {
