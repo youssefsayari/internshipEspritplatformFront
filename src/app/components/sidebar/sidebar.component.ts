@@ -1,35 +1,37 @@
 import { Component, OnInit } from '@angular/core';
 import { MeetingComponent } from '../meeting/meeting.component';
 
+import {UserService} from "../../services/user.service";
+
 declare interface RouteInfo {
     path: string;
     title: string;
     icon: string;
     class: string;
+    roles: string[];
 }
 export const ROUTES: RouteInfo[] = [
-    /*{ path: '/dashboard', title: 'Dashboard',  icon: 'design_app', class: '' },
-    { path: '/meeting', title: 'Meeting',  icon:'education_atom', class: '' },
-    { path: '/tasks', title: 'Tasks',  icon:'location_map-big', class: '' },
-
-
-
-    { path: '/icons', title: 'Icons',  icon:'education_atom', class: '' },
-    { path: '/maps', title: 'Maps',  icon:'location_map-big', class: '' },
-    { path: '/notifications', title: 'Notifications',  icon:'ui-1_bell-53', class: '' },
-
-    { path: '/user-profile', title: 'User Profile',  icon:'users_single-02', class: '' },
-    { path: '/table-list', title: 'Table List',  icon:'design_bullet-list-67', class: '' },
-    { path: '/typography', title: 'Typography',  icon:'text_caps-small', class: '' },
-    { path: '/upgrade', title: 'Upgrade to PRO',  icon:'objects_spaceship', class: 'active active-pro' }*/
+    //AMEN
     { path: '/My meeting', title: 'My Meeting', icon: 'education_atom', class: '' },
     { path: '/StudentMeeting', title: 'StudentMeeting', icon: 'education_atom', class: '' },
 
-    { path: '/My Students', title: 'My Students', icon: 'location_map-big', class: '' },
-    { path: '/My internships', title: 'My Internships', icon: 'business_briefcase-24', class: '' },
-    { path: '/My defenses', title: 'My Defenses', icon: 'design_app', class: '' },
-    { path: '/feedback', title: 'Feedback', icon: 'ui-1_bell-53', class: '' },
+   
 
+  { path: '/dashboard', title: 'Dashboard', icon: 'business_chart-bar-32', class: '', roles: ['Admin'] },
+  { path: '/user-profile', title: 'My Profile', icon: 'users_single-02', class: '', roles: ['Student', 'Tutor','Company'] },
+  { path: '/student', title: 'Students', icon: 'education_glasses', class: '', roles: ['Admin'] },
+  { path: '/post', title: 'Posts', icon: 'education_paper', class: '', roles: ['Admin'] },
+  { path: '/internship-request', title: 'Internship Request', icon: 'education_paper', class: '', roles: ['Company'] },
+  { path: '/agreement', title: 'My Agreement', icon: 'education_paper', class: '', roles: ['Student'] },
+  { path: '/internship', title: 'My Internship', icon: 'business_briefcase-24', class: '', roles: ['Student'] },
+  { path: '/internship', title: 'Internship', icon: 'business_briefcase-24', class: '', roles: ['Tutor'] },
+  { path: '/document', title: 'My Documents', icon: 'files_single-copy-04', class: '', roles: ['Student', 'Admin'] },
+  { path: '/meeting', title: 'My Meetings', icon: 'ui-1_calendar-60', class: '', roles: ['Student', 'Admin','Company'] },
+  { path: '/task', title: 'My Tasks', icon: 'design_vector', class: '', roles: ['Student', 'Admin'] },
+  { path: '/quiz', title: 'My Quizzes', icon: 'ui-2_chat-round', class: '', roles: ['Student','Company'] },
+  { path: '/defence', title: 'My Defences', icon: 'education_hat', class: '', roles: ['Student'] },
+  { path: '/setting', title: 'Settings', icon: 'ui-1_settings-gear-63', class: '', roles: ['Admin'] },
+  { path: '/feedback', title: 'Feedback', icon: 'ui-1_send', class: 'active active-pro', roles: ['Student','Admin','Company'] },
 ];
 
 @Component({
@@ -38,12 +40,23 @@ export const ROUTES: RouteInfo[] = [
   styleUrls: ['./sidebar.component.css']
 })
 export class SidebarComponent implements OnInit {
-  menuItems: any[];
+  menuItems: RouteInfo[] = [];
+  userRole: string = '';
 
-  constructor() { }
+  constructor(private userService: UserService) { }
 
   ngOnInit() {
-    this.menuItems = ROUTES.filter(menuItem => menuItem);
+    const token = localStorage.getItem('Token');
+    this.userService.decodeTokenRole(token).subscribe({
+      next: (userDetails) => {
+        this.userRole = userDetails.role;
+        this.menuItems = ROUTES.filter(menuItem => menuItem.roles.includes(this.userRole));
+      },
+      error: (err) => {
+        console.error("Error fetching user role:", err);
+        this.userRole = 'Unknown';
+      }
+    });
   }
   isMobileMenu() {
       if ( window.innerWidth > 991) {

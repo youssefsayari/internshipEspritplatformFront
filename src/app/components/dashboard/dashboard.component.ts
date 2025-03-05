@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as Chartist from 'chartist';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-dashboard',
@@ -57,9 +58,19 @@ export class DashboardComponent implements OnInit {
       return "rgb(" + r + ", " + g + ", " + b + ")";
     }
   }
-  constructor() { }
+  constructor(private router : Router) { }
 
   ngOnInit() {
+    const userRole = localStorage.getItem('userRole');
+    const userClasse = localStorage.getItem('userClasse');
+    const token = localStorage.getItem('Token');
+
+    if (!token || !userRole) {
+      localStorage.clear();
+      this.router.navigate(['/login']);
+      return;
+    }
+
     this.chartColor = "#FFFFFF";
     this.canvas = document.getElementById("bigDashboardChart");
     this.ctx = this.canvas.getContext("2d");

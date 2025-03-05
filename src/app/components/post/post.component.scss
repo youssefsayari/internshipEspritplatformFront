@@ -1,0 +1,48 @@
+.arrow-icon {
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out;
+  font-size: 22px; /* Taille de la flèche */
+  color: #333;
+  font-weight: 100;
+}
+
+.slide-down {
+  animation: slideDown 0.5s ease-out;
+}
+
+.arrow-icon:hover {
+  color: #007bff; /* Bleu au hover */
+}
+
+.rotate-arrow {
+  transform: rotate(180deg); /* Rotation de la flèche */
+}
+
+.fade-in {
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+.badge {
+  padding: 8px 12px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+table {
+  width: 100%;
+  padding: 5px;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}

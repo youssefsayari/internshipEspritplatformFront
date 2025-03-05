@@ -1,6 +1,7 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -14,6 +15,10 @@ import { FullCalendarModule } from '@fullcalendar/angular';
 
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import {MatDialogModule} from '@angular/material/dialog';
+
+import { LoginComponent } from './components/login/login.component';
+
 
 
 
@@ -29,12 +34,16 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     RouterModule,
     AppRoutingModule,
     NgbModule,
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(),
+    ReactiveFormsModule,
+    MatDialogModule,
+
   ],
   declarations: [
     AppComponent,
     AdminLayoutComponent,
 
+    LoginComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

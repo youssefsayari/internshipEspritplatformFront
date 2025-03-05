@@ -1,0 +1,64 @@
+<h2 mat-dialog-title class="d-flex align-items-center justify-content-between">
+  Internship
+  <div *ngIf="internship.skills?.length > 0" class="d-flex flex-wrap" style="gap: 10px;">
+    <span class="badge bg-primary p-2" *ngFor="let skill of internship.skills">
+      {{ skill.name }}
+    </span>
+  </div>
+</h2>
+<mat-dialog-content class="mat-typography">
+  <mat-form-field>
+    <mat-label>Student Name</mat-label>
+    <input matInput [(ngModel)]="internship.studentName" disabled>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Classroom</mat-label>
+    <input matInput [(ngModel)]="internship.classe" disabled>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>State</mat-label>
+    <input matInput [(ngModel)]="internship.internshipState" disabled>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Type</mat-label>
+    <input matInput [(ngModel)]="internship.typeInternship" disabled>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Company Name</mat-label>
+    <input matInput [(ngModel)]="internship.companyName" disabled>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Title</mat-label>
+    <input matInput [(ngModel)]="internship.title" disabled>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Description</mat-label>
+    <textarea matInput [(ngModel)]="internship.content" disabled></textarea>
+  </mat-form-field>
+
+
+
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button
+          *ngIf="internship.typeInternship === 'Graduation' && internship.internshipState !== 'APPROVED'"
+          color="warn"
+          (click)="DeniedInternship(internship.idInternship)">
+    Denied
+  </button>
+  <button mat-button
+          *ngIf="internship.typeInternship === 'Graduation' && internship.internshipState !== 'APPROVED'"
+          color="primary"
+          (click)="AcceptInternship(internship.idInternship)">
+    Accepted
+  </button>
+</mat-dialog-actions>
+
