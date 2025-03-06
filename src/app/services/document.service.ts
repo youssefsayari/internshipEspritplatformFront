@@ -7,7 +7,7 @@ import { Document } from '../models/document';
   providedIn: 'root'
 })
 export class DocumentService {
-  private baseUrl = 'http://localhost:8090/innoxpert/documents';
+  private baseUrl = 'http://localhost:8089/innoxpert/documents';
 
   constructor(private http: HttpClient) {}
 
@@ -70,13 +70,7 @@ downloadStudentCV(userId: number): Observable<Blob> {
     headers: new HttpHeaders().set('Accept', 'application/pdf')
   });
 }
-// ✅ Check for plagiarism in a student's report
-checkPlagiarism(report: File): Observable<string> {
-  const formData = new FormData();
-  formData.append('report', report);
 
-  return this.http.post<string>(`${this.baseUrl}/checkPlagiarism`, formData);
-}
  
   
 }
