@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { QuizService } from '../../services/quiz.service';
-import { QuestionService } from '../../services/question.service';
+import { QuizService } from '../../Services/quiz.service';
+import { QuestionService } from '../../Services/question.service';
 import { Quiz } from '../../models/quiz';
 import { QuestionReponse } from '../../models/questionreponse';
-import { QuizUserService } from '../../services/quiz-user.service';
+import { QuizUserService } from '../../Services/quiz-user.service';
 import Swal from 'sweetalert2'; // Import de SweetAlert2
+import { UserService } from "../../Services/user.service";
 
 @Component({
   selector: 'app-quiz-pass',
@@ -17,7 +18,6 @@ export class QuizPassComponent implements OnInit {
   questions: QuestionReponse[] = [];
   userId: number = 1;
   selectedAnswers: { [key: string]: number } = {};
-
   timeLeft: number = 15; // 15 secondes
   timer: any;
   isQuizValidated: boolean = false;
@@ -27,7 +27,8 @@ export class QuizPassComponent implements OnInit {
     private router: Router,
     private quizService: QuizService,
     private questionService: QuestionService,
-    private quizUserService: QuizUserService
+    private quizUserService: QuizUserService,
+        private userService: UserService
   ) {}
 
   ngOnInit(): void {
@@ -35,6 +36,32 @@ export class QuizPassComponent implements OnInit {
     console.log('ID du quiz:', idQuiz);
     this.checkIfQuizAlreadyTaken(idQuiz);
   }
+
+  fetchUserDetails() {
+        const token = localStorage.getItem('Token');
+        if (!token) return;
+    
+        this.userService.decodeTokenRole(token).subscribe({
+          next: (userDetails) => {
+            localStorage.setItem('userRole', userDetails.role);
+            localStorage.setItem('userClasse', userDetails.classe);
+            this.userId = userDetails.id;
+          },
+          error: () => {
+            Swal.fire({
+              icon: 'error',
+              title: '⚠️ Error',
+              text: 'Failed to fetch user details. Please log in again.',
+              width: '50%',
+              customClass: {
+                popup: 'swal-custom-popup',
+                confirmButton: 'swal-custom-button'
+              }
+            });
+          }
+        });
+      }
+
 
   checkIfQuizAlreadyTaken(idQuiz: number): void {
     this.quizUserService.hasUserTakenQuiz(this.userId, idQuiz).subscribe(

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { QuizService } from '../services/quiz.service';
-import { QuestionService } from '../services/question.service';
+import { QuizService } from '../Services/quiz.service';
+import { QuestionService } from '../Services/question.service';
 import { Quiz } from '../models/quiz';
 import { QuestionReponse } from '../models/questionreponse';
-import { QuizUserService } from '../services/quiz-user.service';
+import { QuizUserService } from '../Services/quiz-user.service';
 import Swal from 'sweetalert2'; // Import de SweetAlert2
 
 @Component({

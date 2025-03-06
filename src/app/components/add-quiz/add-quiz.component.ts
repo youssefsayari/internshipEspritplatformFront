@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { QuizService } from '../../services/quiz.service';
+import { QuizService } from '../../Services/quiz.service';
 import { Quiz } from '../../models/quiz';
+import Swal from 'sweetalert2';
+import { UserService } from "../../Services/user.service";
 
 @Component({
   selector: 'app-add-quiz',
@@ -11,11 +13,12 @@ import { Quiz } from '../../models/quiz';
 })
 export class AddQuizComponent implements OnInit {
   quizForm: FormGroup;
-
+  idCompany : number ;
   constructor(
     private formBuilder: FormBuilder,
     private quizService: QuizService,
-    private router: Router
+    private router: Router,
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
@@ -36,6 +39,31 @@ export class AddQuizComponent implements OnInit {
     return null; // Pas d'erreur
   }
 
+  fetchUserDetails() {
+      const token = localStorage.getItem('Token');
+      if (!token) return;
+  
+      this.userService.decodeTokenRole(token).subscribe({
+        next: (userDetails) => {
+          localStorage.setItem('userRole', userDetails.role);
+          localStorage.setItem('userClasse', userDetails.classe);
+          this.idCompany = userDetails.id;
+        },
+        error: () => {
+          Swal.fire({
+            icon: 'error',
+            title: '⚠️ Error',
+            text: 'Failed to fetch user details. Please log in again.',
+            width: '50%',
+            customClass: {
+              popup: 'swal-custom-popup',
+              confirmButton: 'swal-custom-button'
+            }
+          });
+        }
+      });
+    }
+
   onSubmit(): void {
     if (this.quizForm.valid) {
       const newQuiz: Quiz = {
@@ -44,7 +72,7 @@ export class AddQuizComponent implements OnInit {
         date_passage: this.quizForm.value.date_passage
       };
 
-      this.quizService.addQuizAndAssignToSociete(newQuiz, 1).subscribe(
+      this.quizService.addQuizAndAssignToSociete(newQuiz, this.idCompany).subscribe(
         (quiz: Quiz) => {
           console.log('✅ Réponse de l’API:', quiz);
           if (quiz && quiz.idQuiz) {

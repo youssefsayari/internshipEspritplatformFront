@@ -1,9 +1,9 @@
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { QuestionReponse } from '../models/questionreponse';
-import { QuestionService } from '../services/question.service';
+import { QuestionService } from '../Services/question.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { QuizService } from '../services/quiz.service';
+import { QuizService } from '../Services/quiz.service';
 import { Quiz } from '../models/quiz';
 import Swal from 'sweetalert2';
 

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import { QuestionService } from '../../services/question.service';
+import { QuestionService } from '../../Services/question.service';
 
 @Component({
   selector: 'app-add-questions',
