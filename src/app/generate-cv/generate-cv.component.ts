@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DocumentService } from '../Services/document.service';
+import { UserService } from "../Services/user.service";
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
@@ -16,12 +17,36 @@ export class GenerateCvComponent implements OnInit {
   constructor(
     private documentService: DocumentService,
     private router: Router,
-    private sanitizer: DomSanitizer // Inject sanitizer for URL security
+    private sanitizer: DomSanitizer, private userService: UserService // Inject sanitizer for URL security
   ) {}
 
   ngOnInit(): void {
-    this.userId = 1; // Example user ID, set it dynamically as needed
+ this.fetchUserDetails();
   }
+  fetchUserDetails() {
+      const token = localStorage.getItem('Token');
+      if (!token) return;
+  
+      this.userService.decodeTokenRole(token).subscribe({
+        next: (userDetails) => {
+          localStorage.setItem('userRole', userDetails.role);
+          localStorage.setItem('userClasse', userDetails.classe);
+          this.userId = userDetails.id;
+        },
+        error: () => {
+          Swal.fire({
+            icon: 'error',
+            title: '⚠️ Error',
+            text: 'Failed to fetch user details. Please log in again.',
+            width: '50%',
+            customClass: {
+              popup: 'swal-custom-popup',
+              confirmButton: 'swal-custom-button'
+            }
+          });
+        }
+      });
+    }
 
   generateCV(): void {
     this.documentService.generateStudentCV(this.userId).subscribe(
