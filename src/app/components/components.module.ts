@@ -8,7 +8,6 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { NotfoundComponent } from './notfound/notfound.component';
 import { QuizListComponent } from './quiz-list/quiz-list.component';
-import { QuizPassComponent } from './quiz-pass/quizpass.component';
 
 @NgModule({
   imports: [
@@ -22,8 +21,7 @@ import { QuizPassComponent } from './quiz-pass/quizpass.component';
     SidebarComponent,
     NotfoundComponent,
     QuizListComponent,
-    QuizPassComponent
-  ],
+   ],
   exports: [
     FooterComponent,
     NavbarComponent,

@@ -1,0 +1,101 @@
+/* Style de la carte principale */
+.quiz-card {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+}
+
+.quiz-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Titre */
+h2 {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+/* Informations du quiz */
+.quiz-info {
+  text-align: center;
+}
+
+.quiz-info h3 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #007bff;
+}
+
+.quiz-info .description {
+  font-style: italic;
+  color: #555;
+}
+
+.quiz-info .date {
+  font-weight: bold;
+  color: #333;
+}
+
+/* Style de la liste des questions */
+.question-list {
+  padding: 0;
+  list-style: none;
+}
+
+.question-card {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+  transition: 0.3s;
+}
+
+.question-card:hover {
+  background: #e9ecef;
+  transform: scale(1.02);
+}
+
+/* Texte des questions */
+.question-text {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Options */
+.options ul {
+  padding-left: 20px;
+}
+
+.options li {
+  background: white;
+  padding: 8px;
+  margin: 5px 0;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  transition: 0.3s;
+}
+
+/* Réponse correcte en surbrillance */
+.options .correct {
+  background: #d4edda;
+  border-color: #28a745;
+  font-weight: bold;
+  color: #155724;
+}
+
+/* Bouton retour */
+.back-btn {
+  font-size: 16px;
+  padding: 10px 20px;
+  border-radius: 25px;
+  transition: 0.3s;
+}
+
+.back-btn:hover {
+  background: #0056b3;
+}

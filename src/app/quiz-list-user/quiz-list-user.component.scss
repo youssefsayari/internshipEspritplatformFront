@@ -1,0 +1,132 @@
+.quiz-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    justify-items: center;
+  }
+  
+  .quiz-box {
+    background-color: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .quiz-box:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+  
+  .card-body {
+    padding: 20px;
+  }
+  
+  .card-title {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #2b3d51;
+  }
+  
+  .card-title i {
+    font-size: 1.4rem;
+    color: #007bff;
+  }
+  
+  .badge {
+    font-size: 1rem;
+    padding: 5px 12px;
+    border-radius: 50px;
+  }
+  
+  .card-text {
+    font-size: 1rem;
+    color: #6c757d;
+    line-height: 1.5;
+  }
+  
+  .quiz-box .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+  }
+  
+  .quiz-box .btn:hover {
+    background-color: #218838;
+  }
+  
+  .quiz-box .btn i {
+    margin-right: 8px;
+  }
+  
+  /* Icon styles */
+  .fas {
+    font-size: 1.2rem;
+  }
+  
+  .fas.fa-clock,
+  .fas.fa-sticky-note {
+    color: #6c757d;
+  }
+  
+  .fas.fa-play-circle {
+    font-size: 1.5rem;
+  }
+  
+  .quiz-container .quiz-box {
+    width: 100%;
+  }
+  
+  @media (max-width: 768px) {
+    .quiz-container {
+      padding: 10px;
+    }
+    .card-body {
+      padding: 15px;
+    }
+  }
+  .alert {
+    background-color: #f8d7da; /* Rouge pâle pour l'alerte */
+    color: #721c24; /* Texte en rouge foncé */
+    padding: 8px 16px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+ 
+  
+  
+  .full-width-alert {
+    background-color: #dc3545; /* Rouge vif */
+    color: #fff; /* Texte blanc pour contraste */
+    font-size: 1.2rem; /* Taille de la police un peu plus grande */
+    font-weight: bold;
+    border-radius: 8px;
+    padding: 15px; /* Plus de padding pour occuper toute la carte */
+    width: 100%; /* Occupe toute la largeur de la carte */
+    text-align: center;
+    box-sizing: border-box; /* Inclure le padding dans la largeur totale */
+    margin-bottom: 15px; /* Ajouter un peu d'espace entre le message et le reste */
+  }
+  
+  .alert i {
+    font-size: 1.5rem; /* Taille de l'icône plus grande pour attirer l'attention */
+  }
+  
+  .alert strong {
+    color: #fff; /* Assurer que le texte reste blanc */
+  }
+  
+  
+  

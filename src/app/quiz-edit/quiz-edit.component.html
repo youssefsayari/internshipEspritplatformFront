@@ -1,0 +1,45 @@
+<div class="container mt-5 d-flex justify-content-center">
+  <div class="card p-4 shadow-lg" style="max-width: 700px; width: 100%; border-radius: 12px;">
+    <h2 class="text-center text-primary mb-4">
+      <i class="bi bi-pencil-square"></i> Update Quiz
+    </h2>
+
+    <form [formGroup]="quizForm" (ngSubmit)="onSubmit()">
+      <!-- Champ Titre -->
+      <div class="mb-3">
+        <label for="titre" class="form-label fw-bold">
+          <i class="bi bi-pencil-square"></i> Title
+        </label>
+        <input type="text" id="titre" formControlName="titre" class="form-control" />
+        <div *ngIf="quizForm.get('titre').hasError('required')" class="text-danger">Title is required</div>
+        <div *ngIf="quizForm.get('titre').hasError('minlength')" class="text-danger">Title must be at least 5 characters long</div>
+        <div *ngIf="quizForm.get('titre').hasError('maxlength')" class="text-danger">Title must be at most 100 characters long</div>
+      </div>
+
+      <!-- Champ Description -->
+      <div class="mb-3">
+        <label for="description" class="form-label fw-bold">
+          <i class="bi bi-file-text"></i> Description
+        </label>
+        <textarea id="description" formControlName="description" class="form-control" rows="3"></textarea>
+        <div *ngIf="quizForm.get('description').hasError('required')" class="text-danger">Description is required</div>
+        <div *ngIf="quizForm.get('description').hasError('minlength')" class="text-danger">Description must be at least 10 characters long</div>
+      </div>
+
+      <!-- Champ Date de Passage -->
+      <div class="mb-4">
+        <label for="date_passage" class="form-label fw-bold">
+          <i class="bi bi-calendar-event"></i> Date of quiz passing
+        </label>
+        <input type="date" id="date_passage" formControlName="date_passage" class="form-control" />
+        <div *ngIf="quizForm.get('date_passage').hasError('required')" class="text-danger">Date is required</div>
+        <div *ngIf="quizForm.get('date_passage').hasError('dateInvalid')" class="text-danger">Date must be in the future</div>
+      </div>
+
+      <!-- Bouton Modifier -->
+      <button type="submit" class="btn btn-primary w-100" [disabled]="quizForm.invalid">
+        <i class="bi bi-pencil-square"></i> Update Quiz
+      </button>
+    </form>
+  </div>
+</div>

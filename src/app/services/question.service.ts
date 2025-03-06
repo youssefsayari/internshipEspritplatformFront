@@ -8,6 +8,9 @@ import { QuestionReponse } from '../models/questionreponse';
   })
   export class QuestionService {
     private baseUrl = 'http://localhost:8090/innoxpert/question';
+    private apiUrl = 'https://opentdb.com/api.php?amount=10&type=multiple&category=18';
+
+
   
     constructor(private http: HttpClient) {}
   
@@ -29,6 +32,9 @@ import { QuestionReponse } from '../models/questionreponse';
   
     deleteQuestion(idQuestionReponse: number): Observable<void> {
       return this.http.delete<void>(`${this.baseUrl}/deleteQuestion/${idQuestionReponse}`);
+    }
+    getTriviaQuestions(): Observable<any> {
+      return this.http.get<any>(this.apiUrl);
     }
   }
   

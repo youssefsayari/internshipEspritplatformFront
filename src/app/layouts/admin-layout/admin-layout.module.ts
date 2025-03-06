@@ -24,6 +24,7 @@ import {AgreementComponent} from "../../components/agreement/agreement.component
     FormsModule,
     ChartsModule,
     NgbModule,
+    ReactiveFormsModule,
     ToastrModule.forRoot()
   ],
   declarations: [

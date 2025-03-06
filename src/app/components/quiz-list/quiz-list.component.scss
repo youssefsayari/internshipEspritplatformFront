@@ -1,38 +1,217 @@
+/* Styles généraux */
+.container {
+  max-width: 900px;
+  margin: auto;
+}
+
+/* Titre avec animation */
+.title {
+  font-size: 2rem;
+  font-weight: bold;
+  text-shadow: 2px 2px 5px rgba(0, 0, 255, 0.2);
+  animation: fadeIn 1s ease-in-out;
+}
+
+/* Conteneur des quiz */
 .quiz-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    padding: 20px;
-  }
-  
-  .quiz-box {
-    background: #fff;
-    border-radius: 10px;
-    padding: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 300px;
-    transition: transform 0.3s ease-in-out;
-  }
-  
-  .quiz-box:hover {
-    transform: translateY(-5px);
-  }
-  
-  .quiz-box h3 {
-    font-size: 18px;
-    color: #333;
-    display: flex;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+/* Style des cartes */
+.quiz-box {
+  background: linear-gradient(135deg, #ffffff, #f1f1f1);
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+/* Animation au chargement */
+.animate {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.6s forwards ease-in-out;
+}
+
+/* Effet au survol */
+.quiz-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Titre du quiz */
+.quiz-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #007bff;
+  display: flex;
+  align-items: center;
+}
+
+.quiz-title i {
+  margin-right: 10px;
+}
+
+/* Date & description */
+/* Appliquer du gras et du noir aux attributs */
+.date,
+.description,
+.quiz-title {
+  font-weight: bold;
+  color: #000; /* Noir */
+}
+
+
+.date i,
+.description i {
+  margin-right: 5px;
+  color: #007bff;
+}
+
+/* Boutons d'action */
+.actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.btn {
+  flex: 1;
+  margin: 0 5px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  border-radius: 8px;
+  transition: transform 0.2s ease-in-out, background 0.3s;
+}
+.actions {
+  display: flex;
+  gap: 15px; /* Espacement entre les boutons */
+  justify-content: center; /* Centrer les boutons */
+  align-items: center; /* Aligner verticalement les boutons */
+}
+
+.actions .btn {
+  display: flex;
+  align-items: center; /* Aligner l'icône et le texte verticalement */
+  justify-content: center; /* Centrer le texte horizontalement */
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+}
+
+.actions .btn-animate {
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.actions .btn-animate:hover {
+  transform: translateY(-3px); /* Effet de survol */
+  background-color: #0056b3; /* Changer la couleur au survol */
+}
+
+/* Espacement des icônes et du texte */
+.actions .btn i {
+  margin-right: 8px;
+  vertical-align: middle; /* Aligner verticalement l'icône */
+}
+
+
+/* Animation des boutons */
+.btn-animate:hover {
+  transform: scale(1.05);
+}
+
+/* Effet au clic */
+.btn:active {
+  transform: scale(0.95);
+}
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  font-family: 'Arial', sans-serif;
+  color: #4a4a4a;
+}
+
+/* Style for the page number and buttons */
+.pagination-controls button,
+.pagination-controls span {
+  font-size: 16px;
+  padding: 8px 15px;
+  margin: 0 5px;
+  border-radius: 25px;
+  border: 1px solid #4a90e2;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Style for the previous/next buttons */
+.pagination-controls button {
+  background-color: #4a90e2;
+  color: #fff;
+  font-weight: bold;
+}
+
+.pagination-controls button:hover {
+  background-color: #357ab7;
+  border-color: #357ab7;
+}
+
+/* Style for the active page number */
+.pagination-controls span {
+  background-color: #f1f1f1;
+  color: #4a90e2;
+  font-weight: bold;
+}
+
+/* Style for the disabled buttons */
+.pagination-controls button:disabled {
+  background-color: #e0e0e0;
+  color: #9e9e9e;
+  cursor: not-allowed;
+  border-color: #ccc;
+}
+
+/* Hover effect for all buttons */
+.pagination-controls button:hover {
+  transform: scale(1.1);
+}
+
+/* Responsive design for mobile screens */
+@media (max-width: 600px) {
+  .pagination-controls {
+    flex-direction: column;
     align-items: center;
   }
   
-  .quiz-box h3 i {
-    margin-right: 10px;
-    color: #007bff;
-  }
-  
-  .quiz-box .description {
+  .pagination-controls button,
+  .pagination-controls span {
+    margin: 5px;
     font-size: 14px;
-    color: #666;
-    margin-bottom: 10px;
   }
-  
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

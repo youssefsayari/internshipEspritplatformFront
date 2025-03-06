@@ -13,7 +13,12 @@ import { InternshipComponent } from '../../components/internship/internship.comp
 import { GraduationInternshipComponent } from '../../components/internship/graduation-internship/graduation-internship.component';
 import { SummerInternshipComponent} from "../../components/internship/summer-internship/summer-internship.component";
 import {QuizListComponent } from '../../components/quiz-list/quiz-list.component';
-import { QuizPassComponent} from '../../components/quiz-pass/quizpass.component';
+import { AddQuizComponent } from '../../components/add-quiz/add-quiz.component';
+import { AddQuestionsComponent } from '../../components/add-questions/add-questions.component';
+import { QuizDetailsComponent } from '../../quiz-details/quiz-details.component';
+import { QuizEditComponent } from '../../quiz-edit/quiz-edit.component';
+import { QuizListUserComponent } from '../../quiz-list-user/quiz-list-user.component';
+import { QuizPassComponent } from '../../quiz-pass/quiz-pass.component';
 
 
 
@@ -28,7 +33,18 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'notifications',  component: NotificationsComponent },
     { path: 'upgrade',        component: UpgradeComponent },
     {path:'quiz-list',        component:QuizListComponent},
+    {path:'quiz-list-user',        component:QuizListUserComponent},
+
+    {path:'add-quiz',        component:AddQuizComponent},
+    {path:'add-questions/:id',        component:AddQuestionsComponent},
+    { path: 'quiz-details/:id', component: QuizDetailsComponent },
+    { path: 'quiz-edit/:id', component: QuizEditComponent }, 
     { path: 'quiz/:id', component: QuizPassComponent },
+ 
+
+
+
+
     { path: 'internship',        component: InternshipComponent,
     children: [
     { path: 'summer-internship', component: SummerInternshipComponent },

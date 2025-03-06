@@ -1,0 +1,46 @@
+<div class="container mt-5">
+  <div class="quiz-card">
+    <h2 class="text-center text-primary">📜 Quiz Details</h2>
+
+    <div class="quiz-info">
+      <h3>{{ quiz.titre }}</h3>
+      <p class="description">{{ quiz.description }}</p>
+      <p class="date"><strong>📅 Date of quiz passing:</strong> {{ quiz.date_passage | date: 'dd/MM/yyyy' }}</p>
+    </div>
+
+    <hr />
+
+    <!-- Questions List -->
+    <div *ngIf="questions.length > 0">
+      <h4 class="text-secondary">❓ Questions :</h4>
+      <ul class="question-list">
+        <li *ngFor="let question of questions" class="question-card">
+          <p class="question-text"><strong>{{ question.question }}</strong></p>
+          <div class="options">
+            <p><strong>📝 Options :</strong></p>
+            <ul>
+              <li [class.correct]="question.reponse_correcte === 1">{{ question.option1 }}</li>
+              <li [class.correct]="question.reponse_correcte === 2">{{ question.option2 }}</li>
+              <li [class.correct]="question.reponse_correcte === 3">{{ question.option3 }}</li>
+              <li [class.correct]="question.reponse_correcte === 4">{{ question.option4 }}</li>
+            </ul>
+          </div>
+          <div class="correct-answer">
+            <p><strong>✅ Correct answer :</strong> Option {{ question.reponse_correcte }}</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div *ngIf="questions.length === 0" class="alert alert-info text-center">
+      📌 No questions for this quiz yet.
+    </div>
+
+    <!-- Back Button -->
+    <div class="text-center mt-4">
+      <a [routerLink]="['/quiz-list']" class="btn btn-primary back-btn">
+        <i class="fas fa-arrow-left"></i> Back to the list.
+      </a>
+    </div>
+  </div>
+</div>
