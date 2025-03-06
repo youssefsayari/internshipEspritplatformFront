@@ -213,4 +213,27 @@ export class MeetingComponent implements OnInit {
   trackMeeting(index: number, meeting: Meeting) {
     return meeting.idMeeting;
   }
+  calculateApprovalRate() {
+    if (this.meetings.length === 0) {
+      Swal.fire({
+        title: "📊 Meeting Stats",
+        text: "No meetings available to calculate stats.",
+        icon: "info"
+      });
+      return;
+    }
+  
+    const approvedMeetings = this.meetings.filter(meeting => meeting.approved).length;
+    const totalMeetings = this.meetings.length;
+    const approvalRate = ((approvedMeetings / totalMeetings) * 100).toFixed(2);
+  
+    Swal.fire({
+      title: "📊 Approval Rate",
+      html: `<strong>Total Meetings:</strong> ${totalMeetings} <br>
+             <strong>Approved Meetings:</strong> ${approvedMeetings} <br>
+             <strong>Approval Rate:</strong> ${approvalRate}%`,
+      icon: "success"
+    });
+  }
+  
 }
