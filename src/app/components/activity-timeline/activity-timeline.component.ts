@@ -3,6 +3,7 @@ import { PostService } from '../../Services/PostService'; // Assure-toi que le c
 import { CommentService } from '../../Services/CommentService'; // Assure-toi que le chemin est correct
 import { CompanyService } from '../../Services/CompanyService'; // Assure-toi que le chemin est correct
 import { RatingService } from '../../Services/RatingService'; // Assure-toi que le chemin est correct
+import {InternshipService} from "../../Services/internship.service";
 
 
 
@@ -102,7 +103,7 @@ export class ActivityTimelineComponent implements OnInit {
 
 
 
-  constructor(private postService: PostService   ,private commentService: CommentService, private userService: UserService ,private companyService: CompanyService ,private ratingService: RatingService,private cdr: ChangeDetectorRef,private toastr: ToastrService   ) {}
+  constructor(private postService: PostService,private internshipService: InternshipService   ,private commentService: CommentService, private userService: UserService ,private companyService: CompanyService ,private ratingService: RatingService,private cdr: ChangeDetectorRef,private toastr: ToastrService   ) {}
 
   ngOnInit(): void {
     this.loadPosts();
@@ -436,6 +437,56 @@ getTimeRemaining(expiryDateTime: string): string {
     return `Expires in ${diffWeeks} week${diffWeeks > 1 ? "s" : ""}`;
   }
 }
+
+addInternship(postId: number): void {
+    const token = localStorage.getItem('Token');
+    this.userService.decodeTokenRole(token).subscribe({
+      next: (userDetails) => {
+        if (!userDetails.id) return;
+
+        const internshipAddRequest = {
+          idUser: userDetails.id,
+          idPost: postId
+        };
+
+        this.internshipService.addInternship(internshipAddRequest).subscribe({
+          next: () => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Succès !',
+              text: 'Votre demande de stage a été soumise avec succès.',
+              confirmButtonColor: '#3085d6'
+            });
+          },
+          error: (err) => {
+            console.error("Erreur lors de la soumission du stage :", err);
+
+            const errorMessage =
+              err.error && typeof err.error === 'string'
+                ? err.error
+                : "Une erreur inattendue s'est produite.";
+
+            Swal.fire({
+              icon: 'error',
+              title: 'Erreur',
+              text: errorMessage,
+              confirmButtonColor: '#d33'
+            });
+          }
+        });
+      },
+      error: (err) => {
+        console.error('Error fetching user details:', err);
+        Swal.fire({
+          icon: 'error',
+          title: 'Erreur',
+          text: "Impossible de récupérer les informations de l'utilisateur.",
+          confirmButtonColor: '#d33'
+        });
+      }
+    });
+  }
+
 
 
 
