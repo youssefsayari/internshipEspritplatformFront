@@ -8,13 +8,13 @@ import { Post } from '../Model/Post';  // Assure-toi d'avoir un modèle Post
 })
 export class PostService {
 
-  private baseUrl = 'http://localhost:8090/innoxpert/post';  // URL de ton backend Spring Boot
+  private baseUrl = 'http://localhost:8089/innoxpert/post';  // URL de ton backend Spring Boot
 
   constructor(private http: HttpClient) { }
 
   // Récupérer tous les posts
   getAllPosts(): Observable<Post[]> {
-    return this.http.get<Post[]>(`${this.baseUrl}/getAllPostsDTO`);
+    return this.http.get<Post[]>(`${this.baseUrl}/getAllPosts`);
   }
 
   // Récupérer un post par ID
@@ -24,7 +24,7 @@ export class PostService {
 
   // Récupérer les posts d'une entreprise spécifique
   getPostsByCompany(companyId: number): Observable<Post[]> {
-    return this.http.get<Post[]>(`${this.baseUrl}/getPostsByCompanyDTO/${companyId}`);
+    return this.http.get<Post[]>(`${this.baseUrl}/getPostsByCompany/${companyId}`);
   }
 
    // Ajouter un post et l'affecter à une entreprise avec une image
