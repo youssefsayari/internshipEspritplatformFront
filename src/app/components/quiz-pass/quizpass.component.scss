@@ -1,0 +1,150 @@
+/* Style général du container */
+.quiz-container {
+  background-color: #ffffff; /* Fond blanc */
+  border-radius: 15px;
+  padding: 30px;
+  max-width: 900px;
+  margin: 0 auto;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  font-family: 'Roboto', sans-serif;
+  background-color: #f8f9fa; /* Gris clair */
+}
+
+/* Timer */
+.timer {
+  background-color: #222222; /* Noir */
+  color: white;
+  border-radius: 50px;
+  padding: 15px 25px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.timer p {
+  font-weight: bold;
+}
+
+.timer i {
+  font-size: 1.5rem;
+  color: #ffffff;
+}
+
+/* Progress bar (Timer) */
+.progress-bar {
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+  line-height: 20px;
+  color: #ffffff;
+  background-color: #222222; /* Noir pour la barre de progression du timer */
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}
+
+.progress-bar .progress-text {
+  color: #ffffff;
+  font-size: 0.9rem;
+}
+
+/* Progress bar (Réponses) */
+.progress-bar {
+  background-color: #222222; /* Noir pour la barre de progression des réponses */
+  transition: width 0.3s ease;
+}
+
+.progress-bar .progress-text {
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* Style des cartes des questions */
+.quiz-box {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.card-body {
+  padding: 25px;
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #333333; /* Texte sombre */
+  margin-bottom: 20px;
+}
+
+/* Styles pour les boutons des options de réponses */
+.btn {
+  transition: all 0.3s ease;
+  border-radius: 10px;
+  font-size: 1rem;
+  padding: 15px;
+  text-align: left;
+  background-color: #222222; /* Noir */
+  border: 1px solid #000000; /* Bordure noire */
+  color: white; /* Texte blanc */
+}
+
+.btn:hover {
+  background-color: #27ae60; /* Vert au survol */
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Styles pour l'option sélectionnée */
+.btn-primary {
+  background-color: #27ae60; /* Vert pour l'option sélectionnée */
+  color: white;
+  border: 1px solid #27ae60;
+}
+
+.btn-primary:hover {
+  background-color: #219150; /* Vert plus foncé au survol */
+}
+
+/* Style du bouton de validation */
+.btn-success {
+  background-color: #0066cc; /* Bleu clair */
+  border: 1px solid #0066cc;
+  padding: 15px 40px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 10px;
+  box-shadow: 0 5px 20px rgba(0, 102, 204, 0.1);
+  color: white;
+}
+
+.btn-success:hover {
+  background-color: #004c99; /* Bleu plus foncé */
+}
+
+.btn-success:focus {
+  outline: none;
+  box-shadow: 0 0 15px rgba(0, 102, 204, 0.5);
+}
+
+/* Espacement entre les cartes */
+.quiz-box + .quiz-box {
+  margin-top: 20px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .quiz-container {
+    padding: 20px;
+  }
+
+  .btn {
+    font-size: 0.95rem;
+  }
+
+  .btn-success {
+    font-size: 1rem;
+    padding: 12px 30px;
+  }
+}

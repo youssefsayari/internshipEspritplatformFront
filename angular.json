@@ -145,7 +145,6 @@
 
       "prefix": "app",
       "style": "scss"
-
     },
     "@schematics/angular:directive": {
       "prefix": "app"

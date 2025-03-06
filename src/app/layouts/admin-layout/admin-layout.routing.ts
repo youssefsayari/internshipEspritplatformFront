@@ -22,6 +22,9 @@ import { DocumentDetailsComponent } from '../../document-details/document-detail
 import { PredefinedDocumentsComponent } from '../../predefined-documents/predefined-documents.component';
 import { GenerateCvComponent } from '../../generate-cv/generate-cv.component';
 import { AddDocumentComponent } from '../../add-document/add-document.component';
+import {QuizListComponent } from '../../components/quiz-list/quiz-list.component';
+import { QuizPassComponent} from '../../components/quiz-pass/quizpass.component';
+
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent },
@@ -30,6 +33,7 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'typography',     component: TypographyComponent },
     { path: 'posts',          component: IconsComponent },
     { path: 'maps',           component: MapsComponent },
+
     { path: 'notifications',  component: NotificationsComponent },
     { path: 'upgrade',        component: UpgradeComponent },
     { path: 'internship',        component: InternshipComponent},
@@ -46,6 +50,7 @@ export const AdminLayoutRoutes: Routes = [
   { path: 'defense', component: DefenseComponent },
   { path: 'generate-cv', component: GenerateCvComponent },
   { path: 'add-document', component: AddDocumentComponent },
-  { path: 'predefined-documents', component: PredefinedDocumentsComponent }
-
+  { path: 'predefined-documents', component: PredefinedDocumentsComponent },
+    {path:'quiz-list',        component:QuizListComponent},
+    { path: 'quiz/:id', component: QuizPassComponent },
 ];

@@ -3,8 +3,8 @@ import {HttpClient,HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {User} from "../models/user";
 import {UserResponse} from "../models/user-response";
-
 const API_URL = "http://localhost:8089/innoxpert/user";
+
 
 @Injectable({
   providedIn: 'root'
@@ -35,12 +35,12 @@ export class UserService {
   updateTutorRem(key: string, userId: number): Observable<string> {
     return this.http.put<string>(`${API_URL}/updateRem/${userId}?key=${key}`, null, { responseType: 'text' as 'json' });
   }
-  
+
   sendOtp(email: string): Observable<{ message: string }> {
     const headers = new HttpHeaders({ 'Content-Type': 'text/plain' });
     return this.http.post<{ message: string }>(`${API_URL}/send-otp`, email, { headers });
   }
-  
+
 
   verifyOtp(email: string, otp: number): Observable<boolean> {
     return this.http.post<boolean>(`${API_URL}/verify-otp?email=${email}&otp=${otp}`, null);
@@ -48,10 +48,9 @@ export class UserService {
   changePassword(email: string, newPassword: string): Observable<{ message: string }> {
     return this.http.post<{ message: string }>(
       `${API_URL}/change-password?email=${email}&newPassword=${newPassword}`,
-      null, 
+      null,
       { responseType: 'json' }
     );
   }
-  
   
 }

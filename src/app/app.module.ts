@@ -10,6 +10,8 @@ import { ComponentsModule } from './components/components.module';
 import { AppComponent } from './app.component';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
+import { LoginComponent } from './components/login/login.component';
+
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import {MatDialogModule} from '@angular/material/dialog';
@@ -40,6 +42,7 @@ import { AddDocumentComponent } from './add-document/add-document.component';
     ToastrModule.forRoot(),
     ReactiveFormsModule,
     MatDialogModule,
+    ReactiveFormsModule
   ],
   declarations: [
     AppComponent,

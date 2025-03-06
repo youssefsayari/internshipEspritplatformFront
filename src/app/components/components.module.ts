@@ -37,6 +37,8 @@ import { ActivityTimelineComponent } from './activity-timeline/activity-timeline
 import { MyContactsComponent } from './my-contacts/my-contacts.component';
 import { ProfileCardComponent } from './profile-card/profile-card.component';
 import { IconsComponent } from '../icons/icons.component'; // Vérifie le chemin exact
+import { QuizListComponent } from './quiz-list/quiz-list.component';
+import { QuizPassComponent } from './quiz-pass/quizpass.component';
 
 
 @NgModule({
@@ -87,6 +89,8 @@ import { IconsComponent } from '../icons/icons.component'; // Vérifie le chemin
     MyContactsComponent,
     ProfileCardComponent,
     IconsComponent,
+    QuizListComponent,
+    QuizPassComponent
   ],
   exports: [
     FooterComponent,
