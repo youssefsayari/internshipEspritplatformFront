@@ -15,6 +15,13 @@ import {SettingComponent} from "../../components/setting/setting.component";
 import { MeetingComponent } from '../../components/meeting/meeting.component';
 import { TasksListComponent } from '../../components/tasks/tasks-list/tasks-list.component';
 import { StudentMeetingsComponent } from '../../components/Students/student-meetings/student-meetings.component';
+import { DocumentListComponent } from '../../document-list/document-list.component';
+import { DocumentComponent } from '../../document/document.component';
+import { DefenseComponent } from '../../defense/defense.component';
+import { DocumentDetailsComponent } from '../../document-details/document-details.component';
+import { PredefinedDocumentsComponent } from '../../predefined-documents/predefined-documents.component';
+import { GenerateCvComponent } from '../../generate-cv/generate-cv.component';
+import { AddDocumentComponent } from '../../add-document/add-document.component';
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent },
@@ -33,4 +40,12 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'internship-request',        component: PostComponent },
       { path: 'MyMeeting',        component: MeetingComponent },
     { path: 'StudentMeeting', component: StudentMeetingsComponent },
+    { path: 'document-list', component: DocumentListComponent },
+  { path: 'document', component: DocumentComponent },
+  { path: 'document-details/:id', component: DocumentDetailsComponent },
+  { path: 'defense', component: DefenseComponent },
+  { path: 'generate-cv', component: GenerateCvComponent },
+  { path: 'add-document', component: AddDocumentComponent },
+  { path: 'predefined-documents', component: PredefinedDocumentsComponent }
+
 ];

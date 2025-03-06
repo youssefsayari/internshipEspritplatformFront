@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
 
+
 @Component({
   selector: 'app-agreement',
   templateUrl: './agreement.component.html',
@@ -12,6 +13,7 @@ export class AgreementComponent implements OnInit {
   endDate: string = '';
   showWarning: boolean = false;
   constructor(private router: Router) { }
+
 
   ngOnInit(): void {
     this.today = new Date().toISOString().split('T')[0];
@@ -25,6 +27,7 @@ export class AgreementComponent implements OnInit {
       this.router.navigate(['/login']);
       return;
     }
+
   }
   onDateChange() {
     this.showWarning = true;

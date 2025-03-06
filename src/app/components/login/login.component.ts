@@ -6,6 +6,7 @@ import { IntegrationService } from "../../Services/integration.service";
 import { UserService } from "../../Services/user.service";
 import { LoginRequest } from "../../models/login-request";
 
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -43,6 +44,7 @@ export class LoginComponent implements OnInit {
 
     this.request.identifiant = formValue.identifiant;
     this.request.password = formValue.password;
+
 
     try {
       const res = await this.integrationService.doLogin(this.request).toPromise();

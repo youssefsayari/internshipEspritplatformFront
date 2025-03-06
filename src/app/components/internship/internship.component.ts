@@ -11,6 +11,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {DialogRemarkComponent} from "../dialog-remark/dialog-remark.component";
 import {InternshipRemarkService} from "../../Services/internship-remark.service";
 import {Remark} from "../../models/remark";
+
 @Component({
   selector: 'app-internship',
   templateUrl: './internship.component.html',

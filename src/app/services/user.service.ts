@@ -6,7 +6,6 @@ import {UserResponse} from "../models/user-response";
 
 const API_URL = "http://localhost:8089/innoxpert/user";
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -55,5 +54,4 @@ export class UserService {
   }
   
   
-
 }

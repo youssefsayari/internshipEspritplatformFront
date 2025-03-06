@@ -4,6 +4,7 @@ import { BrowserModule  } from '@angular/platform-browser';
 import { Routes, RouterModule } from '@angular/router';
 
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
+
 import { MeetingComponent } from './components/meeting/meeting.component';
 
 
@@ -26,7 +27,6 @@ const routes: Routes =[
   }]},
   {path: '**', component:NotfoundComponent},
   { path: 'upload', component: ImageComponent }
-
 ];
 
 @NgModule({

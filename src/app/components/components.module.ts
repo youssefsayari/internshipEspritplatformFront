@@ -39,8 +39,6 @@ import { ProfileCardComponent } from './profile-card/profile-card.component';
 import { IconsComponent } from '../icons/icons.component'; // Vérifie le chemin exact
 
 
-
-
 @NgModule({
   imports: [
     CommonModule,
@@ -88,10 +86,7 @@ import { IconsComponent } from '../icons/icons.component'; // Vérifie le chemin
     ActivityTimelineComponent,
     MyContactsComponent,
     ProfileCardComponent,
-
-    IconsComponent, // Assurez-vous que IconsComponent est bien ici
-
-
+    IconsComponent,
   ],
   exports: [
     FooterComponent,

@@ -1,0 +1,71 @@
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header">
+      Upload Document
+    </div>
+    <div class="card-body">
+      <form #documentForm="ngForm" (ngSubmit)="onSubmit(documentForm)">
+        <!-- Document Name -->
+        <div class="form-group">
+          <label for="name" class="form-label">Document Name</label>
+          <input 
+            name="name" 
+            id="name" 
+            type="text" 
+            class="form-control" 
+            placeholder="Enter document name"
+            [(ngModel)]="document.name" required>
+          <div *ngIf="fieldErrors.name" class="text-danger mt-2">
+            {{ fieldErrors.name }}
+          </div>
+        </div>
+
+        <!-- Document Type -->
+        <div class="form-group">
+          <label for="typeDocument" class="form-label">Document Type</label>
+          <select 
+            name="typeDocument" 
+            id="typeDocument" 
+            class="form-control" 
+            [(ngModel)]="document.typeDocument" required>
+            <option value="" disabled selected>Select a document type</option>
+            <option *ngFor="let type of documentTypes" [value]="type">{{ type }}</option>
+          </select>
+          <div *ngIf="fieldErrors.typeDocument" class="text-danger mt-2">
+            {{ fieldErrors.typeDocument }}
+          </div>
+        </div>
+
+        <!-- File Upload -->
+        <div class="form-group">
+          <label for="file" class="form-label">Upload Document (PDF Only)</label>
+          <input 
+            type="file" 
+            id="file" 
+            class="form-control" 
+            (change)="onFileSelected($event)" 
+            accept="application/pdf" required>
+          <div *ngIf="fieldErrors.file" class="text-danger mt-2">
+            {{ fieldErrors.file }}
+          </div>
+        </div>
+
+        <!-- Preview PDF (If Selected) -->
+        <div class="form-group text-center" *ngIf="pdfPreviewUrl">
+          <label class="form-label">Preview:</label>
+          <iframe [src]="pdfPreviewUrl" class="preview-frame"></iframe>
+        </div>
+
+        <!-- Submit & Back Buttons -->
+        <div class="form-group text-right">
+          <button type="submit" [disabled]="documentForm.invalid">
+            <i class="fas fa-check-circle"></i> Submit
+          </button>
+          <button class="back-button ml-3" (click)="goBack()">
+            ⬅️ Back to Document List
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

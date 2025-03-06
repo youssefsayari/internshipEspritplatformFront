@@ -1,0 +1,48 @@
+<div class="panel-header panel-header-sm"></div>
+<div class="main-content">
+  <div class="row justify-content-center">
+    <div class="col-lg-10 col-md-12">
+      <div class="card shadow-lg border-0 rounded-lg">
+        <div class="card-header bg-gradient-primary text-white text-center py-3">
+          <h4 class="mb-0"><i class="fas fa-file-upload"></i> Upload Your Documents</h4>
+        </div>
+        <div class="card-body p-4">
+          
+          <form (ngSubmit)="onSubmit()">
+
+            <div class="row">
+              <div class="col-md-6" *ngFor="let doc of documents">
+                <div class="form-group">
+                  <label class="font-weight-bold">
+                    <i class="fas fa-file"></i> {{ doc.displayName }} (PDF Only)*
+                  </label>
+
+                  <div class="custom-file">
+                    <input 
+                      type="file" 
+                      class="custom-file-input" 
+                      (change)="onFileSelected($event, doc.type)"
+                      accept="application/pdf"
+                      required>
+                    <label class="custom-file-label">Choose file...</label>
+                  </div>
+
+                  <div class="text-center mt-2" *ngIf="doc.previewUrl">
+                    <iframe [src]="doc.previewUrl" width="100%" height="200px" class="rounded shadow-sm"></iframe>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="text-center mt-4">
+              <button type="submit" class="btn btn-success btn-lg px-4 rounded-pill">
+                <i class="fas fa-check-circle"></i> Submit All Documents
+              </button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

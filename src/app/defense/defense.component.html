@@ -1,0 +1,52 @@
+<div class="panel-header panel-header-sm"></div>
+<div class="main-content">
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-12">
+        <div class="card shadow-lg border-0">
+          <div class="card-header text-center bg-primary text-white rounded-top">
+            <h3><i class="fas fa-shield-alt"></i> Defense List</h3>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <!-- Loop through defenses and create a card for each one -->
+              <div class="col-md-4 mb-4" *ngFor="let defense of defenses">
+                <div class="card shadow-lg border-0 rounded-lg">
+                  <div class="card-body p-4">
+                    <h5 class="card-title text-center text-primary font-weight-bold">{{ defense.defenseDegree }}</h5>
+                    <p class="card-text"><strong class="text-muted">Date:</strong> {{ defense.defenseDate | date: 'shortDate' }}</p>
+                    <p class="card-text"><strong class="text-muted">Time:</strong> {{ defense.defenseTime }}</p>
+                    <p class="card-text"><strong class="text-muted">Classroom:</strong> {{ defense.classroom }}</p>
+
+                    <div class="row">
+                      <div class="col-md-6">
+                        <p class="card-text d-flex align-items-center">
+                          <strong class="mr-2">Report Submitted:</strong>
+                          <i *ngIf="defense.reportSubmitted" class="fas fa-check-circle text-success"></i>
+                          <i *ngIf="!defense.reportSubmitted" class="fas fa-times-circle text-danger"></i>
+                        </p>
+                      </div>
+                      <div class="col-md-6">
+                        <p class="card-text d-flex align-items-center">
+                          <strong class="mr-2">Internship Completed:</strong>
+                          <i *ngIf="defense.internshipCompleted" class="fas fa-check-circle text-success"></i>
+                          <i *ngIf="!defense.internshipCompleted" class="fas fa-times-circle text-danger"></i>
+                        </p>
+                      </div>
+                    </div>
+
+                    <div class="mt-3">
+                      <a [routerLink]="['/defense-details', defense.id]" class="btn btn-primary btn-block rounded-pill">
+                        <i class="fas fa-info-circle"></i> View Details
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

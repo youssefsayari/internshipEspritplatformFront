@@ -11,6 +11,9 @@ declare interface RouteInfo {
     roles: string[];
 }
 export const ROUTES: RouteInfo[] = [
+//Amin kabobi
+    { path: '/predefined-documents', title: 'My Documents',  icon:'files_single-copy-04', class: '',  roles: ['Student']},
+    { path: '/document-list', title: 'Document List',  icon:'files_paper', class: '',  roles: ['Admin']},
 
   //sayariiii
   { path: '/dashboard', title: 'Dashboard', icon: 'business_chart-bar-32', class: '', roles: ['Admin'] },
