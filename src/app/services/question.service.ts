@@ -7,7 +7,7 @@ import { QuestionReponse } from '../models/questionreponse';
     providedIn: 'root'
   })
   export class QuestionService {
-    private baseUrl = 'http://localhost:8090/innoxpert/question';
+    private baseUrl = 'http://localhost:8089/innoxpert/question';
     private apiUrl = 'https://opentdb.com/api.php?amount=10&type=multiple&category=18';
 
 

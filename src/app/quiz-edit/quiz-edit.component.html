@@ -1,45 +1,142 @@
-<div class="container mt-5 d-flex justify-content-center">
-  <div class="card p-4 shadow-lg" style="max-width: 700px; width: 100%; border-radius: 12px;">
-    <h2 class="text-center text-primary mb-4">
-      <i class="bi bi-pencil-square"></i> Update Quiz
-    </h2>
+<div class="container">
+  <h2>Modifier le Quiz</h2>
 
-    <form [formGroup]="quizForm" (ngSubmit)="onSubmit()">
-      <!-- Champ Titre -->
-      <div class="mb-3">
-        <label for="titre" class="form-label fw-bold">
-          <i class="bi bi-pencil-square"></i> Title
-        </label>
-        <input type="text" id="titre" formControlName="titre" class="form-control" />
-        <div *ngIf="quizForm.get('titre').hasError('required')" class="text-danger">Title is required</div>
-        <div *ngIf="quizForm.get('titre').hasError('minlength')" class="text-danger">Title must be at least 5 characters long</div>
-        <div *ngIf="quizForm.get('titre').hasError('maxlength')" class="text-danger">Title must be at most 100 characters long</div>
+  <!-- Formulaire du Quiz -->
+  <form [formGroup]="quizForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="titre">Titre</label>
+      <input
+        id="titre"
+        type="text"
+        class="form-control"
+        formControlName="titre"
+        [ngClass]="{ 'is-invalid': quizForm.get('titre').invalid && quizForm.get('titre').touched }"
+      />
+      <div *ngIf="quizForm.get('titre').invalid && quizForm.get('titre').touched" class="invalid-feedback">
+        Le titre est requis (min 5 caractères, max 100 caractères).
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea
+        id="description"
+        class="form-control"
+        formControlName="description"
+        [ngClass]="{ 'is-invalid': quizForm.get('description').invalid && quizForm.get('description').touched }"
+      ></textarea>
+      <div *ngIf="quizForm.get('description').invalid && quizForm.get('description').touched" class="invalid-feedback">
+        La description est requise (min 10 caractères).
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="date_passage">Date de passage</label>
+      <input
+        id="date_passage"
+        type="date"
+        class="form-control"
+        formControlName="date_passage"
+        [ngClass]="{ 'is-invalid': quizForm.get('date_passage').invalid && quizForm.get('date_passage').touched }"
+      />
+      <div *ngIf="quizForm.get('date_passage').invalid && quizForm.get('date_passage').touched" class="invalid-feedback">
+        La date doit être dans le futur.
+      </div>
+    </div>
+
+    <!-- Liste des questions -->
+    <div *ngFor="let questionForm of questionForms; let i = index">
+      <h4>Question {{ i + 1 }}</h4>
+
+      <div class="form-group">
+        <label for="question">Question</label>
+        <input
+          id="question"
+          type="text"
+          class="form-control"
+          [formControlName]="'question'"
+          [ngClass]="{ 'is-invalid': questionForm.get('question').invalid && questionForm.get('question').touched }"
+        />
+        <div *ngIf="questionForm.get('question').invalid && questionForm.get('question').touched" class="invalid-feedback">
+          La question est requise.
+        </div>
       </div>
 
-      <!-- Champ Description -->
-      <div class="mb-3">
-        <label for="description" class="form-label fw-bold">
-          <i class="bi bi-file-text"></i> Description
-        </label>
-        <textarea id="description" formControlName="description" class="form-control" rows="3"></textarea>
-        <div *ngIf="quizForm.get('description').hasError('required')" class="text-danger">Description is required</div>
-        <div *ngIf="quizForm.get('description').hasError('minlength')" class="text-danger">Description must be at least 10 characters long</div>
+      <div class="form-group">
+        <label for="option1">Option 1</label>
+        <input
+          id="option1"
+          type="text"
+          class="form-control"
+          [formControlName]="'option1'"
+          [ngClass]="{ 'is-invalid': questionForm.get('option1').invalid && questionForm.get('option1').touched }"
+        />
+        <div *ngIf="questionForm.get('option1').invalid && questionForm.get('option1').touched" class="invalid-feedback">
+          Cette option est requise.
+        </div>
       </div>
 
-      <!-- Champ Date de Passage -->
-      <div class="mb-4">
-        <label for="date_passage" class="form-label fw-bold">
-          <i class="bi bi-calendar-event"></i> Date of quiz passing
-        </label>
-        <input type="date" id="date_passage" formControlName="date_passage" class="form-control" />
-        <div *ngIf="quizForm.get('date_passage').hasError('required')" class="text-danger">Date is required</div>
-        <div *ngIf="quizForm.get('date_passage').hasError('dateInvalid')" class="text-danger">Date must be in the future</div>
+      <div class="form-group">
+        <label for="option2">Option 2</label>
+        <input
+          id="option2"
+          type="text"
+          class="form-control"
+          [formControlName]="'option2'"
+          [ngClass]="{ 'is-invalid': questionForm.get('option2').invalid && questionForm.get('option2').touched }"
+        />
+        <div *ngIf="questionForm.get('option2').invalid && questionForm.get('option2').touched" class="invalid-feedback">
+          Cette option est requise.
+        </div>
       </div>
 
-      <!-- Bouton Modifier -->
-      <button type="submit" class="btn btn-primary w-100" [disabled]="quizForm.invalid">
-        <i class="bi bi-pencil-square"></i> Update Quiz
-      </button>
-    </form>
-  </div>
+      <div class="form-group">
+        <label for="option3">Option 3</label>
+        <input
+          id="option3"
+          type="text"
+          class="form-control"
+          [formControlName]="'option3'"
+          [ngClass]="{ 'is-invalid': questionForm.get('option3').invalid && questionForm.get('option3').touched }"
+        />
+        <div *ngIf="questionForm.get('option3').invalid && questionForm.get('option3').touched" class="invalid-feedback">
+          Cette option est requise.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="option4">Option 4</label>
+        <input
+          id="option4"
+          type="text"
+          class="form-control"
+          [formControlName]="'option4'"
+          [ngClass]="{ 'is-invalid': questionForm.get('option4').invalid && questionForm.get('option4').touched }"
+        />
+        <div *ngIf="questionForm.get('option4').invalid && questionForm.get('option4').touched" class="invalid-feedback">
+          Cette option est requise.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="reponse_correcte">Réponse correcte</label>
+        <select
+          id="reponse_correcte"
+          class="form-control"
+          [formControlName]="'reponse_correcte'"
+          [ngClass]="{ 'is-invalid': questionForm.get('reponse_correcte').invalid && questionForm.get('reponse_correcte').touched }"
+        >
+          <option value="1">Option 1</option>
+          <option value="2">Option 2</option>
+          <option value="3">Option 3</option>
+          <option value="4">Option 4</option>
+        </select>
+        <div *ngIf="questionForm.get('reponse_correcte').invalid && questionForm.get('reponse_correcte').touched" class="invalid-feedback">
+          La réponse correcte est requise.
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary" [disabled]="quizForm.invalid">Modifier</button>
+  </form>
 </div>

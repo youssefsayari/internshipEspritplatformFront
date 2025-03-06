@@ -13,7 +13,7 @@ import { UserService } from "../../Services/user.service";
 })
 export class AddQuizComponent implements OnInit {
   quizForm: FormGroup;
-  idCompany : number ;
+  idCompany : string =localStorage.getItem('userClasse');
   constructor(
     private formBuilder: FormBuilder,
     private quizService: QuizService,
@@ -47,7 +47,6 @@ export class AddQuizComponent implements OnInit {
         next: (userDetails) => {
           localStorage.setItem('userRole', userDetails.role);
           localStorage.setItem('userClasse', userDetails.classe);
-          this.idCompany = userDetails.id;
         },
         error: () => {
           Swal.fire({
@@ -72,7 +71,7 @@ export class AddQuizComponent implements OnInit {
         date_passage: this.quizForm.value.date_passage
       };
 
-      this.quizService.addQuizAndAssignToSociete(newQuiz, this.idCompany).subscribe(
+      this.quizService.addQuizAndAssignToSociete(newQuiz, Number(this.idCompany)).subscribe(
         (quiz: Quiz) => {
           console.log('✅ Réponse de l’API:', quiz);
           if (quiz && quiz.idQuiz) {

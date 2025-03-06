@@ -7,7 +7,7 @@ import { Quiz } from '../models/quiz';
   providedIn: 'root'
 })
 export class QuizService {
-  private baseUrl = 'http://localhost:8090/innoxpert/quiz';
+  private baseUrl = 'http://localhost:8089/innoxpert/quiz';
 
   constructor(private http: HttpClient) {}
 

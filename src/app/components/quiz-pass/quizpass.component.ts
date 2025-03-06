@@ -16,7 +16,7 @@ import { UserService } from "../../Services/user.service";
 export class QuizPassComponent implements OnInit {
   quiz: Quiz;
   questions: QuestionReponse[] = [];
-  userId: number = 1;
+  userId: number = 5;
   selectedAnswers: { [key: string]: number } = {};
   timeLeft: number = 15; // 15 secondes
   timer: any;

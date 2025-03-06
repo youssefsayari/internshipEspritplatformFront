@@ -1,11 +1,11 @@
-import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
-import { QuestionReponse } from '../models/questionreponse';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { QuestionService } from '../Services/question.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { QuizService } from '../Services/quiz.service';
 import { Quiz } from '../models/quiz';
 import Swal from 'sweetalert2';
+import { QuestionReponse } from '../models/questionreponse';
 
 @Component({
   selector: 'app-quiz-edit',
@@ -14,6 +14,7 @@ import Swal from 'sweetalert2';
 })
 export class QuizEditComponent implements OnInit {
   quizForm: FormGroup;
+  questionForms: FormGroup[] = [];
   quizId: number;
 
   constructor(
@@ -30,30 +31,38 @@ export class QuizEditComponent implements OnInit {
   }
 
   loadQuizDetails(): void {
+    // Charger d'abord le quiz
     this.quizService.getQuizById(this.quizId).subscribe((quiz: Quiz) => {
+      console.log(quiz.questions);
       const datePassage = new Date(quiz.date_passage).toISOString().split('T')[0];
 
+      // Formulaire pour le quiz
       this.quizForm = this.fb.group({
         titre: [quiz.titre, [Validators.required, Validators.minLength(5), Validators.maxLength(100)]],
         description: [quiz.description, [Validators.required, Validators.minLength(10)]],
         date_passage: [datePassage, [Validators.required, this.dateValidator]],
-        questions: this.fb.array(quiz.questions.map(q => this.fb.group({
-          idQuestionReponse: [q.idQuestionReponse],
-          question: [q.question, Validators.required],
-          option1: [q.option1, Validators.required],
-          option2: [q.option2, Validators.required],
-          option3: [q.option3, Validators.required],
-          option4: [q.option4, Validators.required],
-          reponse_correcte: [q.reponse_correcte, Validators.required]
-        })))
+      });
+
+      // Maintenant, charger les questions associées au quiz
+      this.questionService.getQuestionsByQuizId(this.quizId).subscribe((questions) => {
+        // Création des formulaires pour chaque question
+        questions.forEach((question) => {
+          const questionForm = this.fb.group({
+            idQuestionReponse: [question.idQuestionReponse],
+            question: [question.question, Validators.required],
+            option1: [question.option1, Validators.required],
+            option2: [question.option2, Validators.required],
+            option3: [question.option3, Validators.required],
+            option4: [question.option4, Validators.required],
+            reponse_correcte: [question.reponse_correcte, Validators.required]
+          });
+          this.questionForms.push(questionForm);
+        });
       });
     });
   }
 
-  get questions(): FormArray {
-    return this.quizForm.get('questions') as FormArray;
-  }
-
+  // Validation de la date
   dateValidator(control): { [key: string]: boolean } | null {
     const currentDate = new Date();
     const inputDate = new Date(control.value);
@@ -68,7 +77,7 @@ export class QuizEditComponent implements OnInit {
       return;
     }
 
-    // Mettre à jour les données du quiz
+    // Créer un objet de quiz mis à jour
     const updatedQuiz: Quiz = {
       idQuiz: this.quizId,
       titre: this.quizForm.value.titre,
@@ -78,27 +87,29 @@ export class QuizEditComponent implements OnInit {
 
     // Mise à jour du quiz
     this.quizService.updateQuiz(updatedQuiz).subscribe(() => {
-      // Mettre à jour les questions
-      const updatedQuestions = this.quizForm.value.questions.map((q) => ({
-        idQuestionReponse: q.idQuestionReponse,
-        question: q.question,
-        option1: q.option1,
-        option2: q.option2,
-        option3: q.option3,
-        option4: q.option4,
-        reponse_correcte: q.reponse_correcte,
-        quiz: { idQuiz: this.quizId },
-      }));
+      // Mise à jour des questions
+      this.questionForms.forEach((questionForm) => {
+        if (questionForm.valid) {
+          const updatedQuestion: QuestionReponse = {
+            idQuestionReponse: questionForm.value.idQuestionReponse,
+            question: questionForm.value.question,
+            option1: questionForm.value.option1,
+            option2: questionForm.value.option2,
+            option3: questionForm.value.option3,
+            option4: questionForm.value.option4,
+            reponse_correcte: questionForm.value.reponse_correcte,
+            quiz: updatedQuiz // Vous passez l'objet `updatedQuiz` complet ici
+          };
 
-      updatedQuestions.forEach((question) => {
-        this.questionService.updateQuestion(question).subscribe(
-          () => {
-            console.log('Question mise à jour:', question);
-          },
-          (error) => {
-            console.error('Erreur lors de la mise à jour de la question', error);
-          }
-        );
+          this.questionService.updateQuestion(updatedQuestion).subscribe(
+            () => {
+              console.log('Question mise à jour:', updatedQuestion);
+            },
+            (error) => {
+              console.error('Erreur lors de la mise à jour de la question', error);
+            }
+          );
+        }
       });
 
       Swal.fire('Succès', 'Le quiz et ses questions ont été modifiés avec succès.', 'success');
