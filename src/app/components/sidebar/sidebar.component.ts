@@ -11,6 +11,12 @@ declare interface RouteInfo {
     roles: string[];
 }
 export const ROUTES: RouteInfo[] = [
+  
+  //sayariiii
+  { path: '/dashboard', title: 'Dashboard', icon: 'business_chart-bar-32', class: '', roles: ['Admin'] },
+  { path: '/user-profile', title: 'My Profile', icon: 'users_single-02', class: '', roles: ['Student', 'Tutor','Company'] },
+  { path: '/student', title: 'Students', icon: 'education_glasses', class: '', roles: ['Admin'] },
+  //{ path: '/Posts', title: 'Post Management',  icon:'education_atom', class: '', roles: ['Tutor','Company'] },
   //ala
   { path: '/quiz-list', title: 'All Quizzes',  icon:'ui-2_chat-round', class: '' ,  roles: ['Company']},
   { path: '/add-quiz', title: 'Add Quiz',  icon:'ui-2_chat-round', class: '',  roles: ['Company'] },
@@ -18,11 +24,6 @@ export const ROUTES: RouteInfo[] = [
 //Amin kabobi
     { path: '/predefined-documents', title: 'My Documents',  icon:'files_single-copy-04', class: '',  roles: ['Student']},
     { path: '/document-list', title: 'Document List',  icon:'files_paper', class: '',  roles: ['Admin']},
-  //sayariiii
-  { path: '/dashboard', title: 'Dashboard', icon: 'business_chart-bar-32', class: '', roles: ['Admin'] },
-  { path: '/user-profile', title: 'My Profile', icon: 'users_single-02', class: '', roles: ['Student', 'Tutor','Company'] },
-  { path: '/student', title: 'Students', icon: 'education_glasses', class: '', roles: ['Admin'] },
-  //{ path: '/Posts', title: 'Post Management',  icon:'education_atom', class: '', roles: ['Tutor','Company'] },
   { path: '/post', title: 'Posts', icon: 'education_paper', class: '', roles: ['Admin'] },
   { path: '/internship-request', title: 'Internship Request', icon: 'education_paper', class: '', roles: ['Company'] },
   { path: '/agreement', title: 'My Agreement', icon: 'education_paper', class: '', roles: ['Student'] },
