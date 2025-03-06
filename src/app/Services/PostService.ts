@@ -16,7 +16,15 @@ export class PostService {
   getAllPosts(): Observable<Post[]> {
     return this.http.get<Post[]>(`${this.baseUrl}/getAllPosts`);
   }
+  // Récupérer tous les posts
+  getAllPostsDTO(): Observable<Post[]> {
+    return this.http.get<Post[]>(`${this.baseUrl}/getAllPostsDTO`);
+  }
 
+  // Récupérer les posts d'une entreprise spécifique
+  getPostsByCompanyDTO(companyId: number): Observable<Post[]> {
+    return this.http.get<Post[]>(`${this.baseUrl}/getPostsByCompanyDTO/${companyId}`);
+  }
   // Récupérer un post par ID
   getPostById(postId: number): Observable<Post> {
     return this.http.get<Post>(`${this.baseUrl}/getPostById/${postId}`);

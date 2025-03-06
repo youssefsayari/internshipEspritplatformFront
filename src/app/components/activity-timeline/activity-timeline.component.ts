@@ -13,6 +13,8 @@ import { ChangeDetectorRef } from '@angular/core';
 import { Comment } from '../../Model/Comment';
 import { Rating } from '../../Model/Rating';
 import { ToastrService } from 'ngx-toastr';
+import Swal from 'sweetalert2';
+import {UserService} from '../../Services/user.service';
 
 
 
@@ -42,7 +44,7 @@ interface Timeline {
   hoverRating: number;
   feedbackGiven: Boolean;
   ownerId: number ; // Déclare une variable pour stocker l'ID de l'utilisateur
-  
+
   ratings?: Rating[];  // Changer cela de number[] à Rating[]
   averageRating?: number;  // Ajouter une propriété pour la note moyenne
   sector?: string;  // Ajouter une propriété pour l'entreprise
@@ -63,7 +65,7 @@ export class ActivityTimelineComponent implements OnInit {
   mytimelines: Timeline[] = [];
 
   // Utilisateur connecté, statique à 1 pour l'instant
-  userConnecte: number = 1; // A modifier plus tard pour correspondre à l'ID de l'utilisateur connecté
+ // A modifier plus tard pour correspondre à l'ID de l'utilisateur connecté
 
   stars = [1, 2, 3, 4, 5]; // Liste des étoiles à afficher
 
@@ -74,14 +76,14 @@ export class ActivityTimelineComponent implements OnInit {
   newPostTitle = '';
   newPostExpiryDateTime?: string; // Optionnel, peut être null
    // Retourne la date actuelle formatée pour le champ datetime-local
-   
+
 
 
   selectedPostId: number | null = null; // Stocker l'ID du post sélectionné
   companyId: number | null = null; // Déclare une variable pour stocker l'ID de l'entreprise
   isUserInCompany: boolean = false; // Variable pour savoir si l'utilisateur appartient à une entreprise
 
-
+  userConnecte: number;
   rating: Rating | null = null;
 
   selectedFile: File | null = null;
@@ -98,12 +100,13 @@ export class ActivityTimelineComponent implements OnInit {
 
   userType: string= '';
 
- 
 
-  constructor(private postService: PostService   ,private commentService: CommentService ,private companyService: CompanyService ,private ratingService: RatingService,private cdr: ChangeDetectorRef,private toastr: ToastrService   ) {}
+
+  constructor(private postService: PostService   ,private commentService: CommentService, private userService: UserService ,private companyService: CompanyService ,private ratingService: RatingService,private cdr: ChangeDetectorRef,private toastr: ToastrService   ) {}
 
   ngOnInit(): void {
     this.loadPosts();
+    this.fetchUserDetails();
     this.userType = localStorage.getItem('userRole');
   // Appel pour vérifier si l'utilisateur appartient à une entreprise
   this.companyService.isUserInCompany(this.userConnecte).subscribe(
@@ -143,30 +146,30 @@ export class ActivityTimelineComponent implements OnInit {
   }
 
 
- 
+
 
   /**
    * 🔥 Récupère les posts et les transforme en Timeline
    */
- 
-  
+
+
   loadPosts() {
     this.postService.getAllPosts().subscribe(
       (posts: Post[]) => {
         console.log("Posts récupérés :", posts);
-        
+
         // Trier les posts du plus récent au plus ancien
         posts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-        
+
         this.mytimelines = posts.map(post => {
           const timeline = this.transformPostToTimeline(post);
-          
+
           // Calculer la note moyenne pour chaque post
           timeline.averageRating = this.calculateAverageRating(timeline.ratings);
-          
+
           return timeline;
         });
-        
+
 
         this.origanalTimelines = [...this.mytimelines]; // Sauvegarder les posts originaux
 
@@ -189,28 +192,51 @@ export class ActivityTimelineComponent implements OnInit {
       }
     );
   }
+  fetchUserDetails() {
+    const token = localStorage.getItem('Token');
+    if (!token) return;
 
+    this.userService.decodeTokenRole(token).subscribe({
+      next: (userDetails) => {
+        localStorage.setItem('userRole', userDetails.role);
+        localStorage.setItem('userClasse', userDetails.classe);
+        this.userConnecte = userDetails.id;
+      },
+      error: () => {
+        Swal.fire({
+          icon: 'error',
+          title: '⚠️ Error',
+          text: 'Failed to fetch user details. Please log in again.',
+          width: '50%',
+          customClass: {
+            popup: 'swal-custom-popup',
+            confirmButton: 'swal-custom-button'
+          }
+        });
+      }
+    });
+  }
   // Récupérer et filtrer les posts dans une seule méthode
 getPostsAndFilterByCompany(companyId: number) {
   this.postService.getPostsByCompany(companyId).subscribe(
     (posts: Post[]) => {
       console.log("Posts récupérés :", posts);
-      
+
       // Trier les posts du plus récent au plus ancien
       posts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-      
+
       this.mytimelines = posts.map(post => {
         const timeline = this.transformPostToTimeline(post);
-        
+
         // Calculer la note moyenne pour chaque post
         timeline.averageRating = this.calculateAverageRating(timeline.ratings);
-        
+
         return timeline;
       });
 
       this.origanalTimelines = [...this.mytimelines]; // Sauvegarder les posts originaux
 
-      
+
       // Maintenant que les timelines sont chargées, récupérez la note
       this.mytimelines.forEach(timeline => {
         this.ratingService.getMyRatingForPost(timeline.id, this.userConnecte).subscribe(
@@ -233,12 +259,12 @@ filterPosts() {
   this.mytimelines = [...this.origanalTimelines]; // Sauvegarder les posts originaux
   // Si un secteur est sélectionné, filtrer les posts en fonction du texte de recherche et du secteur
   this.mytimelines = this.mytimelines.filter(post => {
-    const matchesSearchText = post.title.toLowerCase().includes(this.searchText.toLowerCase()) || 
+    const matchesSearchText = post.title.toLowerCase().includes(this.searchText.toLowerCase()) ||
                               post.content.toLowerCase().includes(this.searchText.toLowerCase());
 
     // Normaliser les valeurs pour éviter des problèmes de casse ou d'espaces superflus
-    const matchesSector = this.selectedSector 
-      ? post.sector.trim().toLowerCase() === this.selectedSector.trim().toLowerCase() 
+    const matchesSector = this.selectedSector
+      ? post.sector.trim().toLowerCase() === this.selectedSector.trim().toLowerCase()
       : true;
 
     return matchesSearchText && matchesSector;
@@ -260,7 +286,7 @@ clearFilters() {
   this.searchText = '';
   this.selectedSector = '';
   this.filteredTimelines = [...this.mytimelines]; // Réinitialiser les posts
-  
+
   // Recharger la page
   window.location.reload();
 }
@@ -273,7 +299,7 @@ clearFilters() {
 
 
 
-  
+
     // Méthode pour vérifier si la date d'expiration est dans le futur
     isExpired(expiryDateTime: string): boolean {
       return new Date(expiryDateTime) > new Date();
@@ -290,28 +316,28 @@ clearFilters() {
 
     minDateTime(): string {
       const now = new Date();
-    
+
       // Récupérer les composants de la date locale
       const year = now.getFullYear();
       const month = String(now.getMonth() + 1).padStart(2, '0'); // Mois commence à 0
       const day = String(now.getDate()).padStart(2, '0');
       const hours = String(now.getHours()).padStart(2, '0');
       const minutes = String(now.getMinutes()).padStart(2, '0');
-    
+
       // Retourner au format "YYYY-MM-DDTHH:MM"
       return `${year}-${month}-${day}T${hours}:${minutes}`;
     }
-    
 
 
 
 
-  
+
+
 
   /**
    * 🛠️ Convertit un Post en Timeline
    */
- 
+
   private transformPostToTimeline(post: Post): Timeline {
     const selectedRating = post.ratings && post.ratings.length > 0 ? post.ratings[0].stars : 0;
 
@@ -340,18 +366,18 @@ clearFilters() {
       sector: post.company?.sector,
       expiryDateTime: post.expiryDateTime, // ISO Date string (nullable)
 
-    
+
     };
   }
-  
-  
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
+
+
 
 
 
@@ -428,7 +454,7 @@ getTimeRemaining(expiryDateTime: string): string {
     return /\.(jpg|jpeg|png|gif)$/i.test(content);
   }
 
-  
+
 
 
 
@@ -440,7 +466,7 @@ getTimeRemaining(expiryDateTime: string): string {
           id: timeline.id,
         },
       };
-  
+
       this.commentService.addCommentToPostAndUser(timeline.id, this.userConnecte, newComment).subscribe(
         (savedComment: Comment) => {
           timeline.comments.unshift({
@@ -450,9 +476,9 @@ getTimeRemaining(expiryDateTime: string): string {
             text: savedComment.content,
             createdAt: new Date().toISOString()
           });
-  
+
           timeline.comments.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-  
+
           timeline.newComment = '';
           this.toastr.success('Your comment has been successfully added!', 'Success', {
             timeOut: 3000,
@@ -461,12 +487,12 @@ getTimeRemaining(expiryDateTime: string): string {
         },
         error => {
           console.error('Error while adding comment:', error);
-          
+
           if (error.error && error.error.message) {
             if (error.error.message.includes("mots interdits")) {
               this.toastr.warning(
                 "Your comment contains inappropriate language and was not posted.",
-                "Warning", 
+                "Warning",
                 { timeOut: 4000, positionClass: 'toast-top-right' }
               );
             } else {
@@ -490,16 +516,16 @@ getTimeRemaining(expiryDateTime: string): string {
       });
     }
   }
-  
+
 
   deleteComment(commentId: number): void {
     // Sélectionner l'élément HTML du commentaire
     const commentElement = document.getElementById(`comment-${commentId}`);
-  
+
     if (commentElement) {
       // Ajouter une classe CSS pour l'animation de disparition
       commentElement.classList.add('fade-out');
-  
+
       // Attendre la fin de l'animation avant de supprimer le commentaire
       setTimeout(() => {
         // Supprimer le commentaire du backend
@@ -509,7 +535,7 @@ getTimeRemaining(expiryDateTime: string): string {
             this.mytimelines.forEach(timeline => {
               timeline.comments = timeline.comments.filter(comment => comment.id !== commentId);
             });
-  
+
             // Afficher un message de succès
             this.toastr.success('Le commentaire a été supprimé avec succès !', 'Succès', {
               timeOut: 3000,
@@ -527,17 +553,17 @@ getTimeRemaining(expiryDateTime: string): string {
       }, 500); // Temps d'attente pour la fin de l'animation (500ms)
     }
   }
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
+
+
+
+
   setRating(timeline: Timeline, rating: number) {
     // Vérifier si l'utilisateur a déjà noté ce post
     this.ratingService.hasUserRated(timeline.id, this.userConnecte).subscribe(
@@ -545,7 +571,7 @@ getTimeRemaining(expiryDateTime: string): string {
         if (!hasRated) {
           // Si l'utilisateur n'a pas encore noté, on attribue la note
           timeline.selectedRating = rating;
-  
+
           // Créer un nouvel objet Rating
           const newRating: Rating = {
             id: 0,  // L'ID peut être généré par le backend
@@ -553,20 +579,20 @@ getTimeRemaining(expiryDateTime: string): string {
             user: { idUser: this.userConnecte },
             createdAt: new Date().toISOString(),
           };
-  
+
           // Assurer que la liste des notes existe, sinon la créer
           timeline.ratings = timeline.ratings || [];
           timeline.ratings.push(newRating);
-  
+
           // Recalculer la moyenne des notes
           timeline.averageRating = this.calculateAverageRating(timeline.ratings);
-  
+
           // Appeler le service pour ajouter la note
           this.ratingService.addRatingToPost(timeline.id, this.userConnecte, rating).subscribe(
             (response: Rating) => {
               // Mettre à jour l'état de feedback donné
               timeline.feedbackGiven = true;
-  
+
               // Stocker la note dans le localStorage
               localStorage.setItem(`rated-${timeline.id}-${this.userConnecte}`, 'true');
             },
@@ -581,8 +607,8 @@ getTimeRemaining(expiryDateTime: string): string {
       }
     );
   }
-  
-  
+
+
   addRating(postId: number, userId: number, stars: number) {
     // Créer un objet Rating
     const rating: Rating = {
@@ -591,7 +617,7 @@ getTimeRemaining(expiryDateTime: string): string {
       user: { idUser: this.userConnecte },
       createdAt: new Date().toISOString(),
     };
-  
+
     // Appeler le service pour ajouter la note au backend
     this.ratingService.addRatingToPost(postId, this.userConnecte, stars).subscribe(
       (response: Rating) => {
@@ -603,7 +629,7 @@ getTimeRemaining(expiryDateTime: string): string {
       }
     );
   }
-  
+
   getPreviousRating(postId: number, userId: number): number {
     // Récupérer la note précédemment donnée depuis le localStorage
     return Number(localStorage.getItem(`rating-${postId}-${userId}`) || 0);
@@ -612,24 +638,24 @@ getTimeRemaining(expiryDateTime: string): string {
     if (!ratings || ratings.length === 0) {
       return 0;
     }
-  
+
     const totalStars = ratings.reduce((sum, rating) => sum + rating.stars, 0);
     return totalStars / ratings.length;
   }
-  
-  
-  
 
 
 
-  
-  
-  
-  
 
-  
-  
-  
+
+
+
+
+
+
+
+
+
+
 
   // Optimisation de la boucle *ngFor avec trackBy
   trackByFn(index: number, item: Timeline): number {
@@ -646,13 +672,13 @@ getTimeRemaining(expiryDateTime: string): string {
       this.newPostTitle = '';  // Réinitialiser le titre
       this.newPostContent = '';  // Réinitialiser le contenu
       this.selectedPostId = null;  // Réinitialiser l'ID du post sélectionné
-  
+
       this.isPostCreateModalOpen = true;
     }
   }
-  
-  
-  
+
+
+
   closePostModal() {
     this.isPostCreateModalOpen = false;
     this.isPostEditModalOpen = false;
@@ -702,7 +728,7 @@ getTimeRemaining(expiryDateTime: string): string {
       });
     }, 300);
   }
-    
+
 
 
 
@@ -711,23 +737,23 @@ getTimeRemaining(expiryDateTime: string): string {
   isPostDisabled(): boolean {
     return this.newPostTitle.trim() === '' || this.newPostContent.trim() === '';
   }
-  
+
 
 
   deletePost(postId: number): void {
     // Sélectionner l'élément HTML du post à supprimer
     const postElement = document.getElementById(`post-${postId}`);
-    
+
     if (postElement) {
       // Appliquer la classe pour démarrer l'animation de disparition
       postElement.classList.add('fade-out');
       postElement.classList.add('hidden');  // Ajout de la classe 'hidden' pour masquer avec animation
-  
+
       // Retirer le post après 500ms (la durée de l'animation)
       setTimeout(() => {
         // Supprimer le post du tableau local (avant la suppression backend)
         this.mytimelines = this.mytimelines.filter(post => post.id !== postId);
-  
+
         // Supprimer également le post côté backend
         this.postService.deletePost(postId).subscribe(
           () => {
@@ -740,44 +766,44 @@ getTimeRemaining(expiryDateTime: string): string {
       }, 500);  // Temps d'attente pour la fin de l'animation (500ms)
     }
   }
-  
-  
-  
-  
 
-  
-  
-  
+
+
+
+
+
+
+
   editPost(postId: number): void {
     const postToEdit = this.mytimelines.find(post => post.id === postId);
-  
+
     if (postToEdit) {
-      this.selectedPostId = postToEdit.id; 
-      this.newPostTitle = postToEdit.title; 
-      this.newPostContent = postToEdit.content; 
-      this.newPostExpiryDateTime = postToEdit.expiryDateTime 
-        ? new Date(postToEdit.expiryDateTime).toISOString().slice(0, 16) 
+      this.selectedPostId = postToEdit.id;
+      this.newPostTitle = postToEdit.title;
+      this.newPostContent = postToEdit.content;
+      this.newPostExpiryDateTime = postToEdit.expiryDateTime
+        ? new Date(postToEdit.expiryDateTime).toISOString().slice(0, 16)
         : '';
-  
+
       this.isPostCreateModalOpen = false;
       this.isPostEditModalOpen = true;
     }
   }
-  
-  
+
+
 
   updatePost(): void {
     if (this.newPostTitle.trim() === '' || this.newPostContent.trim() === '' || !this.selectedPostId) {
       return;
     }
-  
+
     const updatedPost: Post = {
       id: this.selectedPostId,
       title: this.newPostTitle,
       content: this.newPostContent,
       expiryDateTime: this.newPostExpiryDateTime ? new Date(this.newPostExpiryDateTime).toISOString() : undefined
     };
-  
+
     this.postService.updatePost(updatedPost).subscribe(
       (savedPost: Post) => {
         // Recherche du post mis à jour et remplacement
@@ -785,7 +811,7 @@ getTimeRemaining(expiryDateTime: string): string {
         if (index !== -1) {
           this.mytimelines[index] = this.transformPostToTimeline(savedPost);
         }
-  
+
         // Réinitialise l'état des modaux et des champs
         this.selectedPostId = null;
         this.newPostTitle = '';
@@ -798,18 +824,18 @@ getTimeRemaining(expiryDateTime: string): string {
       }
     );
   }
-  
-
-  
-  
-  
 
 
 
 
 
-  
 
-  
-  
+
+
+
+
+
+
+
+
 }

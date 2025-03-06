@@ -48,18 +48,18 @@ export class PostComponent implements OnInit {
     }
     if (userRole === 'Admin') {
       this.isAdmin = true;
-      this.postService.getAllPosts().subscribe((data: Post[]) => {
+      this.postService.getAllPostsDTO().subscribe((data: Post[]) => {
         this.posts = data;
       });
     }
     else if (userRole === 'Company') {
       this.isCompany = true;
-      this.postService.getPostsByCompany(Number(classe)).subscribe((data: Post[]) => {
+      this.postService.getPostsByCompanyDTO(Number(classe)).subscribe((data: Post[]) => {
         this.posts = data;
       });
     }
     else {
-      this.postService.getAllPosts().subscribe((data: Post[]) => {
+      this.postService.getAllPostsDTO().subscribe((data: Post[]) => {
         this.posts = data;
       });
     }
