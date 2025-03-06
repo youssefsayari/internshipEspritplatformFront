@@ -12,7 +12,9 @@ declare interface RouteInfo {
 }
 export const ROUTES: RouteInfo[] = [
   //ala
-  { path: '/quiz-list', title: 'My Quizzes',  icon:'ui-2_chat-round', class: '' ,  roles: ['Student']},
+  { path: '/quiz-list', title: 'All Quizzes',  icon:'ui-2_chat-round', class: '' ,  roles: ['Company']},
+  { path: '/add-quiz', title: 'Add Quiz',  icon:'ui-2_chat-round', class: '',  roles: ['Company'] },
+  { path: '/quiz-list-user', title: 'My Quizzes',  icon:'ui-2_chat-round', class: '',  roles: ['Student'] },
 //Amin kabobi
     { path: '/predefined-documents', title: 'My Documents',  icon:'files_single-copy-04', class: '',  roles: ['Student']},
     { path: '/document-list', title: 'Document List',  icon:'files_paper', class: '',  roles: ['Admin']},

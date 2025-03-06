@@ -1,0 +1,159 @@
+/* Global Styles */
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f7f7f7;
+  margin: 0;
+  padding: 0;
+}
+
+/* Container for form */
+.container {
+  max-width: 900px;
+  margin-top: 50px;
+}
+
+/* Card style */
+.card {
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  padding: 30px;
+  transition: all 0.3s ease-in-out;
+}
+
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card h2 {
+  font-size: 24px;
+  color: #4e73df;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Input fields */
+input[type="text"],
+textarea,
+input[type="date"],
+select {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  margin-bottom: 15px;
+  transition: 0.3s;
+}
+
+input[type="text"]:focus,
+textarea:focus,
+input[type="date"]:focus,
+select:focus {
+  border-color: #4e73df;
+  outline: none;
+  background-color: #ffffff;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Form Labels */
+.form-label {
+  font-weight: 600;
+  font-size: 16px;
+  color: #333;
+}
+
+/* Error messages */
+.text-danger {
+  color: #e74a3b;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+/* Section Questions */
+.questions .form-label {
+  margin-top: 15px;
+  font-size: 16px;
+}
+
+/* Options */
+.row .col-6 input[type="text"] {
+  margin-bottom: 10px;
+}
+
+.row {
+  display: flex;
+  gap: 20px;
+}
+
+/* Submit button */
+button[type="submit"] {
+  background-color: #4e73df;
+  color: #ffffff;
+  padding: 15px;
+  font-size: 18px;
+  border: none;
+  border-radius: 8px;
+  width: 100%;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button[type="submit"]:hover {
+  background-color: #2e59d9;
+}
+
+button[type="submit"]:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Media Queries for Responsive Design */
+@media (max-width: 768px) {
+  .card {
+    padding: 20px;
+  }
+
+  .container {
+    margin-top: 30px;
+  }
+
+  .row {
+    flex-direction: column;
+  }
+
+  .questions .form-label {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 500px) {
+  .card {
+    padding: 15px;
+  }
+
+  .container {
+    margin-top: 20px;
+  }
+
+  .form-label {
+    font-size: 14px;
+  }
+
+  input[type="text"],
+  textarea,
+  input[type="date"],
+  select {
+    font-size: 14px;
+  }
+
+  button[type="submit"] {
+    font-size: 16px;
+  }
+}

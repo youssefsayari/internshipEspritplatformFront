@@ -1,0 +1,53 @@
+<div class="quiz-container">
+    <div class="alert alert-danger text-center full-width-alert" role="alert">
+        <i class="fas fa-info-circle me-2"></i>
+        <strong>Attention!</strong> All quizzes take place on the scheduled date, and <strong>exactly at 9:00 AM</strong>. Be ready! <br>
+        <strong>We believe in you, engineers!</strong>      </div>
+    <div *ngFor="let quiz of quizzes" class="quiz-box card mb-4 shadow-sm">
+      <div class="card-body">
+        <!-- Titre du quiz avec icône -->
+        <div class="d-flex justify-content-between align-items-center">
+          <h3 class="card-title text-primary d-flex align-items-center">
+            <i class="fas fa-chalkboard-teacher me-2"></i>{{ quiz.titre }}
+          </h3>
+        </div>
+        
+        <!-- Date de passage avec icône de clock -->
+        <div class="d-flex align-items-center">
+          <i class="fas fa-clock me-2"></i>
+          <span class="badge bg-info text-white">{{ quiz.date_passage | date:'dd/MM/yyyy' }}</span>
+        </div>
+        
+        <!-- Description avec icône de note -->
+        <div class="d-flex align-items-center mt-2">
+          <i class="fas fa-sticky-note me-2"></i>
+          <p class="card-text text-muted">{{ quiz.description }}</p>
+        </div>
+  
+        <!-- Lien pour participer au quiz -->
+        <button 
+          *ngIf="isQuizPassable(quiz.date_passage)" 
+          [routerLink]="['/quiz', quiz.idQuiz]" 
+          class="btn btn-success mt-3"
+          (mouseenter)="onHover(quiz.date_passage)" 
+          (mouseleave)="onMouseLeave()">
+          <i class="fas fa-play-circle"></i> Participate
+        </button>
+  
+        <!-- Affichage du message quand on survole le bouton -->
+        <div *ngIf="hoveredQuizDate" class="hover-message">
+          {{ hoveredQuizDate }}
+        </div>
+  
+        <!-- Si le quiz n'est pas encore passé, on désactive le bouton -->
+        <button 
+          *ngIf="!isQuizPassable(quiz.date_passage)" 
+          class="btn btn-secondary mt-3" 
+          disabled
+          >
+          <i class="fas fa-play-circle"></i> Participate
+        </button>
+      </div>
+    </div>
+  </div>
+  

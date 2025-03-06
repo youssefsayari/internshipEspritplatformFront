@@ -1,0 +1,54 @@
+<div class="container mt-5 d-flex justify-content-center">
+  <div class="card p-4 shadow-lg" style="max-width: 600px; width: 100%; border-radius: 12px;">
+    
+    <h2 class="text-center text-primary mb-4">
+      <i class="bi bi-patch-question-fill"></i> Add Quiz
+    </h2>
+
+    <form [formGroup]="quizForm" (ngSubmit)="onSubmit()">
+      
+      <!-- Champ Titre -->
+      <div class="mb-3">
+        <label for="titre" class="form-label fw-bold">
+          <i class="bi bi-pencil-square"></i> Quiz Title
+        </label>
+        <input type="text" id="titre" formControlName="titre" class="form-control" placeholder="Enter Quiz Title..." />
+        <div *ngIf="quizForm.controls['titre'].invalid && quizForm.controls['titre'].touched" class="text-danger">
+          <small *ngIf="quizForm.controls['titre'].hasError('required')">Title is required.</small>
+          <small *ngIf="quizForm.controls['titre'].hasError('minlength')">Title must be at least 5 characters long.</small>
+          <small *ngIf="quizForm.controls['titre'].hasError('maxlength')">Title cannot be more than 100 characters long.</small>
+        </div>
+      </div>
+
+      <!-- Champ Description -->
+      <div class="mb-3">
+        <label for="description" class="form-label fw-bold">
+          <i class="bi bi-file-text"></i> Description
+        </label>
+        <textarea id="description" formControlName="description" class="form-control" rows="3" placeholder="Describe the quiz..."></textarea>
+        <div *ngIf="quizForm.controls['description'].invalid && quizForm.controls['description'].touched" class="text-danger">
+          <small *ngIf="quizForm.controls['description'].hasError('required')">Description is required.</small>
+          <small *ngIf="quizForm.controls['description'].hasError('minlength')">Description must be at least 10 characters long.</small>
+        </div>
+      </div>
+
+      <!-- Champ Date de Passage -->
+      <div class="mb-4">
+        <label for="date_passage" class="form-label fw-bold">
+          <i class="bi bi-calendar-event"></i> Date of the quiz passing
+        </label>
+        <input type="date" id="date_passage" formControlName="date_passage" class="form-control" />
+        <div *ngIf="quizForm.controls['date_passage'].invalid && quizForm.controls['date_passage'].touched" class="text-danger">
+          <small *ngIf="quizForm.controls['date_passage'].hasError('required')">Date is required.</small>
+          <small *ngIf="quizForm.controls['date_passage'].hasError('futureDate')">Date must be in the future.</small>
+        </div>
+      </div>
+
+      <!-- Bouton Ajouter -->
+      <button type="submit" class="btn btn-primary w-100" [disabled]="quizForm.invalid">
+        <i class="bi bi-plus-circle"></i> Confirm Adding
+      </button>
+
+    </form>
+  </div>
+</div>

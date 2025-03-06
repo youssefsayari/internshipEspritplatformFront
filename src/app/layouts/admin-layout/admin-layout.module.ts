@@ -42,8 +42,8 @@ import { ComponentsModule } from "../../components/components.module";
     MatSelectModule,
     MatDialogModule,
     ComponentsModule,
-
-
+    ReactiveFormsModule,
+    ToastrModule.forRoot()
 
   ],
 

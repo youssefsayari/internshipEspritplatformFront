@@ -1,0 +1,109 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f8f9fa;
+  }
+  
+  .card {
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease-in-out;
+    overflow: hidden;
+  }
+  
+  .card:hover {
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+  }
+  
+  .card h2 {
+    font-size: 24px;
+    color: #28a745;
+  }
+  
+  .card h2 i {
+    margin-right: 8px;
+  }
+  
+  .form-label {
+    font-size: 18px;
+    color: #333;
+  }
+  
+  .form-label i {
+    margin-right: 8px;
+    color: #28a745;
+  }
+  
+  .form-control,
+  .form-select {
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 16px;
+    transition: border-color 0.3s ease-in-out;
+  }
+  
+  .form-control:focus,
+  .form-select:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  }
+  
+  .btn-primary,
+  .btn-success {
+    border: none;
+    border-radius: 8px;
+    padding: 14px 20px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+  }
+  
+  .btn-primary {
+    background-color: #007bff;
+    color: #ffffff;
+  }
+  
+  .btn-success {
+    background-color: #28a745;
+    color: #ffffff;
+  }
+  
+  .btn-primary:hover,
+  .btn-success:hover {
+    transform: translateY(-2px);
+  }
+  
+  .btn-primary:hover {
+    background-color: #0056b3;
+  }
+  
+  .btn-success:hover {
+    background-color: #218838;
+  }
+  
+  .btn i {
+    margin-right: 8px;
+    font-size: 20px;
+  }
+  /* Ajoutez des styles pour le bouton IA */
+.btn-warning {
+  background-color: #f39c12;
+  border-color: #e67e22;
+  font-weight: bold;
+  padding: 10px 20px;
+  border-radius: 50px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-warning:hover {
+  background-color: #e67e22;
+  border-color: #f39c12;
+}
+
+  

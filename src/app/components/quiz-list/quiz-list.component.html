@@ -1,30 +1,36 @@
-<div class="quiz-container">
-    <div  *ngFor="let quiz of quizzes" class=" quiz-box card mb-4 shadow-sm">
-      <div class="card-body">
-        <!-- Titre du quiz avec icône -->
-        <div class="d-flex justify-content-between align-items-center">
-          <h3 class="card-title text-primary d-flex align-items-center">
-            <i class="fas fa-chalkboard-teacher me-2"></i>{{ quiz.titre }}
-          </h3>
-        </div>
-        
-        <!-- Date de passage avec icône de clock -->
-        <div class="d-flex align-items-center">
-          <i class="fas fa-clock me-2"></i>
-          <span class="badge bg-info text-white">{{ quiz.date_passage | date:'dd/MM/yyyy' }}</span>
-        </div>
-        
-        <!-- Description avec icône de note -->
-        <div class="d-flex align-items-center mt-2">
-          <i class="fas fa-sticky-note me-2"></i>
-          <p class="card-text text-muted">{{ quiz.description }}</p>
-        </div>
-  
-        <!-- Lien pour participer au quiz -->
-        <a [routerLink]="['/quiz', quiz.idQuiz]" class="btn btn-success mt-3">
-          <i class="fas fa-play-circle"></i> Participer
+<div class="container mt-4">
+  <h2 class="text-center text-primary title">📋 Quiz List</h2>
+
+  <div class="quiz-container">
+    <div class="quiz-box animate" *ngFor="let quiz of paginatedQuizzes">
+      <h3 class="quiz-title">
+        <i class="fas fa-chalkboard-teacher"></i> {{ quiz.titre }}
+      </h3>
+      <div class="date">
+        <i class="fas fa-clock"></i>
+        <span>{{ quiz.date_passage | date:'dd/MM/yyyy' }}</span>
+      </div>
+      <div class="description">
+        <i class="fas fa-sticky-note"></i> {{ quiz.description }}
+      </div>
+      <div class="actions">
+        <button class="btn btn-danger btn-animate" (click)="deleteQuiz(quiz.idQuiz)">
+          <i class="fas fa-trash-alt"></i> Delete
+        </button>
+        <a [routerLink]="['/quiz-edit', quiz.idQuiz]" class="btn btn-primary btn-animate">
+          <i class="fas fa-edit"></i> Edit
+        </a>
+        <a [routerLink]="['/quiz-details', quiz.idQuiz]" class="btn btn-success btn-animate">
+          <i class="fas fa-info-circle"></i> Details
         </a>
       </div>
     </div>
   </div>
-  
+
+  <!-- Pagination Controls -->
+  <div class="pagination-controls mt-4">
+    <button (click)="onPageChange(page - 1)" [disabled]="page <= 1">Previous</button>
+    <span>Page {{ page }} of {{ totalPages }}</span>
+    <button (click)="onPageChange(page + 1)" [disabled]="page >= totalPages">Next</button>
+  </div>
+</div>
