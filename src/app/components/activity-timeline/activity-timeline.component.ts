@@ -83,7 +83,7 @@ export class ActivityTimelineComponent implements OnInit {
   companyId: number | null = null; // Déclare une variable pour stocker l'ID de l'entreprise
   isUserInCompany: boolean = false; // Variable pour savoir si l'utilisateur appartient à une entreprise
 
-  userConnecte: number;
+  userConnecte: number = 6;
   rating: Rating | null = null;
 
   selectedFile: File | null = null;
