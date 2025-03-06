@@ -3,7 +3,7 @@
 
 
 <!-- Zone de texte simulée pour écrire un post -->
-<div class="fake-input" (click)="openPostModal()" *ngIf="isUserInCompany|| userType === 'Admin'">
+<div class="fake-input" (click)="openPostModal()" *ngIf="userType === 'Company'|| userType === 'Admin'">
   <img src="assets/images/profile/pngtree-3d-realistic-red-portable-megaphone-speaker.png" alt="user" />
   <span>What's New ?</span>
 </div>
@@ -29,6 +29,7 @@
 
   <!-- Clear Filters Button -->
   <button (click)="clearFilters()" class="btn btn-secondary">Clear Filters</button>
+
 </div>
 
 
@@ -146,7 +147,6 @@
 </div>
 
 
-
   <div class="d-flex align-items-start">   
     <!-- Image utilisateur avec clic -->
     <img *ngIf="timeline.image" 
@@ -164,7 +164,7 @@
 
 
       <!-- 🔥 Affichage du titre du post -->
-      <h6 class="fw-semibold text-dark mt-2">{{ timeline.title }}</h6>
+      <h6 class="fw-semibold text-dark mt-2">{{ timeline.title }} </h6>
       <hr class="my-2">
 
       <!-- Contenu du post (texte ou image) -->
