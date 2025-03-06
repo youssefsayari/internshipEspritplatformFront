@@ -1,0 +1,35 @@
+<div class="panel-header panel-header-sm"></div>
+<div class="main-content">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="title">100 Awesome Nucleo Icons</h5>
+          <p class="category">
+            Handcrafted by our friends from
+            <a href="https://nucleoapp.com/?ref=1712">NucleoApp</a>
+          </p>
+        </div>
+        <div class="card-body all-icons">
+          <div class="row">
+
+            <div class="col-lg-4">
+              <app-profile-card   *ngIf="showProfileCard"  [image]="image" [from]="from" ></app-profile-card>
+              <app-my-contacts></app-my-contacts>
+            </div>
+
+
+        
+            
+             <div class="col-lg-8">
+
+
+              <app-activity-timeline (profileSelected)="onProfileSelected($event)"></app-activity-timeline>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

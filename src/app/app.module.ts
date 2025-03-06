@@ -15,7 +15,6 @@ import { LoginComponent } from './components/login/login.component';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import {MatDialogModule} from '@angular/material/dialog';
-import { LoginComponent } from './components/login/login.component';
 import { ImageComponent } from './image/image.component';
 import { DocumentComponent } from './document/document.component';
 import { DocumentListComponent } from './document-list/document-list.component';
