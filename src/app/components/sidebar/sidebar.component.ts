@@ -24,7 +24,7 @@ export const ROUTES: RouteInfo[] = [
 //Amin kabobi
     { path: '/predefined-documents', title: 'My Documents',  icon:'files_single-copy-04', class: '',  roles: ['Student']},
     { path: '/document-list', title: 'Document List',  icon:'files_paper', class: '',  roles: ['Admin']},
-  { path: '/post', title: 'Posts', icon: 'education_paper', class: '', roles: ['Admin'] },
+  { path: '/post', title: 'Internships', icon: 'education_paper', class: '', roles: ['Admin'] },
   { path: '/internship-request', title: 'Internship Request', icon: 'education_paper', class: '', roles: ['Company'] },
   { path: '/agreement', title: 'My Agreement', icon: 'education_paper', class: '', roles: ['Student'] },
   { path: '/internship', title: 'My Internship', icon: 'business_briefcase-24', class: '', roles: ['Student'] },
