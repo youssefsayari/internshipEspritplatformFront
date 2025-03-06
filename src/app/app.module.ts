@@ -22,7 +22,6 @@ import { QuizPassComponent } from './quiz-pass/quiz-pass.component';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import {MatDialogModule} from '@angular/material/dialog';
-import { ImageComponent } from './image/image.component';
 import { DocumentComponent } from './document/document.component';
 import { DocumentListComponent } from './document-list/document-list.component';
 import { DefenseComponent } from './defense/defense.component';
@@ -57,7 +56,6 @@ import { AddDocumentComponent } from './add-document/add-document.component';
     AppComponent,
     AdminLayoutComponent,
     LoginComponent,
-    ImageComponent,
     DocumentComponent,
     DocumentListComponent,
     DefenseComponent,
