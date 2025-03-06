@@ -81,10 +81,10 @@ export class ActivityTimelineComponent implements OnInit {
 
 
   selectedPostId: number | null = null; // Stocker l'ID du post sélectionné
-  companyId: number | null = null; // Déclare une variable pour stocker l'ID de l'entreprise
+  companyId: number =0; // Déclare une variable pour stocker l'ID de l'entreprise
   isUserInCompany: boolean = false; // Variable pour savoir si l'utilisateur appartient à une entreprise
 
-  userConnecte: number = 6;
+  userConnecte: number = 0;
   rating: Rating | null = null;
 
   selectedFile: File | null = null;
@@ -107,8 +107,10 @@ export class ActivityTimelineComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadPosts();
-    this.fetchUserDetails();
     this.userType = localStorage.getItem('userRole');
+
+    this.userConnecte = Number(localStorage.getItem('userClasse'));
+
   // Appel pour vérifier si l'utilisateur appartient à une entreprise
   this.companyService.isUserInCompany(this.userConnecte).subscribe(
     (isInCompany: boolean) => {
