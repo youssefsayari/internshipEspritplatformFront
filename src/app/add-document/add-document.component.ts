@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { DocumentService } from '../services/document.service';
+import { DocumentService } from '../Services/document.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { TypeDocument } from '../models/TypeDocument'; // Import the enum
 import { Router } from '@angular/router'; // ✅ Import Router

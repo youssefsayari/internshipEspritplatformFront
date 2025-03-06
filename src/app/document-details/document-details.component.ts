@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DocumentService } from '../services/document.service';
+import { DocumentService } from '../Services/document.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 
