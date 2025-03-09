@@ -7,7 +7,7 @@ import { Defense } from '../models/defense';
   providedIn: 'root'
 })
 export class DefenseService {
-  private baseUrl = 'http://localhost:8090/innoxpert/defense';
+  private baseUrl = 'http://localhost:8089/innoxpert/defense';
 
   constructor(private http: HttpClient) {}
 
