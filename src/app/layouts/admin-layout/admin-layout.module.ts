@@ -7,7 +7,6 @@ import { DashboardComponent } from '../../components/dashboard/dashboard.compone
 import { UserProfileComponent } from '../../components/user-profile/user-profile.component';
 import { TableListComponent } from '../../components/table-list/table-list.component';
 import { TypographyComponent } from '../../components/typography/typography.component';
-import { IconsComponent } from '../../components/icons/icons.component';
 import { MapsComponent } from '../../components/maps/maps.component';
 import { NotificationsComponent } from '../../components/notifications/notifications.component';
 import { ChartsModule } from 'ng2-charts';
@@ -57,7 +56,6 @@ import { ImageComponent } from '../../image/image.component';
     TableListComponent,
     UpgradeComponent,
     TypographyComponent,
-    IconsComponent,
     MapsComponent,
     NotificationsComponent,
     InternshipComponent,

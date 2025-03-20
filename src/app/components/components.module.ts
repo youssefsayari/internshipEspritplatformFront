@@ -36,7 +36,7 @@ import { DialogRemarkComponent } from './dialog-remark/dialog-remark.component';
 import { ActivityTimelineComponent } from './activity-timeline/activity-timeline.component';
 import { MyContactsComponent } from './my-contacts/my-contacts.component';
 import { ProfileCardComponent } from './profile-card/profile-card.component';
-import { IconsComponent } from '../icons/icons.component'; // Vérifie le chemin exact
+import { IconsComponent } from './icons/icons.component'; // Vérifie le chemin exact
 import { QuizListComponent } from './quiz-list/quiz-list.component';
 
 
