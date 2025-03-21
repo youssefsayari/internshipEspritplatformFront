@@ -12,10 +12,10 @@ import { UserService } from '../../Services/user.service';
   styleUrls: ['./add-meeting.component.css']
 })
 export class AddMeetingComponent implements OnInit {
-  meetingForm: FormGroup;
+  meetingForm!: FormGroup;
   students: User[] = [];
   typeMeetings = Object.keys(TypeMeeting).filter(key => isNaN(Number(key))) as Array<TypeMeeting>;
-  tutorId!: number; // Ensure tutorId is always defined
+  tutorId: number | null = null; // Start as null
 
   @Output() close = new EventEmitter<void>();
 
@@ -39,14 +39,12 @@ export class AddMeetingComponent implements OnInit {
     if (token) {
       this.userService.decodeTokenRole(token).subscribe({
         next: (userDetails) => {
-          if (userDetails.role || userDetails.classe) {
-            localStorage.setItem('userRole', userDetails.role);
-            localStorage.setItem('userClasse', userDetails.classe);
+          if (userDetails.id) {
             this.tutorId = userDetails.id;
-            console.log("The tutor is", this.tutorId);
+            console.log("Tutor ID set to:", this.tutorId);
 
-            // Call loadStudents AFTER tutorId is set
-            this.loadStudents(this.tutorId);
+            // Load students AFTER tutorId is set
+            this.loadStudents();
           }
         },
         error: (err) => {
@@ -56,13 +54,13 @@ export class AddMeetingComponent implements OnInit {
     }
   }
 
-  loadStudents(tutorId: number) {
-    if (!tutorId) {
+  loadStudents() {
+    if (this.tutorId === null) {
       console.error("Tutor ID is undefined. Cannot fetch students.");
       return;
     }
 
-    this.meetingService.getStudentsByTutorId(tutorId).subscribe({
+    this.meetingService.getStudentsByTutorId(this.tutorId).subscribe({
       next: (students) => {
         this.students = students;
       },
@@ -72,17 +70,32 @@ export class AddMeetingComponent implements OnInit {
 
   notBeforeToday(): (control: AbstractControl) => ValidationErrors | null {
     return (control: AbstractControl): ValidationErrors | null => {
+      if (!control.value) return null;
+
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       const selectedDate = new Date(control.value);
-      return selectedDate <= today ? { 'notBeforeToday': true } : null;
+
+      return selectedDate < today ? { 'notBeforeToday': true } : null;
     };
   }
 
   onSubmit() {
+    if (!this.tutorId) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Tutor ID is not available. Please try again later.',
+      });
+      return;
+    }
+
     if (this.meetingForm.valid) {
-      const organiserId = this.tutorId; // Use tutorId as the organiser
+      const organiserId = this.tutorId;
       const participantId = this.meetingForm.get('studentId')?.value;
+
+      console.log("The organiser is", organiserId);
+      console.log("The participant is", participantId);
 
       if (!participantId) {
         Swal.fire({
@@ -106,7 +119,7 @@ export class AddMeetingComponent implements OnInit {
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: 'Failed to add meeting With that Type!',
+            text: 'Failed to add meeting. Please check your input!',
             footer: error.message
           });
         }
