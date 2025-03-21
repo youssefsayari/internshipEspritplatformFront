@@ -21,6 +21,7 @@ import {UserService} from '../../Services/user.service';
 
 
 
+
 interface CommentUI {
   id?: number;
   user: string;
@@ -84,7 +85,7 @@ export class ActivityTimelineComponent implements OnInit {
   companyId: number =0; // Déclare une variable pour stocker l'ID de l'entreprise
   isUserInCompany: boolean = false; // Variable pour savoir si l'utilisateur appartient à une entreprise
 
-  userConnecte: number = 0;
+
   rating: Rating | null = null;
 
   selectedFile: File | null = null;
@@ -100,53 +101,96 @@ export class ActivityTimelineComponent implements OnInit {
 
 
   userType: string= '';
-
+  userConnecte: number= null;
 
 
   constructor(private postService: PostService,private internshipService: InternshipService   ,private commentService: CommentService, private userService: UserService ,private companyService: CompanyService ,private ratingService: RatingService,private cdr: ChangeDetectorRef,private toastr: ToastrService   ) {}
 
   ngOnInit(): void {
-    this.loadPosts();
-    this.userType = localStorage.getItem('userRole');
-
-    this.userConnecte = Number(localStorage.getItem('userClasse'));
-
-  // Appel pour vérifier si l'utilisateur appartient à une entreprise
-  this.companyService.isUserInCompany(this.userConnecte).subscribe(
-    (isInCompany: boolean) => {
-      this.isUserInCompany = isInCompany; // Met à jour la variable isUserInCompany
-      if (isInCompany) {
-        // Si l'utilisateur appartient à une entreprise, récupère l'ID de l'entreprise
-        this.companyService.getCompanyIdByUserId(this.userConnecte).subscribe(
-          (companyId: number) => {
-            this.companyId = companyId;
-          },
-          error => {
-            console.error('Erreur lors de la récupération de l\'ID de l\'entreprise :', error);
-          }
-        );
-      } else {
-        console.log("L'utilisateur n\'appartient à aucune entreprise.");
-      }
-    },
-    error => {
-      console.error('Erreur lors de la vérification de l\'appartenance à une entreprise :', error);
-    }
-  );
-
-
-
-
-
-
+    this.fetchUserDetails().then(() => {
+        console.error('userConnecte après récupération', this.userConnecte);
+        this.checkUserCompany();
+        this.loadPosts();
+        
+    });
 
     // Ajout d'une animation pour afficher les timelines progressivement
     setTimeout(() => {
-      document.querySelectorAll('.timeline-card').forEach(card => {
-        card.classList.add('show');
-      });
+        document.querySelectorAll('.timeline-card').forEach(card => {
+            card.classList.add('show');
+        });
     }, 300);
-  }
+}
+
+  
+fetchUserDetails(): Promise<void> {
+  return new Promise((resolve, reject) => {
+      const token = localStorage.getItem('Token');
+      if (!token) return reject('Token non trouvé');
+
+      this.userService.decodeTokenRole(token).subscribe({
+          next: (userDetails) => {
+              localStorage.setItem('userRole', userDetails.role);
+              localStorage.setItem('userClasse', userDetails.classe);
+              
+              this.userType = userDetails.role;
+              this.userConnecte = userDetails.id;
+
+              console.error('userDetailsId', userDetails.id);
+              console.error('userDetailsRole', userDetails.role);
+              console.error('userType', this.userType);
+              console.error('userConnecte', this.userConnecte);
+              
+              resolve();
+          },
+          error: (err) => {
+              Swal.fire({
+                  icon: 'error',
+                  title: '⚠️ Error',
+                  text: 'Failed to fetch user details. Please log in again.',
+                  width: '50%',
+                  customClass: {
+                      popup: 'swal-custom-popup',
+                      confirmButton: 'swal-custom-button'
+                  }
+              });
+              reject(err);
+          }
+      });
+  });
+}
+
+
+  checkUserCompany(): void {
+    if (!this.userConnecte) {
+        console.error('userConnecte est null, impossible de vérifier l\'entreprise');
+        return;
+    }
+
+    this.companyService.isUserInCompany(this.userConnecte).subscribe(
+        (isInCompany: boolean) => {
+            this.isUserInCompany = isInCompany;
+            if (isInCompany) {
+                this.companyService.getCompanyIdByUserId(this.userConnecte).subscribe(
+                    (companyId: number) => {
+                        this.companyId = companyId;
+                    },
+                    error => {
+                        console.error('Erreur lors de la récupération de l\'ID de l\'entreprise :', error);
+                    }
+                );
+            } else {
+                console.log("L'utilisateur n'appartient à aucune entreprise.");
+            }
+        },
+        error => {
+            console.error('Erreur lors de la vérification de l\'appartenance à une entreprise :', error);
+        }
+    );
+}
+
+
+
 
 
 
@@ -195,30 +239,8 @@ export class ActivityTimelineComponent implements OnInit {
       }
     );
   }
-  fetchUserDetails() {
-    const token = localStorage.getItem('Token');
-    if (!token) return;
 
-    this.userService.decodeTokenRole(token).subscribe({
-      next: (userDetails) => {
-        localStorage.setItem('userRole', userDetails.role);
-        localStorage.setItem('userClasse', userDetails.classe);
-        this.userConnecte = userDetails.id;
-      },
-      error: () => {
-        Swal.fire({
-          icon: 'error',
-          title: '⚠️ Error',
-          text: 'Failed to fetch user details. Please log in again.',
-          width: '50%',
-          customClass: {
-            popup: 'swal-custom-popup',
-            confirmButton: 'swal-custom-button'
-          }
-        });
-      }
-    });
-  }
+
   // Récupérer et filtrer les posts dans une seule méthode
 getPostsAndFilterByCompany(companyId: number) {
   this.postService.getPostsByCompany(companyId).subscribe(
@@ -440,60 +462,6 @@ getTimeRemaining(expiryDateTime: string): string {
   }
 }
 
-addInternship(postId: number): void {
-    const token = localStorage.getItem('Token');
-    this.userService.decodeTokenRole(token).subscribe({
-      next: (userDetails) => {
-        if (!userDetails.id) return;
-
-        const internshipAddRequest = {
-          idUser: userDetails.id,
-          idPost: postId
-        };
-
-        this.internshipService.addInternship(internshipAddRequest).subscribe({
-          next: () => {
-            Swal.fire({
-              icon: 'success',
-              title: 'Succès !',
-              text: 'Votre demande de stage a été soumise avec succès.',
-              confirmButtonColor: '#3085d6'
-            });
-          },
-          error: (err) => {
-            console.error("Erreur lors de la soumission du stage :", err);
-
-            const errorMessage =
-              err.error && typeof err.error === 'string'
-                ? err.error
-                : "Une erreur inattendue s'est produite.";
-
-            Swal.fire({
-              icon: 'error',
-              title: 'Erreur',
-              text: errorMessage,
-              confirmButtonColor: '#d33'
-            });
-          }
-        });
-      },
-      error: (err) => {
-        console.error('Error fetching user details:', err);
-        Swal.fire({
-          icon: 'error',
-          title: 'Erreur',
-          text: "Impossible de récupérer les informations de l'utilisateur.",
-          confirmButtonColor: '#d33'
-        });
-      }
-    });
-  }
-
-
-
-
-
-
   // Clic sur l'image ou le nom de l'utilisateur
   onProfileClick(timeline: Timeline) {
     this.profileSelected.emit({
@@ -506,9 +474,6 @@ addInternship(postId: number): void {
   isImage(content: string): boolean {
     return /\.(jpg|jpeg|png|gif)$/i.test(content);
   }
-
-
-
 
 
   addComment(timeline: Timeline): void {
@@ -877,9 +842,55 @@ addInternship(postId: number): void {
       }
     );
   }
+/*---------------------5edmet ghassen-----------------------*/ 
+  addInternship(postId: number): void {
+    const token = localStorage.getItem('Token');
+    this.userService.decodeTokenRole(token).subscribe({
+      next: (userDetails) => {
+        if (!userDetails.id) return;
 
+        const internshipAddRequest = {
+          idUser: userDetails.id,
+          idPost: postId
+        };
 
+        this.internshipService.addInternship(internshipAddRequest).subscribe({
+          next: () => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Succès !',
+              text: 'Votre demande de stage a été soumise avec succès.',
+              confirmButtonColor: '#3085d6'
+            });
+          },
+          error: (err) => {
+            console.error("Erreur lors de la soumission du stage :", err);
 
+            const errorMessage =
+              err.error && typeof err.error === 'string'
+                ? err.error
+                : "Une erreur inattendue s'est produite.";
+
+            Swal.fire({
+              icon: 'error',
+              title: 'Erreur',
+              text: errorMessage,
+              confirmButtonColor: '#d33'
+            });
+          }
+        });
+      },
+      error: (err) => {
+        console.error('Error fetching user details:', err);
+        Swal.fire({
+          icon: 'error',
+          title: 'Erreur',
+          text: "Impossible de récupérer les informations de l'utilisateur.",
+          confirmButtonColor: '#d33'
+        });
+      }
+    });
+  }
 
 
 

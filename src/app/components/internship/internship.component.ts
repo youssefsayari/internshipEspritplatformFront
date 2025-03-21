@@ -39,7 +39,7 @@ export class InternshipComponent implements OnInit {
   ngOnInit() {
     console.log(document.querySelector('.main-panel'));
 
-
+/*ya sayari ija hezz*/
     const userRole = localStorage.getItem('userRole');
     const userClasse = localStorage.getItem('userClasse');
     const token = localStorage.getItem('Token');
@@ -49,6 +49,7 @@ export class InternshipComponent implements OnInit {
       this.router.navigate(['/login']);
       return;
     }
+    /*end ya sayari ija hezz*/
     if (userRole === 'Student') {
       if (userClasse && ['1', '2', '3', '4'].includes(userClasse.charAt(0))) {
         this.isSummerInternship = true;
