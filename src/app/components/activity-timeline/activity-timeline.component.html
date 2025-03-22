@@ -128,7 +128,8 @@
 
 
                               
-<div *ngFor="let timeline of mytimelines; trackBy: trackByFn" class="timeline-card card p-3 mb-3 shadow-sm rounded"        [id]="'post-' + timeline.id">
+<div *ngFor="let timeline of mytimelines; trackBy: trackByFn" class="timeline-card card p-3 mb-3 shadow-sm rounded"        
+[id]="'post-' + timeline.id">
   
   
   <div class="btn-container" *ngIf="timeline.ownerId === companyId || userType === 'Admin'">
@@ -154,7 +155,9 @@
          width="50" height="50"
          alt="user" 
          class="rounded-circle me-3 border shadow-sm" 
-         (click)="onProfileClick(timeline)" />
+         (click)="onProfileClick(timeline)" 
+        
+         />
 
     <div class="w-100">
       <!-- Informations utilisateur -->

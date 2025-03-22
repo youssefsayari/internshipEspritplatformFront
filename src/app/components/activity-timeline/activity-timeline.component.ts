@@ -62,7 +62,6 @@ interface Timeline {
   styleUrls: ['./activity-timeline.component.css']
 })
 export class ActivityTimelineComponent implements OnInit {
-
   @Output() profileSelected = new EventEmitter<{ image: string; from: string }>();
   mytimelines: Timeline[] = [];
 

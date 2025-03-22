@@ -1,2 +1,30 @@
+/* Style pour le conteneur sticky du profile-card */
+.sticky-profile-card {
+  position: sticky;
+  top: 20px; /* Ajustez cette valeur pour contrôler la distance par rapport au haut de la page */
+  z-index: 1000; /* Assurez-vous que le profile-card est au-dessus des autres éléments */
+  transition: opacity 0.4s ease, transform 0.4s ease; /* Animation fluide */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Ombre portée moderne */
+}
 
-  
+/* Animation pour le profile-card */
+.sticky-profile-card.ng-enter, .sticky-profile-card.ng-leave {
+  opacity: 0; /* Fade-in et fade-out */
+  transform: translateX(-20px); /* Décalage horizontal */
+}
+
+.sticky-profile-card.ng-enter-active, .sticky-profile-card.ng-leave-active {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Transition fluide pour les colonnes */
+.col-lg-6, .col-lg-9 {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); /* Animation fluide avec easing */
+}
+
+/* Effet de zoom et ombre portée lors du changement de taille */
+.col-lg-6:hover, .col-lg-9:hover {
+  transform: scale(1.02); /* Légère augmentation de la taille au survol */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Ombre portée moderne */
+}

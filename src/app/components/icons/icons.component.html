@@ -5,29 +5,30 @@
       <div class="card">
         <div class="card-header">
           <h5 class="title">Discover the Latest Internship Offers</h5>
-          
-            <p class="category">
-              Offered by Our Partner Companies.
-            </p>
-
+          <p class="category">Offered by Our Partner Companies.</p>
         </div>
         <div class="card-body all-icons">
           <div class="row">
-
-            <div class="col-lg-4">
-              <app-profile-card   *ngIf="showProfileCard"  [image]="image" [from]="from" ></app-profile-card>
-              <app-my-contacts></app-my-contacts>
+            <!-- Colonne pour le profile-card (gauche) -->
+            <div class="col-lg-3" *ngIf="showProfileCard" @fadeInOut>
+              <div class="sticky-profile-card">
+                <app-profile-card
+                  [image]="image"
+                  [from]="from"
+                  (closeCard)="onCloseCard()"
+                ></app-profile-card>
+              </div>
             </div>
 
-
-        
-            
-             <div class="col-lg-8">
-
-
+            <!-- Colonne pour la timeline (centre) -->
+            <div [class.col-lg-9]="!showProfileCard" [class.col-lg-6]="showProfileCard">
               <app-activity-timeline (profileSelected)="onProfileSelected($event)"></app-activity-timeline>
             </div>
 
+            <!-- Colonne pour app-my-contacts (droite) -->
+            <div class="col-lg-3">
+              <app-my-contacts></app-my-contacts>
+            </div>
           </div>
         </div>
       </div>
