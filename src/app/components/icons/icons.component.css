@@ -28,3 +28,28 @@
   transform: scale(1.02); /* Légère augmentation de la taille au survol */
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Ombre portée moderne */
 }
+.greeting {
+  font-family: 'Playfair Display', serif; /* Police moderne */
+  font-size: 2rem; /* Taille de police plus grande */
+  font-weight: 700; /* Gras */
+  background: linear-gradient(90deg, #f11a1a, #ed5f5f); /* Dégradé moderne */
+  -webkit-background-clip: text; /* Applique le dégradé au texte */
+  background-clip: text; /* Standard property for compatibility */
+  -webkit-text-fill-color: transparent; /* Rend le texte transparent */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* Ombre portée */
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* Espace entre l'icône et le texte */
+  animation: fadeIn 1s ease-in-out; /* Animation de fondu */
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
