@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CompanyService } from '../../Services/CompanyService';
 import { Company } from '../../Model/Company';
 import { TypeSector } from '../../Model/type-sector.enum';
 import { Router } from "@angular/router";
+import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-add-company',
@@ -16,6 +18,11 @@ export class AddCompanyComponent implements OnInit {
   loading = false;
   selectedFile: File | null = null;
   currentYear: number = new Date().getFullYear();
+  imagePreview: string | ArrayBuffer | null = null;
+  selectedFileName: string | null = null;
+  @ViewChild('fileInput') fileInput: ElementRef;
+
+
 
   constructor(
     private fb: FormBuilder,
@@ -50,9 +57,34 @@ export class AddCompanyComponent implements OnInit {
   }
 
   onFileChange(event: any): void {
-    this.selectedFile = event.target.files[0];
-    this.companyForm.patchValue({ image: this.selectedFile });
-    this.companyForm.get('image')?.updateValueAndValidity();
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
+      this.selectedFileName = file.name;
+      this.companyForm.patchValue({ image: file });
+      this.companyForm.get('image').markAsTouched();
+      
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreview = reader.result;
+      };
+      reader.readAsDataURL(file);
+    } else {
+      this.clearImage();
+    }
+  }
+
+  clearImage(): void {
+    this.selectedFile = null;
+    this.imagePreview = null;
+    this.selectedFileName = null;
+    this.companyForm.patchValue({ image: null });
+    this.companyForm.get('image').markAsTouched();
+    
+    // Réinitialiser l'input file
+    if (this.fileInput) {
+      this.fileInput.nativeElement.value = '';
+    }
   }
 
   onSubmit(): void {
@@ -65,16 +97,47 @@ export class AddCompanyComponent implements OnInit {
           this.loading = false;
           this.resetForm();
           
-          // Redirect to /login after successful addition
-          this.router.navigate(['/login']);
+          // Show success message
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: 'Company added successfully!',
+            timer: 2000,
+            showConfirmButton: false
+          }).then(() => {
+            this.router.navigate(['/login']);
+          });
         },
         (error) => {
           console.error('Error adding company:', error);
           this.loading = false;
+          
+          // Check if error is about existing email
+          if (error.error && error.error.message && error.error.message.toLowerCase().includes('email')) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'This email is already registered. Please use a different email address.',
+              confirmButtonText: 'OK'
+            });
+          } else {
+            // Generic error message for other errors
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'This email is already registered. Please use a different email address.',
+              confirmButtonText: 'OK'
+            });
+          }
         }
       );
     } else {
-      console.error('Form is invalid or no file selected');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Incomplete Form',
+        text: 'Please fill all required fields and select a logo.',
+        confirmButtonText: 'OK'
+      });
     }
   }
   resetForm(): void {
