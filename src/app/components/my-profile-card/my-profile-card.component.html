@@ -1,0 +1,85 @@
+<div class="cardWithShadow little-profile" *ngIf="!isLoading; else loading">
+  <!-- Utiliser formattedCompany au lieu de company -->
+  <img [src]="formattedCompany?.image?.imageUrl || 'assets/images/backgrounds/profile-bg.jpg'" 
+       class="profile-bg-height" alt="Company background" />
+  
+  <div class="card-content p-24">
+    <div class="pro-img">
+      <img [src]="formattedCompany?.image?.imageUrl || 'assets/images/profile/user-1.jpg'" 
+           width="128" [alt]="formattedCompany?.name" class="rounded-circle" />
+    </div>
+    
+    <h3 class="m-b-0 f-s-20 f-w-500 m-t-30">{{formattedCompany?.name || 'Company Name'}}</h3>
+    <!-- Utiliser sectorDisplay au lieu d'appeler la fonction -->
+    <h6 class="f-s-14 f-w-400 m-t-4">{{formattedCompany?.abbreviation}}</h6>
+    <h6 class="f-s-14 f-w-400 m-t-4">{{formattedCompany?.sectorDisplay || 'Business Sector'}}</h6>
+    
+    <div class="justify-content-center m-y-10 p-24">
+      <button class="follow-button" (click)="viewCompanyProfile()">
+        <i class="fas fa-eye"></i> View Profile
+      </button>
+    </div>
+    
+    <div class="row">
+      <div class="col-4">
+        <h3 class="m-b-4 f-s-20 f-w-500">{{formattedCompany?.followers?.length || 0}}</h3>
+        <span class="f-s-14">Followers</span>
+      </div>
+      <div class="col-4">
+        <!-- Afficher la date déjà formatée -->
+        <h3 class="m-b-4 f-s-20 f-w-500">{{formattedCompany?.foundingYear || 'N/A'}}</h3>
+        <span class="f-s-14">Founded</span>
+      </div>
+      <div class="col-4">
+        <h3 class="m-b-4 f-s-20 f-w-500">{{formattedCompany?.labelDate || 'N/A'}}</h3>
+        <span class="f-s-14">Label Date</span>
+    </div>
+      
+    </div>
+    
+    <div class="company-details m-t-20">
+      <p class="f-s-14">
+        <i class="fas fa-envelope"></i> 
+        <a href="mailto:{{formattedCompany?.email}}" *ngIf="formattedCompany?.email; else noEmail">
+          {{formattedCompany?.email}}
+        </a>
+        <ng-template #noEmail>Email not specified</ng-template>
+      </p>
+      <p class="f-s-14">
+        <i class="fas fa-phone-alt"></i> 
+        {{formattedCompany?.phone || 'Phone not specified'}}
+      </p>
+      <p class="f-s-14">
+        <i class="fas fa-map-marker-alt"></i> 
+        {{formattedCompany?.address || 'Address not specified'}}
+      </p>
+      <p class="f-s-14">
+        <i class="fas fa-globe"></i> 
+        <a [href]="formattedCompany?.website" target="_blank" *ngIf="formattedCompany?.website; else noWebsite">
+          {{formattedCompany?.website}}
+        </a>
+        <ng-template #noWebsite>Website not available</ng-template>
+      </p>
+      <p class="f-s-14">
+        <i class="fas fa-user-tie"></i> 
+        Founded by {{formattedCompany?.founders || 'unknown founders'}}
+      </p>
+    </div>
+  </div>
+</div>
+
+<ng-template #loading>
+  <div class="cardWithShadow little-profile">
+    <div class="card-content p-24">
+      <div class="loading-spinner">
+        <i class="fas fa-spinner fa-spin fa-2x"></i>
+        <p>Loading company profile...</p>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<div *ngIf="error" class="error-message p-16">
+  <i class="fas fa-exclamation-circle"></i> {{error}}
+  <button class="retry-btn" (click)="loadCompanyData()">Retry</button>
+</div>

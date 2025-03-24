@@ -40,6 +40,7 @@ import { IconsComponent } from './icons/icons.component'; // Vérifie le chemin 
 import { QuizListComponent } from './quiz-list/quiz-list.component';
 import { AddCompanyComponent } from './add-company/add-company.component';
 import { ImageComponent } from './image/image.component';
+import { MyProfileCardComponent } from './my-profile-card/my-profile-card.component';
 
 
 @NgModule({
@@ -93,6 +94,7 @@ import { ImageComponent } from './image/image.component';
     QuizListComponent,
     AddCompanyComponent,
     ImageComponent,
+    MyProfileCardComponent,
 
    ],
   exports: [
