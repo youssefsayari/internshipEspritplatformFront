@@ -38,6 +38,8 @@ import { MyContactsComponent } from './my-contacts/my-contacts.component';
 import { ProfileCardComponent } from './profile-card/profile-card.component';
 import { IconsComponent } from './icons/icons.component'; // Vérifie le chemin exact
 import { QuizListComponent } from './quiz-list/quiz-list.component';
+import { AddCompanyComponent } from './add-company/add-company.component';
+import { ImageComponent } from './image/image.component';
 
 
 @NgModule({
@@ -89,6 +91,9 @@ import { QuizListComponent } from './quiz-list/quiz-list.component';
     ProfileCardComponent,
     IconsComponent,
     QuizListComponent,
+    AddCompanyComponent,
+    ImageComponent,
+
    ],
   exports: [
     FooterComponent,

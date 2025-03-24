@@ -1,0 +1,112 @@
+<div class="full-page-container">
+  <img src="./assets/img/loogo.png" class="background-image">
+
+  <div class="company-container">
+    <form [formGroup]="companyForm" (ngSubmit)="onSubmit()">
+      <!-- Company Name and Label Date on the same line -->
+      <div class="input-group company-name">
+        <label>Company Name</label>
+        <input type="text" formControlName="name" placeholder="Enter company name" required>
+        <div *ngIf="companyForm.get('name')?.invalid && companyForm.get('name')?.touched" class="error-message">
+          The name must be at least 3 characters long and not contain special characters
+        </div>
+      </div>
+      <div class="input-group">
+        <label>Founding Year</label>
+        <input type="date" formControlName="foundingYear" required>
+        <div *ngIf="companyForm.get('foundingYear')?.invalid && companyForm.get('foundingYear')?.touched" class="error-message">
+          The founding year must be between 1900 and {{ currentYear }}
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label>Abbreviation</label>
+        <input type="text" formControlName="abbreviation" placeholder="Enter abbreviation" required>
+        <div *ngIf="companyForm.get('abbreviation')?.invalid && companyForm.get('abbreviation')?.touched" class="error-message">
+          Abbreviation cannot be empty
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label>Address</label>
+        <input type="text" formControlName="address" placeholder="Enter address" required>
+        <div *ngIf="companyForm.get('address')?.invalid && companyForm.get('address')?.touched" class="error-message">
+          The address must be at least 5 characters long. Example: 123 Main St, Springfield
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label>Sector</label>
+        <select formControlName="sector" required>
+          <option *ngFor="let sector of sectors" [value]="sector">{{ sector }}</option>
+        </select>
+        <div *ngIf="companyForm.get('sector')?.invalid && companyForm.get('sector')?.touched" class="error-message">
+          Please select a sector
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label>Email</label>
+        <input type="email" formControlName="email" placeholder="Enter email" required>
+        <div *ngIf="companyForm.get('email')?.invalid && companyForm.get('email')?.touched" class="error-message">
+          Please enter a valid email address. Example: example(AT)domain.com
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label>Phone</label>
+        <input type="number" formControlName="phone" placeholder="Enter phone number" required>
+        <div *ngIf="companyForm.get('phone')?.invalid && companyForm.get('phone')?.touched" class="error-message">
+          Phone number must be 8-15 digits long. Example: 1234567890
+        </div>
+      </div>
+
+      <div class="input-group label-date">
+        <label>Label Date</label>
+        <input type="date" formControlName="labelDate" required>
+        <div *ngIf="companyForm.get('labelDate')?.invalid && companyForm.get('labelDate')?.touched" class="error-message">
+          Label date must be today or before and after the founding year
+        </div>
+      </div>
+
+      <div class="input-group website">
+        <label>Website</label>
+        <input type="url" formControlName="website" placeholder="Enter website URL" required>
+        <div *ngIf="companyForm.get('website')?.invalid && companyForm.get('website')?.touched" class="error-message">
+          Please enter a valid website URL. Example: http://www.example.com
+        </div>
+      </div>
+
+      <div class="input-group founders">
+        <label>Founders</label>
+        <input type="text" formControlName="founders" placeholder="Enter founders" required>
+        <div *ngIf="companyForm.get('founders')?.invalid && companyForm.get('founders')?.touched" class="error-message">
+          Founders field cannot be empty
+        </div>
+      </div>
+
+      <div class="input-group full-width">
+        <label>Secret Key</label>
+        <input type="password" formControlName="secretKey" placeholder="Enter secret key" required>
+        <div *ngIf="companyForm.get('secretKey')?.invalid && companyForm.get('secretKey')?.touched" class="error-message">
+          Secret key must be at least 8 characters long, contain at least one uppercase letter, one special character, and one number
+        </div>
+      </div>
+
+      <div class="input-group full-width">
+        <label>Company Logo</label>
+        <input type="file" (change)="onFileChange($event)" accept="image/*" class="form-control" required>
+        <div *ngIf="companyForm.get('image')?.invalid && companyForm.get('image')?.touched" class="error-message">
+          Company logo cannot be empty
+        </div>
+      </div>
+
+      <div class="button-group">
+        <button class="add-company-btn" type="submit" [disabled]="companyForm.invalid || loading">
+          {{ loading ? 'Saving...' : 'Add Company' }}
+        </button>
+        <button class="cancel-btn" type="button" (click)="onCancel()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>

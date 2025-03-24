@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Company } from '../Model/Company'; // Assure-toi d'avoir le modèle Comment
 
@@ -19,4 +19,19 @@ export class CompanyService {
  isUserInCompany(userId: number): Observable<boolean> {
     return this.http.get<boolean>(`${this.baseUrl}/IsCompany/company/${userId}`);
   }
+  addCompanyAndAssignUser(company: Company, file: File): Observable<Company> {
+    const formData = new FormData();
+    formData.append('company', new Blob([JSON.stringify(company)], { type: 'application/json' })); // Envoyer la Company
+    formData.append('file', file); // Envoyer le fichier image
+  
+    // Ajouter les en-têtes nécessaires
+    const headers = new HttpHeaders();
+    headers.append('Accept', 'application/json');
+  
+    return this.http.post<Company>(`${this.baseUrl}/add`, formData, { headers });
+  }
+
+
+
+
 }

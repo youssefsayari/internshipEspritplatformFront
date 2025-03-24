@@ -1,5 +1,6 @@
 import { Post } from "./Post";
 import { User } from "./User";
+import { Image } from "./image";
 
 export interface Company {
   id: number;
@@ -9,12 +10,14 @@ export interface Company {
   sector: "TECHNOLOGY" | "FINANCE" | "HEALTHCARE" | "EDUCATION";
   email: string;
   phone?: number;
-  foundingYear?: string; // ISO Date string
-  labelDate?: string; // ISO Date string
+  foundingYear?: Date; // ISO Date string
+  labelDate?: Date; // ISO Date string
   website?: string;
   founders?: string;
   secretKey: string;
   posts: Post[];
   owner: User;
   followers: User[];
+  image?: Image; // Ajoutez ce champ
+
 }

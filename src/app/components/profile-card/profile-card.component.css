@@ -1,53 +1,69 @@
 /* Style général de la carte */
 .cardWithShadow {
-  position: relative; /* Nécessaire pour positionner le bouton en absolute */
-  border-radius: 8px; /* Bordures arrondies */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre portée légère */
-  background-color: #fff; /* Fond blanc */
-  overflow: hidden; /* Pour gérer les débordements */
-  margin: 20px; /* Espacement autour de la carte */
-  width: 100%; /* Assurez-vous que la carte prend toute la largeur disponible */
+  position: relative;
+  border-radius: 12px; /* Bordures plus arrondies */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15); /* Ombre plus prononcée */
+  background-color: #fff;
+  overflow: hidden;
+  margin: 20px 0;
+  width: 100%;
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transition fluide */
+}
+
+.cardWithShadow:hover {
+  transform: translateY(-5px); /* Légère élévation au survol */
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2); /* Ombre plus intense au survol */
 }
 
 /* Style de l'image de fond */
 .profile-bg-height {
   width: 100%;
-  height: 200px;
-  object-fit: cover; /* Pour que l'image couvre bien l'espace sans déformer */
+  height: 150px;
+  object-fit: cover;
+  filter: brightness(0.9); /* Assombrir légèrement l'image de fond */
+  transition: filter 0.3s ease; /* Transition fluide */
+}
+
+.cardWithShadow:hover .profile-bg-height {
+  filter: brightness(1); /* Éclaircir l'image au survol */
 }
 
 /* Contenu de la carte */
 .card-content {
-  padding: 24px;
+  padding: 20px;
   text-align: center;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 1)); /* Dégradé léger */
 }
 
 /* Style de l'image du profil */
 .pro-img img {
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
-  border: 4px solid #fff; /* Bordure blanche autour de l'image */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombre légère autour de l'image */
+  border: 4px solid #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Ombre plus prononcée */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transition fluide */
+}
+
+.pro-img img:hover {
+  transform: scale(1.1); /* Légère augmentation de la taille au survol */
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3); /* Ombre plus intense au survol */
 }
 
 /* Style des titres */
 .f-s-20 {
-  font-size: 20px;
+  font-size: 20px; /* Taille de police légèrement augmentée */
+  font-weight: 600; /* Police plus épaisse */
+  color: #333; /* Couleur de texte plus foncée */
 }
 
 .f-s-14 {
   font-size: 14px;
-}
-
-.f-w-500 {
-  font-weight: 500;
-}
-
-.f-w-400 {
-  font-weight: 400;
+  color: #666; /* Couleur de texte plus douce */
 }
 
 .m-t-30 {
-  margin-top: 30px;
+  margin-top: 20px;
 }
 
 .m-b-0 {
@@ -60,17 +76,20 @@
 
 /* Style du bouton Follow */
 .follow-button {
-  background-color: #ff0000;
+  background: linear-gradient(45deg, #ff416c, #ff4b2b); /* Dégradé moderne */
   color: #fff;
   border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
+  padding: 10px 20px;
+  border-radius: 25px; /* Bouton plus arrondi */
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  font-size: 14px;
+  font-weight: 500;
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transition fluide */
 }
 
 .follow-button:hover {
-  background-color: #b30000; /* Changement de couleur au survol */
+  transform: translateY(-3px); /* Légère élévation au survol */
+  box-shadow: 0 6px 12px rgba(255, 75, 43, 0.3); /* Ombre colorée au survol */
 }
 
 /* Disposition des colonnes */
@@ -83,6 +102,24 @@
 .col-4 {
   flex: 1;
   text-align: center;
+  padding: 10px;
+  transition: transform 0.3s ease; /* Transition fluide */
+}
+
+.col-4:hover {
+  transform: translateY(-5px); /* Légère élévation au survol */
+}
+
+/* Style des statistiques */
+.col-4 h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+.col-4 span {
+  font-size: 12px;
+  color: #777;
 }
 
 /* Ajout de l'espacement vertical et horizontal */
@@ -92,40 +129,51 @@
 }
 
 .p-24 {
-  padding: 24px;
+  padding: 20px;
 }
-
-  /* Ajoutez ce style pour rendre le profile-card sticky */
-.sticky-profile-card {
-  position: sticky;
-  top: 20px; /* Ajustez cette valeur pour contrôler la distance par rapport au haut de la page */
-  z-index: 1000; /* Assurez-vous que le profile-card est au-dessus des autres éléments */
-}
-
 
 /* Style pour le bouton de fermeture */
 .close-button {
   position: absolute;
-  top: 15px; /* Ajustez cette valeur pour contrôler la distance par rapport au haut */
-  right: 15px; /* Ajustez cette valeur pour contrôler la distance par rapport à la droite */
-  background-color: rgba(255, 255, 255, 0.8); /* Fond semi-transparent */
-  border: none;
-  border-radius: 50%; /* Bouton rond */
-  width: 40px; /* Largeur du bouton */
-  height: 40px; /* Hauteur du bouton */
+  top: 15px;
+  right: 15px;
+  background-color: rgba(255, 255, 255, 0.95); /* Fond blanc presque opaque */
+  border: 2px solid rgba(0, 0, 0, 0.1); /* Bordure subtile */
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
+  font-size: 18px;
   color: #333; /* Couleur de l'icône */
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-  z-index: 1000; /* Assurez-vous que le bouton est au-dessus des autres éléments */
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease; /* Transitions fluides */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Ombre plus prononcée */
+  z-index: 1501; /* S'assurer qu'il est au-dessus des autres éléments */
 }
 
 /* Effet hover pour le bouton de fermeture */
 .close-button:hover {
-  background-color: rgba(255, 0, 0, 0.8); /* Fond rouge semi-transparent au survol */
+  background-color: rgba(255, 0, 0, 0.95); /* Fond rouge presque opaque au survol */
   color: #fff; /* Couleur de l'icône au survol */
   transform: scale(1.1); /* Légère augmentation de la taille au survol */
+  box-shadow: 0 6px 12px rgba(255, 0, 0, 0.3); /* Ombre rouge au survol */
+  border-color: rgba(255, 255, 255, 0.5); /* Bordure plus claire au survol */
+}
+
+/* Style de l'icône */
+.close-button i {
+  transition: transform 0.3s ease; /* Transition fluide pour l'icône */
+}
+
+.close-button:hover i {
+  transform: rotate(90deg); /* Rotation de l'icône au survol */
+}
+
+/* Style sticky */
+.sticky-profile-card {
+  position: sticky;
+  top: 20px;
+  z-index: 1000;
 }
