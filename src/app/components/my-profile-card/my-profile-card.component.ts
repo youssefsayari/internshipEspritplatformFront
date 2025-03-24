@@ -22,6 +22,9 @@ export class MyProfileCardComponent implements OnInit {
   userConnecte: number;
   isUserInCompany: boolean = false;
   companyId: number = 0;
+  isEditing = false;
+originalCompany: Company;
+updatedCompany: any;
 
 
   constructor( private companyService: CompanyService,private userService: UserService) {}
@@ -130,6 +133,62 @@ getSectorDisplayName(sector: string): string {
     'EDUCATION': 'Education'
   };
   return sectorNames[sector] || sector;
+}
+// Modifiez ou ajoutez ces méthodes
+toggleEditMode(): void {
+  this.isEditing = !this.isEditing;
+  
+  if (this.isEditing) {
+    // Sauvegarder l'original avant modification
+    this.originalCompany = {...this.company};
+    this.updatedCompany = {...this.formattedCompany};
+  } else {
+    // Annuler les modifications
+    this.formatCompanyData(this.originalCompany);
+  }
+}
+
+saveChanges(): void {
+  this.isLoading = true;
+  
+  // Convertir les données formatées vers le modèle Company
+  const companyToUpdate: Company = {
+    ...this.originalCompany,
+    name: this.updatedCompany.name,
+    abbreviation: this.updatedCompany.abbreviation,
+    email: this.updatedCompany.email,
+    phone: this.updatedCompany.phone,
+    address: this.updatedCompany.address,
+    website: this.updatedCompany.website,
+    founders: this.updatedCompany.founders,
+    sector: this.company.sector, // Garder l'original car c'est un select
+    // Les dates doivent être gérées séparément si modifiables
+  };
+
+  this.companyService.updateCompany(this.company.id, companyToUpdate).subscribe({
+    next: (updatedCompany) => {
+      this.company = updatedCompany;
+      this.formatCompanyData(updatedCompany);
+      this.isEditing = false;
+      this.isLoading = false;
+      
+      Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: 'Company profile updated successfully',
+        timer: 2000,
+        showConfirmButton: false
+      });
+    },
+    error: (err) => {
+      this.isLoading = false;
+      Swal.fire({
+        icon: 'error',
+        title: 'Update Failed',
+        text: 'Error updating company profile: ' + err.message
+      });
+    }
+  });
 }
 
 }

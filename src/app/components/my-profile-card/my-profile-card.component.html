@@ -15,9 +15,18 @@
     <h6 class="f-s-14 f-w-400 m-t-4">{{formattedCompany?.sectorDisplay || 'Business Sector'}}</h6>
     
     <div class="justify-content-center m-y-10 p-24">
-      <button class="follow-button" (click)="viewCompanyProfile()">
-        <i class="fas fa-eye"></i> View Profile
+      <button *ngIf="!isEditing" class="follow-button" (click)="toggleEditMode()">
+        <i class="fas fa-edit"></i> Update Profile
       </button>
+      
+      <div *ngIf="isEditing" class="edit-buttons">
+        <button class="save-button" (click)="saveChanges()">
+          <i class="fas fa-save"></i> Save Changes
+        </button>
+        <button class="cancel-button" (click)="toggleEditMode()">
+          <i class="fas fa-times"></i> Cancel
+        </button>
+      </div>
     </div>
     
     <div class="row">
@@ -37,34 +46,38 @@
       
     </div>
     
-    <div class="company-details m-t-20">
-      <p class="f-s-14">
-        <i class="fas fa-envelope"></i> 
-        <a href="mailto:{{formattedCompany?.email}}" *ngIf="formattedCompany?.email; else noEmail">
-          {{formattedCompany?.email}}
-        </a>
-        <ng-template #noEmail>Email not specified</ng-template>
-      </p>
-      <p class="f-s-14">
-        <i class="fas fa-phone-alt"></i> 
-        {{formattedCompany?.phone || 'Phone not specified'}}
-      </p>
-      <p class="f-s-14">
-        <i class="fas fa-map-marker-alt"></i> 
-        {{formattedCompany?.address || 'Address not specified'}}
-      </p>
-      <p class="f-s-14">
-        <i class="fas fa-globe"></i> 
-        <a [href]="formattedCompany?.website" target="_blank" *ngIf="formattedCompany?.website; else noWebsite">
-          {{formattedCompany?.website}}
-        </a>
-        <ng-template #noWebsite>Website not available</ng-template>
-      </p>
-      <p class="f-s-14">
-        <i class="fas fa-user-tie"></i> 
-        Founded by {{formattedCompany?.founders || 'unknown founders'}}
-      </p>
-    </div>
+    <!-- Modifiez les champs pour qu'ils soient éditables en mode édition -->
+<div class="company-details m-t-20">
+  <p class="f-s-14">
+    <i class="fas fa-envelope"></i> 
+    <span *ngIf="!isEditing">{{formattedCompany?.email || 'Email not specified'}}</span>
+    <input *ngIf="isEditing" [(ngModel)]="updatedCompany.email" type="email" class="form-control">
+  </p>
+  
+  <p class="f-s-14">
+    <i class="fas fa-phone-alt"></i> 
+    <span *ngIf="!isEditing">{{formattedCompany?.phone || 'Phone not specified'}}</span>
+    <input *ngIf="isEditing" [(ngModel)]="updatedCompany.phone" type="tel" class="form-control">
+  </p>
+  
+  <p class="f-s-14">
+    <i class="fas fa-map-marker-alt"></i> 
+    <span *ngIf="!isEditing">{{formattedCompany?.address || 'Address not specified'}}</span>
+    <input *ngIf="isEditing" [(ngModel)]="updatedCompany.address" class="form-control">
+  </p>
+  
+  <p class="f-s-14">
+    <i class="fas fa-globe"></i> 
+    <span *ngIf="!isEditing">{{formattedCompany?.website || 'Website not available'}}</span>
+    <input *ngIf="isEditing" [(ngModel)]="updatedCompany.website" type="url" class="form-control">
+  </p>
+  
+  <p class="f-s-14">
+    <i class="fas fa-user-tie"></i> 
+    <span *ngIf="!isEditing">Founded by {{formattedCompany?.founders || 'unknown founders'}}</span>
+    <input *ngIf="isEditing" [(ngModel)]="updatedCompany.founders" class="form-control">
+  </p>
+</div>
   </div>
 </div>
 

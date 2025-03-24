@@ -231,3 +231,43 @@
 .follow-button i {
   margin-right: 8px;
 }
+
+.save-button, .cancel-button {
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s;
+  border: none;
+  margin: 0 5px;
+  
+  i {
+    margin-right: 5px;
+  }
+}
+
+
+
+.save-button {
+  background-color: #4caf50;
+  color: white;
+  
+  &:hover {
+    background-color: #388e3c;
+  }
+}
+
+.cancel-button {
+  background-color: #f44336;
+  color: white;
+  
+  &:hover {
+    background-color: #d32f2f;
+  }
+}
+
+.form-control {
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}

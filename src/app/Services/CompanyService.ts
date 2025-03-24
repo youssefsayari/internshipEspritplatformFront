@@ -40,6 +40,16 @@ export class CompanyService {
         })
       );
     }
+    updateCompany(companyId: number, companyData: Company): Observable<Company> {
+      const url = `${this.baseUrl}/updateCompany/${companyId}`;
+      const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+      
+      return this.http.put<Company>(url, companyData, { headers }).pipe(
+        catchError(error => {
+          throw new Error('Failed to update company: ' + error.message);
+        })
+      );
+    }
 
 
 
