@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Company } from '../Model/Company'; // Assure-toi d'avoir le modèle Comment
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 
 
 @Injectable({
@@ -58,6 +58,27 @@ export class CompanyService {
       })
     );
   }
+// Dans CompanyService
+followCompany(userId: number, companyId: number): Observable<any> {
+  return this.http.put(`${this.baseUrl}/${companyId}/follow/${userId}`, {}, {
+    responseType: 'text' // Accepter les réponses texte
+  }).pipe(
+    map(() => ({ success: true })) // Convertir en objet valide
+  );
+}
+
+unfollowCompany(userId: number, companyId: number): Observable<any> {
+  return this.http.put(`${this.baseUrl}/${companyId}/unfollow/${userId}`, {}, {
+    responseType: 'text' // Accepter les réponses texte
+  }).pipe(
+    map(() => ({ success: true })) // Convertir en objet valide
+  );
+}
+
+// Ajoutez cette méthode pour vérifier si l'utilisateur suit déjà l'entreprise
+isFollowingCompany(userId: number, companyId: number): Observable<boolean> {
+  return this.http.get<boolean>(`${this.baseUrl}/isFollowing/${companyId}/${userId}`);
+}
 
 
 

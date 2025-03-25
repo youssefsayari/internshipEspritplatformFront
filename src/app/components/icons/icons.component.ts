@@ -86,6 +86,7 @@ export class IconsComponent implements OnInit {
 }
   // Méthode pour mettre à jour les informations du profil
   onProfileSelected(profileData: any) {
+    this.userConnecte = profileData.userConnecte;
     this.companyIdSelected = profileData.companyIdSelected;
     this.showProfileCard = true;  // Affiche le profile card
     

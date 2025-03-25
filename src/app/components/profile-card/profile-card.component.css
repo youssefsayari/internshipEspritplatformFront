@@ -165,17 +165,30 @@
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition: all 0.3s ease;
   display: flex;
   align-items: center;
   gap: 8px;
   margin: 0 auto;
+  position: relative;
+
 }
 
 .follow-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
-  background: linear-gradient(135deg, #ff3333, #c62828);
+}
+
+.follow-button.unfollow {
+  background: linear-gradient(135deg, #666666, #333333);
+}
+
+.follow-button.unfollow:hover {
+  box-shadow: 0 5px 15px rgba(102, 102, 102, 0.3);
+}
+.follow-button .spinner-border {
+  position: absolute;
+  right: 10px;
 }
 
 /* Details Section */
