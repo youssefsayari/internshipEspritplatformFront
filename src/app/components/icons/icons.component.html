@@ -14,8 +14,7 @@
             <div class="col-lg-3" *ngIf="showProfileCard" @fadeInOut>
               <div class="sticky-profile-card">
                 <app-profile-card
-                  [image]="image"
-                  [from]="from"
+                  [companyIdSelected]="companyIdSelected"
                   (closeCard)="onCloseCard()"
                 ></app-profile-card>
               </div>

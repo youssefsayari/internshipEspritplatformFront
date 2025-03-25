@@ -50,7 +50,14 @@ export class CompanyService {
         })
       );
     }
-
+  // Nouvelle méthode pour récupérer une entreprise par son ID
+  getCompanyById(companyId: number): Observable<Company> {
+    return this.http.get<Company>(`${this.baseUrl}/getCompanyById/${companyId}`).pipe(
+      catchError(error => {
+        throw new Error('Failed to fetch company by ID: ' + error.message);
+      })
+    );
+  }
 
 
 

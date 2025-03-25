@@ -62,7 +62,7 @@ interface Timeline {
   styleUrls: ['./activity-timeline.component.css']
 })
 export class ActivityTimelineComponent implements OnInit {
-  @Output() profileSelected = new EventEmitter<{ image: string; from: string }>();
+  @Output() profileSelected = new EventEmitter<{ companyIdSelected:number }>();
   mytimelines: Timeline[] = [];
 
   // Utilisateur connecté, statique à 1 pour l'instant
@@ -464,8 +464,7 @@ getTimeRemaining(expiryDateTime: string): string {
   // Clic sur l'image ou le nom de l'utilisateur
   onProfileClick(timeline: Timeline) {
     this.profileSelected.emit({
-      image: timeline.image,
-      from: timeline.from
+     companyIdSelected: timeline.ownerId
     });
   }
 

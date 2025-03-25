@@ -42,8 +42,7 @@ export class IconsComponent implements OnInit {
 
 /*end User Connected Vars*/
   /* Profile Card Vars */
-  image: string | undefined;
-  from: string | undefined;
+  companyIdSelected: number = 0;  // Déclare une variable pour stocker l'ID de l'entreprise
   showProfileCard: boolean = false;  // Nouvelle variable pour contrôler l'affichage du profile card
 
   constructor(private userService: UserService, private router: Router,private companyService: CompanyService) {}
@@ -87,8 +86,7 @@ export class IconsComponent implements OnInit {
 }
   // Méthode pour mettre à jour les informations du profil
   onProfileSelected(profileData: any) {
-    this.image = profileData.image;
-    this.from = profileData.from;
+    this.companyIdSelected = profileData.companyIdSelected;
     this.showProfileCard = true;  // Affiche le profile card
     
   }

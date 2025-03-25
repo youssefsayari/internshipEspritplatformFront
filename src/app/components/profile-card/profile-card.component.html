@@ -1,34 +1,104 @@
-<div class="sticky-profile-card">
-  <div class="cardWithShadow little-profile">
-    <!-- Bouton de fermeture -->
-    <button class="close-button" (click)="closeProfileCard()">
-      <i class="fas fa-times"></i>
-    </button>
+<div class="company-profile-card" *ngIf="companyIdSelected">
+  <div class="card">
+       <!-- Bouton de fermeture -->
+       <button class="close-button" (click)="closeProfileCard()">
+        <i class="fas fa-times"></i>
+      </button>
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-overlay">
+      <div class="spinner"></div>
+      <p>Loading company details...</p>
+    </div>
 
-    <img src="assets/images/backgrounds/profile-bg.jpg" class="profile-bg-height" alt="Photo de fond" />
-    <div class="card-content p-24">
-      <div class="pro-img">
-        <img [src]="image" width="128" alt="user" class="rounded-circle" />
+    <!-- Error State -->
+    <div *ngIf="error" class="error-message">
+      <i class="fas fa-exclamation-circle"></i>
+      {{ error }}
+      <button class="retry-button" (click)="loadCompany()">Retry</button>
+    </div>
+
+    <!-- Content -->
+    <div *ngIf="company && !isLoading && !error" class="card-content">
+      <!-- Cover Image -->
+      <div class="cover-image" *ngIf="company.image?.imageUrl">
+        <img [src]="company.image.imageUrl" alt="Company cover">
       </div>
-      <h3 class="m-b-0 f-s-20 f-w-500 m-t-30">{{ from }}</h3>
-      <h6 class="f-s-14 f-w-400 m-t-4">Web Designer &amp; Developer</h6>
-      <div class="justify-content-center m-y-10 p-24">
-        <button class="follow-button">Follow</button>
+      <div class="default-cover" *ngIf="!company.image?.imageUrl"></div>
+
+      <!-- Profile Section -->
+      <div class="profile-section">
+        <!-- Logo -->
+        <div class="logo-container">
+          <img *ngIf="company.image?.imageUrl" [src]="company.image.imageUrl" alt="Company logo" class="company-logo">
+          <div *ngIf="!company.image?.imageUrl" class="default-logo">
+            {{ company.abbreviation || company.name.charAt(0) }}
+          </div>
+        </div>
+
+        <!-- Basic Info -->
+        <div class="basic-info">
+          <h2 class="company-name">{{ company.name }}</h2>
+          <p class="company-abbreviation">{{ company.abbreviation }}</p>
+          <p class="company-sector">
+            <i class="fas fa-industry"></i> {{ company.sector }}
+          </p>
+        </div>
+
+        <!-- Follow Button -->
+        <button class="follow-button">
+          <i class="fas fa-plus"></i> Follow
+        </button>
       </div>
-      <div class="row">
-        <div class="col-4">
-          <h3 class="m-b-4 f-s-20 f-w-500">1099</h3>
-          <span class="f-s-14">Articles</span>
+
+      <!-- Details Section -->
+      <div class="details-section">
+        <div class="detail-item">
+          <i class="fas fa-map-marker-alt"></i>
+          <span>{{ company.address || 'Address not specified' }}</span>
         </div>
-        <div class="col-4">
-          <h3 class="m-b-4 f-s-20 f-w-500">23,469</h3>
-          <span class="f-s-14">Followers</span>
+        
+        <div class="detail-item">
+          <i class="fas fa-envelope"></i>
+          <span>{{ company.email }}</span>
         </div>
-        <div class="col-4">
-          <h3 class="m-b-4 f-s-20 f-w-500">6035</h3>
-          <span class="f-s-14">Likes</span>
+        
+        <div class="detail-item">
+          <i class="fas fa-phone"></i>
+          <span>{{ company.phone || 'Phone not specified' }}</span>
+        </div>
+        
+        <div class="detail-item">
+          <i class="fas fa-globe"></i>
+          <a [href]="company.website" target="_blank" *ngIf="company.website">
+            {{ company.website }}
+          </a>
+          <span *ngIf="!company.website">Website not specified</span>
+        </div>
+        
+        <div class="detail-item">
+          <i class="fas fa-calendar-alt"></i>
+          <span>Founded in {{ company.foundingYear | date: 'yyyy' }}</span>
         </div>
       </div>
+
+      <!-- Stats Section -->
+     <!-- Stats Section -->
+<div class="stats-section">
+  <div class="stat-item">
+    <div class="stat-value">{{ company.followers?.length || 0 }}</div>
+    <div class="stat-label">Followers</div>
+  </div>
+  
+  <div class="stat-item">
+    <div class="stat-value">{{ company.foundingYear | date: 'yyyy' }}</div>
+    <div class="stat-label">Founded</div>
+  </div>
+  
+  <div class="stat-item">
+    <div class="stat-value">{{ company.labelDate | date: 'yyyy' }}</div>
+    <div class="stat-label">Label Date</div>
+  </div>
+</div>
     </div>
   </div>
 </div>
