@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Company } from '../Model/Company'; // Assure-toi d'avoir le modèle Comment
 import { catchError, map } from 'rxjs/operators';
+import { User } from '../Model/User'; // Ensure the correct path to the User model
 
 
 @Injectable({
@@ -80,6 +81,23 @@ isFollowingCompany(userId: number, companyId: number): Observable<boolean> {
   return this.http.get<boolean>(`${this.baseUrl}/isFollowing/${companyId}/${userId}`);
 }
 
+// Dans CompanyService
+getCompanyFollowers(companyId: number): Observable<User[]> {
+  return this.http.get<User[]>(`${this.baseUrl}/getCompanyFollowers/${companyId}`).pipe(
+    catchError(error => {
+      throw new Error('Failed to fetch company followers: ' + error.message);
+    })
+  );
+}
+// Dans CompanyService (service Angular)
 
+getCompaniesFollowedByUser(userId: number): Observable<Company[]> {
+  return this.http.get<Company[]>(`${this.baseUrl}/getCompaniesFollowedByUser/${userId}`).pipe(
+    catchError(error => {
+      console.error('Failed to fetch followed companies:', error);
+      throw new Error('Failed to fetch followed companies: ' + error.message);
+    })
+  );
+}
 
 }
