@@ -4,6 +4,8 @@ import {UserService} from '../../Services/user.service';
 import Swal from 'sweetalert2';
 import { User } from '../../models/user';
 import { Router } from '@angular/router'; // Importez Router
+import { CompanyService } from '../../Services/CompanyService'; // Assure-toi que le chemin est correct
+
 
 
 
@@ -33,6 +35,10 @@ export class IconsComponent implements OnInit {
   userType: string | null = '';
   userConnecte: number | null = 0;
   user: User |undefined; // Initialisation de user
+  isUserInCompany: boolean = false; // Variable pour savoir si l'utilisateur appartient à une entreprise
+  companyId: number =0; // Déclare une variable pour stocker l'ID de l'entreprise
+
+
 
 /*end User Connected Vars*/
   /* Profile Card Vars */
@@ -40,17 +46,45 @@ export class IconsComponent implements OnInit {
   from: string | undefined;
   showProfileCard: boolean = false;  // Nouvelle variable pour contrôler l'affichage du profile card
 
-  constructor(private userService: UserService, private router: Router) {}
+  constructor(private userService: UserService, private router: Router,private companyService: CompanyService) {}
 
   ngOnInit(): void {
     this.fetchUserDetails().then(() => {
       if (this.userConnecte !== null) {
         this.getUserById(this.userConnecte);
+        this.checkUserCompany();
       }
     }).catch((error) => {
       console.error('Error fetching user details:', error);
     });
   }
+  checkUserCompany(): void {
+    if (!this.userConnecte) {
+        console.error('userConnecte est null, impossible de vérifier l\'entreprise');
+        return;
+    }
+
+    this.companyService.isUserInCompany(this.userConnecte).subscribe(
+        (isInCompany: boolean) => {
+            this.isUserInCompany = isInCompany;
+            if (isInCompany) {
+                this.companyService.getCompanyIdByUserId(this.userConnecte).subscribe(
+                    (companyId: number) => {
+                        this.companyId = companyId;
+                    },
+                    error => {
+                        console.error('Erreur lors de la récupération de l\'ID de l\'entreprise :', error);
+                    }
+                );
+            } else {
+                console.log("L'utilisateur n'appartient à aucune entreprise.");
+            }
+        },
+        error => {
+            console.error('Erreur lors de la vérification de l\'appartenance à une entreprise :', error);
+        }
+    );
+}
   // Méthode pour mettre à jour les informations du profil
   onProfileSelected(profileData: any) {
     this.image = profileData.image;
