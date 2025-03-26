@@ -1,27 +1,44 @@
-import { Component,OnInit,Output,EventEmitter} from '@angular/core';
+import { Component,OnInit,Output,EventEmitter, ViewChild, Input, SimpleChanges} from '@angular/core';
 import { CompanyService } from '../../Services/CompanyService';
 import {UserService} from '../../Services/user.service';
 import { User } from '../../Model/User';
 import { Company } from '../../Model/Company';
 
 import Swal from 'sweetalert2';
+import { animate, style, transition, trigger } from '@angular/animations';
 
 
 
 @Component({
   selector: 'app-my-contacts',
   templateUrl: './my-contacts.component.html',
-  styleUrls: ['./my-contacts.component.css']
+  styleUrls: ['./my-contacts.component.css'],
+  animations: [
+    trigger('listItem', [
+      transition(':enter', [
+        style({ opacity: 0, height: '0', transform: 'translateY(-20px)' }),
+        animate('300ms cubic-bezier(0.4, 0.0, 0.2, 1)', 
+          style({ opacity: 1, height: '*', transform: 'translateY(0)' }))
+      ]),
+      transition(':leave', [
+        animate('300ms cubic-bezier(0.4, 0.0, 0.2, 1)', 
+          style({ opacity: 0, height: '0', transform: 'translateY(-20px)' }))
+      ])
+    ])
+  ]
 
 })
 export class MyContactsComponent implements OnInit{
-    @Output() profileSelected = new EventEmitter<{ userConnecte:number,companyIdSelected:number }>();
+    @Output() profileSelected = new EventEmitter<{ userConnecte:number,companyIdSelected:number,companyIdConnected:number }>();
+    @Input() followEvent: {companyId: number, isFollowing: boolean};
+    private previousFollowEvent: {companyId: number, isFollowing: boolean};
+
   
 
-  userConnecte: number= null;
+  userConnecte: number= 0;
   userType: string = null;
   isUserInCompany = false;
-  companyId: number = null;
+  companyId: number = 0;
   
   followers: User[] = [];
    followedCompanies: Company[] = [];
@@ -34,6 +51,8 @@ export class MyContactsComponent implements OnInit{
     '/assets/images/profile/user-4.jpg'
   ];
   usedImages: string[] = []; // Garde trace des images déjà utilisées
+  private imageMap: Map<number, string> = new Map(); // Pour stocker les images associées aux utilisateurs
+
 
   // Titres dynamiques
   title: string = '';
@@ -58,6 +77,17 @@ export class MyContactsComponent implements OnInit{
       this.isLoading = false;
       this.error = 'Failed to initialize component';
     });
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.followEvent && this.followEvent && 
+        (!this.previousFollowEvent || 
+         this.followEvent.companyId !== this.previousFollowEvent.companyId || 
+         this.followEvent.isFollowing !== this.previousFollowEvent.isFollowing)) {
+      
+      this.handleFollowChange(this.followEvent);
+      this.previousFollowEvent = {...this.followEvent};
+    }
   }
 
   fetchUserDetails(): Promise<void> {
@@ -140,7 +170,7 @@ loadFollowers(): void {
     next: (followers) => {
       this.followers = followers.map(follower => ({
         ...follower,
-        randomImage: this.getRandomDefaultImage()
+        randomImage: this.getRandomDefaultImage(follower.idUser)
       }));
       this.isLoading = false;
     },
@@ -173,22 +203,29 @@ loadFollowedCompanies(): void {
   });
 }
 
-getRandomDefaultImage(): string {
-  // Si toutes les images ont été utilisées, réinitialise la liste
+// Modifiez la méthode getRandomDefaultImage
+getRandomDefaultImage(userId: number): string {
+  // Si l'image est déjà mappée pour cet utilisateur, la retourner
+  if (this.imageMap.has(userId)) {
+    return this.imageMap.get(userId);
+  }
+
+  // Si toutes les images ont été utilisées, réinitialiser la liste
   if (this.usedImages.length === this.defaultImages.length) {
     this.usedImages = [];
   }
 
-  // Filtre les images non encore utilisées
+  // Filtrer les images non encore utilisées
   const availableImages = this.defaultImages.filter(
     img => !this.usedImages.includes(img)
   );
 
-  // Choisit une image aléatoire parmi celles disponibles
+  // Choisir une image aléatoire
   const randomIndex = Math.floor(Math.random() * availableImages.length);
   const selectedImage = availableImages[randomIndex];
 
-  // Ajoute l'image sélectionnée aux images utilisées
+  // Stocker l'association user-image
+  this.imageMap.set(userId, selectedImage);
   this.usedImages.push(selectedImage);
 
   return selectedImage;
@@ -200,11 +237,42 @@ trackByFn(index: number, item: User): number {
   // Clic sur l'image ou le nom de l'utilisateur
   onProfileClick(company: Company) {
     this.profileSelected.emit({
+      companyIdConnected : this.companyId,
       userConnecte : this.userConnecte,
      companyIdSelected: company.id
     });
   }
 
+
+private handleFollowChange(event: {companyId: number, isFollowing: boolean}): void {
+  if (this.isUserInCompany) {
+    this.loadFollowers(); // Recharger si c'est une entreprise
+  } else {
+    // Mise à jour optimisée pour les utilisateurs normaux
+    if (event.isFollowing) {
+      // Ajout immédiat avec optimiste UI update
+      this.companyService.getCompanyById(event.companyId).subscribe({
+        next: (company) => {
+          if (!this.followedCompanies.some(c => c.id === company.id)) {
+            this.followedCompanies = [company, ...this.followedCompanies];
+          }
+        },
+        error: () => {
+          // Fallback si l'optimistic update échoue
+          this.loadFollowedCompanies();
+        }
+      });
+    } else {
+      // Suppression immédiate avec optimiste UI update
+      this.followedCompanies = this.followedCompanies.filter(c => c.id !== event.companyId);
+    }
+  }
 }
+
+
+
+}
+
+
 
 

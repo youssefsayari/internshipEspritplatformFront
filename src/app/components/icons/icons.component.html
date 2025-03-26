@@ -11,27 +11,37 @@
         <div class="card-body all-icons">
           <div class="row">
             <!-- Colonne pour le profile-card (gauche) -->
-            <div class="col-lg-3" *ngIf="showProfileCard" @fadeInOut>
+            <div class="col-lg-3" *ngIf="showProfileCard" @slideInOut>
               <div class="sticky-profile-card">
                 <app-profile-card
                   [companyIdSelected]="companyIdSelected"
                   [userConnecte]="userConnecte"
+                  [companyIdConnected]="companyIdConnected"
                   (closeCard)="onCloseCard()"
+                  (followChanged)="onFollowChanged($event)"
                 ></app-profile-card>
               </div>
             </div>
 
-            <!-- Colonne pour la timeline (centre) -->
-            <div [class.col-lg-9]="!showProfileCard" [class.col-lg-6]="showProfileCard">
+                        <!-- Colonne pour la timeline (centre) -->
+              <div [class.col-lg-6]="showProfileCard && showContactCard"
+              [class.col-lg-9]="(showProfileCard && !showContactCard) || (!showProfileCard && showContactCard)"
+              [class.col-lg-12]="!showProfileCard && !showContactCard"
+              [@timelineResize]="getTimelineState()">
               <app-activity-timeline (profileSelected)="onProfileSelected($event)"></app-activity-timeline>
-            </div>
+              </div>
 
             <!-- Colonne pour app-my-contacts (droite) -->
-            <div class="col-lg-3"  > 
-                  <div *ngIf="isUserInCompany">           
-                    <app-my-profile-card ></app-my-profile-card>
-                  </div>  
-                <app-my-contacts (profileSelected)="onProfileSelected($event)"></app-my-contacts>
+            <div class="col-lg-3" *ngIf="showContactCard" @slideInOutRight> 
+              <div *ngIf="isUserInCompany">           
+                <app-my-profile-card></app-my-profile-card>
+              </div>  
+              <div *ngIf="userType !== 'Admin'">
+                <app-my-contacts 
+                  [followEvent]="currentFollowEvent"
+                  (profileSelected)="onProfileSelected($event)">
+                </app-my-contacts>
+              </div>
             </div>
           </div>
         </div>

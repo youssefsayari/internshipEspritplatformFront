@@ -23,7 +23,7 @@
       <div class="msg-item p-x-16 p-y-12">
         <div class="d-flex align-items-center w-100">
           <!-- Utilisez l'image aléatoire pour les followers -->
-          <img [src]="getRandomDefaultImage()" 
+          <img [src]="follower.randomImage" 
                class="rounded-circle" width="48" height="48" />
           <div class="m-l-16">
             <h5 class="f-s-14 f-w-600 m-0">
@@ -44,7 +44,7 @@
 
     <div class="msg-box" *ngIf="!isLoading && !error && !isUserInCompany">
       <ng-container *ngFor="let company of followedCompanies; trackBy: trackByFn">
-        <div class="msg-item p-x-16 p-y-12" (click)="onProfileClick(company)">
+        <div class="msg-item p-x-16 p-y-12" (click)="onProfileClick(company)"@listItem>
           <div class="d-flex align-items-center w-100">
             <!-- Utilisez l'image de l'entreprise -->
             <img [src]="company.image?.imageUrl || '/assets/images/profile/default-company.png'" 

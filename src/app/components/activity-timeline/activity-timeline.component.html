@@ -11,10 +11,10 @@
 <!-- Filter Section -->
 <div class="filter-section d-flex justify-content-between p-3 mb-3">
   <!-- Search Bar -->
-  <input type="text" [(ngModel)]="searchText" (ngModelChange)="filterPosts()" placeholder="Search posts..." class="form-control" style="max-width: 300px;">
+  <input type="text" [(ngModel)]="searchText" (ngModelChange)="filterPosts()" placeholder="Search posts..." class="form-control" 
+  style="max-width: 300px;">
 
-  <!-- Sector Filter -->
-  <select [(ngModel)]="selectedSector" (ngModelChange)="filterPosts()" class="form-select" style="max-width: 200px;">
+  <select [(ngModel)]="selectedSector" (ngModelChange)="onSectorChange($event)" class="form-select">
     <option value="">All Sectors</option>
     <option value="TECHNOLOGY">Technology</option>
     <option value="FINANCE">Finance</option>
@@ -22,13 +22,24 @@
     <option value="EDUCATION">Education</option>
   </select>
 
+   <!-- Filter by Followed Companies (only for regular Users) -->
+   <button *ngIf="userType === 'Student'" 
+   (click)="toggleFollowedCompaniesFilter()" 
+   class="btn" 
+   [ngClass]="{'btn-primary': !showOnlyFollowedCompanies, 'btn-success': showOnlyFollowedCompanies}">
+{{ showOnlyFollowedCompanies ? 'Showing Followed Companies ' : 'Show Followed Companies' }}
+</button>
+
 <!-- Filter by Company Button -->
  
 <button *ngIf="isUserInCompany|| userType === 'Admin'" (click)="getPostsAndFilterByCompany(companyId)" class="btn btn-primary">My Posts</button>
 
 
+
   <!-- Clear Filters Button -->
-  <button (click)="clearFilters()" class="btn btn-secondary">Clear Filters</button>
+  <button (click)="clearFilters()" class="btn btn-secondary">
+    <i class="fas fa-sync-alt"></i> Reset All
+  </button>
 
 </div>
 

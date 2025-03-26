@@ -36,6 +36,7 @@
   padding: 16px; /* Espacement interne augmenté */
   border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Ligne de séparation entre les messages */
   transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Animation douce */
+  overflow: hidden;
 }
 
 .msg-item:hover {
@@ -149,4 +150,9 @@
   text-align: center;
   padding: 20px;
   color: #666;
+}
+/* Empêche le débordement pendant les animations */
+.row {
+  min-height: 300px; /* Ajustez selon vos besoins */
+  overflow: hidden;
 }

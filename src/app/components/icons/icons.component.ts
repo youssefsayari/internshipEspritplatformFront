@@ -19,13 +19,74 @@ import { CompanyService } from '../../Services/CompanyService'; // Assure-toi qu
   encapsulation: ViewEncapsulation.None,  // Use the enum correctly
 
   animations: [
-    trigger('fadeInOut', [
-      state('void', style({ opacity: 0, transform: 'translateX(-20px)' })),
-      transition(':enter, :leave', [
-        animate('0.4s ease', style({ opacity: 1, transform: 'translateX(0)' })),
+    trigger('slideInOut', [
+      transition(':enter', [
+        style({ 
+          opacity: 0,
+          transform: 'translateX(-20px)',
+          width: '0',
+          marginRight: '0'
+        }),
+        animate('300ms ease-out', style({ 
+          opacity: 1,
+          transform: 'translateX(0)',
+          width: '*',
+          marginRight: '*'
+        }))
       ]),
+      transition(':leave', [
+        animate('300ms ease-in', style({ 
+          opacity: 0,
+          transform: 'translateX(-20px)',
+          width: '0',
+          marginRight: '0'
+        }))
+      ])
     ]),
-  ],
+    trigger('slideInOutRight', [
+      transition(':enter', [
+        style({ 
+          opacity: 0,
+          transform: 'translateX(20px)',
+          width: '0',
+          marginLeft: '0'
+        }),
+        animate('300ms cubic-bezier(0.4, 0.0, 0.2, 1)', style({ 
+          opacity: 1,
+          transform: 'translateX(0)',
+          width: '*',
+          marginLeft: '*'
+        }))
+      ]),
+      transition(':leave', [
+        animate('300ms cubic-bezier(0.4, 0.0, 0.2, 1)', style({ 
+          opacity: 0,
+          transform: 'translateX(20px)',
+          width: '0',
+          marginLeft: '0'
+        }))
+      ])
+    ]),
+    trigger('timelineResize', [
+      state('small', style({ flex: '0 0 50%', maxWidth: '50%' })),
+      state('medium', style({ flex: '0 0 75%', maxWidth: '75%' })),
+      state('large', style({ flex: '0 0 100%', maxWidth: '100%' })),
+      transition('* <=> *', [
+        animate('300ms cubic-bezier(0.4, 0.0, 0.2, 1)')
+      ])
+    ]),
+    trigger('listItem', [
+      transition(':enter', [
+        style({ opacity: 0, height: '0', transform: 'translateY(-20px)' }),
+        animate('300ms cubic-bezier(0.4, 0.0, 0.2, 1)', 
+          style({ opacity: 1, height: '*', transform: 'translateY(0)' }))
+      ]),
+      transition(':leave', [
+        animate('300ms cubic-bezier(0.4, 0.0, 0.2, 1)', 
+          style({ opacity: 0, height: '0', transform: 'translateY(-20px)' }))
+      ])
+    ])
+  ]
 })
 export class IconsComponent implements OnInit {
   @HostBinding('@fadeInOut') get fadeInOut() {
@@ -37,13 +98,15 @@ export class IconsComponent implements OnInit {
   user: User |undefined; // Initialisation de user
   isUserInCompany: boolean = false; // Variable pour savoir si l'utilisateur appartient à une entreprise
   companyId: number =0; // Déclare une variable pour stocker l'ID de l'entreprise
-
+  companyIdConnected:number = 0; 
 
 
 /*end User Connected Vars*/
   /* Profile Card Vars */
   companyIdSelected: number = 0;  // Déclare une variable pour stocker l'ID de l'entreprise
   showProfileCard: boolean = false;  // Nouvelle variable pour contrôler l'affichage du profile card
+
+  currentFollowEvent: {companyId: number, isFollowing: boolean};
 
   constructor(private userService: UserService, private router: Router,private companyService: CompanyService) {}
 
@@ -52,6 +115,7 @@ export class IconsComponent implements OnInit {
       if (this.userConnecte !== null) {
         this.getUserById(this.userConnecte);
         this.checkUserCompany();
+
       }
     }).catch((error) => {
       console.error('Error fetching user details:', error);
@@ -88,6 +152,7 @@ export class IconsComponent implements OnInit {
   onProfileSelected(profileData: any) {
     this.userConnecte = profileData.userConnecte;
     this.companyIdSelected = profileData.companyIdSelected;
+    this.companyIdConnected = profileData.companyIdConnected
     this.showProfileCard = true;  // Affiche le profile card
     
   }
@@ -142,4 +207,18 @@ export class IconsComponent implements OnInit {
     }
   );
 }
+// icons.component.ts
+onFollowChanged(event: {companyId: number, isFollowing: boolean}) {
+  // Transmettre l'événement à MyContactsComponent
+  this.currentFollowEvent = event;
 }
+get showContactCard(): boolean {
+  return this.userType !== 'Admin' ;
+}
+getTimelineState(): string {
+  if (this.showProfileCard && this.showContactCard) return 'small';
+  if (this.showProfileCard || this.showContactCard) return 'medium';
+  return 'large';
+}
+}
+

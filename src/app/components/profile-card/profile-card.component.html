@@ -40,21 +40,21 @@
         <div class="basic-info">
           <h2 class="company-name">{{ company.name }}</h2>
           <p class="company-abbreviation">{{ company.abbreviation }}</p>
-
           <p class="company-sector">
             <i class="fas fa-industry"></i> {{ company.sector }}
           </p>
         </div>
 
               <!-- Modifiez juste le bouton Follow/Unfollow -->
-              <button class="follow-button" 
-              [class.unfollow]="isFollowing"
-              (click)="toggleFollow()"
-              [disabled]="isLoading">
-        <i class="fas" [class.fa-plus]="!isFollowing" [class.fa-minus]="isFollowing"></i>
-        {{ isFollowing ? 'Unfollow' : 'Follow' }}
-        <span *ngIf="isLoading" class="spinner-border spinner-border-sm"></span>
-      </button>
+                <button class="follow-button" 
+                [class.unfollow]="isFollowing"
+                (click)="toggleFollow()"
+                [disabled]="isLoading"
+                *ngIf="companyIdConnected == 0">
+                <i class="fas" [class.fa-plus]="!isFollowing" [class.fa-minus]="isFollowing"></i>
+          {{ isFollowing ? 'Unfollow' : 'Follow' }}
+          <span *ngIf="isLoading" class="spinner-border spinner-border-sm"></span>
+        </button>
 
       <!-- Details Section -->
       <div class="details-section">

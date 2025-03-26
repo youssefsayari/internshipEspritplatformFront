@@ -15,7 +15,9 @@ import { User } from '../../Model/User'; // Ensure this path is correct
 export class ProfileCardComponent implements OnChanges{
   @Input() companyIdSelected: number;  // Image de l'utilisateur
   @Input() userConnecte: number;  // Image de l'utilisateur
+  @Input() companyIdConnected: number;  // Image de l'utilisateur
 
+  @Output() followChanged = new EventEmitter<{companyId: number, isFollowing: boolean}>();
   @Output() closeCard = new EventEmitter<void>(); // Événement pour fermer la carte
   company: Company;
   isLoading = true;
@@ -83,12 +85,15 @@ export class ProfileCardComponent implements OnChanges{
     action.subscribe({
       next: () => {
         this.updateFollowersList(!previousState);
-        // Ne pas afficher d'erreur
+        // Émettre l'événement avec les bonnes données
+        this.followChanged.emit({
+          companyId: this.company.id,
+          isFollowing: !previousState
+        });
         this.error = null;
       },
       error: (err) => {
-        this.isFollowing = previousState; // Revenir à l'état précédent
-        // Ne pas afficher l'erreur de parsing
+        this.isFollowing = previousState;
         if (!err.message.includes('parsing')) {
           this.error = 'An error occurred';
         }

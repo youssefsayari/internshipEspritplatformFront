@@ -59,10 +59,11 @@ interface Timeline {
 @Component({
   selector: 'app-activity-timeline',
   templateUrl: './activity-timeline.component.html',
-  styleUrls: ['./activity-timeline.component.css']
+  styleUrls: ['./activity-timeline.component.css'],
+  
 })
 export class ActivityTimelineComponent implements OnInit {
-  @Output() profileSelected = new EventEmitter<{ userConnecte:number,companyIdSelected:number }>();
+  @Output() profileSelected = new EventEmitter<{ userConnecte:number,companyIdSelected:number,companyIdConnected:number }>();
   mytimelines: Timeline[] = [];
 
   // Utilisateur connecté, statique à 1 pour l'instant
@@ -102,13 +103,15 @@ export class ActivityTimelineComponent implements OnInit {
   userType: string= '';
   userConnecte: number= null;
 
+  showOnlyFollowedCompanies: boolean = false;
 
   constructor(private postService: PostService,private internshipService: InternshipService   ,private commentService: CommentService, private userService: UserService ,private companyService: CompanyService ,private ratingService: RatingService,private cdr: ChangeDetectorRef,private toastr: ToastrService   ) {}
 
   ngOnInit(): void {
     this.fetchUserDetails().then(() => {
-        console.error('userConnecte après récupération', this.userConnecte);
         this.checkUserCompany();
+        console.error('isUserInCompany', this.isUserInCompany);
+
         this.loadPosts();
         
     });
@@ -165,6 +168,13 @@ fetchUserDetails(): Promise<void> {
         console.error('userConnecte est null, impossible de vérifier l\'entreprise');
         return;
     }
+        // Si l'utilisateur est admin, on set companyId à -1 et on sort
+        if (this.userType === 'Admin') {
+          this.companyId = -1;
+          this.isUserInCompany = false;
+          console.log("Utilisateur admin détecté, companyId set à -1");
+          return;
+      }
 
     this.companyService.isUserInCompany(this.userConnecte).subscribe(
         (isInCompany: boolean) => {
@@ -240,64 +250,81 @@ fetchUserDetails(): Promise<void> {
   }
 
 
-  // Récupérer et filtrer les posts dans une seule méthode
-getPostsAndFilterByCompany(companyId: number) {
-  this.postService.getPostsByCompany(companyId).subscribe(
-    (posts: Post[]) => {
-      console.log("Posts récupérés :", posts);
+  getPostsAndFilterByCompany(companyId: number) {
+    this.postService.getPostsByCompany(companyId).subscribe(
+      (posts: Post[]) => {
+        this.origanalTimelines = posts
+          .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+          .map(post => this.transformPostToTimeline(post));
+        
+        // Réinitialiser les autres filtres
+        this.searchText = '';
+        this.selectedSector = '';
+        this.showOnlyFollowedCompanies = false;
+        
+        // Appliquer les filtres
+        this.mytimelines = [...this.origanalTimelines];
+      },
+      error => console.error('Error loading company posts:', error)
+    );
+  }
+  private loadRatingsForTimelines() {
+    this.mytimelines.forEach(timeline => {
+      this.ratingService.getMyRatingForPost(timeline.id, this.userConnecte).subscribe(
+        (data) => timeline.selectedRating = data ? data.stars : 0,
+        (error) => console.error('Erreur lors de la récupération de la note:', error)
+      );
+    });
+  }
 
-      // Trier les posts du plus récent au plus ancien
-      posts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-
-      this.mytimelines = posts.map(post => {
-        const timeline = this.transformPostToTimeline(post);
-
-        // Calculer la note moyenne pour chaque post
-        timeline.averageRating = this.calculateAverageRating(timeline.ratings);
-
-        return timeline;
-      });
-
-      this.origanalTimelines = [...this.mytimelines]; // Sauvegarder les posts originaux
-
-
-      // Maintenant que les timelines sont chargées, récupérez la note
-      this.mytimelines.forEach(timeline => {
-        this.ratingService.getMyRatingForPost(timeline.id, this.userConnecte).subscribe(
-          (data) => {
-            timeline.selectedRating = data ? data.stars : 0;  // Met à jour la note si elle existe
-          },
-          (error) => {
-            console.error('Erreur lors de la récupération de la note:', error);
-          }
-        );
-      });
-    },
-    error => {
-      console.error('Erreur lors de la récupération des posts :', error);
+  filterPosts() {
+    // Toujours partir des données originales
+    let filteredPosts = [...this.origanalTimelines];
+  
+    // Appliquer le filtre par secteur si sélectionné
+    if (this.selectedSector) {
+      filteredPosts = filteredPosts.filter(post => 
+        post.sector && post.sector.toUpperCase() === this.selectedSector.toUpperCase()
+      );
     }
-  );
-}
+  
+    // Appliquer le filtre par texte si saisi
+    if (this.searchText) {
+      filteredPosts = filteredPosts.filter(post => 
+        post.title.toLowerCase().includes(this.searchText.toLowerCase()) || 
+        post.content.toLowerCase().includes(this.searchText.toLowerCase())
+      );
+    }
+  
+    // Appliquer le filtre par entreprises suivies si activé
+    if (this.showOnlyFollowedCompanies && this.userType === 'Student') {
+      this.applyFollowedCompaniesFilter(filteredPosts);
+    } else {
+      this.mytimelines = filteredPosts;
+    }
+  }
+  
+  private applyFollowedCompaniesFilter(postsToFilter: Timeline[]) {
+    this.companyService.getCompaniesFollowedByUser(this.userConnecte).subscribe({
+      next: (followedCompanies) => {
+        const followedCompanyIds = followedCompanies.map(c => c.id);
+        this.mytimelines = postsToFilter.filter(post => 
+          followedCompanyIds.includes(post.ownerId)
+        );
+      },
+      error: (err) => {
+        console.error('Error loading followed companies:', err);
+        this.mytimelines = postsToFilter;
+      }
+    });
+  }
+  onSectorChange(newSector: string) {
+    this.selectedSector = newSector;
+    this.showOnlyFollowedCompanies = false;
+    this.filterPosts();
+    this.cdr.detectChanges(); // Forcer la détection des changements
+  }
 
-filterPosts() {
-  this.mytimelines = [...this.origanalTimelines]; // Sauvegarder les posts originaux
-  // Si un secteur est sélectionné, filtrer les posts en fonction du texte de recherche et du secteur
-  this.mytimelines = this.mytimelines.filter(post => {
-    const matchesSearchText = post.title.toLowerCase().includes(this.searchText.toLowerCase()) ||
-                              post.content.toLowerCase().includes(this.searchText.toLowerCase());
-
-    // Normaliser les valeurs pour éviter des problèmes de casse ou d'espaces superflus
-    const matchesSector = this.selectedSector
-      ? post.sector.trim().toLowerCase() === this.selectedSector.trim().toLowerCase()
-      : true;
-
-    return matchesSearchText && matchesSector;
-  });
-
-  console.log('Filtered Timelines:', this.filteredTimelines); // Vérifiez si le tableau est correctement filtré
-  this.cdr.detectChanges();
-
-}
 
 ngOnChanges() {
   // Cette méthode se déclenche lorsqu'il y a un changement dans le secteur sélectionné
@@ -307,11 +334,7 @@ ngOnChanges() {
 
 
 clearFilters() {
-  this.searchText = '';
-  this.selectedSector = '';
-  this.filteredTimelines = [...this.mytimelines]; // Réinitialiser les posts
 
-  // Recharger la page
   window.location.reload();
 }
 
@@ -387,7 +410,7 @@ clearFilters() {
       feedbackGiven: false,
       ownerId: post.company.id,
       ratings: post.ratings,  // Directly assign the entire Rating[] array
-      sector: post.company?.sector,
+      sector: post.company?.sector?.toUpperCase().trim(), // Normalisation
       expiryDateTime: post.expiryDateTime, // ISO Date string (nullable)
 
 
@@ -464,8 +487,10 @@ getTimeRemaining(expiryDateTime: string): string {
   // Clic sur l'image ou le nom de l'utilisateur
   onProfileClick(timeline: Timeline) {
     this.profileSelected.emit({
+      companyIdConnected:this.companyId,
       userConnecte : this.userConnecte,
      companyIdSelected: timeline.ownerId
+     
     });
   }
 
@@ -841,6 +866,15 @@ getTimeRemaining(expiryDateTime: string): string {
       }
     );
   }
+  toggleFollowedCompaniesFilter() {
+    this.showOnlyFollowedCompanies = !this.showOnlyFollowedCompanies;
+    // Réinitialiser le filtre de secteur si on active "Followed"
+    if (this.showOnlyFollowedCompanies) {
+      this.selectedSector = '';
+    }
+    this.filterPosts();
+  }
+
 /*---------------------5edmet ghassen-----------------------*/ 
   addInternship(postId: number): void {
     const token = localStorage.getItem('Token');
