@@ -31,7 +31,7 @@
                   <div *ngIf="isUserInCompany">           
                     <app-my-profile-card ></app-my-profile-card>
                   </div>  
-                <app-my-contacts></app-my-contacts>
+                <app-my-contacts (profileSelected)="onProfileSelected($event)"></app-my-contacts>
             </div>
           </div>
         </div>

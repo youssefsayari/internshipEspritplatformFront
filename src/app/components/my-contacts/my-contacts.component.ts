@@ -1,4 +1,4 @@
-import { Component,OnInit} from '@angular/core';
+import { Component,OnInit,Output,EventEmitter} from '@angular/core';
 import { CompanyService } from '../../Services/CompanyService';
 import {UserService} from '../../Services/user.service';
 import { User } from '../../Model/User';
@@ -15,6 +15,8 @@ import Swal from 'sweetalert2';
 
 })
 export class MyContactsComponent implements OnInit{
+    @Output() profileSelected = new EventEmitter<{ userConnecte:number,companyIdSelected:number }>();
+  
 
   userConnecte: number= null;
   userType: string = null;
@@ -195,5 +197,14 @@ getRandomDefaultImage(): string {
 trackByFn(index: number, item: User): number {
   return item.idUser;
 }
+  // Clic sur l'image ou le nom de l'utilisateur
+  onProfileClick(company: Company) {
+    this.profileSelected.emit({
+      userConnecte : this.userConnecte,
+     companyIdSelected: company.id
+    });
+  }
 
 }
+
+
