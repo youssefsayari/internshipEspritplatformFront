@@ -7,7 +7,15 @@
       {{ statusLabel(status) }}
     </h3>
 
-    <div class="task" *ngFor="let task of getTasksByStatus(status)">
+    <div
+      class="task"
+      *ngFor="let task of getTasksByStatus(status)"
+      [ngClass]="{
+        'todo': task.status === 'TODO',
+        'inprogress': task.status === 'INPROGRESS',
+        'done': task.status === 'DONE'
+      }"
+    >
       <h4>{{ task.title }}</h4>
       <p>{{ task.description }}</p>
     </div>
