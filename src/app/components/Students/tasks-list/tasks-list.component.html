@@ -1,7 +1,15 @@
 <div class="panel-header panel-header-sm"></div>
 
 <div class="task-container">
-  <div class="task-box" *ngFor="let status of statuses">
+  <div
+    class="task-box"
+    *ngFor="let status of statuses"
+    [id]="status"
+    cdkDropList
+    [cdkDropListData]="getTasksByStatus(status)"
+    [cdkDropListConnectedTo]="statuses"
+    (cdkDropListDropped)="onTaskDrop($event, status)"
+  >
     <h3>
       <i class="{{ iconForStatus(status) }}"></i>
       {{ statusLabel(status) }}
@@ -10,6 +18,8 @@
     <div
       class="task"
       *ngFor="let task of getTasksByStatus(status)"
+      cdkDrag
+      [cdkDragData]="task"
       [ngClass]="{
         'todo': task.status === 'TODO',
         'inprogress': task.status === 'INPROGRESS',

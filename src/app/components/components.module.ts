@@ -38,6 +38,8 @@ import { MyContactsComponent } from './my-contacts/my-contacts.component';
 import { ProfileCardComponent } from './profile-card/profile-card.component';
 import { IconsComponent } from './icons/icons.component'; // Vérifie le chemin exact
 import { QuizListComponent } from './quiz-list/quiz-list.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+
 
 
 @NgModule({
@@ -59,6 +61,7 @@ import { QuizListComponent } from './quiz-list/quiz-list.component';
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,
+    DragDropModule
 
 
 

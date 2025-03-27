@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Task } from '../../../Model/Task';
 import { TaskService } from '../../../Services/taskservice.service';
 import { TypeStatus } from '../../../Model/TypeStatus';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-tasks-list',
@@ -11,7 +12,7 @@ import { TypeStatus } from '../../../Model/TypeStatus';
 export class TasksListComponent implements OnInit {
   tasks: Task[] = [];
   studentId: number = 2;
-  statuses = [TypeStatus.TODO, TypeStatus.INPROGRESS, TypeStatus.DONE];
+  statuses = ['TODO', 'INPROGRESS', 'DONE'] as TypeStatus[];
 
   constructor(private taskService: TaskService) {}
 
@@ -36,11 +37,11 @@ export class TasksListComponent implements OnInit {
 
   iconForStatus(status: TypeStatus): string {
     switch (status) {
-      case TypeStatus.TODO:
+      case 'TODO':
         return 'fas fa-list-ul';
-      case TypeStatus.INPROGRESS:
+      case 'INPROGRESS':
         return 'fas fa-spinner fa-pulse';
-      case TypeStatus.DONE:
+      case 'DONE':
         return 'fas fa-check-circle';
       default:
         return '';
@@ -49,14 +50,28 @@ export class TasksListComponent implements OnInit {
 
   statusLabel(status: TypeStatus): string {
     switch (status) {
-      case TypeStatus.TODO:
+      case 'TODO':
         return '📝 To Do';
-      case TypeStatus.INPROGRESS:
+      case 'INPROGRESS':
         return '⏳ In Progress';
-      case TypeStatus.DONE:
+      case 'DONE':
         return '✅ Done';
       default:
         return '';
+    }
+  }
+
+  onTaskDrop(event: CdkDragDrop<Task[]>, newStatus: TypeStatus): void {
+    const task: Task = event.item.data;
+    if (task.status !== newStatus) {
+      this.taskService.changeTaskStatus(task.idTask, newStatus).subscribe({
+        next: () => {
+          task.status = newStatus;
+        },
+        error: (err) => {
+          console.error('Failed to update task status:', err);
+        }
+      });
     }
   }
 }
