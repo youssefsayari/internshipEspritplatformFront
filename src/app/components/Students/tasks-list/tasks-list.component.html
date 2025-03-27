@@ -1,0 +1,19 @@
+<div class="panel-header panel-header-sm"></div>
+
+<div class="task-container">
+  <div class="task-box" *ngFor="let status of statuses">
+    <h3>
+      <i class="{{ iconForStatus(status) }}"></i>
+      {{ statusLabel(status) }}
+    </h3>
+
+    <div class="task" *ngFor="let task of getTasksByStatus(status)">
+      <h4>{{ task.title }}</h4>
+      <p>{{ task.description }}</p>
+    </div>
+
+    <div *ngIf="getTasksByStatus(status).length === 0" class="no-tasks">
+      <em>No tasks available.</em>
+    </div>
+  </div>
+</div>

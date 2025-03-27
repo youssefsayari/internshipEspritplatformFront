@@ -51,4 +51,42 @@
   .task-box:hover {
     transform: translateY(-5px);
   }
+  .task-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 20px;
+  }
+  
+  .task-box {
+    flex: 1;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    background-color: #f9f9f9;
+  }
+  
+  .task-box h3 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 16px;
+  }
+  
+  .task {
+    background-color: #fff;
+    padding: 10px;
+    margin-bottom: 12px;
+    border-radius: 6px;
+    border-left: 5px solid #007bff;
+  }
+  
+  .task h4 {
+    margin: 0 0 5px;
+  }
+  
+  .no-tasks {
+    text-align: center;
+    color: #999;
+    font-style: italic;
+  }
   

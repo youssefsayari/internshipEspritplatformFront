@@ -1,7 +1,11 @@
+import { User } from './User';
+import { TypeStatus } from './TypeStatus';
+
+
+
 export interface Task {
-    id: number;
-    title: string;
-    description: string;
-    status: 'ToDo' | 'InProgress' | 'Done';
-  }
-  
+  idTask?: number; 
+  description: string;
+  status: TypeStatus;
+  student: User;
+}
