@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
 import { Company } from '../Model/Company'; // Assure-toi d'avoir le modèle Comment
 import { catchError, map } from 'rxjs/operators';
 import { User } from '../Model/User'; // Ensure the correct path to the User model
@@ -13,6 +13,15 @@ export class CompanyService {
   private baseUrl = 'http://localhost:8089/innoxpert/company'; // URL du backend Spring Boot
 
   constructor(private http: HttpClient) {}
+
+    // Headers pour les requêtes JSON
+    private jsonHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
+
+      // Gestion des erreurs
+  private handleError(error: any) {
+    console.error('An error occurred:', error);
+    return throwError(() => new Error(error.message || 'Server error'));
+  }
 
   // Méthode pour obtenir l'ID de l'entreprise en fonction de l'ID de l'utilisateur
   getCompanyIdByUserId(userId: number): Observable<number> {
@@ -100,4 +109,15 @@ getCompaniesFollowedByUser(userId: number): Observable<Company[]> {
   );
 }
 
+enrichCompanyData(name?: string, website?: string): Observable<Company> {
+  let params = new HttpParams();
+  if (name) params = params.append('name', name);
+  if (website) params = params.append('website', website);
+
+  return this.http.get<Company>(`${this.baseUrl}/api/autocomplete/enrich`, { params })
+    .pipe(catchError(this.handleError));
 }
+
+}
+
+

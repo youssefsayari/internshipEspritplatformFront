@@ -20,8 +20,17 @@ export class AddCompanyComponent implements OnInit {
   currentYear: number = new Date().getFullYear();
   imagePreview: string | ArrayBuffer | null = null;
   selectedFileName: string | null = null;
+  showSecretKey = false;
   @ViewChild('fileInput') fileInput: ElementRef;
 
+  // AI Assistant properties
+  showAssistant = false;
+  isThinking = false;
+  isTyping = false;
+  assistantMessage = '';
+  showGuessButton = false;
+  private typingTimeout: any;
+  thankYouMode = false;
 
 
   constructor(
@@ -46,6 +55,165 @@ export class AddCompanyComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+  toggleSecretKeyVisibility(): void {
+    this.showSecretKey = !this.showSecretKey;
+  }
+  showThinkingBot() {
+  this.showAssistant = true;
+  this.isThinking = true;
+  this.assistantMessage = 'Analyzing company information...';
+  
+  // Augmenter le délai à 3 secondes (3000ms)
+  setTimeout(() => {
+    this.isThinking = false;
+    this.assistantMessage = 'I found some information! I can help you complete this form faster.';
+    this.showGuessButton = true;
+  }, 4000);
+}
+  checkForAutoComplete() {
+    const name = this.companyForm.get('name');
+    const website = this.companyForm.get('website');
+    
+    const shouldShow = name?.valid && 
+                     website?.valid && 
+                     name?.value && 
+                     website?.value &&
+                     !(name?.invalid && name?.touched) &&
+                     !(website?.invalid && website?.touched);
+    
+    if (shouldShow && !this.showAssistant) {
+      this.showThinkingBot();
+    } else if (!shouldShow && this.showAssistant) {
+      this.hideAssistant();
+    }
+  }
+  guessForm() {
+    this.showGuessButton = false;
+    this.isTyping = true;
+    this.assistantMessage = 'Great! I\'m fetching the company details...';
+    
+    const name = this.companyForm.get('name')?.value;
+    const website = this.companyForm.get('website')?.value;
+    
+    this.companyService.enrichCompanyData(name, website).subscribe({
+      next: (company) => {
+        if (company) {
+          this.fillFormWithCompanyData(company);
+        } else {
+          this.assistantMessage = 'I couldn\'t find enough information. Please complete the form manually.';
+          this.isTyping = false;
+          setTimeout(() => this.hideAssistant(), 3000);
+        }
+      },
+      error: (error) => {
+        console.error('Error enriching company data:', error);
+        this.assistantMessage = 'There was an error fetching the data. Please complete the form manually.';
+        this.isTyping = false;
+        setTimeout(() => this.hideAssistant(), 3000);
+      }
+    });
+  }
+  fillFormWithCompanyData(company: any) {
+    this.assistantMessage = 'Filling the form with available information...';
+    
+    const fieldsToFill = [
+      { name: 'abbreviation', value: company.abbreviation },
+      { name: 'sector', value: company.sector },
+      { name: 'email', value: company.email },
+      { name: 'phone', value: company.phone.toString() },
+      { name: 'address', value: company.address },
+      { name: 'founders', value: company.founders },
+      { name: 'foundingYear', value: this.formatDateForInput(company.foundingYear) },
+      { name: 'secretKey', value: company.secretKey }
+    ];
+  
+    let promises: Promise<void>[] = [];
+    
+    fieldsToFill.forEach((field, index) => {
+      const promise = new Promise<void>((resolve) => {
+        setTimeout(() => {
+          this.typeField(field.name, field.value).then(resolve);
+        }, 1000 + (index * 1500));
+      });
+      promises.push(promise);
+    });
+  
+    Promise.all(promises).then(() => {
+      // Vérifier toutes les erreurs après remplissage
+      this.showFieldErrors();
+      this.assistantMessage = 'All done! Please review the information before submitting.';
+      this.showThankYouButton();
+    });
+  }
+  
+  showThankYouButton() {
+    this.showGuessButton = false;
+    this.thankYouMode = true;
+  }
+  hideAssistantAfterThankYou() {
+    this.hideAssistant();
+    this.thankYouMode = false;
+  }
+
+
+// Helper function to format date for input field
+private formatDateForInput(dateString: string): string {
+  if (!dateString) return '';
+  const date = new Date(dateString);
+  return date.toISOString().split('T')[0];
+}
+private hideAssistant() {
+  this.showAssistant = false;
+  this.isThinking = false;
+  this.isTyping = false;
+  this.assistantMessage = '';
+  this.showGuessButton = false;
+}
+
+typeField(fieldName: string, value: any): Promise<void> {
+  return new Promise((resolve) => {
+    this.isTyping = true;
+    this.assistantMessage = `Filling ${fieldName.replace(/([A-Z])/g, ' $1').toLowerCase()}...`;
+    
+    let currentValue = '';
+    let i = 0;
+    const typingInterval = setInterval(() => {
+      if (i < value.length) {
+        currentValue += value.charAt(i);
+        this.companyForm.get(fieldName)?.setValue(currentValue, { emitEvent: false });
+        i++;
+      } else {
+        clearInterval(typingInterval);
+        // Déclencher manuellement la validation après le remplissage
+        this.companyForm.get(fieldName)?.updateValueAndValidity();
+        this.companyForm.get(fieldName)?.markAsTouched();
+        this.isTyping = false;
+        resolve();
+      }
+    }, 50);
+  });
+}
+showFieldErrors(): void {
+  Object.keys(this.companyForm.controls).forEach(key => {
+    const control = this.companyForm.get(key);
+    if (control?.invalid) {
+      control.markAsTouched();
+    }
+  });
+}
+
+  shouldShowAssistant(): boolean {
+    const name = this.companyForm.get('name');
+    const website = this.companyForm.get('website');
+    
+    return this.showAssistant && 
+           name?.valid && 
+           website?.valid && 
+           name?.value && 
+           website?.value &&
+           !(name?.invalid && name?.touched) &&
+           !(website?.invalid && website?.touched);
+  }
 
   validateLabelDate(control: any): { [key: string]: boolean } | null {
     const labelDate = new Date(control.value);

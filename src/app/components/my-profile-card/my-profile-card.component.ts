@@ -130,7 +130,9 @@ getSectorDisplayName(sector: string): string {
     'TECHNOLOGY': 'Technology',
     'FINANCE': 'Finance', 
     'HEALTHCARE': 'Healthcare',
-    'EDUCATION': 'Education'
+    'EDUCATION': 'Education',
+    'OTHER': 'Other'
+
   };
   return sectorNames[sector] || sector;
 }

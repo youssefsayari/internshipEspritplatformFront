@@ -7,7 +7,7 @@ export interface Company {
   name: string;
   abbreviation?: string;
   address?: string;
-  sector: "TECHNOLOGY" | "FINANCE" | "HEALTHCARE" | "EDUCATION";
+  sector: "TECHNOLOGY" | "FINANCE" | "HEALTHCARE" | "EDUCATION" | "OTHER";
   email: string;
   phone?: number;
   foundingYear?: Date; // ISO Date string
