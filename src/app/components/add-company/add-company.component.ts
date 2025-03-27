@@ -5,6 +5,7 @@ import { Company } from '../../Model/Company';
 import { TypeSector } from '../../Model/type-sector.enum';
 import { Router } from "@angular/router";
 import Swal from 'sweetalert2';
+import { DomSanitizer } from '@angular/platform-browser';
 
 
 @Component({
@@ -36,7 +37,8 @@ export class AddCompanyComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private companyService: CompanyService,
-    private router: Router
+    private router: Router,
+    private sanitizer: DomSanitizer
   ) {
     this.companyForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3), Validators.pattern('^[a-zA-Z0-9 ]+$')]],
@@ -141,11 +143,48 @@ export class AddCompanyComponent implements OnInit {
     Promise.all(promises).then(() => {
       // Vérifier toutes les erreurs après remplissage
       this.showFieldErrors();
-      this.assistantMessage = 'All done! Please review the information before submitting.';
+      this.assistantMessage = `
+      <div class="assistant-message">
+        <div class="header">
+          <span class="icon">✓</span>
+          <h3>Company Profile Completed!</h3>
+        </div>
+        
+        <p class="description">I've collected all available information from public sources.</p>
+        
+        <div class="welcome-box">
+          <span class="welcome-icon">👋</span>
+          <span>Welcome to <strong>InnoExpert InternConnect</strong></span>
+          <p class="subtext">Your gateway to connecting with top student talent</p>
+        </div>
+        
+        <div class="features">
+          <div class="feature-item">
+            <span class="feature-icon">•</span>
+            <span>Post PFE/Summer internships</span>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">•</span>
+            <span>Screen candidates via smart quizzes</span>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">•</span>
+            <span>Track intern progress in real-time</span>
+          </div>
+        </div>
+        
+        <div class="action-box">
+          Please review your details before submitting
+        </div>
+      </div>
+      `;
       this.showThankYouButton();
     });
   }
-  
+  // Méthode pour sécuriser le HTML
+getSafeHtml(content: string) {
+  return this.sanitizer.bypassSecurityTrustHtml(content);
+}
   showThankYouButton() {
     this.showGuessButton = false;
     this.thankYouMode = true;

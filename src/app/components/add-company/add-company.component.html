@@ -2,24 +2,37 @@
   <img src="./assets/img/loogo.png" class="background-image">
 
    <!-- AI Assistant Container -->
-<!-- Modifier cette ligne -->
-    <div class="ai-assistant" [class.thinking]="isThinking" [class.visible]="shouldShowAssistant()">
-         <div class="ai-bot">
-      <div class="bot-face">
-        <div class="eyes">
-          <div class="eye left"></div>
-          <div class="eye right"></div>
-        </div>
-        <div class="mouth"></div>
+<!-- Modifiez la partie du bot dans le template -->
+<div class="ai-assistant" [class.visible]="shouldShowAssistant()" 
+     [class.thinking]="isThinking" 
+     [class.typing]="isTyping"
+     [class.happy]="thankYouMode"
+     [class.excited]="showGuessButton">
+  <div class="ai-bot">
+    <div class="bot-face">
+      <div class="eyes">
+        <div class="eye left"></div>
+        <div class="eye right"></div>
       </div>
-      <div class="bot-body">
-        <div class="message-bubble" *ngIf="assistantMessage">
-          {{assistantMessage}}
-          <button *ngIf="showGuessButton" class="guess-btn" (click)="guessForm()" [disabled]="isTyping">
-            Let me guess the rest!
+      <div class="mouth"></div>
+      <div class="eyebrows">
+        <div class="eyebrow left"></div>
+        <div class="eyebrow right"></div>
+      </div>
+    </div>
+    <div class="bot-body">
+      <div class="message-bubble" *ngIf="assistantMessage">
+       <!-- <div class="speech-text">{{assistantMessage}}</div>-->
+        <div class="speech-text" [innerHTML]="getSafeHtml(assistantMessage)"></div>
+
+        <div class="interaction-buttons">
+          <button *ngIf="showGuessButton" class="guess-btn" 
+                  (click)="guessForm()" [disabled]="isTyping">
+            Let me guess!
           </button>
-          <button *ngIf="thankYouMode" class="thank-you-btn" (click)="hideAssistantAfterThankYou()">
-            Thank you!
+          <button *ngIf="thankYouMode" class="thank-you-btn" 
+                  (click)="hideAssistantAfterThankYou()">
+            Done!
           </button>
         </div>
         <div class="typing-indicator" *ngIf="isTyping">
@@ -30,6 +43,7 @@
       </div>
     </div>
   </div>
+</div>
 
   <div class="company-container">
     <form [formGroup]="companyForm" (ngSubmit)="onSubmit()">
