@@ -3,6 +3,8 @@ import { Task } from '../../../Model/Task';
 import { TaskService } from '../../../Services/taskservice.service';
 import { TypeStatus } from '../../../Model/TypeStatus';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { UserService } from '../../../Services/user.service';
+
 
 @Component({
   selector: 'app-tasks-list',
@@ -11,13 +13,35 @@ import { CdkDragDrop } from '@angular/cdk/drag-drop';
 })
 export class TasksListComponent implements OnInit {
   tasks: Task[] = [];
-  studentId: number = 2;
+  studentId: number ;
   statuses = ['TODO', 'INPROGRESS', 'DONE'] as TypeStatus[];
 
-  constructor(private taskService: TaskService) {}
+  constructor(private taskService: TaskService,private userService : UserService) {}
 
   ngOnInit(): void {
-    this.loadTasksForStudent();
+    this.fetchUserDetails();
+  }
+  fetchUserDetails() {
+    const token = localStorage.getItem('Token');
+
+    if (token) {
+      this.userService.decodeTokenRole(token).subscribe({
+        next: (userDetails) => {
+          if (userDetails.role || userDetails.classe) {
+            localStorage.setItem('userRole', userDetails.role);
+            localStorage.setItem('userClasse', userDetails.classe);
+            this.studentId=userDetails.id;
+            console.log("the student is ", this.studentId);
+            this.loadTasksForStudent();
+
+
+          }
+        },
+        error: (err) => {
+          console.log('Error fetching user details:', err);
+        }
+      });
+    }
   }
 
   loadTasksForStudent(): void {
