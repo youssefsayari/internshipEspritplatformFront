@@ -992,3 +992,29 @@ form {
     }
   }
 }
+.warning-box {
+  background: #fff3bf;
+  padding: 12px;
+  border-radius: 6px;
+  margin-top: 15px;
+  display: flex;
+  align-items: center;
+  border-left: 4px solid #ffd43b;
+  animation: pulseWarning 2s infinite;
+
+  .warning-icon {
+    margin-right: 10px;
+    font-size: 1.2rem;
+  }
+
+  .warning-text {
+    font-weight: 500;
+    color: #5f3d00;
+    font-size: 0.9rem;
+  }
+}
+
+@keyframes pulseWarning {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}

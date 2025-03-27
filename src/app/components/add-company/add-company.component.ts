@@ -146,11 +146,10 @@ export class AddCompanyComponent implements OnInit {
       this.assistantMessage = `
       <div class="assistant-message">
         <div class="header">
-          <span class="icon">✓</span>
-          <h3>Company Profile Completed!</h3>
+          <h3>Your Company Profile Is Ready!</h3>
         </div>
         
-        <p class="description">I've collected all available information from public sources.</p>
+        <p>I've tried my best to collect available information from public sources.</p>
         
         <div class="welcome-box">
           <span class="welcome-icon">👋</span>
@@ -171,11 +170,16 @@ export class AddCompanyComponent implements OnInit {
             <span class="feature-icon">•</span>
             <span>Track intern progress in real-time</span>
           </div>
+          <div class="feature-item">
+            <span class="feature-icon">•</span>
+            <span>...</span>
+          </div>
         </div>
-        
-        <div class="action-box">
-          Please review your details before submitting
-        </div>
+        <br>
+         <div class="warning-box">
+            <span class="warning-icon">⚠️</span>
+            <span class="warning-text">Don't forget to review your details before submitting!</span>
+          </div>
       </div>
       `;
       this.showThankYouButton();
