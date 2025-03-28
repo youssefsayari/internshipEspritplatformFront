@@ -1,11 +1,16 @@
 <div class="panel-header panel-header-sm"></div>
 
 <div class="main-content p-4">
-  <h2 class="task-title">👨‍🏫 Tutor Task Management</h2>
+  <h2 class="task-title mb-4">👨‍🏫 Tutor Task Management</h2>
 
+  <!-- White Box for Student Selection -->
   <div class="student-box">
     <label for="studentDropdown">👨‍🎓 Select a Student</label>
-    <select id="studentDropdown" [(ngModel)]="selectedStudentId" (change)="onStudentChange()">
+    <select
+      id="studentDropdown"
+      [(ngModel)]="selectedStudentId"
+      (change)="onStudentChange()"
+    >
       <option [ngValue]="null" disabled selected>Select a student</option>
       <option *ngFor="let student of students" [ngValue]="student.idUser">
         {{ student.firstName }} {{ student.lastName }}
@@ -13,7 +18,8 @@
     </select>
   </div>
 
-  <div *ngIf="true" class="task-container">
+  <!-- Tasks Columns -->
+  <div class="task-container">
     <div
       class="task-box"
       *ngFor="let status of statuses"
