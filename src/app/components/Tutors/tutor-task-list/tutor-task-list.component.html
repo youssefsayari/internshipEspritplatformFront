@@ -3,7 +3,7 @@
 <div class="main-content p-4">
   <h2 class="task-title mb-4">👨‍🏫 Tutor Task Management</h2>
 
-  <!-- White Box for Student Selection -->
+  <!-- Student selection box -->
   <div class="student-box">
     <label for="studentDropdown">👨‍🎓 Select a Student</label>
     <select
@@ -44,8 +44,15 @@
           'done': task.status === 'DONE'
         }"
       >
-        <h4>{{ task.title }}</h4>
+        <div class="task-header">
+          <h4>{{ task.title }}</h4>
+        </div>
         <p>{{ task.description }}</p>
+
+        <div class="task-actions">
+          <button class="btn-action edit" (click)="editTask(task)">✏️</button>
+          <button class="btn-action delete" (click)="deleteTask(task.idTask)">🗑️</button>
+        </div>
       </div>
 
       <div *ngIf="getTasksByStatus(status).length === 0" class="no-tasks">

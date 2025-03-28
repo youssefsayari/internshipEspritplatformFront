@@ -19,6 +19,7 @@ export class TutorTaskListComponent implements OnInit {
   tasks: Task[] = [];
   tutorId: number;
   statuses = ['TODO', 'INPROGRESS', 'DONE'] as TypeStatus[];
+  editingTask: Task | null = null;
 
   constructor(
     private taskService: TaskService,
@@ -111,5 +112,31 @@ export class TutorTaskListComponent implements OnInit {
       default:
         return '';
     }
+  }
+  editTask(task: Task): void {
+    this.editingTask = { ...task }; 
+  }
+  
+  deleteTask(id: number): void {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'You are about to delete this task!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#aaa',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        
+        this.taskService.deleteTask(id).subscribe({
+          next: () => {
+            Swal.fire('Deleted!', 'Task has been deleted.', 'success');
+            this.onStudentChange(); // reload tasks
+          },
+          error: (err) => console.error('Error deleting task', err)
+        });
+      }
+    });
   }
 }
