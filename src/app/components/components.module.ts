@@ -39,6 +39,7 @@ import { ProfileCardComponent } from './profile-card/profile-card.component';
 import { IconsComponent } from './icons/icons.component'; // Vérifie le chemin exact
 import { QuizListComponent } from './quiz-list/quiz-list.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { TutorTaskListComponent } from './Tutors/tutor-task-list/tutor-task-list.component';
 
 
 
@@ -92,6 +93,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     ProfileCardComponent,
     IconsComponent,
     QuizListComponent,
+    TutorTaskListComponent,
    ],
   exports: [
     FooterComponent,

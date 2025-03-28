@@ -30,6 +30,7 @@ import { QuizListUserComponent } from '../../quiz-list-user/quiz-list-user.compo
 import { QuizPassComponent } from '../../quiz-pass/quiz-pass.component';
 import { ImageComponent } from '../../image/image.component';
 import { TasksListComponent } from '../../components/Students/tasks-list/tasks-list.component';
+import { TutorTaskListComponent } from '../../components/Tutors/tutor-task-list/tutor-task-list.component';
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent },
@@ -50,6 +51,7 @@ export const AdminLayoutRoutes: Routes = [
       { path: 'MyMeeting',        component: MeetingComponent },
     { path: 'StudentMeeting', component: StudentMeetingsComponent },
     { path: 'MyTasks', component: TasksListComponent },
+    {path : "Tasks" , component : TutorTaskListComponent},
 
 
 

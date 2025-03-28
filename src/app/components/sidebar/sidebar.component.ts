@@ -33,6 +33,8 @@ export const ROUTES: RouteInfo[] = [
   { path: '/StudentMeeting', title: 'My Meeting', icon: 'education_atom', class: '' ,roles:['Student']},
   { path: '/internship', title: 'Internship', icon: 'business_briefcase-24', class: '', roles: ['Tutor'] },
   { path: '/MyTasks', title: 'My Tasks', icon: 'design_vector', class: '', roles: ['Student'] },
+  { path: '/Tasks', title: 'Tasks', icon: 'design_vector', class: '', roles: ['Tutor'] },
+
   { path: '/defence', title: 'My Defences', icon: 'education_hat', class: '', roles: ['Student'] },
   { path: '/setting', title: 'Settings', icon: 'ui-1_settings-gear-63', class: '', roles: ['Admin'] },
   { path: '/feedback', title: 'Feedback', icon: 'ui-1_send', class: 'active active-pro', roles: ['Student','Admin','Company'] },
