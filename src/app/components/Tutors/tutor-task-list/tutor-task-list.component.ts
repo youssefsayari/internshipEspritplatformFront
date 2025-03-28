@@ -6,6 +6,7 @@ import { User } from '../../../Model/User';
 import { TypeStatus } from '../../../Model/TypeStatus';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { MeetingService } from '../../../Services/MeetingService';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-tutor-task-list',
@@ -19,7 +20,11 @@ export class TutorTaskListComponent implements OnInit {
   tutorId: number;
   statuses = ['TODO', 'INPROGRESS', 'DONE'] as TypeStatus[];
 
-  constructor(private taskService: TaskService, private userService: UserService,private meetingService: MeetingService) {}
+  constructor(
+    private taskService: TaskService,
+    private userService: UserService,
+    private meetingService: MeetingService
+  ) {}
 
   ngOnInit(): void {
     this.fetchUserDetails();
@@ -32,6 +37,12 @@ export class TutorTaskListComponent implements OnInit {
         next: (userDetails) => {
           this.tutorId = userDetails.id;
           this.loadStudents();
+          Swal.fire({
+            title: '👨‍🏫 Welcome!',
+            text: 'Please select a student to view their tasks.',
+            icon: 'info',
+            confirmButtonText: 'OK'
+          });
         },
         error: (err) => console.error('Error fetching user details', err)
       });
