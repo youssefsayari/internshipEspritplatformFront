@@ -1,11 +1,11 @@
 <div class="panel-header panel-header-sm"></div>
 
 <div class="main-content p-4">
-  <h2 class="task-title mb-4">👨‍🏫 Tutor Task Management</h2>
+  <h2 class="task-title">👨‍🏫 Tutor Task Management</h2>
 
-  <div class="form-group mb-4">
-    <label for="studentDropdown" class="font-weight-bold">👨‍🎓 Select Student:</label>
-    <select id="studentDropdown" class="form-control w-50" [(ngModel)]="selectedStudentId" (change)="onStudentChange()">
+  <div class="student-box">
+    <label for="studentDropdown">👨‍🎓 Select a Student</label>
+    <select id="studentDropdown" [(ngModel)]="selectedStudentId" (change)="onStudentChange()">
       <option [ngValue]="null" disabled selected>Select a student</option>
       <option *ngFor="let student of students" [ngValue]="student.idUser">
         {{ student.firstName }} {{ student.lastName }}
@@ -13,7 +13,7 @@
     </select>
   </div>
 
-  <div *ngIf="selectedStudentId" class="task-container">
+  <div *ngIf="true" class="task-container">
     <div
       class="task-box"
       *ngFor="let status of statuses"
