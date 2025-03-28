@@ -163,6 +163,62 @@ export class TutorTaskListComponent implements OnInit {
       }
     });
   }
+  openAddTask(): void {
+    Swal.fire({
+      title: '➕ Add New Task',
+      html: `
+        <div style="text-align:left;">
+          <label style="font-weight:600;">📝 Description:</label>
+          <textarea id="newDescription" class="swal2-textarea" placeholder="Enter task description"></textarea>
+            <br>
+          <label style="font-weight:600; margin-top:10px;">📌 Status:</label>
+          <br>
+          <select id="newStatus" class="swal2-select">
+            <option value="TODO">📝 TODO</option>
+            <option value="INPROGRESS">⏳ IN PROGRESS</option>
+            <option value="DONE">✅ DONE</option>
+          </select>
+        </div>
+      `,
+      showCancelButton: true,
+      confirmButtonText: '➕ Add',
+      cancelButtonText: '❌ Cancel',
+      preConfirm: () => {
+        const desc = (document.getElementById('newDescription') as HTMLTextAreaElement).value;
+        const status = (document.getElementById('newStatus') as HTMLSelectElement).value;
+  
+        if (!desc.trim()) {
+          Swal.showValidationMessage('Description is required.');
+          return;
+        }
+  
+        return {
+          description: desc.trim(),
+          status: status as TypeStatus
+        };
+      }
+    }).then((result) => {
+      if (result.isConfirmed && result.value) {
+        const newTask: Task = {
+          idTask: 0,
+          description: result.value.description,
+          status: result.value.status,
+          student: { idUser: this.selectedStudentId! } 
+        };
+  
+        this.taskService.addTaskAndAssignToStudent(newTask, this.selectedStudentId!).subscribe({
+          next: () => {
+            Swal.fire('✅ Added', 'Task successfully added.', 'success');
+            this.onStudentChange();
+          },
+          error: (err) => {
+            console.error('Error adding task:', err);
+            Swal.fire('❌ Error', 'Could not add task.Select student to affect the task', 'error');
+          }
+        });
+      }
+    });
+  }
   
   
   
@@ -181,11 +237,14 @@ export class TutorTaskListComponent implements OnInit {
         this.taskService.deleteTask(id).subscribe({
           next: () => {
             Swal.fire('Deleted!', 'Task has been deleted.', 'success');
-            this.onStudentChange(); // reload tasks
+            this.onStudentChange(); 
           },
           error: (err) => console.error('Error deleting task', err)
         });
       }
     });
   }
+  
+
+
 }

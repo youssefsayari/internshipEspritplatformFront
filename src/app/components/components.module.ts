@@ -40,6 +40,7 @@ import { IconsComponent } from './icons/icons.component'; // Vérifie le chemin 
 import { QuizListComponent } from './quiz-list/quiz-list.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { TutorTaskListComponent } from './Tutors/tutor-task-list/tutor-task-list.component';
+import { AddTaskComponent } from './Tutors/add-task/add-task.component';
 
 
 
@@ -94,6 +95,7 @@ import { TutorTaskListComponent } from './Tutors/tutor-task-list/tutor-task-list
     IconsComponent,
     QuizListComponent,
     TutorTaskListComponent,
+    AddTaskComponent,
    ],
   exports: [
     FooterComponent,

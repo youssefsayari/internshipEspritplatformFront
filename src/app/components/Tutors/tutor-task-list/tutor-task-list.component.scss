@@ -169,4 +169,27 @@
   .btn-action.delete:hover {
     background-color: #b02a37;
   }
+  /* Flex layout for student box */
+.student-box {
+    position: relative;
+    flex-direction: row; /* change from column to row */
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .student-box .left {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .student-box .btn.btn-primary {
+    position: absolute;
+    right: 30px;
+    top: 20px;
+    padding: 8px 16px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
   

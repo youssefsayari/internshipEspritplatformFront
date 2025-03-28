@@ -3,19 +3,23 @@
 <div class="main-content p-4">
   <h2 class="task-title mb-4">👨‍🏫 Tutor Task Management</h2>
 
-  <!-- Student selection box -->
+  <!-- Student selection box with Add button -->
   <div class="student-box">
-    <label for="studentDropdown">👨‍🎓 Select a Student</label>
-    <select
-      id="studentDropdown"
-      [(ngModel)]="selectedStudentId"
-      (change)="onStudentChange()"
-    >
-      <option [ngValue]="null" disabled selected>Select a student</option>
-      <option *ngFor="let student of students" [ngValue]="student.idUser">
-        {{ student.firstName }} {{ student.lastName }}
-      </option>
-    </select>
+    <div class="left">
+      <label for="studentDropdown">👨‍🎓 Select a Student</label>
+      <select
+        id="studentDropdown"
+        [(ngModel)]="selectedStudentId"
+        (change)="onStudentChange()"
+      >
+        <option [ngValue]="null" disabled selected>Select a student</option>
+        <option *ngFor="let student of students" [ngValue]="student.idUser">
+          {{ student.firstName }} {{ student.lastName }}
+        </option>
+      </select>
+    </div>
+
+    <button class="btn btn-primary add-btn" (click)="openAddTask()">➕ Add Meeting</button>
   </div>
 
   <!-- Tasks Columns -->
@@ -54,14 +58,6 @@
           <button class="btn-action delete" (click)="deleteTask(task.idTask)">🗑️</button>
         </div>
       </div>
-      <app-update-task
-  *ngIf="editingTask"
-  [task]="editingTask"
-  [studentId]="selectedStudentId!"
-  (close)="editingTask = null"
-  (updated)="onStudentChange()"
-></app-update-task>
-
 
       <div *ngIf="getTasksByStatus(status).length === 0" class="no-tasks">
         <em>No tasks available.</em>
