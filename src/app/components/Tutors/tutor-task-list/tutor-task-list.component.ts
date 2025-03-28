@@ -116,13 +116,19 @@ export class TutorTaskListComponent implements OnInit {
   editTask(task: Task): void {
     Swal.fire({
       title: '✏️ Edit Task',
-      html:
-        `<textarea id="description" class="swal2-textarea" placeholder="Description" rows="4">${task.description}</textarea>` +
-        `<select id="status" class="swal2-select" style="margin-top:10px;">
-          <option value="TODO" ${task.status === 'TODO' ? 'selected' : ''}>📝 TODO</option>
-          <option value="INPROGRESS" ${task.status === 'INPROGRESS' ? 'selected' : ''}>⏳ IN PROGRESS</option>
-          <option value="DONE" ${task.status === 'DONE' ? 'selected' : ''}>✅ DONE</option>
-        </select>`,
+      html: `
+        <div style="text-align:left;">
+          <label style="font-weight:600; display:block; margin-bottom:5px;">📝 Description:</label>
+          <textarea id="description" class="swal2-textarea" placeholder="Enter description" rows="4">${task.description}</textarea>
+  
+          <label style="font-weight:600; margin-top:15px; display:block;">📌 Status:</label>
+          <select id="status" class="swal2-select" style="margin-top:5px;">
+            <option value="TODO" ${task.status === 'TODO' ? 'selected' : ''}>📝 TODO</option>
+            <option value="INPROGRESS" ${task.status === 'INPROGRESS' ? 'selected' : ''}>⏳ IN PROGRESS</option>
+            <option value="DONE" ${task.status === 'DONE' ? 'selected' : ''}>✅ DONE</option>
+          </select>
+        </div>
+      `,
       showCancelButton: true,
       confirmButtonText: '✅ Update',
       cancelButtonText: '❌ Cancel',
@@ -157,6 +163,7 @@ export class TutorTaskListComponent implements OnInit {
       }
     });
   }
+  
   
   
   deleteTask(id: number): void {
