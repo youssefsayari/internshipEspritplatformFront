@@ -114,8 +114,50 @@ export class TutorTaskListComponent implements OnInit {
     }
   }
   editTask(task: Task): void {
-    this.editingTask = { ...task }; 
+    Swal.fire({
+      title: '✏️ Edit Task',
+      html:
+        `<textarea id="description" class="swal2-textarea" placeholder="Description" rows="4">${task.description}</textarea>` +
+        `<select id="status" class="swal2-select" style="margin-top:10px;">
+          <option value="TODO" ${task.status === 'TODO' ? 'selected' : ''}>📝 TODO</option>
+          <option value="INPROGRESS" ${task.status === 'INPROGRESS' ? 'selected' : ''}>⏳ IN PROGRESS</option>
+          <option value="DONE" ${task.status === 'DONE' ? 'selected' : ''}>✅ DONE</option>
+        </select>`,
+      showCancelButton: true,
+      confirmButtonText: '✅ Update',
+      cancelButtonText: '❌ Cancel',
+      preConfirm: () => {
+        const updatedDescription = (document.getElementById('description') as HTMLTextAreaElement).value;
+        const updatedStatus = (document.getElementById('status') as HTMLSelectElement).value;
+  
+        if (!updatedDescription.trim()) {
+          Swal.showValidationMessage('Description is required.');
+          return;
+        }
+  
+        return {
+          ...task,
+          description: updatedDescription.trim(),
+          status: updatedStatus as TypeStatus
+        };
+      }
+    }).then((result) => {
+      if (result.isConfirmed && result.value) {
+        const updatedTask: Task = result.value;
+        this.taskService.updateTaskAndAssignToStudent(updatedTask, this.selectedStudentId!).subscribe({
+          next: () => {
+            Swal.fire('✅ Updated', 'Task updated successfully!', 'success');
+            this.onStudentChange();
+          },
+          error: (err) => {
+            console.error('Error updating task:', err);
+            Swal.fire('❌ Error', 'Could not update the task.', 'error');
+          }
+        });
+      }
+    });
   }
+  
   
   deleteTask(id: number): void {
     Swal.fire({

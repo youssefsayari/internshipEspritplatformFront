@@ -35,7 +35,7 @@ export class TaskService {
     return this.http.post<Task>(`${this.baseUrl}/addTaskAndAssignToStudent/${idUser}`, task);
   }
   updateTaskAndAssignToStudent(task: Task, idUser: number): Observable<Task> {
-    return this.http.post<Task>(`${this.baseUrl}/updateTaskAndAssignToStudent/${idUser}`, task);
+    return this.http.put<Task>(`${this.baseUrl}/updateAndAssignTaskToStudent/${idUser}`, task);
   }
 
   changeTaskStatus(idTask: number, typeStatus: string): Observable<Task> {

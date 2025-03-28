@@ -54,6 +54,14 @@
           <button class="btn-action delete" (click)="deleteTask(task.idTask)">🗑️</button>
         </div>
       </div>
+      <app-update-task
+  *ngIf="editingTask"
+  [task]="editingTask"
+  [studentId]="selectedStudentId!"
+  (close)="editingTask = null"
+  (updated)="onStudentChange()"
+></app-update-task>
+
 
       <div *ngIf="getTasksByStatus(status).length === 0" class="no-tasks">
         <em>No tasks available.</em>
