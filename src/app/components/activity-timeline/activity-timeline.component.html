@@ -163,8 +163,8 @@
 
   <div class="d-flex align-items-start">   
     <!-- Image utilisateur avec clic -->
-    <img *ngIf="timeline.image" 
-         [src]="timeline.image" 
+    <img *ngIf="timeline.image.imageUrl" 
+         [src]="timeline.image.imageUrl" 
          width="50" height="50"
          alt="user" 
          class="rounded-circle me-3 border shadow-sm" 
@@ -276,4 +276,44 @@
 
   </div>
 
+
+<!-- Ajoutez après la section de contenu du post -->
+<div *ngIf="postAnalysis.get(timeline.id) as analysis">
+  <div class="qna-section" *ngIf="analysis.qna.length > 0">
+    <h4 class="qna-title">
+    <i class="fas fa-lightbulb"></i> Educational Insights
+    <span *ngIf="analysis.loading" class="loading-spinner">
+      <i class="fas fa-spinner fa-spin"></i> Generating insights...
+    </span>
+  </h4>
+
+  <div *ngIf="analysis.error" class="qna-error alert alert-warning">
+    {{ analysis.error }}
+  </div>
+
+  <div class="qna-list" *ngIf="analysis.qna.length > 0">
+    <div class="qna-item" *ngFor="let item of analysis.qna; let i = index">
+      <div class="question-card" (click)="toggleAnswer(timeline.id, i)">
+        <div class="question-content">
+          <div class="question-icon">
+            <i class="fas fa-question-circle"></i>
+          </div>
+          <div class="question-text">{{ item.question }}</div>
+          <div class="toggle-icon">
+            <i class="fas" [ngClass]="{'fa-chevron-down': !item.expanded, 'fa-chevron-up': item.expanded}"></i>
+          </div>
+        </div>
+        <div class="answer-card" [class.expanded]="item.expanded">
+          <div class="answer-content">
+            <div class="answer-icon">
+              <i class="fas fa-comment-dots"></i>
+            </div>
+            <div class="answer-text">{{ item.answer }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+</div>
+
