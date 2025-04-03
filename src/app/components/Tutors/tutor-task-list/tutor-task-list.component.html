@@ -20,6 +20,7 @@
     </div>
     <div *ngIf="topStudent" class="top-student-box">
       <h3>🏆 Top Performer: {{ topStudent.firstName }} {{ topStudent.lastName }}</h3>
+      <button class="btn btn-info details-btn" (click)="showStudentDetails()">📋 Details</button>
     </div>
   
 

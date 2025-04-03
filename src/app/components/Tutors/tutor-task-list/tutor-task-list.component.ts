@@ -258,4 +258,38 @@ export class TutorTaskListComponent implements OnInit {
     });
   }
 
+
+
+  showStudentDetails(): void {
+    if (!this.students || this.students.length === 0) {
+      Swal.fire('📋 No Students', 'No students found for this tutor.', 'info');
+      return;
+    }
+  
+    let studentListHtml = '';
+  
+    const fetchCounts = async () => {
+      for (const student of this.students) {
+        try {
+          const doneCount = await this.taskService.countDoneTasksByStudent(student.idUser!).toPromise();
+          studentListHtml += `👨‍🎓 ${student.firstName} ${student.lastName}: ✅ ${doneCount} Done Tasks<br>`;
+        } catch (error) {
+          console.error(`Error fetching tasks for ${student.firstName} ${student.lastName}:`, error);
+          studentListHtml += `👨‍🎓 ${student.firstName} ${student.lastName}: ❌ Error fetching tasks<br>`;
+        }
+      }
+  
+      Swal.fire({
+        title: '📋 Student Task Details',
+        html: studentListHtml,
+        icon: 'info',
+        confirmButtonText: 'OK'
+      });
+    };
+  
+    fetchCounts();
+  }
+  
+
+
 }
