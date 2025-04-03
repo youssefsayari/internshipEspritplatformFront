@@ -50,6 +50,9 @@ export class TaskService {
   findStudentWithMostDoneTasks(): Observable<any> {
     return this.http.get<any>(`${this.baseUrl}/findStudentWithMostDoneTasks`);
   }
+  getStudentsWithDoneTasks(tutorId: number): Observable<Map<string, number>> {
+    return this.http.get<Map<string, number>>(`${this.baseUrl}/students-done-tasks/${tutorId}`);
+  }
   
 
 }

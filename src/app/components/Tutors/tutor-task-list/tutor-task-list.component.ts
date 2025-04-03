@@ -252,12 +252,7 @@ export class TutorTaskListComponent implements OnInit {
     this.taskService.findStudentWithMostDoneTasks().subscribe({
       next: (student) => {
         this.topStudent = student;
-        Swal.fire({
-          title: '🏆 Top Student!',
-          text: `${student.firstName} ${student.lastName} has completed the most tasks!`,
-          icon: 'success',
-          confirmButtonText: 'Nice!'
-        });
+       
       },
       error: (err) => console.error('Error finding top student:', err)
     });
