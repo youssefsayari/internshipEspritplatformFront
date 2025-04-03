@@ -170,29 +170,41 @@
     background-color: #b02a37;
   }
   /* Flex layout for student box */
+/* Flex layout for student box */
 .student-box {
-    position: relative;
-    flex-direction: row; /* change from column to row */
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .student-box .left {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .student-box .btn.btn-primary {
-    position: absolute;
-    right: 30px;
-    top: 20px;
-    padding: 8px 16px;
-    font-size: 0.95rem;
-    font-weight: 600;
-    border-radius: 6px;
-    white-space: nowrap;
-  }
-  /* Centering the Top Performer */
+  position: relative;
+  flex-direction: row; /* Keep it in a row */
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px; /* Add some gap between the buttons */
+}
+
+.student-box .btn.btn-primary {
+  padding: 8px 16px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.student-box .btn.btn-primary.add-btn {
+  order: 2; 
+}
+
+.student-box .btn.btn-primary.add-btn:nth-child(2) {
+  order: 1; 
+}
+/* Specific styling for the Details button */
+.student-box .btn.btn-primary.details-btn {
+  background-color: #007bff; /* Blue color */
+  color: white;
+}
+
+.student-box .btn.btn-primary.details-btn:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+
 .top-student-box {
   width: 100%;
   display: flex;

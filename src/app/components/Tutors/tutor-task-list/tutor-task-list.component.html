@@ -20,11 +20,12 @@
     </div>
     <div *ngIf="topStudent" class="top-student-box">
       <h3>🏆 Top Performer: {{ topStudent.firstName }} {{ topStudent.lastName }}</h3>
-      <button class="btn btn-info details-btn" (click)="showStudentDetails()">📋 Details</button>
     </div>
   
 
+    <button class="btn btn-primary details-btn" (click)="showStudentDetails()">📋 Details</button>
     <button class="btn btn-primary add-btn" (click)="openAddTask()">➕ Add Task</button>
+
   </div>
 
   <!-- Tasks Columns -->
