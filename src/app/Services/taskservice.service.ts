@@ -47,4 +47,9 @@ export class TaskService {
       params: { idUser: idUser.toString() }
     });
   }
+  findStudentWithMostDoneTasks(): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/findStudentWithMostDoneTasks`);
+  }
+  
+
 }

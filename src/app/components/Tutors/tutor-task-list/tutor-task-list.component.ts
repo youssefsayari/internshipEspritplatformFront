@@ -20,6 +20,8 @@ export class TutorTaskListComponent implements OnInit {
   tutorId: number;
   statuses = ['TODO', 'INPROGRESS', 'DONE'] as TypeStatus[];
   editingTask: Task | null = null;
+  topStudent: User | null = null;
+
 
   constructor(
     private taskService: TaskService,
@@ -54,6 +56,7 @@ export class TutorTaskListComponent implements OnInit {
     this.meetingService.getStudentsByTutorId(this.tutorId).subscribe({
       next: (students) => {
         this.students = students;
+        this.findTopStudent();
       },
       error: (err) => console.error('Failed to load students', err)
     });
@@ -245,6 +248,19 @@ export class TutorTaskListComponent implements OnInit {
     });
   }
   
-
+  findTopStudent(): void {
+    this.taskService.findStudentWithMostDoneTasks().subscribe({
+      next: (student) => {
+        this.topStudent = student;
+        Swal.fire({
+          title: '🏆 Top Student!',
+          text: `${student.firstName} ${student.lastName} has completed the most tasks!`,
+          icon: 'success',
+          confirmButtonText: 'Nice!'
+        });
+      },
+      error: (err) => console.error('Error finding top student:', err)
+    });
+  }
 
 }
