@@ -312,4 +312,42 @@ export class TutorTaskListComponent implements OnInit {
     });
   }
 
+  rateTask(task: Task): void {
+    Swal.fire({
+      title: '⭐ Rate Task',
+      input: 'number',
+      inputLabel: 'Enter a score out of 100',
+      inputAttributes: {
+        min: '0',
+        max: '100'
+      },
+      inputValue: task.note ?? '',
+      showCancelButton: true,
+      confirmButtonText: '✅ Rate',
+      cancelButtonText: '❌ Cancel',
+      inputValidator: (value) => {
+        const score = Number(value);
+        if (isNaN(score) || score < 0 || score > 100) {
+          return 'Please enter a valid number between 0 and 100';
+        }
+        return null;
+      }
+    }).then((result) => {
+      if (result.isConfirmed && result.value !== undefined) {
+        const note = Number(result.value);
+        this.taskService.rateTask(task.idTask!, note).subscribe({
+          next: (updatedTask) => {
+            Swal.fire('✅ Rated', `Task rated ${note}/100`, 'success');
+            task.note = note;
+          },
+          error: (err) => {
+            console.error('Error rating task:', err);
+            Swal.fire('❌ Error', 'Could not rate the task.', 'error');
+          }
+        });
+      }
+    });
+  }
+  
+
 }

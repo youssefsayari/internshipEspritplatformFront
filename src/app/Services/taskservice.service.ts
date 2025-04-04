@@ -56,6 +56,9 @@ export class TaskService {
   countDoneTasksByStudent(studentId: number): Observable<number> {
     return this.http.get<number>(`${this.baseUrl}/done-tasks-count/${studentId}`);
   }
+  rateTask(taskId: number, note: number): Observable<Task> {
+    return this.http.put<Task>(`${this.baseUrl}/rateTask/${taskId}/${note}`, {});
+  }
   
   
 

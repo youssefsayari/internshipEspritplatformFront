@@ -8,4 +8,5 @@ export interface Task {
   description: string;
   status: TypeStatus;
   student: User;
+  note?: number; 
 }

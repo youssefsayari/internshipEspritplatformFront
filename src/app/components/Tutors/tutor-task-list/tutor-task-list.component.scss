@@ -223,3 +223,24 @@
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
+.task p strong {
+  color: #2c3e50;
+}
+
+.task p {
+  margin-top: 5px;
+  font-size: 0.9rem;
+}
+.task-top {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+}
+
+.task-note {
+  font-size: 0.85rem;
+  padding: 4px 8px;
+  border-radius: 6px;
+  color: #2c3e50;
+  font-weight: 600;
+}
