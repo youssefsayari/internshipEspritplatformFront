@@ -4,6 +4,8 @@ import { TaskService } from '../../../Services/taskservice.service';
 import { TypeStatus } from '../../../Model/TypeStatus';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { UserService } from '../../../Services/user.service';
+import confetti from 'canvas-confetti';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -87,10 +89,15 @@ export class TasksListComponent implements OnInit {
 
   onTaskDrop(event: CdkDragDrop<Task[]>, newStatus: TypeStatus): void {
     const task: Task = event.item.data;
+  
     if (task.status !== newStatus) {
       this.taskService.changeTaskStatus(task.idTask, newStatus).subscribe({
         next: () => {
           task.status = newStatus;
+  
+          if (newStatus === 'DONE') {
+            this.celebrateTaskCompletion();
+          }
         },
         error: (err) => {
           console.error('Failed to update task status:', err);
@@ -98,4 +105,21 @@ export class TasksListComponent implements OnInit {
       });
     }
   }
+  celebrateTaskCompletion() {
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 },
+    });
+  
+    Swal.fire({
+      title: 'Well done!',
+      text: 'Task completed 💪',
+      icon: 'success',
+      confirmButtonText: 'Thanks!',
+      timer: 2000,
+      timerProgressBar: true
+    });
+  }
+
 }

@@ -7,6 +7,8 @@ import { TypeStatus } from '../../../Model/TypeStatus';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { MeetingService } from '../../../Services/MeetingService';
 import Swal from 'sweetalert2';
+import confetti from 'canvas-confetti';
+
 
 @Component({
   selector: 'app-tutor-task-list',
@@ -79,10 +81,12 @@ export class TutorTaskListComponent implements OnInit {
 
   onTaskDrop(event: CdkDragDrop<Task[]>, newStatus: TypeStatus): void {
     const task: Task = event.item.data;
+  
     if (task.status !== newStatus) {
       this.taskService.changeTaskStatus(task.idTask, newStatus).subscribe({
         next: () => {
           task.status = newStatus;
+  
         },
         error: (err) => {
           console.error('Failed to update task status:', err);
@@ -90,6 +94,7 @@ export class TutorTaskListComponent implements OnInit {
       });
     }
   }
+  
 
   iconForStatus(status: TypeStatus): string {
     switch (status) {
@@ -290,6 +295,21 @@ export class TutorTaskListComponent implements OnInit {
     fetchCounts();
   }
   
-
+  celebrateTaskCompletion() {
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 },
+    });
+  
+    Swal.fire({
+      title: 'Well done!',
+      text: 'Task completed 💪',
+      icon: 'success',
+      confirmButtonText: 'Thanks!',
+      timer: 2000,
+      timerProgressBar: true
+    });
+  }
 
 }
