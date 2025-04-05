@@ -109,8 +109,6 @@ export class ActivityTimelineComponent implements OnInit {
   ngOnInit(): void {
     this.fetchUserDetails().then(() => {
         this.checkUserCompany();
-        console.error('isUserInCompany', this.isUserInCompany);
-
         this.loadPosts();
         
     });
@@ -167,7 +165,6 @@ fetchUserDetails(): Promise<void> {
         if (this.userType === 'Admin') {
           this.companyId = -1;
           this.isUserInCompany = false;
-          console.log("Utilisateur admin détecté, companyId set à -1");
           return;
       }
 
@@ -435,7 +432,7 @@ clearFilters() {
         .map(c => ({
           id: c.id ?? 0,
           user: c.user ? `${c.user.firstName} ${c.user.lastName}` : 'Anonyme',
-          userId: c.user.idUser ?? 0,
+          userId: c.user?.idUser ?? 0,
           text: c.content ?? '',
           createdAt: c.createdAt
         }))

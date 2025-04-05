@@ -34,7 +34,7 @@
 
 <!-- Filter by Company Button -->
  
-<button *ngIf="isUserInCompany|| userType === 'Admin'" (click)="getPostsAndFilterByCompany(companyId)" class="btn btn-primary">My Posts</button>
+<button *ngIf="isUserInCompany|| userType === 'Admin'" (click)="getPostsAndFilterByCompany(companyId)" class="btn btn-primary" style="background-color: #FF3636;">My Posts</button>
 
 
 
@@ -258,10 +258,10 @@
 
       <!-- ➕ Ajouter un commentaire -->
       <div class="mt-3 comment-input d-flex align-items-center">
-        <textarea placeholder="Ajouter un commentaire..." 
+        <textarea placeholder="Add a comment..." 
                   [(ngModel)]="timeline.newComment" 
                   rows="2" class="form-control me-2 rounded"></textarea>
-        <button (click)="addComment(timeline)" class="btn btn-primary">
+        <button (click)="addComment(timeline)" class="btn btn-primary" style="background-color: #FF3636;">
           <i class="fas fa-paper-plane"></i> <!-- Icône Font Awesome -->
         </button>
       </div>

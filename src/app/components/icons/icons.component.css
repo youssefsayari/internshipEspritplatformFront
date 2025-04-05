@@ -32,7 +32,7 @@
   font-family: 'Playfair Display', serif; /* Police moderne */
   font-size: 2rem; /* Taille de police plus grande */
   font-weight: 700; /* Gras */
-  background: linear-gradient(90deg, #f11a1a, #ed5f5f); /* Dégradé moderne */
+  background: linear-gradient(90deg, #FF3636, #ed5f5f); /* Dégradé moderne */
   -webkit-background-clip: text; /* Applique le dégradé au texte */
   background-clip: text; /* Standard property for compatibility */
   -webkit-text-fill-color: transparent; /* Rend le texte transparent */
