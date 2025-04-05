@@ -144,17 +144,16 @@ export class TasksListComponent implements OnInit {
   }
   
   sendHelpRequest(task: Task, message: string) {
-    const helpRequest = {
-      taskId: task.idTask,
-      studentId: this.studentId,
-      message: message,
-      date: new Date()
-    };
-  
-    console.log("Help Request Sent: ", helpRequest);
-  
-  
-    Swal.fire('Sent!', 'Your request has been sent to your instructor.', 'success');
+    this.taskService.sendHelpRequest(task.idTask, message).subscribe({
+      next: (response) => {
+        console.log('✅ Help request sent:', response);
+        Swal.fire('Sent!', 'Your request has been sent to your instructor.', 'success');
+      },
+      error: (err) => {
+        console.error('❌ Failed to send help request:', err);
+        Swal.fire('Error', 'Failed to send your request. Please try again later.', 'error');
+      }
+    });
   }
   
 

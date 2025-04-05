@@ -59,6 +59,10 @@ export class TaskService {
   rateTask(taskId: number, note: number): Observable<Task> {
     return this.http.put<Task>(`${this.baseUrl}/rateTask/${taskId}/${note}`, {});
   }
+  sendHelpRequest(taskId: number, message: string): Observable<string> {
+    const body = { message }; 
+    return this.http.post(`${this.baseUrl}/help-request/${taskId}`, body, { responseType: 'text' });
+  }
   
   
 
