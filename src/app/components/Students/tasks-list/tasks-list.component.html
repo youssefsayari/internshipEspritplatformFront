@@ -31,8 +31,8 @@
     >
       <h4>{{ task.title }}</h4>
       <div class="task-top">
-        <p *ngIf="task.status === 'DONE' && task.note !== undefined" class="task-note">
-          ⭐ <strong>Mark:</strong> {{ task.note }}/100
+        <p *ngIf="task.status === 'DONE' && task.mark !== undefined" class="task-note">
+          ⭐ <strong>Mark:</strong> {{ task.mark }}/100
         </p>
                 </div>
       <p>{{ task.description }}</p>

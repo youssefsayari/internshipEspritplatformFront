@@ -321,7 +321,7 @@ export class TutorTaskListComponent implements OnInit {
         min: '0',
         max: '100'
       },
-      inputValue: task.note ?? '',
+      inputValue: task.mark ?? '',
       showCancelButton: true,
       confirmButtonText: '✅ Rate',
       cancelButtonText: '❌ Cancel',
@@ -338,7 +338,7 @@ export class TutorTaskListComponent implements OnInit {
         this.taskService.rateTask(task.idTask!, note).subscribe({
           next: (updatedTask) => {
             Swal.fire('✅ Rated', `Task rated ${note}/100`, 'success');
-            task.note = note;
+            task.mark = note;
           },
           error: (err) => {
             console.error('Error rating task:', err);
