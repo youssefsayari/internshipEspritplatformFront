@@ -1,4 +1,4 @@
-<div class="panel-header panel-header-sm"></div>
+<div class="panel-header panel-header-sm"></div> 
 
 <!-- Section Title -->
 <h2 class="task-title">🗂️ My Tasks</h2>
@@ -34,8 +34,15 @@
         <p *ngIf="task.status === 'DONE' && task.mark !== undefined" class="task-note">
           ⭐ <strong>Mark:</strong> {{ task.mark }}/100
         </p>
-                </div>
+      </div>
       <p>{{ task.description }}</p>
+
+      <!-- ❓ Help Button (only for TODO and INPROGRESS) -->
+      <div class="task-actions" *ngIf="task.status === 'TODO' || task.status === 'INPROGRESS'">
+        <button class="help-btn" (click)="openHelpDialog(task)">
+          ❓
+        </button>        
+      </div>
     </div>
 
     <div *ngIf="getTasksByStatus(status).length === 0" class="no-tasks">

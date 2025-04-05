@@ -122,4 +122,40 @@ export class TasksListComponent implements OnInit {
     });
   }
 
+  openHelpDialog(task: Task) {
+    Swal.fire({
+      title: `Need help with Task?`,
+      input: 'textarea',
+      inputLabel: 'Describe your issue',
+      inputPlaceholder: 'Type your question or issue here...',
+      showCancelButton: true,
+      confirmButtonText: 'Send',
+      preConfirm: (message) => {
+        if (!message) {
+          Swal.showValidationMessage('Message cannot be empty');
+        }
+        return message;
+      }
+    }).then((result) => {
+      if (result.isConfirmed && result.value) {
+        this.sendHelpRequest(task, result.value);
+      }
+    });
+  }
+  
+  sendHelpRequest(task: Task, message: string) {
+    const helpRequest = {
+      taskId: task.idTask,
+      studentId: this.studentId,
+      message: message,
+      date: new Date()
+    };
+  
+    console.log("Help Request Sent: ", helpRequest);
+  
+  
+    Swal.fire('Sent!', 'Your request has been sent to your instructor.', 'success');
+  }
+  
+
 }

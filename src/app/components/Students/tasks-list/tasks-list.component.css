@@ -112,3 +112,25 @@
   color: #2c3e50;
   font-weight: 600;
 }
+.help-btn {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 8px; /* <- This gives it the rounded corners */
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.help-btn:hover {
+  background-color: #c82333; /* Slightly darker red on hover */
+  text-decoration: none;
+}
+.task-actions {
+  margin-top: auto;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding-top: 10px;
+}
