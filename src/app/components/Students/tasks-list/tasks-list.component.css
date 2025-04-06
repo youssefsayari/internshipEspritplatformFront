@@ -134,3 +134,17 @@
   gap: 8px;
   padding-top: 10px;
 }
+.ai-btn {
+  background-color: #007bff; /* Blue */
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.ai-btn:hover {
+  background-color: #0056b3; /* Darker blue */
+}

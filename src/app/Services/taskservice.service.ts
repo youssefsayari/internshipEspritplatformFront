@@ -63,6 +63,10 @@ export class TaskService {
     const body = { message }; 
     return this.http.post(`${this.baseUrl}/help-request/${taskId}`, body, { responseType: 'text' });
   }
+  getAISuggestion(taskId: number, message: string): Observable<string> {
+    const body = { message };
+    return this.http.post(`${this.baseUrl}/ai-suggestion/${taskId}`, body, { responseType: 'text' });
+  }
   
   
 

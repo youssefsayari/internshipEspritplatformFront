@@ -41,7 +41,9 @@
       <div class="task-actions" *ngIf="task.status === 'TODO' || task.status === 'INPROGRESS'">
         <button class="help-btn" (click)="openHelpDialog(task)">
           ❓
-        </button>        
+        </button>
+        <button class="ai-btn" (click)="openAISuggestionDialog(task)">🤖</button> 
+        
       </div>
     </div>
 

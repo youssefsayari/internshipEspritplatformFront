@@ -155,6 +155,43 @@ export class TasksListComponent implements OnInit {
       }
     });
   }
+  openAISuggestionDialog(task: Task) {
+    Swal.fire({
+      title: `Get AI Suggestion for Task`,
+      input: 'textarea',
+      inputLabel: 'Ask your question',
+      inputPlaceholder: 'Describe your issue or what you need help with...',
+      showCancelButton: true,
+      confirmButtonText: 'Generate',
+      preConfirm: (message) => {
+        if (!message) {
+          Swal.showValidationMessage('Message cannot be empty');
+        }
+        return message;
+      }
+    }).then((result) => {
+      if (result.isConfirmed && result.value) {
+        this.getAISuggestion(task.idTask, result.value);
+      }
+    });
+  }
+  
+  getAISuggestion(taskId: number, message: string) {
+    this.taskService.getAISuggestion(taskId, message).subscribe({
+      next: (response: string) => {
+        Swal.fire({
+          title: '💡 AI Suggestion',
+          html: `<pre style="text-align:left; white-space:pre-wrap;">${response}</pre>`,
+          confirmButtonText: 'Thanks!',
+          width: '50%'
+        });
+      },
+      error: (err) => {
+        console.error('Failed to get AI suggestion:', err);
+        Swal.fire('Error', 'Could not retrieve AI suggestion. Please try again later.', 'error');
+      }
+    });
+  }
   
 
 }
