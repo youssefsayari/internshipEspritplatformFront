@@ -135,7 +135,7 @@
   padding-top: 10px;
 }
 .ai-btn {
-  background-color: #007bff; /* Blue */
+  background-color: #339af0; 
   color: white;
   border: none;
   padding: 6px 10px;
@@ -146,5 +146,5 @@
 }
 
 .ai-btn:hover {
-  background-color: #0056b3; /* Darker blue */
+  background-color: #1d78d0; 
 }
