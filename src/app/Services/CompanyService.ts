@@ -118,6 +118,18 @@ enrichCompanyData(name?: string, website?: string): Observable<Company> {
     .pipe(catchError(this.handleError));
 }
 
+// Add this method to your CompanyService class
+deleteCompany(companyId: number): Observable<{success: boolean, message: string}> {
+  return this.http.delete<{success: boolean, message: string}>(`${this.baseUrl}/deleteCompany/${companyId}`).pipe(
+    catchError(error => {
+      // Handle different error cases
+      if (error.status === 404) {
+        return throwError(() => new Error('Company not found'));
+      } else if (error.status === 500) {
+        return throwError(() => new Error('Failed to delete company: ' + error.error?.message || error.message));
+      }
+      return throwError(() => new Error('An unexpected error occurred'));
+    })
+  );
 }
-
-
+}

@@ -1,4 +1,17 @@
 <div class="cardWithShadow little-profile" *ngIf="!isLoading; else loading">
+
+  <div class="floating-delete-container">
+    <!-- Bouton principal -->
+    <div class="delete-trigger" >
+      <div class="delete-icon" (click)="deleteCompany()">
+        <i class="fas fa-trash-alt"></i>
+      </div>
+      
+      <!-- Effet de vague -->
+      <div class="liquid-effect"></div>
+    </div>
+  </div>
+
   <!-- Utiliser formattedCompany au lieu de company -->
   <img [src]="formattedCompany?.image?.imageUrl || 'assets/images/backgrounds/profile-bg.jpg'" 
        class="profile-bg-height" alt="Company background" />

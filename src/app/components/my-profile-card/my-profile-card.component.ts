@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 import { CompanyService } from '../../Services/CompanyService';
 import { Company } from '../../Model/Company';
 import {UserService} from '../../Services/user.service';
 import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 
 
@@ -26,8 +28,7 @@ export class MyProfileCardComponent implements OnInit {
 originalCompany: Company;
 updatedCompany: any;
 
-
-  constructor( private companyService: CompanyService,private userService: UserService) {}
+  constructor( private companyService: CompanyService, private userService: UserService, private router: Router) {}
 
   ngOnInit(): void {
     this.fetchUserDetails().then(() => {
@@ -188,6 +189,48 @@ saveChanges(): void {
         icon: 'error',
         title: 'Update Failed',
         text: 'Error updating company profile: ' + err.message
+      });
+    }
+  });
+}
+deleteCompany(): void {
+  Swal.fire({
+    title: 'Confirmer la suppression',
+    text: 'Êtes-vous sûr de vouloir supprimer définitivement cette entreprise ?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#ff416c',
+    cancelButtonColor: '#6c757d',
+    confirmButtonText: 'Oui, supprimer',
+    cancelButtonText: 'Annuler',
+    customClass: {
+      container: 'swal-delete-container',
+      popup: 'swal-delete-popup',
+      confirmButton: 'swal-delete-confirm',
+      cancelButton: 'swal-delete-cancel'
+    }
+  }).then((result) => {
+    if (result.isConfirmed) {
+      this.companyService.deleteCompany(this.companyId).subscribe({
+        next: () => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Entreprise supprimée !',
+            text: 'Votre entreprise a été supprimée avec succès',
+            timer: 2000,
+            showConfirmButton: false
+          }).then(() => {
+            // Redirection vers /login après la notification
+            this.router.navigate(['/login']);
+          });
+        },
+        error: (err) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Erreur',
+            text: 'La suppression a échoué : ' + err.message
+          });
+        }
       });
     }
   });
