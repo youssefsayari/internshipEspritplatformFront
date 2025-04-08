@@ -23,18 +23,18 @@ interface CommentUI {
 }
 
 interface Timeline {
-  id: number;
-  from: string;
-  time: string;
-  image: Image;
-  title: string;
-  content: string;
-  comments: CommentUI[];
-  newComment: string;
-  selectedRating: number;
-  hoverRating: number;
-  feedbackGiven: Boolean;
-  ownerId: number ; // Déclare une variable pour stocker l'ID de l'utilisateur
+  id?: number;
+  from?: string;
+  time?: string;
+  image?: Image;
+  title?: string;
+  content?: string;
+  comments?: CommentUI[];
+  newComment?: string;
+  selectedRating?: number;
+  hoverRating?: number;
+  feedbackGiven?: Boolean;
+  ownerId?: number ; // Déclare une variable pour stocker l'ID de l'utilisateur
   ratings?: Rating[];  // Changer cela de number[] à Rating[]
   averageRating?: number;  // Ajouter une propriété pour la note moyenne
   sector?: string;  // Ajouter une propriété pour l'entreprise
@@ -196,111 +196,66 @@ fetchUserDetails(): Promise<void> {
 
 
   loadPosts() {
-    this.postService.getAllPosts().subscribe(
-      (posts: Post[]) => {
-        console.log("Posts récupérés :", posts);
-
-        // Trier les posts du plus récent au plus ancien
-        posts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-
-        this.mytimelines = posts.map(post => {
-          const timeline = this.transformPostToTimeline(post);
-
-          // Calculer la note moyenne pour chaque post
-          timeline.averageRating = this.calculateAverageRating(timeline.ratings);
-          this.initPostAnalysis(timeline.id, timeline.content); // Démarrage immédiat
-
-          return timeline;
-        });
-
-        this.origanalTimelines = [...this.mytimelines]; // Sauvegarder les posts originaux
+    this.postService.getAllPosts().subscribe({
+      next: (posts: Post[]) => {
+        this.mytimelines = (posts || [])
+          .sort((a, b) => new Date(b?.createdAt).getTime() - new Date(a?.createdAt).getTime())
+          .map(post => this.transformPostToTimeline(post));
   
-        // Maintenant que les timelines sont chargées, récupérez la note
-        this.mytimelines.forEach(timeline => {
-          this.ratingService.getMyRatingForPost(timeline.id, this.userConnecte).subscribe(
-            (data) => {
-              timeline.selectedRating = data ? data.stars : 0;  // Met à jour la note si elle existe
-            },
-            (error) => {
-              console.error('Erreur lors de la récupération de la note:', error);
-            }
-          );
+        this.origanalTimelines = [...this.mytimelines];
+        
+        // Schedule analysis calls with 5-second delay between each
+        this.mytimelines.forEach((timeline, index) => {
+          setTimeout(() => {
+            this.initPostAnalysis(timeline.id, timeline.content);
+          }, index * 5000); // 5-second interval between each analysis
         });
+  
+        this.loadRatingsForTimelines();
       },
-      error => {
-        console.error('Erreur lors de la récupération des posts :', error);
+      error: (error) => {
+        console.error('Error loading posts:', error);
+        this.mytimelines = [];
+        this.origanalTimelines = [];
       }
-    );
+    });
   }
  
   // Modifier la méthode d'initialisation
-private initPostAnalysis(postId: number, content: string, retryCount: number = 0) {
-  const maxRetries = 10;
-  const state = this.postAnalysis.get(postId) || {
-    loading: false,
-    qna: [],
-    attempts: [],
-    currentValidStreak: 0
-  };
-
-  if (retryCount >= maxRetries) {
-    // Aucun affichage si pas 2 succès consécutifs
-    const finalState: AnalysisState = {
-      ...state,
-      loading: false,
-      qna: state.currentValidStreak >= 2 ? state.qna : []
+  private initPostAnalysis(postId: number, content: string) {
+    const state: AnalysisState = {
+      loading: true,
+      qna: [],
+      attempts: [],
+      currentValidStreak: 0
     };
-    this.postAnalysis.set(postId, finalState);
-    return;
+  
+    this.postAnalysis.set(postId, state);
+  
+    this.postService.analyzeInternshipOffer(content).subscribe({
+      next: (result) => {
+        const newState: AnalysisState = {
+          loading: false,
+          qna: result?.size > 0 ? 
+            Array.from(result.entries()).map(([q, a]) => ({
+              question: q, 
+              answer: a, 
+              expanded: false 
+            })) : [],
+          attempts: [...state.attempts, { valid: result?.size > 0 }],
+          currentValidStreak: result?.size > 0 ? 1 : 0
+        };
+        this.postAnalysis.set(postId, newState);
+      },
+      error: () => {
+        this.postAnalysis.set(postId, {
+          ...state,
+          loading: false,
+          attempts: [...state.attempts, { valid: false }]
+        });
+      }
+    });
   }
-
-  this.postAnalysis.set(postId, { ...state, loading: true });
-
-  this.postService.analyzeInternshipOffer(content).subscribe({
-    next: (result) => {
-      const isValid = result?.size > 0;
-      const newStreak = isValid ? state.currentValidStreak + 1 : 0;
-      
-      const newState: AnalysisState = {
-        loading: false,
-        qna: newStreak >= 2 ? 
-          Array.from(result.entries()).map(([q, a]) => ({ 
-            question: q, 
-            answer: a, 
-            expanded: false 
-          })) : 
-          state.qna,
-        attempts: [...state.attempts, { valid: isValid }],
-        currentValidStreak: newStreak
-      };
-
-      this.postAnalysis.set(postId, newState);
-
-      // Continuer uniquement si besoin de plus de tentatives
-      if (newStreak < 2 && retryCount + 1 < maxRetries) {
-        setTimeout(() => 
-          this.initPostAnalysis(postId, content, retryCount + 1), 
-          1000 // 2s entre les tentatives
-        );
-      }
-    },
-    error: () => {
-      this.postAnalysis.set(postId, {
-        ...state,
-        loading: false,
-        attempts: [...state.attempts, { valid: false }],
-        currentValidStreak: 0
-      });
-      
-      if (retryCount + 1 < maxRetries) {
-        setTimeout(() => 
-          this.initPostAnalysis(postId, content, retryCount + 1), 
-          1000
-        );
-      }
-    }
-  });
-}
 
     // Ajoutez cette méthode pour basculer les réponses
     toggleAnswer(postId: number, index: number) {
@@ -419,34 +374,62 @@ clearFilters() {
    */
 
   private transformPostToTimeline(post: Post): Timeline {
-    const selectedRating = post.ratings && post.ratings.length > 0 ? post.ratings[0].stars : 0;
-
+    // Protection contre les posts null/undefined
+    if (!post) {
+      return this.getEmptyTimeline();
+    }
+  
+    // Protection pour les commentaires
+    const safeComments = (post.comments || []).map(c => ({
+      id: c?.id ?? 0,
+      user: c?.user ? `${c.user.firstName} ${c.user.lastName}` : 'Anonyme',
+      userId: c?.user?.idUser ?? 0,
+      text: c?.content ?? '',
+      createdAt: c?.createdAt ?? new Date().toISOString()
+    })).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  
+    // Protection pour les ratings
+    const safeRatings = post.ratings || [];
+    const selectedRating = safeRatings.length > 0 ? safeRatings[0].stars : 0;
+  
     return {
-      id: post.id,
+      id: post.id ?? 0,
       from: post.company?.name ?? 'Utilisateur inconnu',
       time: this.timeAgo(new Date(post.createdAt)),
-      image: post.company.image,
-      title: post.title,
+      image: post.company?.image ?? { imageUrl: 'assets/images/profile/default-company.png' },
+      title: post.title ?? 'No title',
       content: post.content ?? 'Aucun contenu disponible',
-      comments: post.comments
-        .map(c => ({
-          id: c.id ?? 0,
-          user: c.user ? `${c.user.firstName} ${c.user.lastName}` : 'Anonyme',
-          userId: c.user?.idUser ?? 0,
-          text: c.content ?? '',
-          createdAt: c.createdAt
-        }))
-        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()),
+      comments: safeComments,
       newComment: '',
-      selectedRating: selectedRating,  // Initialiser avec la note
+      selectedRating: selectedRating,
       hoverRating: 0,
       feedbackGiven: false,
-      ownerId: post.company.id,
-      ratings: post.ratings,  // Directly assign the entire Rating[] array
-      sector: post.company?.sector?.toUpperCase().trim(), // Normalisation
-      expiryDateTime: post.expiryDateTime, // ISO Date string (nullable)
-
-
+      ownerId: post.company?.id ?? 0,
+      ratings: safeRatings,
+      averageRating: this.calculateAverageRating(safeRatings),
+      sector: post.company?.sector?.toUpperCase()?.trim() ?? 'OTHER',
+      expiryDateTime: post.expiryDateTime
+    };
+  }
+  
+  private getEmptyTimeline(): Timeline {
+    return {
+      id: 0,
+      from: 'Unknown',
+      time: 'Just now',
+      image: { imageUrl: 'assets/images/profile/default-company.png' },
+      title: 'No title',
+      content: 'No content',
+      comments: [],
+      newComment: '',
+      selectedRating: 0,
+      hoverRating: 0,
+      feedbackGiven: false,
+      ownerId: 0,
+      ratings: [],
+      averageRating: 0,
+      sector: 'OTHER',
+      expiryDateTime: undefined
     };
   }
 

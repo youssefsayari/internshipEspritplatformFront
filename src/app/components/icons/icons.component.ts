@@ -85,6 +85,23 @@ import { CompanyService } from '../../Services/CompanyService'; // Assure-toi qu
         animate('300ms cubic-bezier(0.4, 0.0, 0.2, 1)', 
           style({ opacity: 0, height: '0', transform: 'translateY(-20px)' }))
       ])
+    ]),
+    trigger('fadeInOut', [
+      // Vérifiez que cette définition correspond exactement à l'utilisation
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('300ms ease-out', style({ opacity: 1 }))
+      ]),
+      transition(':leave', [
+        animate('300ms ease-in', style({ opacity: 0 }))
+      ])
+    ]),
+    // Vérifiez que tous les triggers utilisés sont définis
+    trigger('timelineResize', [
+      state('small', style({ flex: '0 0 50%' })),
+      state('medium', style({ flex: '0 0 75%' })),
+      state('large', style({ flex: '0 0 100%' })),
+      transition('* <=> *', animate('300ms ease-in-out'))
     ])
   ]
 })
@@ -97,8 +114,8 @@ export class IconsComponent implements OnInit {
   userConnecte: number | null = 0;
   user: User |undefined; // Initialisation de user
   isUserInCompany: boolean = false; // Variable pour savoir si l'utilisateur appartient à une entreprise
-  companyId: number =0; // Déclare une variable pour stocker l'ID de l'entreprise
-  companyIdConnected:number = 0; 
+  companyId: number | null = null; // Déclare une variable pour stocker l'ID de l'entreprise
+  companyIdConnected:number | null = null; 
 
 
 /*end User Connected Vars*/
@@ -108,6 +125,8 @@ export class IconsComponent implements OnInit {
 
   currentFollowEvent: {companyId: number, isFollowing: boolean};
 
+  timelineState: string | null = null;
+
   constructor(private userService: UserService, private router: Router,private companyService: CompanyService) {}
 
   ngOnInit(): void {
@@ -115,12 +134,14 @@ export class IconsComponent implements OnInit {
       if (this.userConnecte !== null) {
         this.getUserById(this.userConnecte);
         this.checkUserCompany();
+        this.timelineState = this.getTimelineState();
 
       }
     }).catch((error) => {
       console.error('Error fetching user details:', error);
     });
   }
+  
   checkUserCompany(): void {
     if (!this.userConnecte) {
         console.error('userConnecte est null, impossible de vérifier l\'entreprise');

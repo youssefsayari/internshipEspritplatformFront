@@ -141,7 +141,7 @@
 
 
                               
-<div *ngFor="let timeline of mytimelines; trackBy: trackByFn" class="timeline-card card p-3 mb-3 shadow-sm rounded"        
+<div *ngFor="let timeline of mytimelines || [] ; trackBy: trackByFn" class="timeline-card card p-3 mb-3 shadow-sm rounded"        
 [id]="'post-' + timeline.id">
   
   
@@ -164,7 +164,7 @@
   <div class="d-flex align-items-start">   
     <!-- Image utilisateur avec clic -->
     <img *ngIf="timeline.image.imageUrl" 
-         [src]="timeline.image.imageUrl" 
+        [src]="timeline?.image?.imageUrl || 'assets/images/profile/user-1.jpg'" 
          width="50" height="50"
          alt="user" 
          class="rounded-circle me-3 border shadow-sm" 
@@ -174,7 +174,7 @@
 
     <div class="w-100">
       <!-- Informations utilisateur -->
-      <h5 class="fw-bold mb-1" (click)="onProfileClick(timeline)" style="cursor: pointer;">{{ timeline.from }}</h5>
+      <h5 class="fw-bold mb-1" (click)="onProfileClick(timeline)" style="cursor: pointer;">{{ timeline?.from || 'Unknown' }}</h5>
       <div><small class="text-muted">Posted : {{ timeline.time }}</small></div>
       <div><small class="text-muted"> {{ getTimeRemaining(timeline.expiryDateTime) }} </small></div>
 
@@ -239,22 +239,23 @@
 
 
      <!-- 💬 Affichage des commentaires -->
-<div *ngFor="let comment of timeline.comments" class="comment mt-2 p-2 rounded bg-light" [ngClass]="{ 'other-user': comment.userId !== userConnecte }"[attr.id]="'comment-' + comment.id">
-  <div class="d-flex align-items-center justify-content-between">
-    <!-- User Image -->
-    <div class="d-flex align-items-center">
-      <img src="assets/images/profile/user-1.jpg" width="30" height="30" 
-           alt="user" class="rounded-circle me-2 border shadow-sm" />
-      <p class="mb-0"><strong>{{ comment.user }} </strong>: {{ comment.text }}</p>
+     <div *ngIf="timeline?.comments?.length > 0">
+    <div *ngFor="let comment of timeline.comments" class="comment mt-2 p-2 rounded bg-light" [ngClass]="{ 'other-user': comment.userId !== userConnecte }"[attr.id]="'comment-' + comment.id">
+      <div class="d-flex align-items-center justify-content-between">
+        <!-- User Image -->
+        <div class="d-flex align-items-center">
+          <img src="assets/images/profile/user-1.jpg" width="30" height="30" 
+              alt="user" class="rounded-circle me-2 border shadow-sm" />
+          <p class="mb-0"><strong>{{ comment.user }} </strong>: {{ comment.text }}</p>
+        </div>
+        
+        <!-- Delete Button -->
+        <button class="btn btn-danger btn-sm ms-3 delete-btn" *ngIf="comment.userId === userConnecte|| userType === 'Admin'" (click)="deleteComment(comment.id)">
+          <i class="fas fa-trash"></i> <!-- Using Font Awesome icon for trash -->
+        </button>
+      </div>
     </div>
-    
-    <!-- Delete Button -->
-    <button class="btn btn-danger btn-sm ms-3 delete-btn" *ngIf="comment.userId === userConnecte|| userType === 'Admin'" (click)="deleteComment(comment.id)">
-      <i class="fas fa-trash"></i> <!-- Using Font Awesome icon for trash -->
-    </button>
-  </div>
-</div>
-
+    </div>
 
       <!-- ➕ Ajouter un commentaire -->
       <div class="mt-3 comment-input d-flex align-items-center">
@@ -279,7 +280,7 @@
 
 <!-- Ajoutez après la section de contenu du post -->
 <div *ngIf="postAnalysis.get(timeline.id) as analysis">
-  <div class="qna-section" *ngIf="analysis.qna.length > 0">
+  <div class="qna-section" *ngIf="analysis?.qna?.length > 0">
     <h4 class="qna-title">
     <i class="fas fa-lightbulb"></i> Educational Insights
     <span *ngIf="analysis.loading" class="loading-spinner">
