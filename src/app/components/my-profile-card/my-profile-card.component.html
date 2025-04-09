@@ -1,5 +1,21 @@
 <div class="cardWithShadow little-profile" *ngIf="!isLoading; else loading">
 
+<!-- Ajoutez au début du template -->
+<div *ngIf="isSaving" class="loading-overlay">
+  <div class="loading-content">
+    <div class="cyber-loader"></div>
+    <h2 class="loading-title">Updating Your Digital Identity</h2>
+    <p class="loading-text">
+      <span class="dynamic-dots"></span>
+    </p>
+    <div class="loading-tips">
+      <div class="tip">🔒 Securing updated credentials</div>
+      <div class="tip">📨 Preparing update confirmation</div>
+      <div class="tip">🔄 Syncing company data</div>
+    </div>
+  </div>
+</div>
+
   <div class="floating-delete-container">
     <!-- Bouton principal -->
     <div class="delete-trigger" >
@@ -33,8 +49,8 @@
       </button>
       
       <div *ngIf="isEditing" class="edit-buttons">
-        <button class="save-button" (click)="saveChanges()">
-          <i class="fas fa-save"></i> Save Changes
+        <button class="save-button" (click)="saveChanges()" [disabled]="isSaving">
+          <i class="fas fa-save"></i> {{ isSaving ? 'Saving Updates...' : 'Save Changes' }}
         </button>
         <button class="cancel-button" (click)="toggleEditMode()">
           <i class="fas fa-times"></i> Cancel

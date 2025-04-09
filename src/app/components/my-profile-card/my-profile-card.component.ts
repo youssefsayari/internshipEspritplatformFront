@@ -27,6 +27,8 @@ export class MyProfileCardComponent implements OnInit {
   isEditing = false;
 originalCompany: Company;
 updatedCompany: any;
+isSaving = false;
+
 
   constructor( private companyService: CompanyService, private userService: UserService, private router: Router) {}
 
@@ -152,7 +154,7 @@ toggleEditMode(): void {
 }
 
 saveChanges(): void {
-  this.isLoading = true;
+  this.isSaving = true;
   
   // Convertir les données formatées vers le modèle Company
   // Create the update payload carefully
@@ -181,22 +183,43 @@ saveChanges(): void {
       this.company = updatedCompany;
       this.formatCompanyData(updatedCompany);
       this.isEditing = false;
-      this.isLoading = false;
+      this.isSaving = false;
       
       Swal.fire({
         icon: 'success',
-        title: 'Success!',
-        text: 'Company profile updated successfully',
-        timer: 2000,
-        showConfirmButton: false
+        title: 'Update Complete!',
+        html: `
+          <div class="success-message">
+            <h3>🎉 Profile Updated!</h3>
+            <p>Your company details have been successfully updated.</p>
+            <div class="email-notice">
+              <i class="fa fa-envelope-open-o"></i>
+              <p>Check <strong>${this.company.email}</strong> for updated credentials</p>
+            </div>
+          </div>
+        `,
+        confirmButtonText: 'Continue',
+        customClass: {
+          popup: 'success-popup'
+        },
+        timer: 7000
       });
     },
     error: (err) => {
-      this.isLoading = false;
+      this.isSaving = false;
       Swal.fire({
         icon: 'error',
         title: 'Update Failed',
-        text: 'Error updating company profile: ' + err.message
+        html: `
+          <div class="error-message">
+            <h4>⚠️ Update Error</h4>
+            <p>${err.message || 'Failed to update profile'}</p>
+            <div class="retry-box">
+              <i class="fas fa-sync-alt"></i>
+              <p>Please check your inputs and try again</p>
+            </div>
+          </div>
+        `
       });
     }
   });

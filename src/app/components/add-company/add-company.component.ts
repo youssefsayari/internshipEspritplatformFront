@@ -311,10 +311,21 @@ showFieldErrors(): void {
           // Show success message
           Swal.fire({
             icon: 'success',
-            title: 'Success',
-            text: 'Company added successfully!',
-            timer: 2000,
-            showConfirmButton: false
+            title: 'Setup Complete!',
+            html: `
+              <div class="success-message">
+                <h3>🎉 Welcome to Innoxpert!</h3>
+                <p>Your company profile has been successfully Created !.</p>
+                <div class="email-notice">
+                  <i class="fa fa-envelope-open-o"></i>
+                  <p>Please check <strong>${company.email}</strong> for your login credentials and next steps.</p>
+                </div>
+              </div>
+            `,
+            confirmButtonText: 'Go to Login Page',
+            customClass: {
+              popup: 'success-popup'
+            }
           }).then(() => {
             this.router.navigate(['/login']);
           });

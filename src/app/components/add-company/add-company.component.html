@@ -1,6 +1,19 @@
 <div class="full-page-container">
   <img src="./assets/img/loogo.png" class="background-image">
-
+  <div *ngIf="loading" class="loading-overlay">
+    <div class="loading-content">
+      <div class="cyber-loader"></div>
+      <h2 class="loading-title">Crafting Your Digital Identity</h2>
+      <p class="loading-text">
+        <span class="dynamic-dots"></span>
+      </p>
+      <div class="loading-tips">
+        <div class="tip">🔐 Securing your credentials</div>
+        <div class="tip">📧 Preparing welcome email</div>
+        <div class="tip">🚀 Initializing your portal</div>
+      </div>
+    </div>
+  </div>
    <!-- AI Assistant Container -->
 <!-- Modifiez la partie du bot dans le template -->
 <div class="ai-assistant" [class.visible]="shouldShowAssistant()" 
