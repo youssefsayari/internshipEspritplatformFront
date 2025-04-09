@@ -28,7 +28,6 @@ import { QuizDetailsComponent } from '../../quiz-details/quiz-details.component'
 import { QuizEditComponent } from '../../quiz-edit/quiz-edit.component';
 import { QuizListUserComponent } from '../../quiz-list-user/quiz-list-user.component';
 import { QuizPassComponent } from '../../quiz-pass/quiz-pass.component';
-import { ImageComponent } from '../../image/image.component';
 import { TasksListComponent } from '../../components/Students/tasks-list/tasks-list.component';
 import { TutorTaskListComponent } from '../../components/Tutors/tutor-task-list/tutor-task-list.component';
 

@@ -34,6 +34,7 @@ export class TutorTaskListComponent implements OnInit {
   ngOnInit(): void {
     this.fetchUserDetails();
   }
+ 
 
   fetchUserDetails() {
     const token = localStorage.getItem('Token');
@@ -86,6 +87,8 @@ export class TutorTaskListComponent implements OnInit {
       this.taskService.changeTaskStatus(task.idTask, newStatus).subscribe({
         next: () => {
           task.status = newStatus;
+          this.findTopStudent();
+
   
         },
         error: (err) => {
@@ -162,6 +165,8 @@ export class TutorTaskListComponent implements OnInit {
           next: () => {
             Swal.fire('✅ Updated', 'Task updated successfully!', 'success');
             this.onStudentChange();
+            this.findTopStudent();
+
           },
           error: (err) => {
             console.error('Error updating task:', err);
@@ -218,6 +223,8 @@ export class TutorTaskListComponent implements OnInit {
           next: () => {
             Swal.fire('✅ Added', 'Task successfully added.', 'success');
             this.onStudentChange();
+            this.findTopStudent();
+
           },
           error: (err) => {
             console.error('Error adding task:', err);
@@ -246,6 +253,8 @@ export class TutorTaskListComponent implements OnInit {
           next: () => {
             Swal.fire('Deleted!', 'Task has been deleted.', 'success');
             this.onStudentChange(); 
+            this.findTopStudent();
+
           },
           error: (err) => console.error('Error deleting task', err)
         });
