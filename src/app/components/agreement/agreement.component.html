@@ -3,13 +3,27 @@
 <div class="main-content">
   <div class="row" *ngIf="checkFinished">
     <div class="col-md-12">
-      <div class="card" *ngIf="isFifthYearStudent && hasInternship; else showErrorMessage">
-        <div class="card-header">Request for agreement</div>
+      <div class="card" *ngIf="isFifthYearStudent && hasInternship && !hasExistingAgreement; else showErrorMessage">
+      <div class="card-header">Request for agreement</div>
         <div class="card-body">
           <div class="row">
             <!-- Left side: the form -->
             <div class="col-md-8 border-right pr-4">
               <form [formGroup]="agreementForm" (ngSubmit)="onSubmit()">
+                <div class="form-group mb-3">
+                  <label for="internship" class="text-dark" style="font-size: 16px;">Select Internship*</label>
+                  <select formControlName="internship" class="form-control" [(ngModel)]="selectedInternship" (change)="onInternshipChange()">
+                    <option *ngFor="let internship of internships" [ngValue]="internship">
+                      {{ internship.internshipTitle }} - {{ internship.companyName }}
+                    </option>
+                  </select>
+                  <div *ngIf="agreementForm.get('internship')?.touched && agreementForm.get('internship')?.invalid" class="text-danger" style="font-size: 14px;">
+                    <div *ngIf="agreementForm.get('internship')?.hasError('required')">Please select an internship.</div>
+                  </div>
+                </div>
+
+
+
                 <div class="form-group mb-3">
                   <label for="email" class="text-dark" style="font-size: 16px;">Email address*</label>
                   <input formControlName="email" id="email" type="email" class="form-control" placeholder="Email">
@@ -71,12 +85,12 @@
               </form>
             </div>
             <div class="col-md-4">
-              <div class="alert alert-warning">
-                <b>Warning :</b> For durations under 6 months, please submit a complaint. It will be handled by the internship manager.
+              <div class="alert alert-warning " style="color: black; background-color: #cdcdcd;">
+                <b style="color: black;">Warning :</b> For durations under 6 months, please submit a complaint. It will be handled by the internship manager.
               </div>
 
-              <div class="alert alert-info mt-3">
-                <b>Need help?</b><br>
+              <div class="alert alert-info mt-3" style="color: black; background-color: #cdcdcd;">
+                <b style="color: black;">Need help?</b><br>
                 Contact us at: <br>
                 📞 <strong>70 500 500</strong><br>
                 🏢 Bloc A, 1st Floor, Room A102
@@ -92,11 +106,24 @@
           <h4 style="color: black;">🚀 Good luck finding an internship!</h4>
           <p style="color: black;">You must have an approved internship before requesting an agreement.</p>
         </div>
+
         <div *ngIf="!isFifthYearStudent" class="alert alert-danger text-center mt-5" style="color: white; background-color: #cdcdcd;">
           <h4 style="color: red;">❌ Access Denied</h4>
           <p style="color: black;">Only 5th-year students can request an agreement.</p>
         </div>
+
+        <div *ngIf="hasExistingAgreement && agreementInfo?.agreementState === 'PENDING'" class="alert alert-warning text-center mt-5" style="color: black; background-color: #cdcdcd;">
+          <strong style="color: black;">Info:</strong> Your agreement request is currently being processed. Please wait.
+        </div>
+
+        <div *ngIf="hasExistingAgreement && agreementInfo?.agreementState === 'ACCEPTED'" class="alert alert-success text-center mt-5" style=" color: black; background-color: #cdcdcd;">
+          <strong style="color: black;">✅ Agreement Approved!</strong>
+          <p style="color: black;">You can download your agreement below:</p>
+          <button class="btn btn-primary mt-2" (click)="downloadAgreement()">Download Agreement</button>
+        </div>
+
       </ng-template>
+
     </div>
   </div>
 </div>

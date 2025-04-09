@@ -4,6 +4,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {AgreementService} from "../../Services/agreement.service";
 import {UserService} from "../../Services/user.service";
 import Swal from 'sweetalert2';
+import {InternshipDetailsDTO} from "../../models/internship-details-dto";
+import {AgreementRequestDTO} from "../../models/agreement-request-dto";
+import {AgreementDTO} from "../../models/agreement-dto";
 
 @Component({
   selector: 'app-agreement',
@@ -13,10 +16,15 @@ import Swal from 'sweetalert2';
 export class AgreementComponent implements OnInit {
   today: string;
   agreementForm!: FormGroup;
-
+  internships: InternshipDetailsDTO[] = [];
+  selectedInternship!: InternshipDetailsDTO;
   hasInternship: boolean = false;
   checkFinished: boolean = false;
   isFifthYearStudent: boolean = false;
+  userId!:number;
+  agreementInfo: AgreementDTO;
+  hasExistingAgreement: boolean = false;
+
 
   constructor(private router: Router, private agreementService: AgreementService ,private userService: UserService,private fb: FormBuilder) { }
 
@@ -28,7 +36,8 @@ export class AgreementComponent implements OnInit {
       endDate: ['', [Validators.required, this.endDateAfterStartDate()]],
       companyAddress: ['', [Validators.required]],
       companyPhone: ['', [Validators.required, Validators.pattern('[0-9]+')]],
-      companyRep: ['', [Validators.required]]
+      companyRep: ['', [Validators.required]],
+      internship: ['', [Validators.required]]
     });
 
 
@@ -46,11 +55,34 @@ export class AgreementComponent implements OnInit {
       next: (userDetails) => {
         if (userDetails.id) {
           const userId = userDetails.id;
+          this.userId = userDetails.id;
+          console.log('userId:', this.userId);
           const userEmail = userDetails.email;
-          console.log('Form is invalid', userEmail);
           this.agreementForm.patchValue({
             email: userEmail,
             startDate: this.today
+          });
+          this.agreementService.getAgreementByStudentId(this.userId).subscribe({
+            next: (agreement) => {
+              this.agreementInfo = agreement;
+              this.hasExistingAgreement = true;
+            },
+            error: (err) => {
+              if (err.status === 404) {
+                this.hasExistingAgreement = false;
+              } else {
+                console.error("Erreur lors de la récupération de l'accord :", err);
+              }
+            }
+          });
+          this.agreementService.getApprovedInternships(+userId).subscribe({
+            next: (result) => {
+              this.internships = result
+            },
+            error: (err) => {
+              console.error("Erreur lors de la récupération des stages :", err);
+              this.checkFinished = true;
+            }
           });
           if (userRole === 'Student') {
             if (userClasse && userClasse.charAt(0) === '5') {
@@ -75,8 +107,12 @@ export class AgreementComponent implements OnInit {
       error: (err) => {
         console.error("Erreur lors du décodage du token :", err);
         this.checkFinished = true;
+        this.router.navigate(['/login']);
       }
     });
+
+
+
   }
 
   notBeforeToday() {
@@ -105,12 +141,63 @@ export class AgreementComponent implements OnInit {
     };
   }
 
-  onSubmit() {
-    if (this.agreementForm.valid) {
-      console.log('Form Submitted!', this.agreementForm.value);
+
+  onInternshipChange() {
+    if (this.selectedInternship) {
+
+      this.agreementForm.patchValue({
+        companyAddress: this.selectedInternship.companyAddress || '',
+        companyRep: this.selectedInternship.companyRepresentativeFullName || '',
+        companyPhone: this.selectedInternship.componyPhone || ''
+      });
     } else {
-      console.log('Form is invalid');
+      console.error('No internship selected');
     }
+  }
+
+
+  onSubmit(): void {
+    if (this.agreementForm.valid) {
+      const agreementRequest: AgreementRequestDTO = {
+        studentId: this.userId,
+        companyId: this.selectedInternship ? this.selectedInternship.companyId : 0,
+        startDate: this.agreementForm.value.startDate,
+        endDate: this.agreementForm.value.endDate,
+      };
+
+      this.agreementService.addAgreement(agreementRequest).subscribe({
+        next: (response) => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Succès!',
+            text: 'Agreement submitted successfully.',
+            confirmButtonText: 'OK'
+          });
+          console.log('Agreement submitted successfully:', response);
+        },
+        error: (err) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Erreur!',
+            text: 'Une erreur est survenue lors de l\'enregistrement de l\'accord.',
+            confirmButtonText: 'OK'
+          });
+          console.error('Error submitting agreement:', err);
+        }
+      });
+    } else {
+      console.error('Form is invalid');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Formulaire invalide!',
+        text: 'Veuillez vérifier les informations avant de soumettre.',
+        confirmButtonText: 'OK'
+      });
+    }
+  }
+
+  downloadAgreement() {
+    window.open(`http://localhost:8089/innoxpert/agreement/downloadAgreement/${this.agreementInfo?.id}`, '_blank');
   }
 
 
