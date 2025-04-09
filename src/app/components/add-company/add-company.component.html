@@ -1,0 +1,188 @@
+<div class="full-page-container">
+  <img src="./assets/img/loogo.png" class="background-image">
+
+   <!-- AI Assistant Container -->
+<!-- Modifiez la partie du bot dans le template -->
+<div class="ai-assistant" [class.visible]="shouldShowAssistant()" 
+     [class.thinking]="isThinking" 
+     [class.typing]="isTyping"
+     [class.happy]="thankYouMode"
+     [class.excited]="showGuessButton">
+  <div class="ai-bot">
+    <div class="bot-face">
+      <div class="eyes">
+        <div class="eye left"></div>
+        <div class="eye right"></div>
+      </div>
+      <div class="mouth"></div>
+      <div class="eyebrows">
+        <div class="eyebrow left"></div>
+        <div class="eyebrow right"></div>
+      </div>
+    </div>
+    <div class="bot-body">
+      <div class="message-bubble" *ngIf="assistantMessage">
+       <!-- <div class="speech-text">{{assistantMessage}}</div>-->
+        <div class="speech-text" [innerHTML]="getSafeHtml(assistantMessage)"></div>
+
+        <div class="interaction-buttons">
+          <button *ngIf="showGuessButton" class="guess-btn" 
+                  (click)="guessForm()" [disabled]="isTyping">
+            Let me guess!
+          </button>
+          <button *ngIf="thankYouMode" class="thank-you-btn" 
+                  (click)="hideAssistantAfterThankYou()">
+            Done!
+          </button>
+        </div>
+        <div class="typing-indicator" *ngIf="isTyping">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <div class="company-container">
+    <form [formGroup]="companyForm" (ngSubmit)="onSubmit()">
+      <!-- Ligne 1: Company Name et Website -->
+      <div class="input-group company-name">
+        <label>Company Name</label>
+        <input type="text" formControlName="name" placeholder="Enter company name" required
+        (blur)="checkForAutoComplete()">
+        <div *ngIf="companyForm.get('name')?.invalid && companyForm.get('name')?.touched" class="error-message">
+          The name must be at least 3 characters long and not contain special characters
+        </div>
+      </div>
+      <div class="input-group website">
+        <label>Website</label>
+        <input type="url" formControlName="website" placeholder="Enter website URL" required
+        (blur)="checkForAutoComplete()">
+        <div *ngIf="companyForm.get('website')?.invalid && companyForm.get('website')?.touched" class="error-message">
+          Please enter a valid website URL. Example: http://www.example.com
+        </div>
+      </div>
+      <!-- Sector and Website on same line -->
+      <div class="input-group abbreviation">
+        <label>Abbreviation</label>
+        <input type="text" formControlName="abbreviation" placeholder="Enter abbreviation" required>
+        <div *ngIf="companyForm.get('abbreviation')?.invalid && companyForm.get('abbreviation')?.touched" class="error-message">
+          Abbreviation cannot be empty
+        </div>
+      </div>
+      <div class="input-group sector">
+        <label>Sector</label>
+        <select formControlName="sector" required>
+          <option *ngFor="let sector of sectors" [value]="sector">{{ sector }}</option>
+        </select>
+        <div *ngIf="companyForm.get('sector')?.invalid && companyForm.get('sector')?.touched" class="error-message">
+          Please select a sector
+        </div>
+      </div>
+   
+
+      <!-- Email and Phone on same line -->
+      <div class="input-group email">
+        <label>Email</label>
+        <input type="email" formControlName="email" placeholder="Enter email" required>
+        <div *ngIf="companyForm.get('email')?.invalid && companyForm.get('email')?.touched" class="error-message">
+          Please enter a valid email address. Example: example(AT)domain.com
+        </div>
+      </div>
+      <div class="input-group phone">
+        <label>Phone</label>
+        <input type="number" formControlName="phone" placeholder="Enter phone number" required>
+        <div *ngIf="companyForm.get('phone')?.invalid && companyForm.get('phone')?.touched" class="error-message">
+          Phone number must be 8-15 digits long. Example: 1234567890
+        </div>
+      </div>
+      <!-- Address and Founders on same line -->
+      <div class="input-group address">
+        <label>Address</label>
+        <input type="text" formControlName="address" placeholder="Enter address" required>
+        <div *ngIf="companyForm.get('address')?.invalid && companyForm.get('address')?.touched" class="error-message">
+          The address must be at least 5 characters long. Example: 123 Main St, Springfield
+        </div>
+      </div>
+      <div class="input-group founders">
+        <label>Founders</label>
+        <input type="text" formControlName="founders" placeholder="Enter founders" required>
+        <div *ngIf="companyForm.get('founders')?.invalid && companyForm.get('founders')?.touched" class="error-message">
+          Founders field cannot be empty
+        </div>
+      </div>
+
+      <!-- Founding Year and Label Date on same line -->
+      <div class="input-group founding-year">
+        <label>Founding Year</label>
+        <input type="date" formControlName="foundingYear" required>
+        <div *ngIf="companyForm.get('foundingYear')?.invalid && companyForm.get('foundingYear')?.touched" class="error-message">
+          The founding year must be between 1900 and {{ currentYear }}
+        </div>
+      </div>
+      <div class="input-group label-date">
+        <label>Label Date</label>
+        <input type="date" formControlName="labelDate" required>
+        <div *ngIf="companyForm.get('labelDate')?.invalid && companyForm.get('labelDate')?.touched" class="error-message">
+          Label date must be today or before and after the founding year
+        </div>
+      </div>
+
+      
+
+         <!-- Secret Key et Company Logo -->
+         <div class="input-group secret-key">
+          <label>Secret Key</label>
+          <div class="password-toggle-container">
+            <input [type]="showSecretKey ? 'text' : 'password'" formControlName="secretKey" placeholder="Enter secret key" required>
+            <span class="toggle-password" (click)="toggleSecretKeyVisibility()">
+              <i class="fa" [class.fa-eye]="!showSecretKey" [class.fa-eye-slash]="showSecretKey"></i>
+            </span>
+          </div>
+          <div *ngIf="companyForm.get('secretKey')?.invalid && (companyForm.get('secretKey')?.touched || companyForm.get('secretKey')?.dirty)" 
+               class="error-message">
+            Secret key must be at least 8 characters long, contain at least one uppercase letter, one special character, and one number
+          </div>
+        </div>
+
+    <div class="input-group logo-upload">
+      <label>Company Logo</label>
+      <div class="file-input-container">
+        <div class="file-input-wrapper">
+          <input type="file" #fileInput (change)="onFileChange($event)" accept="image/*" required>
+          <span class="file-display">
+            <span class="file-name">{{selectedFileName || 'Choose File'}}</span>
+            <span class="browse-btn">Browse</span>
+          </span>
+        </div>
+      </div>
+      <div *ngIf="companyForm.get('image')?.invalid && companyForm.get('image')?.touched" class="error-message">
+        Company logo is required
+      </div>
+    </div>
+
+  <!-- Aperçu du logo -->
+  <div class="image-preview-wrapper" *ngIf="imagePreview">
+    <div class="image-preview-container">
+      <div class="preview-controls">
+        <span>Logo Preview</span>
+        <button type="button" class="remove-image-btn" (click)="clearImage()" aria-label="Remove logo">
+          <i class="fa fa-trash-o" aria-hidden="true"></i> Remove
+        </button>
+      </div>
+      <img [src]="imagePreview" alt="Company Logo Preview" class="preview-image">
+    </div>
+  </div>
+
+
+      <div class="button-group">
+        <button class="add-company-btn" type="submit" [disabled]="companyForm.invalid || loading">
+          {{ loading ? 'Saving...' : 'Add Company' }}
+        </button>
+        <button class="cancel-btn" type="button" (click)="onCancel()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>

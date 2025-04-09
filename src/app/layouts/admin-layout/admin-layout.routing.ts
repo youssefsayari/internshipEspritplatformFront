@@ -13,7 +13,6 @@ import {PostComponent} from "../../components/post/post.component";
 import {StudentComponent} from "../../components/student/student.component";
 import {SettingComponent} from "../../components/setting/setting.component";
 import { MeetingComponent } from '../../components/meeting/meeting.component';
-import { TasksListComponent } from '../../components/tasks/tasks-list/tasks-list.component';
 import { StudentMeetingsComponent } from '../../components/Students/student-meetings/student-meetings.component';
 import { DocumentListComponent } from '../../document-list/document-list.component';
 import { DocumentComponent } from '../../document/document.component';
@@ -29,7 +28,9 @@ import { QuizDetailsComponent } from '../../quiz-details/quiz-details.component'
 import { QuizEditComponent } from '../../quiz-edit/quiz-edit.component';
 import { QuizListUserComponent } from '../../quiz-list-user/quiz-list-user.component';
 import { QuizPassComponent } from '../../quiz-pass/quiz-pass.component';
-import { ImageComponent } from '../../image/image.component';
+import { TasksListComponent } from '../../components/Students/tasks-list/tasks-list.component';
+import { TutorTaskListComponent } from '../../components/Tutors/tutor-task-list/tutor-task-list.component';
+
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent },
@@ -49,6 +50,11 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'internship-request',        component: PostComponent },
       { path: 'MyMeeting',        component: MeetingComponent },
     { path: 'StudentMeeting', component: StudentMeetingsComponent },
+    { path: 'MyTasks', component: TasksListComponent },
+    {path : "Tasks" , component : TutorTaskListComponent},
+
+
+
     { path: 'document-list', component: DocumentListComponent },
   { path: 'document', component: DocumentComponent },
   { path: 'document-details/:id', component: DocumentDetailsComponent },
@@ -64,6 +70,5 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'quiz-details/:id', component: QuizDetailsComponent },
     { path: 'quiz-edit/:id', component: QuizEditComponent },
     { path: 'quiz/:id', component: QuizPassComponent },
-    { path: 'upload', component: ImageComponent },
 
 ];

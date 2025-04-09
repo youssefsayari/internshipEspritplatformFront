@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Post } from '../Model/Post';  // Assure-toi d'avoir un modèle Post
 
 @Injectable({
@@ -56,8 +57,22 @@ export class PostService {
     return this.http.get<Post[]>(`${this.baseUrl}/getHomeFeed/${userId}`);
   }
 
-
-
-
+  // Nouvelle méthode pour analyser une offre de stage avec Mistral AI
+  analyzeInternshipOffer(content: string): Observable<Map<string, string>> {
+    // Encoder le contenu pour l'URL
+    const encodedContent = encodeURIComponent(content);
+    
+    return this.http.get<Map<string, string>>(
+      `${this.baseUrl}/analyze?content=${encodedContent}`
+    ).pipe(
+      map(response => {
+        // Convertir l'objet réponse en Map si nécessaire
+        if (!(response instanceof Map)) {
+          return new Map(Object.entries(response));
+        }
+        return response;
+      })
+    );
+  }
 
 }
