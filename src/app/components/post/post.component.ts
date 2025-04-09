@@ -13,6 +13,8 @@ import {MatDialog} from "@angular/material/dialog";
 import {DialogInternshipComponent} from "../dialog-internship/dialog-internship.component";
 import {InternshipRemarkService} from "../../Services/internship-remark.service";
 import {InternshipRemark} from "../../models/internship-remark";
+import {AgreementDialogComponent} from "../agreement-dialog/agreement-dialog.component";
+import {AgreementService} from "../../Services/agreement.service";
 
 
 @Component({
@@ -35,7 +37,8 @@ export class PostComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(private router: Router, private postService: PostService, private userService: UserService,
-              private internshipService: InternshipService,private dialog: MatDialog, private internshipRemarkService: InternshipRemarkService) { }
+              private internshipService: InternshipService,private dialog: MatDialog, private internshipRemarkService: InternshipRemarkService,
+              private agreementService: AgreementService) { }
 
   ngOnInit(): void {
     const userRole = localStorage.getItem('userRole');
@@ -311,6 +314,41 @@ export class PostComponent implements OnInit {
         return state;
     }
   }
+
+  openAgreement(internship: InternshipAdminResponse): void {
+    this.agreementService.getAgreementByStudentId(internship.idStudent).subscribe({
+      next: (agreement) => {
+        if (agreement) {
+          console.log('Dialog closed',agreement);
+          const dialogRef = this.dialog.open(AgreementDialogComponent, {
+            width: '30%',
+            data: agreement
+          });
+
+          dialogRef.afterClosed().subscribe(result => {
+            console.log('Dialog closed');
+          });
+        } else {
+          Swal.fire({
+            icon: 'info',
+            title: 'No Agreement Found',
+            text: 'There is currently no agreement available for this internship.',
+          });
+        }
+      },
+      error: (err) => {
+        console.error('Error while fetching the agreement:', err);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to retrieve the agreement details.',
+        });
+      }
+    });
+  }
+
+
+
 
 
 }

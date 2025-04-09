@@ -11,6 +11,10 @@ import {MatDialog} from "@angular/material/dialog";
 import {DialogRemarkComponent} from "../dialog-remark/dialog-remark.component";
 import {InternshipRemarkService} from "../../Services/internship-remark.service";
 import {Remark} from "../../models/remark";
+import {AgreementService} from "../../Services/agreement.service";
+import {AgreementDTO} from "../../models/agreement-dto";
+import {TimeLineService} from "../../Services/time-line.service";
+import {TimeLine} from "../../models/time-line";
 
 
 @Component({
@@ -33,8 +37,12 @@ export class InternshipComponent implements OnInit {
   isGraduationInternship: boolean = false;
   isTutor: boolean = false;
   remarks: Remark[] = [];
-  constructor(private router: Router, private internshipService: InternshipService,private userService: UserService,private dialog: MatDialog,
-  private internshipRemarkService: InternshipRemarkService,) {}
+  userId: number;
+  AgreementApproved: boolean = false;
+  agreementInfo: AgreementDTO;
+  timelines: TimeLine[] = [];
+  constructor(private router: Router, private internshipService: InternshipService, private timeLineService: TimeLineService ,private userService: UserService,private dialog: MatDialog,
+  private internshipRemarkService: InternshipRemarkService, private agreementService: AgreementService) {}
 
   ngOnInit() {
     console.log(document.querySelector('.main-panel'));
@@ -49,6 +57,7 @@ export class InternshipComponent implements OnInit {
       this.router.navigate(['/login']);
       return;
     }
+
     /*end ya sayari ija hezz*/
     if (userRole === 'Student') {
       if (userClasse && ['1', '2', '3', '4'].includes(userClasse.charAt(0))) {
@@ -57,6 +66,7 @@ export class InternshipComponent implements OnInit {
         this.isGraduationInternship = true;
       }
       this.fetchInternshipsStudent(token);
+      this.fetchInternshipsStudent2(token);
     }
     if (userRole === 'Tutor') {
       this.isTutor = true;
@@ -71,7 +81,6 @@ export class InternshipComponent implements OnInit {
       next: (userDetails) => {
         if (userDetails.id) {
           const idUser = userDetails.id;
-
           this.internshipService.getInternships(idUser).subscribe({
             next: (data) => {
               console.log(data);
@@ -85,12 +94,15 @@ export class InternshipComponent implements OnInit {
           });
         }
       },
+
       error: (err) => {
         console.error("Erreur lors du décodage du token :", err);
         this.router.navigate(['/login']);
       }
     });
+
   }
+
 
   fetchInternshipsTutor(token: string) {
     this.userService.decodeTokenRole(token).subscribe({
@@ -124,9 +136,6 @@ export class InternshipComponent implements OnInit {
       }
     });
   }
-
-
-
 
   deleteInternship(internshipId: number) {
     Swal.fire({
@@ -221,5 +230,79 @@ export class InternshipComponent implements OnInit {
       }
     });
   }
+
+  fetchInternshipsStudent2(token: string) {
+    this.userService.decodeTokenRole(token).subscribe({
+      next: (userDetails) => {
+        if (userDetails.id) {
+          const idUser = userDetails.id;
+          this.agreementService.getAgreementByStudentId(idUser).subscribe({
+            next: (agreement) => {
+              this.agreementInfo = agreement;
+              if (agreement.agreementState === 'APPROVED') {
+                this.AgreementApproved = true;
+                this.addTimelineToAgreement(idUser, this.agreementInfo.id);
+                this.fetchTimelines(idUser);
+              }
+            },
+            error: (err) => {
+              if (err.status === 404) {
+                console.error("Erreur lors de la récupération de l'accord :", err);
+              }
+            }
+          });
+        }
+      },
+      error: (err) => {
+        console.error("Erreur lors du décodage du token :", err);
+        this.router.navigate(['/login']);
+      }
+    });
+  }
+
+  addTimelineToAgreement(userId: number, agreementId: number) {
+    this.timeLineService.addTimeLine(userId, agreementId).subscribe({
+      next: () => {
+        this.fetchTimelines(userId);
+        console.log('Timeline added successfully');
+      },
+      error: (err) => {
+        console.error('Error adding timeline:', err);
+      }
+    });
+  }
+
+  fetchTimelines(userId: number): void {
+    this.timeLineService.getTimeLinesByUserId(userId).subscribe({
+      next: (timelines) => {
+        this.timelines = timelines;
+        console.log('Timeline added successfully', timelines);
+      },
+      error: (err) => {
+        console.error('Error fetching timelines:', err);
+      }
+    });
+  }
+
+  getIcon(title: string): string {
+    switch (title) {
+      case 'Depot Journal de bord':
+        return '📖'; // Exemple d'icône
+      case 'Depot Bilan Version 1':
+        return '📊'; // Exemple d'icône
+      case 'Lancement Visite Mi Parcours':
+        return '📍'; // Exemple d'icône
+      case 'Validation Technique':
+        return '✔️'; // Exemple d'icône
+      case 'Depot Rapport Version 1':
+        return '📑'; // Exemple d'icône
+      case 'Depot Rapport Final':
+        return '📜'; // Exemple d'icône
+      default:
+        return '🔘'; // Icône par défaut
+    }
+  }
+
+
 
 }

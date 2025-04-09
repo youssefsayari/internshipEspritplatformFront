@@ -38,13 +38,14 @@ import { MyContactsComponent } from './my-contacts/my-contacts.component';
 import { ProfileCardComponent } from './profile-card/profile-card.component';
 import { IconsComponent } from './icons/icons.component'; // Vérifie le chemin exact
 import { QuizListComponent } from './quiz-list/quiz-list.component';
+import { AgreementDialogComponent } from './agreement-dialog/agreement-dialog.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { TutorTaskListComponent } from './Tutors/tutor-task-list/tutor-task-list.component';
 import { AddTaskComponent } from './Tutors/add-task/add-task.component';
-
 import { AddCompanyComponent } from './add-company/add-company.component';
 import { ImageComponent } from './image/image.component';
 import { MyProfileCardComponent } from './my-profile-card/my-profile-card.component';
+
 
 
 @NgModule({
@@ -97,6 +98,7 @@ import { MyProfileCardComponent } from './my-profile-card/my-profile-card.compon
     ProfileCardComponent,
     IconsComponent,
     QuizListComponent,
+    AgreementDialogComponent,
     TutorTaskListComponent,
     AddTaskComponent,
     AddCompanyComponent,

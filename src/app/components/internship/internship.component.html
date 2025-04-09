@@ -74,7 +74,7 @@
 
 
 
-        <div *ngIf="isGraduationInternship">
+        <div *ngIf="isGraduationInternship && !AgreementApproved;">
           <div class="card-header">
             Graduation Internship
           </div>
@@ -136,6 +136,36 @@
               </mat-paginator>
             </div>
 
+          </div>
+        </div>
+
+        <!-- **************************************Process*********************************** -->
+
+        <div *ngIf="isGraduationInternship && AgreementApproved">
+          <div class="card-header">
+            Internship Process
+          </div>
+          <div class="card-body">
+            <div *ngIf="timelines?.length > 0; else noTimelines">
+              <div class="timeline-container">
+                <div *ngFor="let timeLine of timelines; let i = index" class="timeline-item">
+                  <div class="timeline-circle">
+                    <i class="timeline-icon">{{ getIcon(timeLine.title) }}</i>
+                  </div>
+                  <div class="timeline-content">
+                    <div class="timeline-title">{{ timeLine.title }}</div>
+                    <div class="timeline-date">{{ timeLine.dateLimite | date:'shortDate' }}</div>
+                  </div>
+                  <div *ngIf="i < timelines.length - 1" class="timeline-line"></div> <!-- Line between items -->
+                </div>
+              </div>
+            </div>
+
+            <ng-template #noTimelines>
+              <div class="no-timelines">
+                No timelines available.
+              </div>
+            </ng-template>
           </div>
         </div>
 
