@@ -29,7 +29,6 @@ import { QuizDetailsComponent } from '../../quiz-details/quiz-details.component'
 import { QuizEditComponent } from '../../quiz-edit/quiz-edit.component';
 import { QuizListUserComponent } from '../../quiz-list-user/quiz-list-user.component';
 import { QuizPassComponent } from '../../quiz-pass/quiz-pass.component';
-import { ImageComponent } from '../../image/image.component';
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent },
@@ -64,6 +63,5 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'quiz-details/:id', component: QuizDetailsComponent },
     { path: 'quiz-edit/:id', component: QuizEditComponent },
     { path: 'quiz/:id', component: QuizPassComponent },
-    { path: 'upload', component: ImageComponent },
 
 ];

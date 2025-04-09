@@ -23,7 +23,6 @@ import {MatInputModule} from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import {MatDialogModule} from '@angular/material/dialog';
 import { ComponentsModule } from "../../components/components.module";
-import { ImageComponent } from '../../image/image.component';
 
 
 @NgModule({
@@ -60,7 +59,6 @@ import { ImageComponent } from '../../image/image.component';
     NotificationsComponent,
     InternshipComponent,
     AgreementComponent,
-    ImageComponent,
 
   ]
 })

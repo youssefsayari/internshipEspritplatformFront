@@ -1,20 +1,23 @@
 import { Post } from "./Post";
 import { User } from "./User";
+import { Image } from "./image";
 
 export interface Company {
-  id: number;
-  name: string;
+  id?: number;
+  name?: string;
   abbreviation?: string;
   address?: string;
-  sector: "TECHNOLOGY" | "FINANCE" | "HEALTHCARE" | "EDUCATION";
-  email: string;
+  sector?: "TECHNOLOGY" | "FINANCE" | "HEALTHCARE" | "EDUCATION" | "OTHER";
+  email?: string;
   phone?: number;
-  foundingYear?: string; // ISO Date string
-  labelDate?: string; // ISO Date string
+  foundingYear?: Date; // ISO Date string
+  labelDate?: Date; // ISO Date string
   website?: string;
   founders?: string;
-  secretKey: string;
-  posts: Post[];
-  owner: User;
-  followers: User[];
+  secretKey?: string;
+  posts?: Post[];
+  owner?: User;
+  followers?: User[];
+  image?: Image; // Ajoutez ce champ
+
 }
