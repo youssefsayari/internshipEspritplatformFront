@@ -18,11 +18,11 @@ export class AgreementRemarkService {
     return this.http.post<any>(`${API_URL}/add`, agreementRemark,{ responseType: 'text' as 'json' });
   }
 
-  getAgreementRemarksByAgreementId(idAgreement: number): Observable<Remark[]> {
+  getAgreementRemarksByAgreementId(idAgreement: number): Observable<AgreementRemark[]> {
     return this.http.get<any>(`${API_URL}/getByAgreementId/${idAgreement}`).pipe(
       tap(response => {
-        console.log('Response from API:', response); // Affiche la réponse
+        console.log('Response from API:', response);
       })
-    );
+    );;
   }
 }

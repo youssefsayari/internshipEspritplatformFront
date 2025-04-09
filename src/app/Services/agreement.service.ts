@@ -33,8 +33,19 @@ export class AgreementService {
     return this.http.post<string>(`${API_URL}/approveAgreement/${agreementId}`, null, { responseType: 'text' as 'json' });
   }
 
+  acceptAgreement(agreementId: number): Observable<string> {
+    return this.http.post<string>(`${API_URL}/acceptAgreement/${agreementId}`, null, { responseType: 'text' as 'json' });
+  }
+
   rejectAgreement(agreementId: number): Observable<string> {
     return this.http.post<string>(`${API_URL}/rejectAgreement/${agreementId}`, null, { responseType: 'text' as 'json' });
   }
+
+  downloadAgreementPDF(agreementId: number): Observable<Blob> {
+    return this.http.get(`${API_URL}/download-pdf/${agreementId}`, {
+      responseType: 'blob'
+    });
+  }
+
 
 }

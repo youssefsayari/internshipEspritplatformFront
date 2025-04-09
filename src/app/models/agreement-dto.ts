@@ -4,5 +4,5 @@ export class AgreementDTO {
   endDate: Date;
   companyName: string;
   companyRepresentative: string;
-  agreementState: 'PENDING' | 'ACCEPTED' | 'REJECTED';
+  agreementState: 'PENDING' | 'ACCEPTED' | 'REJECTED' | 'APPROVED';
 }

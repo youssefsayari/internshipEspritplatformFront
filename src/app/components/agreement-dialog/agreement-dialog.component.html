@@ -25,11 +25,15 @@
 
 
 <mat-dialog-actions align="center">
-  <button mat-button color="primary" (click)="acceptAgreement()" *ngIf="agreement.agreementState !== 'ACCEPTED' && agreement.agreementState !== 'REJECTED'">
+  <button mat-button color="primary" (click)="acceptAgreement()" *ngIf="agreement.agreementState !== 'ACCEPTED' && agreement.agreementState !== 'REJECTED' && agreement.agreementState !== 'APPROVED'">
     Accepted
   </button>
 
-  <button mat-button color="warn" (click)="rejectAgreement()" *ngIf="agreement.agreementState !== 'ACCEPTED' && agreement.agreementState !== 'REJECTED'">
+  <button mat-button color="warn" (click)="rejectAgreement()" *ngIf="agreement.agreementState !== 'ACCEPTED' && agreement.agreementState !== 'REJECTED' && agreement.agreementState !== 'APPROVED'">
     Rejected
+  </button>
+
+  <button mat-button color="primary" (click)="approvedAgreement()" *ngIf="agreement.agreementState == 'ACCEPTED'">
+    Approved
   </button>
 </mat-dialog-actions>

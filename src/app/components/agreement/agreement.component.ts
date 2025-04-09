@@ -7,6 +7,8 @@ import Swal from 'sweetalert2';
 import {InternshipDetailsDTO} from "../../models/internship-details-dto";
 import {AgreementRequestDTO} from "../../models/agreement-request-dto";
 import {AgreementDTO} from "../../models/agreement-dto";
+import {AgreementRemark} from "../../models/agreement-remark";
+import {AgreementRemarkService} from "../../Services/agreement-remark.service";
 
 @Component({
   selector: 'app-agreement',
@@ -24,9 +26,13 @@ export class AgreementComponent implements OnInit {
   userId!:number;
   agreementInfo: AgreementDTO;
   hasExistingAgreement: boolean = false;
+  AgreementApproved: boolean = false;
+  rejectionRemarks?: AgreementRemark[];
 
 
-  constructor(private router: Router, private agreementService: AgreementService ,private userService: UserService,private fb: FormBuilder) { }
+
+  constructor(private router: Router, private agreementService: AgreementService ,private userService: UserService,private fb: FormBuilder,
+               private agreementRemarkService: AgreementRemarkService) { }
 
   ngOnInit(): void {
     this.today = new Date().toISOString().split('T')[0];
@@ -56,7 +62,6 @@ export class AgreementComponent implements OnInit {
         if (userDetails.id) {
           const userId = userDetails.id;
           this.userId = userDetails.id;
-          console.log('userId:', this.userId);
           const userEmail = userDetails.email;
           this.agreementForm.patchValue({
             email: userEmail,
@@ -66,6 +71,21 @@ export class AgreementComponent implements OnInit {
             next: (agreement) => {
               this.agreementInfo = agreement;
               this.hasExistingAgreement = true;
+              if (agreement.agreementState === 'APPROVED') {
+                this.AgreementApproved = true;
+              }
+              if (agreement.agreementState === 'REJECTED') {
+                this.hasExistingAgreement = false;
+                this.agreementRemarkService.getAgreementRemarksByAgreementId(agreement.id).subscribe({
+                  next: (remarks) => {
+                    this.rejectionRemarks = remarks;
+                    console.log('✔️ Remarks loaded:', this.rejectionRemarks);
+                  },
+                  error: (err) => {
+                    console.error("Erreur lors de la récupération des remarques :", err);
+                  }
+                });
+              }
             },
             error: (err) => {
               if (err.status === 404) {
@@ -174,6 +194,7 @@ export class AgreementComponent implements OnInit {
             confirmButtonText: 'OK'
           });
           console.log('Agreement submitted successfully:', response);
+          this.ngOnInit();
         },
         error: (err) => {
           Swal.fire({
@@ -196,9 +217,35 @@ export class AgreementComponent implements OnInit {
     }
   }
 
-  downloadAgreement() {
-    window.open(`http://localhost:8089/innoxpert/agreement/downloadAgreement/${this.agreementInfo?.id}`, '_blank');
-  }
+  downloadAgreement(): void {
+    const agreementId = this.agreementInfo.id;
+
+    this.agreementService.downloadAgreementPDF(agreementId).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Convention_Stage_${agreementId}.pdf`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+        Swal.fire({
+          icon: 'success',
+          title: 'Download Successful',
+          text: 'The PDF file has been successfully downloaded to your machine.',
+        });
+      },
+      error: (err) => {
+        console.error('Error downloading the PDF:', err);
+        Swal.fire({
+          icon: 'error',
+          title: 'Download Failed',
+          text: 'Unable to download the PDF. Please try again later.',
+        });
+      }
+    });
+
+}
+
 
 
 }

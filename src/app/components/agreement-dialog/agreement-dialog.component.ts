@@ -44,6 +44,31 @@ export class AgreementDialogComponent implements OnInit {
     this.dialogRef.close(true);
   }
 
+  approvedAgreement(): void {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this action!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, approve it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.agreementService.acceptAgreement(this.agreement.id).subscribe({
+          next: () => {
+            Swal.fire("Approved!", "The agreement has been successfully approved.", "success");
+          },
+          error: (err) => {
+            console.error("Error accepting agreement:", err);
+            Swal.fire("Error!", "Failed to approve the agreement.", "error");
+          }
+        });
+      }
+    });
+
+    this.dialogRef.close(true);
+  }
 
   rejectAgreement(): void {
     Swal.fire({
