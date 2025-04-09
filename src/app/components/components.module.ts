@@ -7,7 +7,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { MeetingComponent } from './meeting/meeting.component';
 import { AddMeetingComponent } from './add-meeting/add-meeting.component';
-import { TasksListComponent } from './tasks/tasks-list/tasks-list.component';
+import { TasksListComponent } from './Students/tasks-list/tasks-list.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UpdateMeetingComponent } from './update-meeting/update-meeting.component';
 import { FullCalendarModule } from '@fullcalendar/angular';
@@ -38,6 +38,10 @@ import { MyContactsComponent } from './my-contacts/my-contacts.component';
 import { ProfileCardComponent } from './profile-card/profile-card.component';
 import { IconsComponent } from './icons/icons.component'; // Vérifie le chemin exact
 import { QuizListComponent } from './quiz-list/quiz-list.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { TutorTaskListComponent } from './Tutors/tutor-task-list/tutor-task-list.component';
+import { AddTaskComponent } from './Tutors/add-task/add-task.component';
+
 import { AddCompanyComponent } from './add-company/add-company.component';
 import { ImageComponent } from './image/image.component';
 import { MyProfileCardComponent } from './my-profile-card/my-profile-card.component';
@@ -62,6 +66,7 @@ import { MyProfileCardComponent } from './my-profile-card/my-profile-card.compon
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,
+    DragDropModule
 
 
 
@@ -92,6 +97,8 @@ import { MyProfileCardComponent } from './my-profile-card/my-profile-card.compon
     ProfileCardComponent,
     IconsComponent,
     QuizListComponent,
+    TutorTaskListComponent,
+    AddTaskComponent,
     AddCompanyComponent,
     ImageComponent,
     MyProfileCardComponent,
