@@ -4,30 +4,45 @@
     <div class="col-md-12">
       <div class="card">
         <div class="card-header">
+          <h5 class="greeting"> Hi {{ user ? user.firstName : 'Loading...' }} !</h5>
           <h5 class="title">Discover the Latest Internship Offers</h5>
-          
-            <p class="category">
-              Offered by Our Partner Companies.
-            </p>
-
+          <p class="category">Offered by Our Partner Companies.</p>
         </div>
         <div class="card-body all-icons">
           <div class="row">
-
-            <div class="col-lg-4">
-              <app-profile-card   *ngIf="showProfileCard"  [image]="image" [from]="from" ></app-profile-card>
-              <app-my-contacts></app-my-contacts>
+            <!-- Colonne pour le profile-card (gauche) -->
+            <div class="col-lg-3" *ngIf="showProfileCard" @slideInOut>
+              <div class="sticky-profile-card">
+                <app-profile-card
+                  [companyIdSelected]="companyIdSelected"
+                  [userConnecte]="userConnecte"
+                  *ngIf="companyIdConnected !== null" [companyIdConnected]="companyIdConnected!"
+                  (closeCard)="onCloseCard()"
+                  (followChanged)="onFollowChanged($event)"
+                ></app-profile-card>
+              </div>
             </div>
 
-
-        
-            
-             <div class="col-lg-8">
-
-
+                        <!-- Colonne pour la timeline (centre) -->
+              <div [class.col-lg-6]="showProfileCard && showContactCard"
+              [class.col-lg-9]="(showProfileCard && !showContactCard) || (!showProfileCard && showContactCard)"
+              [class.col-lg-12]="!showProfileCard && !showContactCard"
+              *ngIf="timelineState" [@timelineResize]="getTimelineState()">
               <app-activity-timeline (profileSelected)="onProfileSelected($event)"></app-activity-timeline>
-            </div>
+              </div>
 
+            <!-- Colonne pour app-my-contacts (droite) -->
+            <div class="col-lg-3" *ngIf="showContactCard" @slideInOutRight> 
+              <div *ngIf="isUserInCompany">           
+                <app-my-profile-card></app-my-profile-card>
+              </div>  
+              <div *ngIf="userType !== 'Admin'">
+                <app-my-contacts 
+                  [followEvent]="currentFollowEvent"
+                  (profileSelected)="onProfileSelected($event)">
+                </app-my-contacts>
+              </div>
+            </div>
           </div>
         </div>
       </div>

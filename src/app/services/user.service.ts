@@ -52,5 +52,8 @@ export class UserService {
       { responseType: 'json' }
     );
   }
-  
+  // Méthode pour récupérer un utilisateur par son ID
+  getUserById(idUser: number): Observable<User> {
+    return this.http.get<User>(`${API_URL}/getUserById/${idUser}`);
+  }
 }

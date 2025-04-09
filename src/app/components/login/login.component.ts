@@ -212,4 +212,7 @@ export class LoginComponent implements OnInit {
       }
     });
   }
+  redirectToAddCompany() {
+    this.router.navigate(['/add-company']); // Rediriger vers la route add-company
+  }
 }

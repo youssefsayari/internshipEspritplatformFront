@@ -42,6 +42,9 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { TutorTaskListComponent } from './Tutors/tutor-task-list/tutor-task-list.component';
 import { AddTaskComponent } from './Tutors/add-task/add-task.component';
 
+import { AddCompanyComponent } from './add-company/add-company.component';
+import { ImageComponent } from './image/image.component';
+import { MyProfileCardComponent } from './my-profile-card/my-profile-card.component';
 
 
 @NgModule({
@@ -96,6 +99,10 @@ import { AddTaskComponent } from './Tutors/add-task/add-task.component';
     QuizListComponent,
     TutorTaskListComponent,
     AddTaskComponent,
+    AddCompanyComponent,
+    ImageComponent,
+    MyProfileCardComponent,
+
    ],
   exports: [
     FooterComponent,
