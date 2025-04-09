@@ -147,24 +147,27 @@
           </div>
           <div class="card-body">
             <div *ngIf="timelines?.length > 0; else noTimelines">
-              <ul>
-                <li *ngFor="let timeLine of timelines">
-                  <div>
-                    <strong>{{ timeLine.title }}</strong> - {{ timeLine.dateLimite | date:'shortDate' }}
+              <div class="timeline-container">
+                <div *ngFor="let timeLine of timelines; let i = index" class="timeline-item">
+                  <div class="timeline-circle">
+                    <i class="timeline-icon">{{ getIcon(timeLine.title) }}</i>
                   </div>
-                  <div>{{ timeLine.description }}</div>
-                </li>
-              </ul>
+                  <div class="timeline-content">
+                    <div class="timeline-title">{{ timeLine.title }}</div>
+                    <div class="timeline-date">{{ timeLine.dateLimite | date:'shortDate' }}</div>
+                  </div>
+                  <div *ngIf="i < timelines.length - 1" class="timeline-line"></div> <!-- Line between items -->
+                </div>
+              </div>
             </div>
 
-
             <ng-template #noTimelines>
-              <div>No timelines available.</div>
+              <div class="no-timelines">
+                No timelines available.
+              </div>
             </ng-template>
           </div>
         </div>
-
-
 
 
         <!-- **************************************Tutor*********************************** -->

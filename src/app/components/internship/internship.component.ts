@@ -284,4 +284,25 @@ export class InternshipComponent implements OnInit {
     });
   }
 
+  getIcon(title: string): string {
+    switch (title) {
+      case 'Depot Journal de bord':
+        return '📖'; // Exemple d'icône
+      case 'Depot Bilan Version 1':
+        return '📊'; // Exemple d'icône
+      case 'Lancement Visite Mi Parcours':
+        return '📍'; // Exemple d'icône
+      case 'Validation Technique':
+        return '✔️'; // Exemple d'icône
+      case 'Depot Rapport Version 1':
+        return '📑'; // Exemple d'icône
+      case 'Depot Rapport Final':
+        return '📜'; // Exemple d'icône
+      default:
+        return '🔘'; // Icône par défaut
+    }
+  }
+
+
+
 }
