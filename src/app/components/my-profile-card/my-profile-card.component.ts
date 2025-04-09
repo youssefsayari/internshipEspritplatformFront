@@ -155,20 +155,28 @@ saveChanges(): void {
   this.isLoading = true;
   
   // Convertir les données formatées vers le modèle Company
-  const companyToUpdate: Company = {
-    ...this.originalCompany,
+  // Create the update payload carefully
+  const payload = {
+    id: this.company.id,
     name: this.updatedCompany.name,
     abbreviation: this.updatedCompany.abbreviation,
     email: this.updatedCompany.email,
-    phone: this.updatedCompany.phone,
+    phone: Number(this.updatedCompany.phone), // Ensure it's a number
     address: this.updatedCompany.address,
     website: this.updatedCompany.website,
     founders: this.updatedCompany.founders,
-    sector: this.company.sector, // Garder l'original car c'est un select
-    // Les dates doivent être gérées séparément si modifiables
+    sector: this.updatedCompany.sector,
+    // Send dates as they were originally (don't convert to just years)
+    foundingYear: this.company.foundingYear,
+    labelDate: this.company.labelDate,
+    // Include required fields that might be missing
+    secretKey: this.company.secretKey
   };
+  console.log('Update payload:', payload); // Debug log
 
-  this.companyService.updateCompany(this.company.id, companyToUpdate).subscribe({
+
+
+  this.companyService.updateCompany(this.company.id, payload).subscribe({
     next: (updatedCompany) => {
       this.company = updatedCompany;
       this.formatCompanyData(updatedCompany);
@@ -202,33 +210,34 @@ deleteCompany(): void {
     confirmButtonColor: '#ff416c',
     cancelButtonColor: '#6c757d',
     confirmButtonText: 'Oui, supprimer',
-    cancelButtonText: 'Annuler',
-    customClass: {
-      container: 'swal-delete-container',
-      popup: 'swal-delete-popup',
-      confirmButton: 'swal-delete-confirm',
-      cancelButton: 'swal-delete-cancel'
-    }
+    cancelButtonText: 'Annuler'
   }).then((result) => {
     if (result.isConfirmed) {
       this.companyService.deleteCompany(this.companyId).subscribe({
-        next: () => {
-          Swal.fire({
-            icon: 'success',
-            title: 'Entreprise supprimée !',
-            text: 'Votre entreprise a été supprimée avec succès',
-            timer: 2000,
-            showConfirmButton: false
-          }).then(() => {
-            // Redirection vers /login après la notification
-            this.router.navigate(['/login']);
-          });
+        next: (response) => {
+          if (response.success) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Entreprise supprimée !',
+              text: response.message || 'Votre entreprise a été supprimée avec succès',
+              timer: 2000,
+              showConfirmButton: false
+            }).then(() => {
+              this.router.navigate(['/login']);
+            });
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Erreur',
+              text: response.message || 'La suppression a échoué'
+            });
+          }
         },
         error: (err) => {
           Swal.fire({
             icon: 'error',
             title: 'Erreur',
-            text: 'La suppression a échoué : ' + err.message
+            text: err.message || 'Une erreur inattendue est survenue lors de la suppression'
           });
         }
       });

@@ -56,7 +56,19 @@ export class CompanyService {
       
       return this.http.put<Company>(url, companyData, { headers }).pipe(
         catchError(error => {
-          throw new Error('Failed to update company: ' + error.message);
+          console.error('Full error response:', error);
+          let errorMsg = 'Failed to update company';
+          if (error.error) {
+            // Try to extract validation messages from backend
+            if (typeof error.error === 'string') {
+              errorMsg += `: ${error.error}`;
+            } else if (error.error.message) {
+              errorMsg += `: ${error.error.message}`;
+            } else if (Array.isArray(error.error)) {
+              errorMsg += `: ${error.error.join(', ')}`;
+            }
+          }
+          return throwError(() => new Error(errorMsg));
         })
       );
     }
@@ -118,17 +130,24 @@ enrichCompanyData(name?: string, website?: string): Observable<Company> {
     .pipe(catchError(this.handleError));
 }
 
-// Add this method to your CompanyService class
 deleteCompany(companyId: number): Observable<{success: boolean, message: string}> {
   return this.http.delete<{success: boolean, message: string}>(`${this.baseUrl}/deleteCompany/${companyId}`).pipe(
     catchError(error => {
-      // Handle different error cases
-      if (error.status === 404) {
-        return throwError(() => new Error('Company not found'));
-      } else if (error.status === 500) {
-        return throwError(() => new Error('Failed to delete company: ' + error.error?.message || error.message));
+      console.error('Full delete error:', error);
+      let errorMsg = 'Failed to delete company';
+      
+      if (error.error) {
+        // Try to extract server error message
+        if (typeof error.error === 'string') {
+          errorMsg += `: ${error.error}`;
+        } else if (error.error.message) {
+          errorMsg += `: ${error.error.message}`;
+        }
+      } else if (error.message) {
+        errorMsg += `: ${error.message}`;
       }
-      return throwError(() => new Error('An unexpected error occurred'));
+      
+      return throwError(() => new Error(errorMsg));
     })
   );
 }
