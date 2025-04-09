@@ -74,7 +74,7 @@
 
 
 
-        <div *ngIf="isGraduationInternship">
+        <div *ngIf="isGraduationInternship && !AgreementApproved;">
           <div class="card-header">
             Graduation Internship
           </div>
@@ -135,6 +135,15 @@
                              aria-label="Select page of periodic elements">
               </mat-paginator>
             </div>
+
+          </div>
+        </div>
+
+        <div *ngIf="isGraduationInternship && AgreementApproved;">
+          <div class="card-header">
+            Internship Process
+          </div>
+          <div class="card-body">
 
           </div>
         </div>

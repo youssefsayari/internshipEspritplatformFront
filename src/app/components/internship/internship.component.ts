@@ -11,6 +11,8 @@ import {MatDialog} from "@angular/material/dialog";
 import {DialogRemarkComponent} from "../dialog-remark/dialog-remark.component";
 import {InternshipRemarkService} from "../../Services/internship-remark.service";
 import {Remark} from "../../models/remark";
+import {AgreementService} from "../../Services/agreement.service";
+import {AgreementDTO} from "../../models/agreement-dto";
 
 
 @Component({
@@ -33,8 +35,10 @@ export class InternshipComponent implements OnInit {
   isGraduationInternship: boolean = false;
   isTutor: boolean = false;
   remarks: Remark[] = [];
+  AgreementApproved: boolean = false;
+  agreementInfo: AgreementDTO;
   constructor(private router: Router, private internshipService: InternshipService,private userService: UserService,private dialog: MatDialog,
-  private internshipRemarkService: InternshipRemarkService,) {}
+  private internshipRemarkService: InternshipRemarkService, private agreementService: AgreementService) {}
 
   ngOnInit() {
     console.log(document.querySelector('.main-panel'));
@@ -49,6 +53,7 @@ export class InternshipComponent implements OnInit {
       this.router.navigate(['/login']);
       return;
     }
+
     /*end ya sayari ija hezz*/
     if (userRole === 'Student') {
       if (userClasse && ['1', '2', '3', '4'].includes(userClasse.charAt(0))) {
@@ -57,6 +62,7 @@ export class InternshipComponent implements OnInit {
         this.isGraduationInternship = true;
       }
       this.fetchInternshipsStudent(token);
+      this.fetchInternshipsStudent2(token);
     }
     if (userRole === 'Tutor') {
       this.isTutor = true;
@@ -81,6 +87,33 @@ export class InternshipComponent implements OnInit {
             },
             error: (err) => {
               console.error("Erreur lors de la récupération des stages :", err);
+            }
+          });
+        }
+      },
+      error: (err) => {
+        console.error("Erreur lors du décodage du token :", err);
+        this.router.navigate(['/login']);
+      }
+    });
+  }
+
+  fetchInternshipsStudent2(token: string) {
+    this.userService.decodeTokenRole(token).subscribe({
+      next: (userDetails) => {
+        if (userDetails.id) {
+          const idUser = userDetails.id;
+          this.agreementService.getAgreementByStudentId(idUser).subscribe({
+            next: (agreement) => {
+              this.agreementInfo = agreement;
+              if (agreement.agreementState === 'APPROVED') {
+                this.AgreementApproved = true;
+              }
+            },
+            error: (err) => {
+              if (err.status === 404) {
+                console.error("Erreur lors de la récupération de l'accord :", err);
+              }
             }
           });
         }
