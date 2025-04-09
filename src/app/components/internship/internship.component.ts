@@ -13,6 +13,8 @@ import {InternshipRemarkService} from "../../Services/internship-remark.service"
 import {Remark} from "../../models/remark";
 import {AgreementService} from "../../Services/agreement.service";
 import {AgreementDTO} from "../../models/agreement-dto";
+import {TimeLineService} from "../../Services/time-line.service";
+import {TimeLine} from "../../models/time-line";
 
 
 @Component({
@@ -35,9 +37,11 @@ export class InternshipComponent implements OnInit {
   isGraduationInternship: boolean = false;
   isTutor: boolean = false;
   remarks: Remark[] = [];
+  userId: number;
   AgreementApproved: boolean = false;
   agreementInfo: AgreementDTO;
-  constructor(private router: Router, private internshipService: InternshipService,private userService: UserService,private dialog: MatDialog,
+  timelines: TimeLine[] = [];
+  constructor(private router: Router, private internshipService: InternshipService, private timeLineService: TimeLineService ,private userService: UserService,private dialog: MatDialog,
   private internshipRemarkService: InternshipRemarkService, private agreementService: AgreementService) {}
 
   ngOnInit() {
@@ -77,7 +81,6 @@ export class InternshipComponent implements OnInit {
       next: (userDetails) => {
         if (userDetails.id) {
           const idUser = userDetails.id;
-
           this.internshipService.getInternships(idUser).subscribe({
             next: (data) => {
               console.log(data);
@@ -91,39 +94,15 @@ export class InternshipComponent implements OnInit {
           });
         }
       },
+
       error: (err) => {
         console.error("Erreur lors du décodage du token :", err);
         this.router.navigate(['/login']);
       }
     });
+
   }
 
-  fetchInternshipsStudent2(token: string) {
-    this.userService.decodeTokenRole(token).subscribe({
-      next: (userDetails) => {
-        if (userDetails.id) {
-          const idUser = userDetails.id;
-          this.agreementService.getAgreementByStudentId(idUser).subscribe({
-            next: (agreement) => {
-              this.agreementInfo = agreement;
-              if (agreement.agreementState === 'APPROVED') {
-                this.AgreementApproved = true;
-              }
-            },
-            error: (err) => {
-              if (err.status === 404) {
-                console.error("Erreur lors de la récupération de l'accord :", err);
-              }
-            }
-          });
-        }
-      },
-      error: (err) => {
-        console.error("Erreur lors du décodage du token :", err);
-        this.router.navigate(['/login']);
-      }
-    });
-  }
 
   fetchInternshipsTutor(token: string) {
     this.userService.decodeTokenRole(token).subscribe({
@@ -157,9 +136,6 @@ export class InternshipComponent implements OnInit {
       }
     });
   }
-
-
-
 
   deleteInternship(internshipId: number) {
     Swal.fire({
@@ -251,6 +227,59 @@ export class InternshipComponent implements OnInit {
         console.log('Dialog closed with:', result);
         const token = localStorage.getItem('Token');
         this.fetchInternshipsTutor(token);
+      }
+    });
+  }
+
+  fetchInternshipsStudent2(token: string) {
+    this.userService.decodeTokenRole(token).subscribe({
+      next: (userDetails) => {
+        if (userDetails.id) {
+          const idUser = userDetails.id;
+          this.agreementService.getAgreementByStudentId(idUser).subscribe({
+            next: (agreement) => {
+              this.agreementInfo = agreement;
+              if (agreement.agreementState === 'APPROVED') {
+                this.AgreementApproved = true;
+                this.addTimelineToAgreement(idUser, this.agreementInfo.id);
+                this.fetchTimelines(idUser);
+              }
+            },
+            error: (err) => {
+              if (err.status === 404) {
+                console.error("Erreur lors de la récupération de l'accord :", err);
+              }
+            }
+          });
+        }
+      },
+      error: (err) => {
+        console.error("Erreur lors du décodage du token :", err);
+        this.router.navigate(['/login']);
+      }
+    });
+  }
+
+  addTimelineToAgreement(userId: number, agreementId: number) {
+    this.timeLineService.addTimeLine(userId, agreementId).subscribe({
+      next: () => {
+        this.fetchTimelines(userId);
+        console.log('Timeline added successfully');
+      },
+      error: (err) => {
+        console.error('Error adding timeline:', err);
+      }
+    });
+  }
+
+  fetchTimelines(userId: number): void {
+    this.timeLineService.getTimeLinesByUserId(userId).subscribe({
+      next: (timelines) => {
+        this.timelines = timelines;
+        console.log('Timeline added successfully', timelines);
+      },
+      error: (err) => {
+        console.error('Error fetching timelines:', err);
       }
     });
   }

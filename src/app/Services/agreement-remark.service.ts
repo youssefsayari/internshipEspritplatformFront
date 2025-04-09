@@ -23,6 +23,6 @@ export class AgreementRemarkService {
       tap(response => {
         console.log('Response from API:', response);
       })
-    );;
+    );
   }
 }

@@ -139,14 +139,32 @@
           </div>
         </div>
 
-        <div *ngIf="isGraduationInternship && AgreementApproved;">
+        <!-- **************************************Process*********************************** -->
+
+        <div *ngIf="isGraduationInternship && AgreementApproved">
           <div class="card-header">
             Internship Process
           </div>
           <div class="card-body">
+            <div *ngIf="timelines?.length > 0; else noTimelines">
+              <ul>
+                <li *ngFor="let timeLine of timelines">
+                  <div>
+                    <strong>{{ timeLine.title }}</strong> - {{ timeLine.dateLimite | date:'shortDate' }}
+                  </div>
+                  <div>{{ timeLine.description }}</div>
+                </li>
+              </ul>
+            </div>
 
+
+            <ng-template #noTimelines>
+              <div>No timelines available.</div>
+            </ng-template>
           </div>
         </div>
+
+
 
 
         <!-- **************************************Tutor*********************************** -->
