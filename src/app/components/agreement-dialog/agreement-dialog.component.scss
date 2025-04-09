@@ -1,0 +1,41 @@
+.agreement-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px;
+}
+
+.detail-row strong {
+  font-weight: bold;
+}
+
+.detail-row span {
+  text-align: right;
+  color: #555;
+}
+
+.mat-dialog-actions {
+  display: flex;
+  justify-content: center;  /* This centers the buttons */
+  gap: 20px;
+}
+
+button {
+  width: 120px; /* Optional: Adjust the width of the buttons */
+}
+
+/* Optional: Modify the button colors */
+button[color="primary"] {
+  background-color: #4caf50; /* Green for Accepted */
+  color: white;
+}
+
+button[color="warn"] {
+  background-color: #f44336; /* Red for Rejected */
+  color: white;
+}

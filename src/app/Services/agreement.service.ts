@@ -29,5 +29,12 @@ export class AgreementService {
     return this.http.get<AgreementDTO>(`${API_URL}/getAgreementById?studentId=${studentId}`);
   }
 
+  approveAgreement(agreementId: number): Observable<string> {
+    return this.http.post<string>(`${API_URL}/approveAgreement/${agreementId}`, null, { responseType: 'text' as 'json' });
+  }
+
+  rejectAgreement(agreementId: number): Observable<string> {
+    return this.http.post<string>(`${API_URL}/rejectAgreement/${agreementId}`, null, { responseType: 'text' as 'json' });
+  }
 
 }
