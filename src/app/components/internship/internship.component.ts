@@ -15,6 +15,7 @@ import {AgreementService} from "../../Services/agreement.service";
 import {AgreementDTO} from "../../models/agreement-dto";
 import {TimeLineService} from "../../Services/time-line.service";
 import {TimeLine} from "../../models/time-line";
+import { DocumentService } from '../../Services/document.service';
 
 
 @Component({
@@ -41,8 +42,10 @@ export class InternshipComponent implements OnInit {
   AgreementApproved: boolean = false;
   agreementInfo: AgreementDTO;
   timelines: TimeLine[] = [];
+  private timelineApprovalStatus: boolean[] = [];
+  selectedTimelineIndex: number = -1;
   constructor(private router: Router, private internshipService: InternshipService, private timeLineService: TimeLineService ,private userService: UserService,private dialog: MatDialog,
-  private internshipRemarkService: InternshipRemarkService, private agreementService: AgreementService) {}
+  private internshipRemarkService: InternshipRemarkService, private agreementService: AgreementService, private documentService: DocumentService) {}
 
   ngOnInit() {
     console.log(document.querySelector('.main-panel'));
@@ -276,12 +279,22 @@ export class InternshipComponent implements OnInit {
     this.timeLineService.getTimeLinesByUserId(userId).subscribe({
       next: (timelines) => {
         this.timelines = timelines;
+        // Initialize approval status array
+        this.timelineApprovalStatus = new Array(timelines.length).fill(false);
+        // First item is always unlocked
+        if (timelines.length > 0) {
+          this.timelineApprovalStatus[0] = true;
+        }
         console.log('Timeline added successfully', timelines);
       },
       error: (err) => {
         console.error('Error fetching timelines:', err);
       }
     });
+  }
+
+  isTimelineUnlocked(index: number): boolean {
+    return this.timelineApprovalStatus[index];
   }
 
   getIcon(title: string): string {
@@ -303,6 +316,136 @@ export class InternshipComponent implements OnInit {
     }
   }
 
+  Validation(internship: any){
 
+  }
+
+  downloadDocument(timeline: TimeLine) {
+    if (timeline.documentId) {
+      this.documentService.downloadDocument(timeline.documentId).subscribe(
+        (blob: Blob) => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `${timeline.title}.pdf`;
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(a);
+        },
+        error => {
+          console.error('Error downloading document:', error);
+          Swal.fire('Error', 'Failed to download document', 'error');
+        }
+      );
+    }
+  }
+
+  onFileSelected(event: any, timeline: TimeLine) {
+    const file = event.target.files[0];
+    if (file) {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('title', timeline.title);
+      formData.append('userId', this.userId.toString());
+
+      this.documentService.addDocument(formData).subscribe(
+        (response: any) => {
+          timeline.documentId = response.id;
+          Swal.fire('Success', 'Document uploaded successfully', 'success');
+        },
+        error => {
+          console.error('Error uploading document:', error);
+          Swal.fire('Error', 'Failed to upload document', 'error');
+        }
+      );
+    }
+  }
+
+  validateTimeline(timeline: TimeLine) {
+    this.timeLineService.acceptStep(timeline.title, this.userId).subscribe(
+      () => {
+        const currentIndex = this.timelines.findIndex(t => t.id === timeline.id);
+        if (currentIndex < this.timelines.length - 1) {
+          this.timelineApprovalStatus[currentIndex + 1] = true;
+        }
+        Swal.fire('Success', 'Timeline step validated successfully', 'success');
+      },
+      error => {
+        console.error('Error validating timeline:', error);
+        Swal.fire('Error', 'Failed to validate timeline step', 'error');
+      }
+    );
+  }
+
+  rejectTimeline(timeline: TimeLine) {
+    this.timeLineService.rejectStep(timeline.title, this.userId).subscribe(
+      () => {
+        Swal.fire('Success', 'Timeline step rejected successfully', 'success');
+      },
+      error => {
+        console.error('Error rejecting timeline:', error);
+        Swal.fire('Error', 'Failed to reject timeline step', 'error');
+      }
+    );
+  }
+
+  toggleTimelineDetails(index: number) {
+    if (this.selectedTimelineIndex === index) {
+      this.selectedTimelineIndex = -1;
+    } else {
+      this.selectedTimelineIndex = index;
+    }
+  }
+
+  onDragOver(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    const target = event.currentTarget as HTMLElement;
+    target.classList.add('drag-over');
+  }
+
+  onDragLeave(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    const target = event.currentTarget as HTMLElement;
+    target.classList.remove('drag-over');
+  }
+
+  onDrop(event: DragEvent, timeline: TimeLine) {
+    event.preventDefault();
+    event.stopPropagation();
+    const target = event.currentTarget as HTMLElement;
+    target.classList.remove('drag-over');
+
+    const files = event.dataTransfer?.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      if (this.isValidFileType(file)) {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('title', timeline.title);
+        formData.append('userId', this.userId.toString());
+
+        this.documentService.addDocument(formData).subscribe(
+          (response: any) => {
+            timeline.documentId = response.id;
+            Swal.fire('Success', 'Document uploaded successfully', 'success');
+          },
+          error => {
+            console.error('Error uploading document:', error);
+            Swal.fire('Error', 'Failed to upload document', 'error');
+          }
+        );
+      } else {
+        Swal.fire('Error', 'Please upload only PDF or DOC files', 'error');
+      }
+    }
+  }
+
+  private isValidFileType(file: File): boolean {
+    const validTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    return validTypes.includes(file.type);
+  }
 
 }

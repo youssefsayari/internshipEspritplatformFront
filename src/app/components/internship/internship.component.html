@@ -143,27 +143,110 @@
 
         <div *ngIf="isGraduationInternship && AgreementApproved">
           <div class="card-header">
-            Internship Process
+            <h4 class="card-title">Internship Process Timeline</h4>
           </div>
           <div class="card-body">
-            <div *ngIf="timelines?.length > 0; else noTimelines">
-              <div class="timeline-container">
-                <div *ngFor="let timeLine of timelines; let i = index" class="timeline-item">
-                  <div class="timeline-circle">
-                    <i class="timeline-icon">{{ getIcon(timeLine.title) }}</i>
+            <div class="row">
+              <!-- Timeline Container -->
+              <div class="col-md-12">
+                <div *ngIf="timelines?.length > 0; else noTimelines">
+                  <div class="timeline-container">
+                    <div *ngFor="let timeLine of timelines; let i = index"
+                         class="timeline-item"
+                         [class.visible]="true"
+                         [class.locked]="!isTimelineUnlocked(i)"
+                         [class.unlocked]="isTimelineUnlocked(i)"
+                         (click)="toggleTimelineDetails(i)">
+                      <div class="timeline-circle">
+                        <i class="timeline-icon">{{ getIcon(timeLine.title) }}</i>
+                      </div>
+                      <div class="timeline-content">
+                        <div class="timeline-title">{{ timeLine.title }}</div>
+                        <div class="timeline-date">{{ timeLine.dateLimite | date:'shortDate' }}</div>
+                      </div>
+                      <div *ngIf="i < timelines.length - 1"
+                           class="timeline-line"
+                           [class.visible]="isTimelineUnlocked(i)"></div>
+                    </div>
                   </div>
-                  <div class="timeline-content">
-                    <div class="timeline-title">{{ timeLine.title }}</div>
-                    <div class="timeline-date">{{ timeLine.dateLimite | date:'shortDate' }}</div>
+                </div>
+              </div>
+
+              <!-- Details Panel Container -->
+              <div class="col-md-12">
+                <div class="details-panel" *ngIf="selectedTimelineIndex !== -1">
+                  <div class="panel-content">
+                    <div class="description-section">
+                      <h3>Description</h3>
+                      <p>{{ timelines[selectedTimelineIndex].description }}</p>
+                    </div>
+                    
+                    <div class="document-section" *ngIf="isTimelineUnlocked(selectedTimelineIndex)">
+                      <h3>Document Management</h3>
+                      <div class="document-table">
+                        <div class="table-header">
+                          <div class="header-cell">Action</div>
+                          <div class="header-cell">Status</div>
+                          <div class="header-cell">Operations</div>
+                        </div>
+                        <div class="table-row">
+                          <div class="table-cell">
+                            <i class="fas fa-download"></i> Download Template
+                          </div>
+                          <div class="table-cell">
+                            <span class="status-badge" [class.available]="timelines[selectedTimelineIndex].documentId">Available</span>
+                          </div>
+                          <div class="table-cell">
+                            <button class="btn btn-primary" (click)="downloadDocument(timelines[selectedTimelineIndex])" [disabled]="!timelines[selectedTimelineIndex].documentId">
+                              Download
+                            </button>
+                          </div>
+                        </div>
+                        <div class="table-row">
+                          <div class="table-cell">
+                            <i class="fas fa-upload"></i> Upload Document
+                          </div>
+                          <div class="table-cell">
+                            <span class="status-badge" [class.uploaded]="timelines[selectedTimelineIndex].documentId">Not Uploaded</span>
+                          </div>
+                          <div class="table-cell">
+                            <div class="upload-container" 
+                                 (dragover)="onDragOver($event)"
+                                 (dragleave)="onDragLeave($event)"
+                                 (drop)="onDrop($event, timelines[selectedTimelineIndex])">
+                              <input type="file" #fileInput style="display: none" 
+                                     accept=".pdf,.doc,.docx" 
+                                     (change)="onFileSelected($event, timelines[selectedTimelineIndex])">
+                              <button class="btn btn-success" (click)="fileInput.click()">
+                                Choose File
+                              </button>
+                              <p class="upload-hint">or drag and drop files here</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="validation-section" *ngIf="isTutor && timelines[selectedTimelineIndex].documentId">
+                      <h3>Validation</h3>
+                      <div class="validation-actions">
+                        <button class="btn btn-success" (click)="validateTimeline(timelines[selectedTimelineIndex])">
+                          <i class="fas fa-check"></i> Validate
+                        </button>
+                        <button class="btn btn-danger" (click)="rejectTimeline(timelines[selectedTimelineIndex])">
+                          <i class="fas fa-times"></i> Reject
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                  <div *ngIf="i < timelines.length - 1" class="timeline-line"></div> <!-- Line between items -->
                 </div>
               </div>
             </div>
 
             <ng-template #noTimelines>
               <div class="no-timelines">
-                No timelines available.
+                <i class="fas fa-clock"></i>
+                No timelines available yet. Please check back later.
               </div>
             </ng-template>
           </div>
@@ -222,6 +305,9 @@
                   <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
                   <td mat-cell *matCellDef="let row"> <button class="btn btn-info" (click)="showDetails(row)">
                     Details
+                  </button> </td>
+                  <td mat-cell *matCellDef="let row"> <button class="btn btn-info" (click)="Validation(row)">
+                    Validation
                   </button> </td>
                 </ng-container>
 
