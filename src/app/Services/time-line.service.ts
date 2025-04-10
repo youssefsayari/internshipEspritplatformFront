@@ -24,4 +24,19 @@ export class TimeLineService {
     );
   }
 
+  acceptStep(title: string, userId: number): Observable<any> {
+    return this.http.put(`${API_URL}/accept-step`, null, {
+      params: { title, userId }
+    });
+  }
+
+  rejectStep(title: string, userId: number): Observable<any> {
+    return this.http.put(`${API_URL}/reject-step`, null, {
+      params: { title, userId }
+    });
+  }
+
+
+
+
 }
