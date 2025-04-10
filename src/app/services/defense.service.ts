@@ -19,9 +19,10 @@ export class DefenseService {
     return this.http.get<Defense>(`${this.baseUrl}/getDefenseById/${idDefense}`);
   }
 
-  addDefense(defense: Defense): Observable<Defense> {
-    return this.http.post<Defense>(`${this.baseUrl}/addDefense`, defense);
+  addDefense(studentId: number, defenseRequest: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/defense/${studentId}/defenses`, defenseRequest);
   }
+  
 
   updateDefense(defense: Defense): Observable<Defense> {
     return this.http.put<Defense>(`${this.baseUrl}/updateDefense`, defense);

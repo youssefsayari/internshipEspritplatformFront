@@ -29,6 +29,9 @@ import { DocumentDetailsComponent } from './document-details/document-details.co
 import { PredefinedDocumentsComponent } from './predefined-documents/predefined-documents.component';
 import { GenerateCvComponent } from './generate-cv/generate-cv.component';
 import { AddDocumentComponent } from './add-document/add-document.component';
+import { DefenseListComponent } from './defense-list/defense-list.component';
+import { AddDefenseComponent } from './add-defense/add-defense.component';
+import { UpdateDefenseComponent } from './update-defense/update-defense.component';
 
 
 
@@ -69,6 +72,9 @@ import { AddDocumentComponent } from './add-document/add-document.component';
     QuizEditComponent,
     QuizListUserComponent,
     QuizPassComponent,
+    DefenseListComponent,
+    AddDefenseComponent,
+    UpdateDefenseComponent,
 
 
 

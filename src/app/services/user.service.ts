@@ -52,5 +52,12 @@ export class UserService {
       { responseType: 'json' }
     );
   }
+  getAllUsers(): Observable<User[]> {
+    return this.http.get<User[]>(`${API_URL}/getAllUsers`);
+  }
+  // user.service.ts
+getAllTutors(): Observable<User[]> {
+  return this.http.get<User[]>(`${API_URL}/getAllTutors`);
+}
   
 }

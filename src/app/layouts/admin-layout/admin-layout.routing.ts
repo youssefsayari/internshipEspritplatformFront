@@ -30,6 +30,13 @@ import { QuizEditComponent } from '../../quiz-edit/quiz-edit.component';
 import { QuizListUserComponent } from '../../quiz-list-user/quiz-list-user.component';
 import { QuizPassComponent } from '../../quiz-pass/quiz-pass.component';
 import { ImageComponent } from '../../image/image.component';
+import { DefenseListComponent } from '../../defense-list/defense-list.component'; // Add this import
+import { AddDefenseComponent } from '../../add-defense/add-defense.component';
+import { UpdateDefenseComponent  } from '../../update-defense/update-defense.component';
+
+
+
+
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent },
@@ -65,5 +72,10 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'quiz-edit/:id', component: QuizEditComponent },
     { path: 'quiz/:id', component: QuizPassComponent },
     { path: 'upload', component: ImageComponent },
+    { path: 'defenses',       component: DefenseListComponent },
+    { path: 'add-defense', component: AddDefenseComponent },
+    { path: 'update-defense', component: UpdateDefenseComponent } // ✅ Add this line
+    // ✅ Add this line
+
 
 ];
