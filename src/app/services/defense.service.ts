@@ -31,4 +31,14 @@ export class DefenseService {
   deleteDefenseById(idDefense: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/deleteDefenseById/${idDefense}`);
   }
+  // New method to get defenses by tutor ID (dynamic)
+  getDefensesByTutorId(tutorId: number): Observable<Defense[]> {
+    return this.http.get<Defense[]>(`${this.baseUrl}/getDefensesByTutor/${tutorId}`);
+  }
+
+  // Alternative method for static tutor ID = 2
+  getDefensesForTutor2(): Observable<Defense[]> {
+    return this.http.get<Defense[]>(`${this.baseUrl}/getDefensesForTutor2`);
+  }
+
 }

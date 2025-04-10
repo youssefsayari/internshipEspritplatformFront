@@ -47,7 +47,6 @@ export class AddDefenseComponent implements OnInit {
         this.timeRangeValidator
       ]],
       classroom: ['', [Validators.required, Validators.maxLength(50)]],
-      defenseDegree: [0, [Validators.required, Validators.min(0), Validators.max(100)]],
       reportSubmitted: [true],
       internshipCompleted: [true],
       tutorIds: [[], [Validators.required, this.exactlyThreeTutorsValidator]]
@@ -144,7 +143,6 @@ export class AddDefenseComponent implements OnInit {
       classroom: formValue.classroom,
       reportSubmitted: true,
       internshipCompleted: true,
-      defenseDegree: formValue.defenseDegree,
       tutorIds: formValue.tutorIds
     };
 

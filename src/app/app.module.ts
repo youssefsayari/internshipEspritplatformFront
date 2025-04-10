@@ -32,6 +32,8 @@ import { AddDocumentComponent } from './add-document/add-document.component';
 import { DefenseListComponent } from './defense-list/defense-list.component';
 import { AddDefenseComponent } from './add-defense/add-defense.component';
 import { UpdateDefenseComponent } from './update-defense/update-defense.component';
+import { DefensesTutorsComponent } from './defenses-tutors/defenses-tutors.component';
+import { EvaluationFormComponent } from './evaluation-form/evaluation-form.component';
 
 
 
@@ -75,6 +77,8 @@ import { UpdateDefenseComponent } from './update-defense/update-defense.componen
     DefenseListComponent,
     AddDefenseComponent,
     UpdateDefenseComponent,
+    DefensesTutorsComponent,
+    EvaluationFormComponent,
 
 
 

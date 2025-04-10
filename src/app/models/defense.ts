@@ -1,15 +1,17 @@
 import { User } from './user';
+import { Evaluation } from './evaluation'; // You'll need to create this
 
 export class Defense {
   idDefense: number;
-  defenseDate: string;  // Matches Java LocalDate serialization
-  defenseTime: string;  // Matches Java LocalTime serialization 
+  defenseDate: string;
+  defenseTime: string;
   classroom: string;
   reportSubmitted: boolean;
   internshipCompleted: boolean;
   defenseDegree: number;
   student: User;
-  tutors: User[];  // Using array instead of Set (TypeScript/JavaScript standard)
+  tutors: User[];
+  evaluations: Evaluation[] = []; // Add this line
 
   constructor(
     idDefense: number,
@@ -20,7 +22,8 @@ export class Defense {
     internshipCompleted: boolean,
     defenseDegree: number,
     student: User,
-    tutors: User[]
+    tutors: User[],
+    evaluations?: Evaluation[] // Add this optional parameter
   ) {
     this.idDefense = idDefense;
     this.defenseDate = defenseDate;
@@ -31,9 +34,9 @@ export class Defense {
     this.defenseDegree = defenseDegree;
     this.student = student;
     this.tutors = tutors;
+    this.evaluations = evaluations || []; // Initialize evaluations
   }
 
-  // Validation method matching Java's @PrePersist/@PreUpdate
   validate(): void {
     if (!this.tutors || this.tutors.length !== 3) {
       throw new Error('A defense must have exactly 3 tutors');
@@ -42,7 +45,4 @@ export class Defense {
       throw new Error('Cannot schedule defense for incomplete internship');
     }
   }
-
-} 
-
-
+}

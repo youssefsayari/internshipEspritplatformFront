@@ -33,6 +33,10 @@ import { ImageComponent } from '../../image/image.component';
 import { DefenseListComponent } from '../../defense-list/defense-list.component'; // Add this import
 import { AddDefenseComponent } from '../../add-defense/add-defense.component';
 import { UpdateDefenseComponent  } from '../../update-defense/update-defense.component';
+import { DefensesTutorsComponent  } from '../../defenses-tutors/defenses-tutors.component';
+import { EvaluationFormComponent  } from '../../evaluation-form/evaluation-form.component';
+
+
 
 
 
@@ -74,8 +78,12 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'upload', component: ImageComponent },
     { path: 'defenses',       component: DefenseListComponent },
     { path: 'add-defense', component: AddDefenseComponent },
-    { path: 'update-defense', component: UpdateDefenseComponent } // ✅ Add this line
-    // ✅ Add this line
+    { path: 'update-defense', component: UpdateDefenseComponent },
+    { path: 'defenses-tutors', component: DefensesTutorsComponent },
+    { path: 'defenses/:id/evaluate', component: EvaluationFormComponent }
+
+
+
 
 
 ];

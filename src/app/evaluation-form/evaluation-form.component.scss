@@ -1,0 +1,53 @@
+.evaluation-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+  
+  .evaluation-card {
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+  
+  .card-header {
+    padding: 1.5rem;
+    border-bottom: none;
+  }
+  
+  .defense-info {
+    background-color: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid #0d6efd;
+  }
+  
+  .submitted-evaluation {
+    .alert {
+      border-radius: 8px;
+    }
+  }
+  
+  .remarks-box {
+    white-space: pre-wrap;
+    min-height: 100px;
+  }
+  
+  .invalid-feedback {
+    display: block;
+  }
+  
+  textarea {
+    resize: vertical;
+    min-height: 120px;
+  }
+  
+  @media (max-width: 768px) {
+    .evaluation-container {
+      padding: 0 0.5rem;
+    }
+    
+    .defense-info .row > div {
+      margin-bottom: 1rem;
+    }
+  }
