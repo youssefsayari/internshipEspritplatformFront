@@ -209,13 +209,29 @@ export class TutorTaskListComponent implements OnInit {
   
   openAddTask(): void {
     const defaultDescriptions = [
-      'Set up development environment and tools',
-      'Design database schema for the project',
-      'Implement authentication module (login/register)',
-      'Create REST API for CRUD operations',
-      'Integrate frontend with backend APIs',
-      'Write unit tests and documentation'
+      '🛠️ Set up local development environment and tools',
+      '📥 Clone project repository and run the application locally',
+      '🗂️ Design or update database schema for the project',
+      '🔗 Create or update REST API endpoints',
+      '✍️ Implement CRUD operations in the backend',
+      '🎨 Develop UI components for data display and input',
+      '🔄 Integrate frontend with backend APIs',
+      '✅ Add form validation on the client side',
+      '🔐 Implement user authentication (login/register)',
+      '🛡️ Secure backend routes using JWT',
+      '👤 Manage user roles and access control',
+      '🧪 Write unit tests for backend services',
+      '🐛 Perform manual testing and fix bugs',
+      '🌀 Push code using Git and create pull requests',
+      '👥 Participate in code reviews and sprint meetings',
+      '📝 Write project documentation and API reference',
+      '🚀 Deploy project to staging or testing environment',
+      '🎤 Prepare demo or presentation for project milestone',
+      '⚙️ Optimize performance of backend queries',
+      '💡 Improve UI/UX for better usability'
     ];
+    
+    
   
     Swal.fire({
       title: '➕ Add New Task',
