@@ -79,8 +79,8 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'defenses',       component: DefenseListComponent },
     { path: 'add-defense', component: AddDefenseComponent },
     { path: 'update-defense', component: UpdateDefenseComponent },
-    { path: 'defenses-tutors', component: DefensesTutorsComponent },
-    { path: 'defenses/:id/evaluate', component: EvaluationFormComponent }
+    { path: 'defenses-tutors/:tutorId', component: DefensesTutorsComponent },
+    { path: 'defenses/:defenseId/evaluate/:tutorId', component: EvaluationFormComponent }
 
 
 

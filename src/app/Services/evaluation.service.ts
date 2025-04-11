@@ -23,4 +23,10 @@ export class EvaluationService {
   getEvaluation(evaluationId: number): Observable<Evaluation> {
     return this.http.get<Evaluation>(`${this.baseUrl}/${evaluationId}`);
   }
+  getEvaluationByDefenseAndTutor(defenseId: number, tutorId: number): Observable<Evaluation> {
+    return this.http.get<Evaluation>(`${this.baseUrl}/defense/${defenseId}/tutor/${tutorId}`);
+  }
+  
+  
+ 
 }

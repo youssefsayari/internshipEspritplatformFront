@@ -6,6 +6,8 @@ import { DefenseService } from '../Services/defense.service';
 import Swal from 'sweetalert2';
 import { Evaluation } from '../models/evaluation';
 import { Defense } from '../models/defense';
+import { User } from '../models/user';
+
 
 @Component({
   selector: 'app-evaluation-form',
@@ -15,7 +17,7 @@ import { Defense } from '../models/defense';
 export class EvaluationFormComponent implements OnInit {
   evaluationForm: FormGroup;
   defenseId: number;
-  tutorId: number = 2; // Static tutor ID (should come from auth in real app)
+  tutorId: number;
   defense: Defense;
   existingEvaluation: Evaluation | null = null;
   isLoading: boolean = true;
@@ -35,20 +37,30 @@ export class EvaluationFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.defenseId = +this.route.snapshot.paramMap.get('id')!;
+    // Extract defenseId and tutorId from the URL path
+    this.defenseId = +this.route.snapshot.paramMap.get('defenseId')!;
+    this.tutorId = +this.route.snapshot.paramMap.get('tutorId')!;
+    
+    console.log('Defense ID:', this.defenseId);  // Debug log
+    console.log('Tutor ID:', this.tutorId);  // Debug log
+
     this.loadDefenseDetails();
     this.checkExistingEvaluation();
   }
 
   loadDefenseDetails(): void {
+    this.isLoading = true;
     this.defenseService.getDefenseById(this.defenseId).subscribe({
       next: (defense) => {
         this.defense = defense;
+        console.log('Defense details:', defense); // Debug log
+        this.isLoading = false;
       },
       error: (err) => {
         console.error('Error loading defense:', err);
         Swal.fire('Error', 'Failed to load defense details', 'error');
         this.router.navigate(['/defenses']);
+        this.isLoading = false;
       }
     });
   }
@@ -122,5 +134,46 @@ export class EvaluationFormComponent implements OnInit {
 
   get remarks() {
     return this.evaluationForm.get('remarks');
+  }
+  getStudentName(): string {
+    if (!this.defense?.student) return 'N/A';
+    const firstName = this.defense.student.firstName || '';
+    const lastName = this.defense.student.lastName || '';
+    return `${firstName} ${lastName}`.trim() || 'N/A';
+  }
+
+   // Format date for display
+   formatDate(dateString: string): string {
+    if (!dateString) return 'N/A';
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+    } catch (e) {
+      console.error('Error formatting date:', e);
+      return 'Invalid date';
+    }
+  }
+
+  // Format time for display
+  formatTime(timeString: string): string {
+    if (!timeString) return 'N/A';
+    try {
+      const [hours, minutes] = timeString.split(':');
+      const date = new Date();
+      date.setHours(Number(hours));
+      date.setMinutes(Number(minutes));
+      return date.toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+      });
+    } catch (e) {
+      console.error('Error formatting time:', e);
+      return 'Invalid time';
+    }
   }
 }

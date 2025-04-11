@@ -370,3 +370,68 @@ $transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-15px); }
 }
+.progress-bar {
+  height: 20px;
+  background-color: #e9ecef;
+  border-radius: 4px;
+  margin-bottom: 5px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: #6c757d; // Default gray for partial
+  transition: width 0.3s ease;
+  
+  &.progress-complete {
+    background-color: #28a745; // Green when complete
+  }
+  
+  &.progress-partial {
+    background-color: #ffc107; // Yellow when partial
+  }
+}
+
+.status-text {
+  font-weight: bold;
+  text-align: center;
+  color: #6c757d;
+  
+  .progress-complete + & {
+    color: #28a745;
+  }
+  
+  .progress-partial + & {
+    color: #ffc107;
+  }
+  .progress-bar {
+    width: 100%;
+    height: 20px;
+    background-color: #e0e0e0;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 5px 0;
+  }
+  
+  .progress-fill {
+    height: 100%;
+    transition: width 0.3s ease;
+  }
+  
+  .progress-complete {
+    background-color: #4CAF50;
+  }
+  
+  .progress-partial {
+    background-color: #FFC107;
+  }
+  
+  .progress-text {
+    display: inline-block;
+    padding-left: 10px;
+    color: white;
+    font-size: 12px;
+    line-height: 20px;
+    text-shadow: 0 0 2px rgba(0,0,0,0.5);
+  }
+}

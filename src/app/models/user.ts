@@ -9,4 +9,5 @@ export class User {
     email?: string;
     telephone?: number;
     typeUser?: string;
+  
 }

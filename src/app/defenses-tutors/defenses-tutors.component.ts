@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DefenseService } from '../Services/defense.service';
 import { EvaluationService } from '../Services/evaluation.service';
 import { Defense } from '../models/defense';
 import { Evaluation } from '../models/evaluation';
-import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -17,16 +17,21 @@ export class DefensesTutorsComponent implements OnInit {
   itemsPerPage: number = 5;
   totalDefenses: number = 0;
   isLoading: boolean = true;
-  currentTutorId: number = 2; // Static tutor ID = 2
+  currentTutorId: number = 0;
 
   constructor(
     private defenseService: DefenseService,
     private evaluationService: EvaluationService,
-    private router: Router
+    private router: Router,
+    private activatedRoute: ActivatedRoute // Inject ActivatedRoute to get the tutor ID from URL
   ) {}
 
   ngOnInit(): void {
-    this.loadDefenses();
+    // Get tutorId from the URL and load defenses
+    this.activatedRoute.params.subscribe(params => {
+      this.currentTutorId = +params['tutorId']; // Assuming tutorId is part of the route parameters
+      this.loadDefenses();
+    });
   }
 
   loadDefenses(): void {
@@ -36,7 +41,7 @@ export class DefensesTutorsComponent implements OnInit {
         this.defenses = data;
         this.totalDefenses = this.defenses.length;
         this.isLoading = false;
-        console.log('Defenses loaded for tutor 2:', this.defenses);
+        console.log('Defenses loaded for tutor:', this.defenses);
       },
       error: (error) => {
         console.error('Error fetching defenses:', error);
@@ -66,7 +71,6 @@ export class DefensesTutorsComponent implements OnInit {
   }
 
   evaluateDefense(defenseId: number): void {
-    // First check if already evaluated
     const defense = this.defenses.find(d => d.idDefense === defenseId);
     if (defense && this.hasEvaluated(defense)) {
       Swal.fire({
@@ -77,9 +81,9 @@ export class DefensesTutorsComponent implements OnInit {
       });
       return;
     }
-    
-    // Navigate to evaluation form with defense ID
-    this.router.navigate(['/defenses', defenseId, 'evaluate']);
+  
+    // Navigate with both defenseId and tutorId
+    this.router.navigate([`/defenses/${defenseId}/evaluate/${this.currentTutorId}`]);
   }
 
   viewDefenseDetails(id: number): void {
