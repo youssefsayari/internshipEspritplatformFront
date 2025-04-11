@@ -20,6 +20,10 @@
     <div class="detail-row">
       <strong>Agreement Status:</strong> <span>{{ agreement.agreementState }}</span>
     </div>
+
+    <div class="detail-row">
+      <strong>Agreement creation date:</strong> <span>{{ agreement?.creationDate | date: 'yyyy-MM-dd HH:mm:ss' }}</span>
+    </div>
   </div>
 </mat-dialog-content>
 

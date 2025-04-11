@@ -183,6 +183,7 @@ export class AgreementComponent implements OnInit {
         companyId: this.selectedInternship ? this.selectedInternship.companyId : 0,
         startDate: this.agreementForm.value.startDate,
         endDate: this.agreementForm.value.endDate,
+        postId: this.selectedInternship ? this.selectedInternship.postId : 0,
       };
 
       this.agreementService.addAgreement(agreementRequest).subscribe({

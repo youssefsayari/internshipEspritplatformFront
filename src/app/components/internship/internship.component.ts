@@ -16,6 +16,8 @@ import {AgreementDTO} from "../../models/agreement-dto";
 import {TimeLineService} from "../../Services/time-line.service";
 import {TimeLine} from "../../models/time-line";
 import { DocumentService } from '../../Services/document.service';
+import {InternshipAdminResponse} from "../../models/internship-admin-response";
+import {AgreementDialogComponent} from "../agreement-dialog/agreement-dialog.component";
 
 
 @Component({
@@ -41,6 +43,7 @@ export class InternshipComponent implements OnInit {
   userId: number;
   AgreementApproved: boolean = false;
   agreementInfo: AgreementDTO;
+  agreement: any;
   timelines: TimeLine[] = [];
   private timelineApprovalStatus: boolean[] = [];
   selectedTimelineIndex: number = -1;
@@ -279,46 +282,54 @@ export class InternshipComponent implements OnInit {
     this.timeLineService.getTimeLinesByUserId(userId).subscribe({
       next: (timelines) => {
         this.timelines = timelines;
-        // Initialize approval status array
-        this.timelineApprovalStatus = new Array(timelines.length).fill(false);
-        // First item is always unlocked
-        if (timelines.length > 0) {
-          this.timelineApprovalStatus[0] = true;
+        this.getAgreement(userId);
+        this.timelineApprovalStatus = [];
+
+        for (let i = 0; i < timelines.length; i++) {
+          if (i === 0) {
+            this.timelineApprovalStatus.push(false);
+          } else {
+            const previousStatus = timelines[i - 1].timeLaneState;
+            if (previousStatus === 'ACCEPTED') {
+              this.timelineApprovalStatus.push(false);
+            } else {
+              this.timelineApprovalStatus.push(true);
+            }
+          }
         }
-        console.log('Timeline added successfully', timelines);
+
+        console.log('Timelines fetched successfully', timelines);
       },
       error: (err) => {
         console.error('Error fetching timelines:', err);
       }
     });
   }
+  areAllTimelinesApproved(): boolean {
+    return this.timelines?.length > 0 && this.timelines.every(t => t.timeLaneState === 'ACCEPTED');
+  }
+
+
 
   isTimelineUnlocked(index: number): boolean {
-    return this.timelineApprovalStatus[index];
+    return !this.timelineApprovalStatus[index];
   }
 
   getIcon(title: string): string {
     switch (title) {
-      case 'Depot Journal de bord':
-        return '📖'; // Exemple d'icône
-      case 'Depot Bilan Version 1':
-        return '📊'; // Exemple d'icône
-      case 'Lancement Visite Mi Parcours':
-        return '📍'; // Exemple d'icône
+      case 'Demande Convention':
+        return '📑';
+      case 'Remise Plan de Travail':
+        return '📖';
       case 'Validation Technique':
-        return '✔️'; // Exemple d'icône
-      case 'Depot Rapport Version 1':
-        return '📑'; // Exemple d'icône
-      case 'Depot Rapport Final':
-        return '📜'; // Exemple d'icône
+        return '💻';
+      case 'Depot Rapport':
+        return '📜';
       default:
-        return '🔘'; // Icône par défaut
+        return '🔘';
     }
   }
 
-  Validation(internship: any){
-
-  }
 
   downloadDocument(timeline: TimeLine) {
     if (timeline.documentId) {
@@ -390,12 +401,8 @@ export class InternshipComponent implements OnInit {
     );
   }
 
-  toggleTimelineDetails(index: number) {
-    if (this.selectedTimelineIndex === index) {
-      this.selectedTimelineIndex = -1;
-    } else {
-      this.selectedTimelineIndex = index;
-    }
+  toggleTimelineDetails(index: number): void {
+    this.selectedTimelineIndex = index;
   }
 
   onDragOver(event: DragEvent) {
@@ -447,5 +454,31 @@ export class InternshipComponent implements OnInit {
     const validTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
     return validTypes.includes(file.type);
   }
+
+  getAgreement(userId): void {
+    this.agreementService.getAgreementByStudentId(userId).subscribe({
+      next: (agreement) => {
+        if (agreement) {
+          this.agreement = agreement;
+          console.log('Agreement fetched:', agreement);
+        } else {
+          Swal.fire({
+            icon: 'info',
+            title: 'No Agreement Found',
+            text: 'There is currently no agreement available for this internship.',
+          });
+        }
+      },
+      error: (err) => {
+        console.error('Error while fetching the agreement:', err);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to retrieve the agreement details.',
+        });
+      }
+    });
+  }
+
 
 }

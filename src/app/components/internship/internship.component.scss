@@ -34,7 +34,7 @@ table {
   opacity: 0;
   transform: translateY(20px);
   transition: all 0.5s ease;
-  
+
   &.visible {
     opacity: 1;
     transform: translateY(0);
@@ -44,7 +44,7 @@ table {
     .timeline-circle {
       background-color: #6c757d;
       cursor: not-allowed;
-      
+
       &::after {
         content: '🔒';
         position: absolute;
@@ -53,7 +53,7 @@ table {
         right: -5px;
       }
     }
-    
+
     .timeline-content {
       opacity: 0.6;
     }
@@ -211,7 +211,7 @@ table {
 
   .description-section {
     margin-bottom: 20px;
-    
+
     h3 {
       color: #2c3e50;
       margin-bottom: 10px;
@@ -359,7 +359,7 @@ table {
     margin-bottom: 20px;
     padding-bottom: 20px;
     border-bottom: 1px solid #e0e0e0;
-    
+
     h3 {
       color: #2c3e50;
       margin-bottom: 10px;
@@ -501,6 +501,57 @@ table {
     transform: translateY(0);
   }
 }
+
+.agreement-section {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+}
+
+.agreement-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.agreement-details {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 15px;
+  align-items: center;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.detail-label {
+  font-size: 16px;
+  font-weight: 500;
+  color: #555;
+}
+
+.detail-value {
+  font-size: 16px;
+  color: #333;
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+.detail-value {
+  text-align: right;
+  font-style: italic;
+}
+
 
 
 

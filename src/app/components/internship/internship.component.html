@@ -141,8 +141,8 @@
 
         <!-- **************************************Process*********************************** -->
 
-        <div *ngIf="isGraduationInternship && AgreementApproved">
-          <div class="card-header">
+        <div *ngIf="isGraduationInternship && AgreementApproved && !areAllTimelinesApproved()">
+        <div class="card-header">
             <h4 class="card-title">Internship Process Timeline</h4>
           </div>
           <div class="card-body">
@@ -180,8 +180,64 @@
                       <h3>Description</h3>
                       <p>{{ timelines[selectedTimelineIndex].description }}</p>
                     </div>
-                    
-                    <div class="document-section" *ngIf="isTimelineUnlocked(selectedTimelineIndex)">
+                    <div class="alert alert-danger" *ngIf="timelines[selectedTimelineIndex].timeLaneState === 'REJECTED'">
+                      ⚠️ This step has been <strong>rejected</strong>. Please check the <strong>Tasks</strong> section to take the necessary action.
+                      <div class="mt-3">
+                        <a routerLink="/MyTasks" class="btn btn-outline-danger">
+                          <i class="fas fa-tasks me-2"></i> Go to Tasks
+                        </a>
+                      </div>
+                    </div>
+
+                    <div *ngIf="isTimelineUnlocked(selectedTimelineIndex) && timelines[selectedTimelineIndex].title === 'Validation Technique'">
+                      <div class="agreement-section">
+                        <h3 class="agreement-title">Validation Details</h3>
+                        <div class="agreement-details">
+                          <div class="detail-row">
+                            <strong class="detail-label">Validator Name:</strong>
+                            <span class="detail-value">{{ agreement?.validatorName }}</span>
+                          </div>
+                          <div class="detail-row">
+                            <strong class="detail-label">Validation Date:</strong>
+                            <span class="detail-value">{{ timelines[selectedTimelineIndex].dateLimite | date: 'shortDate' }}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Agreement Section Only for "Demande Convention" -->
+                    <div class="agreement-section"
+                         *ngIf="isTimelineUnlocked(selectedTimelineIndex) && timelines[selectedTimelineIndex].title === 'Demande Convention'">
+                      <h3 class="agreement-title">Agreement Details</h3>
+                      <div class="agreement-details">
+                        <div class="detail-row">
+                          <strong class="detail-label">Company Name:</strong>
+                          <span class="detail-value">{{ agreement?.companyName }}</span>
+                        </div>
+                        <div class="detail-row">
+                          <strong class="detail-label">Representative Name:</strong>
+                          <span class="detail-value">{{ agreement?.companyRepresentative }}</span>
+                        </div>
+                        <div class="detail-row">
+                          <strong class="detail-label">Agreement Start Date:</strong>
+                          <span class="detail-value">{{ agreement?.startDate | date }}</span>
+                        </div>
+                        <div class="detail-row">
+                          <strong class="detail-label">Agreement End Date:</strong>
+                          <span class="detail-value">{{ agreement?.endDate | date }}</span>
+                        </div>
+                        <div class="detail-row">
+                          <strong class="detail-label">Agreement Creation Date:</strong>
+                          <span class="detail-value">{{ agreement?.creationDate | date: 'yyyy-MM-dd HH:mm:ss' }}</span>
+                        </div>
+                      </div>
+                    </div>
+
+
+                    <div class="document-section"
+                         *ngIf="isTimelineUnlocked(selectedTimelineIndex) &&
+                        (timelines[selectedTimelineIndex].title === 'Remise Plan de Travail' ||
+                         timelines[selectedTimelineIndex].title === 'Depot Rapport')">
                       <h3>Document Management</h3>
                       <div class="document-table">
                         <div class="table-header">
@@ -189,33 +245,39 @@
                           <div class="header-cell">Status</div>
                           <div class="header-cell">Operations</div>
                         </div>
+
                         <div class="table-row">
                           <div class="table-cell">
                             <i class="fas fa-download"></i> Download Template
                           </div>
                           <div class="table-cell">
-                            <span class="status-badge" [class.available]="timelines[selectedTimelineIndex].documentId">Available</span>
+                    <span class="status-badge"
+                          [class.available]="timelines[selectedTimelineIndex].documentId">Available</span>
                           </div>
                           <div class="table-cell">
-                            <button class="btn btn-primary" (click)="downloadDocument(timelines[selectedTimelineIndex])" [disabled]="!timelines[selectedTimelineIndex].documentId">
+                            <button class="btn btn-primary"
+                                    (click)="downloadDocument(timelines[selectedTimelineIndex])"
+                                    [disabled]="!timelines[selectedTimelineIndex].documentId">
                               Download
                             </button>
                           </div>
                         </div>
+
                         <div class="table-row">
                           <div class="table-cell">
                             <i class="fas fa-upload"></i> Upload Document
                           </div>
                           <div class="table-cell">
-                            <span class="status-badge" [class.uploaded]="timelines[selectedTimelineIndex].documentId">Not Uploaded</span>
+                    <span class="status-badge"
+                          [class.uploaded]="timelines[selectedTimelineIndex].documentId">Not Uploaded</span>
                           </div>
                           <div class="table-cell">
-                            <div class="upload-container" 
+                            <div class="upload-container"
                                  (dragover)="onDragOver($event)"
                                  (dragleave)="onDragLeave($event)"
                                  (drop)="onDrop($event, timelines[selectedTimelineIndex])">
-                              <input type="file" #fileInput style="display: none" 
-                                     accept=".pdf,.doc,.docx" 
+                              <input type="file" #fileInput style="display: none"
+                                     accept=".pdf,.doc,.docx"
                                      (change)="onFileSelected($event, timelines[selectedTimelineIndex])">
                               <button class="btn btn-success" (click)="fileInput.click()">
                                 Choose File
@@ -249,6 +311,20 @@
                 No timelines available yet. Please check back later.
               </div>
             </ng-template>
+          </div>
+        </div>
+
+        <div *ngIf="isGraduationInternship && AgreementApproved && areAllTimelinesApproved()">
+          <div class="card-body text-center p-5">
+            <h3 class="text-success mb-3">
+              ✅ Toutes les étapes sont validées
+            </h3>
+            <p class="lead">
+              Vous pouvez maintenant consulter la section <strong>soutenance</strong>.
+            </p>
+            <a routerLink="/defence" class="btn btn-primary mt-3">
+              Accéder à la partie Soutenance
+            </a>
           </div>
         </div>
 

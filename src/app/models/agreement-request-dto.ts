@@ -3,4 +3,5 @@ export class AgreementRequestDTO {
   companyId: number;
   startDate: Date;
   endDate: Date;
+  postId: number;
 }

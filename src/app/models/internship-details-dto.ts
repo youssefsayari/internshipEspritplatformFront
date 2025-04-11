@@ -5,4 +5,5 @@ export class InternshipDetailsDTO {
   companyRepresentativeFullName: string;
   companyId:number;
   componyPhone:number;
+  postId:number;
 }

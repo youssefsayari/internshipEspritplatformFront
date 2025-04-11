@@ -110,40 +110,68 @@
 
       <!-- Fallback messages -->
       <ng-template #showErrorMessage>
-        <div *ngIf="isFifthYearStudent && !hasInternship" class="alert alert-info text-center mt-5" style="color: white; background-color: #cdcdcd;">
-          <h4 style="color: black;">🚀 Good luck finding an internship!</h4>
-          <p style="color: black;">You must have an approved internship before requesting an agreement.</p>
+        <div class="card">
+        <div *ngIf="isFifthYearStudent && !hasInternship">
+          <div class="card-body text-center p-5">
+            <h3 class="text-success mb-3">
+              🚀 Good luck finding an internship!
+            </h3>
+            <p class="lead">
+              You must have an approved internship before requesting an agreement.
+            </p>
+          </div>
         </div>
 
-        <div *ngIf="!isFifthYearStudent" class="alert alert-danger text-center mt-5" style="color: white; background-color: #cdcdcd;">
-          <h4 style="color: red;">❌ Access Denied</h4>
-          <p style="color: black;">Only 5th-year students can request an agreement.</p>
+        <div *ngIf="!isFifthYearStudent">
+          <div class="card-body text-center p-5">
+            <h3 class="text-success mb-3">
+              ❌ Access Denied
+            </h3>
+            <p class="lead">
+              Only 5th-year students can request an agreement.
+            </p>
+          </div>
         </div>
 
-        <div *ngIf="hasExistingAgreement && agreementInfo?.agreementState === 'PENDING'" class="alert alert-warning text-center mt-5" style="color: black; background-color: #cdcdcd;">
-          <strong style="color: black;">Info:</strong> Your agreement request is currently being processed. Please wait.
+        <div *ngIf="hasExistingAgreement && agreementInfo?.agreementState === 'PENDING'">
+          <div class="card-body text-center p-5">
+            <h3 class="text-success mb-3">
+              Agreement
+            </h3>
+            <p class="lead">
+              Your agreement request is currently being processed. Please wait.
+            </p>
+          </div>
         </div>
 
-        <div *ngIf="hasExistingAgreement && agreementInfo?.agreementState === 'ACCEPTED'"
-             class="alert alert-success text-center mt-5"
-             style="color: black; background-color: #cdcdcd;">
-          <strong style="color: black;">✅ Agreement Approved!</strong>
-          <p style="color: black;">You can download your agreement below:</p>
-          <button class="btn btn-primary mt-2" (click)="downloadAgreement()">Download Agreement</button>
-          <p style="color: black; margin-top: 1rem;">
-            📄 Once signed by you and the company, please return the agreement to the office 🏢 Bloc A, 1st Floor, Room A102.
-          </p>
+        <div *ngIf="hasExistingAgreement && agreementInfo?.agreementState === 'ACCEPTED'">
+          <div class="card-body text-center p-5">
+            <h3 class="text-success mb-3">
+              ✅ Agreement Accepted!
+            </h3>
+            <p class="lead">
+              You can download your agreement below:
+            </p>
+            <button class="btn btn-primary mt-2" (click)="downloadAgreement()">Download Agreement</button>
+            <p class="lead">
+              📄 Once signed by you and the company, please return the agreement to the office 🏢 Bloc A, 1st Floor, Room A102.
+            </p>
+          </div>
         </div>
 
-        <div *ngIf="AgreementApproved && agreementInfo?.agreementState === 'APPROVED'"
-             class="alert alert-success text-center mt-5"
-             style="color: black; background-color: #cdcdcd;">
-          <strong style="color: black;">🎉 Congratulations!</strong>
-          <p style="color: black;">Good luck with your internship! We wish you success!</p>
+        <div *ngIf="AgreementApproved && agreementInfo?.agreementState === 'APPROVED'">
+          <div class="card-body text-center p-5">
+            <h3 class="text-success mb-3">
+              🎉 Congratulations!
+            </h3>
+            <p class="lead">
+              Good luck with your internship! We wish you success!
+            </p>
+          </div>
         </div>
 
 
-
+        </div>
       </ng-template>
 
     </div>
