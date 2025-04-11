@@ -256,8 +256,7 @@
                           </div>
                           <div class="table-cell">
                             <button class="btn btn-primary"
-                                    (click)="downloadDocument(timelines[selectedTimelineIndex])"
-                                    [disabled]="!timelines[selectedTimelineIndex].documentId">
+                                    (click)="downloadDocument(timelines[selectedTimelineIndex].title)">
                               Download
                             </button>
                           </div>

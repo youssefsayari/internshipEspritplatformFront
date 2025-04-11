@@ -331,25 +331,19 @@ export class InternshipComponent implements OnInit {
   }
 
 
-  downloadDocument(timeline: TimeLine) {
-    if (timeline.documentId) {
-      this.documentService.downloadDocument(timeline.documentId).subscribe(
-        (blob: Blob) => {
-          const url = window.URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = `${timeline.title}.pdf`;
-          document.body.appendChild(a);
-          a.click();
-          window.URL.revokeObjectURL(url);
-          document.body.removeChild(a);
-        },
-        error => {
-          console.error('Error downloading document:', error);
-          Swal.fire('Error', 'Failed to download document', 'error');
-        }
-      );
-    }
+  downloadDocument(fileName: string): void {
+    fileName = "Plan de Travail.pdf";
+    this.documentService.downloadPredefinedDocument(fileName).subscribe(response => {
+      const blob = new Blob([response], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    }, error => {
+      console.error('Download failed', error);
+    });
   }
 
   onFileSelected(event: any, timeline: TimeLine) {
