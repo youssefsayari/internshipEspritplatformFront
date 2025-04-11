@@ -18,6 +18,7 @@ import { QuizDetailsComponent } from './quiz-details/quiz-details.component';
 import { QuizEditComponent } from './quiz-edit/quiz-edit.component';
 import { QuizListUserComponent } from './quiz-list-user/quiz-list-user.component';
 import { QuizPassComponent } from './quiz-pass/quiz-pass.component';
+import { MatIconModule } from '@angular/material/icon';
 
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
@@ -34,6 +35,8 @@ import { AddDefenseComponent } from './add-defense/add-defense.component';
 import { UpdateDefenseComponent } from './update-defense/update-defense.component';
 import { DefensesTutorsComponent } from './defenses-tutors/defenses-tutors.component';
 import { EvaluationFormComponent } from './evaluation-form/evaluation-form.component';
+import { StudentDefenseComponent } from './student-defense/student-defense.component';
+import { DefenseStatsComponent } from './defense-stats/defense-stats.component';
 
 
 
@@ -55,7 +58,9 @@ import { EvaluationFormComponent } from './evaluation-form/evaluation-form.compo
     ToastrModule.forRoot(),
     ReactiveFormsModule,
     MatDialogModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatIconModule
+
   ],
   declarations: [
     AppComponent,
@@ -79,6 +84,8 @@ import { EvaluationFormComponent } from './evaluation-form/evaluation-form.compo
     UpdateDefenseComponent,
     DefensesTutorsComponent,
     EvaluationFormComponent,
+    StudentDefenseComponent,
+    DefenseStatsComponent,
 
 
 

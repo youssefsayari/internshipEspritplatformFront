@@ -22,6 +22,8 @@ export class EvaluationFormComponent implements OnInit {
   existingEvaluation: Evaluation | null = null;
   isLoading: boolean = true;
   isSubmitting: boolean = false;
+  categories = ['Excellent', 'Average', 'Bad']; // Ensure correct spelling
+
 
   constructor(
     private fb: FormBuilder,
@@ -155,6 +157,14 @@ export class EvaluationFormComponent implements OnInit {
     } catch (e) {
       console.error('Error formatting date:', e);
       return 'Invalid date';
+    }
+  }
+  getCategoryIcon(category: string): string {
+    switch(category.toLowerCase()) {
+      case 'excellent': return 'emoji_events'; // Fixed typo
+      case 'average': return 'trending_flat';
+      case 'bad': return 'warning';
+      default: return 'person';
     }
   }
 

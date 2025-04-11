@@ -36,9 +36,15 @@ export class DefenseService {
     return this.http.get<Defense[]>(`${this.baseUrl}/getDefensesByTutor/${tutorId}`);
   }
 
-  // Alternative method for static tutor ID = 2
   getDefensesForTutor2(): Observable<Defense[]> {
     return this.http.get<Defense[]>(`${this.baseUrl}/getDefensesForTutor2`);
   }
+getDefensesByStudentId(studentId: number): Observable<Defense[]> {
+  return this.http.get<Defense[]>(`${this.baseUrl}/getDefensesByStudent/${studentId}`);
+}
+getDefenseStats(): Observable<{ [key: string]: Defense[] }> {
+  return this.http.get<{ [key: string]: Defense[] }>(`${this.baseUrl}/stats`);
+}
+
 
 }
