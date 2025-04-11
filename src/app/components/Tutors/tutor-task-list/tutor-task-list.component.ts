@@ -124,7 +124,15 @@ export class TutorTaskListComponent implements OnInit {
         return '';
     }
   }
+
+
+
+
   editTask(task: Task): void {
+    const formattedDeadline = task.deadline
+      ? new Date(task.deadline).toISOString().split('T')[0]
+      : '';
+  
     Swal.fire({
       title: '✏️ Edit Task',
       html: `
@@ -138,24 +146,42 @@ export class TutorTaskListComponent implements OnInit {
             <option value="INPROGRESS" ${task.status === 'INPROGRESS' ? 'selected' : ''}>⏳ IN PROGRESS</option>
             <option value="DONE" ${task.status === 'DONE' ? 'selected' : ''}>✅ DONE</option>
           </select>
+  
+          <label style="font-weight:600; margin-top:15px; display:block;">📅 Deadline:</label>
+          <input type="date" id="deadline" class="swal2-input" value="${formattedDeadline}">
         </div>
       `,
       showCancelButton: true,
       confirmButtonText: '✅ Update',
       cancelButtonText: '❌ Cancel',
       preConfirm: () => {
-        const updatedDescription = (document.getElementById('description') as HTMLTextAreaElement).value;
+        const updatedDescription = (document.getElementById('description') as HTMLTextAreaElement).value.trim();
         const updatedStatus = (document.getElementById('status') as HTMLSelectElement).value;
+        const deadlineStr = (document.getElementById('deadline') as HTMLInputElement).value;
   
-        if (!updatedDescription.trim()) {
-          Swal.showValidationMessage('Description is required.');
+        if (updatedDescription.length < 5 || updatedDescription.length > 255) {
+          Swal.showValidationMessage('La description doit contenir entre 5 et 255 caractères.');
+          return;
+        }
+  
+        if (!deadlineStr) {
+          Swal.showValidationMessage('Deadline is required.');
+          return;
+        }
+  
+        const updatedDeadline = new Date(deadlineStr);
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() );
+        if (updatedDeadline < tomorrow) {
+          Swal.showValidationMessage('Deadline must be tomorrow or after.');
           return;
         }
   
         return {
           ...task,
-          description: updatedDescription.trim(),
-          status: updatedStatus as TypeStatus
+          description: updatedDescription,
+          status: updatedStatus as TypeStatus,
+          deadline: updatedDeadline
         };
       }
     }).then((result) => {
@@ -166,7 +192,6 @@ export class TutorTaskListComponent implements OnInit {
             Swal.fire('✅ Updated', 'Task updated successfully!', 'success');
             this.onStudentChange();
             this.findTopStudent();
-
           },
           error: (err) => {
             console.error('Error updating task:', err);
@@ -176,6 +201,12 @@ export class TutorTaskListComponent implements OnInit {
       }
     });
   }
+
+
+
+
+  
+  
   openAddTask(): void {
     Swal.fire({
       title: '➕ Add New Task',
@@ -183,7 +214,8 @@ export class TutorTaskListComponent implements OnInit {
         <div style="text-align:left;">
           <label style="font-weight:600;">📝 Description:</label>
           <textarea id="newDescription" class="swal2-textarea" placeholder="Enter task description"></textarea>
-            <br>
+          <br>
+  
           <label style="font-weight:600; margin-top:10px;">📌 Status:</label>
           <br>
           <select id="newStatus" class="swal2-select">
@@ -191,23 +223,43 @@ export class TutorTaskListComponent implements OnInit {
             <option value="INPROGRESS">⏳ IN PROGRESS</option>
             <option value="DONE">✅ DONE</option>
           </select>
+          <br><br>
+  
+          <label style="font-weight:600;">📅 Deadline:</label>
+          <br>
+          <input type="date" id="newDeadline" class="swal2-input">
         </div>
       `,
       showCancelButton: true,
       confirmButtonText: '➕ Add',
       cancelButtonText: '❌ Cancel',
       preConfirm: () => {
-        const desc = (document.getElementById('newDescription') as HTMLTextAreaElement).value;
+        const desc = (document.getElementById('newDescription') as HTMLTextAreaElement).value.trim();
         const status = (document.getElementById('newStatus') as HTMLSelectElement).value;
+        const deadlineStr = (document.getElementById('newDeadline') as HTMLInputElement).value;
   
-        if (!desc.trim()) {
-          Swal.showValidationMessage('Description is required.');
+        if (desc.length < 5 || desc.length > 255) {
+          Swal.showValidationMessage('Description must contain between 5 and 255 characters.');
+          return;
+        }
+  
+        if (!deadlineStr) {
+          Swal.showValidationMessage('Deadline is required.');
+          return;
+        }
+  
+        const deadlineDate = new Date(deadlineStr);
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() );
+        if (deadlineDate < tomorrow) {
+          Swal.showValidationMessage('Deadline must be tomorrow or after.');
           return;
         }
   
         return {
-          description: desc.trim(),
-          status: status as TypeStatus
+          description: desc,
+          status: status as TypeStatus,
+          deadline: deadlineDate
         };
       }
     }).then((result) => {
@@ -216,7 +268,8 @@ export class TutorTaskListComponent implements OnInit {
           idTask: 0,
           description: result.value.description,
           status: result.value.status,
-          student: { idUser: this.selectedStudentId! } 
+          deadline: result.value.deadline,
+          student: { idUser: this.selectedStudentId! }
         };
   
         this.taskService.addTaskAndAssignToStudent(newTask, this.selectedStudentId!).subscribe({
@@ -224,17 +277,15 @@ export class TutorTaskListComponent implements OnInit {
             Swal.fire('✅ Added', 'Task successfully added.', 'success');
             this.onStudentChange();
             this.findTopStudent();
-
           },
           error: (err) => {
             console.error('Error adding task:', err);
-            Swal.fire('❌ Error', 'Could not add task.Select student to affect the task', 'error');
+            Swal.fire('❌ Error', 'Could not add task. Select student to affect the task', 'error');
           }
         });
       }
     });
   }
-  
   
   
   deleteTask(id: number): void {

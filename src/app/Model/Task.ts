@@ -9,4 +9,5 @@ export interface Task {
   status: TypeStatus;
   student: User;
   mark?: number; 
+  deadline?: Date;
 }

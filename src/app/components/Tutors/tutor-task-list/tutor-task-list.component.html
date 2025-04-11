@@ -56,6 +56,8 @@
       >
         <div class="task-header">
           <h4>{{ task.title }}</h4>
+          <p *ngIf="task.deadline"><strong>📅 Deadline:</strong> {{ task.deadline | date: 'longDate' }}</p>
+
         </div>
         <div class="task-top">
           <p *ngIf="task.status === 'DONE' && task.mark !== undefined" class="task-note">
