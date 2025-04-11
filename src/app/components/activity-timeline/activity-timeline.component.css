@@ -3,7 +3,7 @@
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   background-color: #fff;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) ease-in-out;
   opacity: 0;
   transform: translateY(20px);
   position: relative; /* nécessaire pour positionner le bouton en absolu */
@@ -91,13 +91,27 @@
 .timeline-card.show {
   opacity: 1;
   transform: translateY(0);
+  transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 /* Hover effect pour la timeline */
 .timeline-card:hover {
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
-
+/* Animation pour le nouveau post */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.new-post-animation {
+  animation: slideIn 0.5s ease-out forwards;
+}
 
 /* 🔹 Conteneur d'évaluation par étoiles */
 
@@ -742,4 +756,44 @@
 }
 .qna-section:empty {
   display: none;
+}
+/* Custom SweetAlert2 Styles */
+.swal-custom-popup {
+  border-radius: 15px !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15) !important;
+  border: 1px solid #eee !important;
+  width: 600px !important;
+  max-width: 90% !important;
+}
+
+.swal2-input.custom-title,
+.swal2-input.custom-datetime {
+  border-radius: 8px !important;
+  border: 2px solid #e0e0e0 !important;
+  transition: all 0.3s ease !important;
+  width: 80% !important;
+  margin: 1rem auto !important;
+}
+
+.swal2-textarea.custom-content {
+  border-radius: 8px !important;
+  border: 2px solid #e0e0e0 !important;
+  transition: all 0.3s ease !important;
+  width: 80% !important;
+  margin: 1rem auto !important;
+  min-height: 120px !important;
+  resize: vertical !important;
+  padding: 10px !important;
+}
+
+.swal2-input.custom-title:focus,
+.swal2-textarea.custom-content:focus,
+.swal2-input.custom-datetime:focus {
+  border-color: #FF3636 !important;
+  box-shadow: 0 0 8px rgba(255, 54, 54, 0.2) !important;
+}
+
+.swal-custom-validation {
+  color: #FF3636 !important;
+  font-weight: 500 !important;
 }
