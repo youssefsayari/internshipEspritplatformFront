@@ -208,15 +208,31 @@ export class TutorTaskListComponent implements OnInit {
   
   
   openAddTask(): void {
+    const defaultDescriptions = [
+      'Set up development environment and tools',
+      'Design database schema for the project',
+      'Implement authentication module (login/register)',
+      'Create REST API for CRUD operations',
+      'Integrate frontend with backend APIs',
+      'Write unit tests and documentation'
+    ];
+  
     Swal.fire({
       title: '➕ Add New Task',
       html: `
-        <div style="text-align:left;">
-          <label style="font-weight:600;">📝 Description:</label>
+       <div style="text-align:left;">
+    <label style="font-weight:600;">📝 Choose a Default Description:</label>
+    <select id="defaultDescSelect" class="swal2-select" style="width: 80%; font-size: 0.9rem;">
+      <option value="">-- Select a default task --</option>
+      ${defaultDescriptions.map(desc => `<option value="${desc}">${desc}</option>`).join('')}
+    </select>
+    <br><br>
+  
+          <label style="font-weight:600;">✍️ Or Write Custom Description:</label>
           <textarea id="newDescription" class="swal2-textarea" placeholder="Enter task description"></textarea>
           <br>
   
-          <label style="font-weight:600; margin-top:10px;">📌 Status:</label>
+          <label style="font-weight:600;">📌 Status:</label>
           <br>
           <select id="newStatus" class="swal2-select">
             <option value="TODO">📝 TODO</option>
@@ -230,6 +246,16 @@ export class TutorTaskListComponent implements OnInit {
           <input type="date" id="newDeadline" class="swal2-input">
         </div>
       `,
+      didOpen: () => {
+        const defaultSelect = document.getElementById('defaultDescSelect') as HTMLSelectElement;
+        const textarea = document.getElementById('newDescription') as HTMLTextAreaElement;
+  
+        defaultSelect.addEventListener('change', () => {
+          if (defaultSelect.value) {
+            textarea.value = defaultSelect.value;
+          }
+        });
+      },
       showCancelButton: true,
       confirmButtonText: '➕ Add',
       cancelButtonText: '❌ Cancel',
@@ -249,10 +275,11 @@ export class TutorTaskListComponent implements OnInit {
         }
   
         const deadlineDate = new Date(deadlineStr);
-        const tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() );
-        if (deadlineDate < tomorrow) {
-          Swal.showValidationMessage('Deadline must be tomorrow or after.');
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+  
+        if (deadlineDate < today) {
+          Swal.showValidationMessage('Deadline must be today or later.');
           return;
         }
   
@@ -280,12 +307,13 @@ export class TutorTaskListComponent implements OnInit {
           },
           error: (err) => {
             console.error('Error adding task:', err);
-            Swal.fire('❌ Error', 'Could not add task. Select student to affect the task', 'error');
+            Swal.fire('❌ Error', 'Could not add task. Select student to affect the task.', 'error');
           }
         });
       }
     });
   }
+
   
   
   deleteTask(id: number): void {
