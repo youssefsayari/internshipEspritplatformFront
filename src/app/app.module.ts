@@ -41,6 +41,7 @@ import { EvaluationFormComponent } from './evaluation-form/evaluation-form.compo
 import { StudentDefenseComponent } from './student-defense/student-defense.component';
 import { DefenseStatsComponent } from './defense-stats/defense-stats.component';
 import { TutorCalendarComponent } from './tutor-calendar/tutor-calendar.component';
+import { DefenseDetailsComponent } from './defense-details/defense-details.component';
 
 @NgModule({
   imports: [
@@ -83,7 +84,8 @@ import { TutorCalendarComponent } from './tutor-calendar/tutor-calendar.componen
     EvaluationFormComponent,
     StudentDefenseComponent,
     DefenseStatsComponent,
-    TutorCalendarComponent
+    TutorCalendarComponent,
+    DefenseDetailsComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

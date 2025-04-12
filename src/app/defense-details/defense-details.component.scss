@@ -1,0 +1,313 @@
+// defense-details.component.scss
+@import '~@angular/material/theming';
+@import '~@fortawesome/fontawesome-free/css/all.min.css';
+
+$primary: #2A4A7B;
+$accent: #4ECDC4;
+$warn: #e74c3c;
+$background: #f8fafc;
+
+.defense-details-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 80vh;
+}
+
+.defense-card {
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1) !important;
+  overflow: hidden;
+  
+  .card-header {
+    background: linear-gradient(135deg, $primary 0%, darken($primary, 10%) 100%);
+    color: white;
+    padding: 2rem;
+    
+    .header-content {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      
+      .header-icon {
+        font-size: 2.5rem;
+        width: 3rem;
+        height: 3rem;
+        color: white;
+      }
+      
+      .card-title {
+        font-size: 1.8rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.5rem;
+      }
+      
+      .card-subtitle {
+        font-size: 1.1rem;
+        opacity: 0.9;
+      }
+    }
+  }
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem 0;
+}
+
+.detail-card {
+  border-radius: 12px !important;
+  transition: transform 0.2s ease;
+  
+  &:hover {
+    transform: translateY(-3px);
+  }
+  
+  mat-card-header {
+    background: rgba($primary, 0.05);
+    border-bottom: 1px solid rgba($primary, 0.1);
+    
+    mat-icon {
+      color: $primary;
+      font-size: 1.8rem;
+      width: 40px;
+      height: 40px;
+    }
+    
+    mat-card-title {
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: $primary;
+    }
+  }
+  
+  mat-card-content {
+    padding: 1.5rem;
+    
+    .student-name {
+      color: $primary;
+      font-size: 1.4rem;
+      margin: 0 0 0.5rem;
+    }
+    
+    .student-id {
+      color: rgba($primary, 0.7);
+      font-size: 0.9rem;
+    }
+    
+    .location-info {
+      .classroom {
+        font-size: 1.4rem;
+        color: $primary;
+        font-weight: 500;
+        display: block;
+      }
+      
+      .campus {
+        color: rgba($primary, 0.7);
+        font-size: 0.9rem;
+      }
+    }
+    
+    .schedule-time {
+      text-align: center;
+      
+      .date {
+        font-size: 1.2rem;
+        color: $primary;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+      }
+      
+      .time {
+        font-size: 1.4rem;
+        color: $accent;
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+.committee-card {
+  margin-top: 2rem;
+  border-radius: 12px !important;
+  
+  mat-card-header {
+    padding: 1.5rem;
+    
+    mat-icon {
+      color: $primary;
+      font-size: 2rem;
+    }
+    
+    mat-card-title {
+      font-size: 1.4rem;
+      font-weight: 500;
+    }
+    
+    mat-card-subtitle {
+      color: rgba($primary, 0.8);
+    }
+  }
+  
+  .committee-members {
+    padding: 1.5rem;
+    display: grid;
+    gap: 1rem;
+    
+    .member-card {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 1rem;
+      background: rgba($primary, 0.03);
+      border-radius: 8px;
+      transition: background 0.2s ease;
+      
+      &:hover {
+        background: rgba($primary, 0.08);
+      }
+      
+      .member-icon {
+        font-size: 2rem;
+        color: $accent;
+        width: 50px;
+        height: 50px;
+      }
+      
+      .member-info {
+        .member-name {
+          color: $primary;
+          margin: 0 0 0.25rem;
+          font-size: 1.1rem;
+        }
+        
+        .member-role {
+          color: rgba($primary, 0.8);
+          font-size: 0.9rem;
+          margin: 0;
+        }
+        
+        .member-department {
+          color: rgba($primary, 0.6);
+          font-size: 0.8rem;
+          margin: 0.25rem 0 0;
+        }
+      }
+    }
+  }
+}
+
+.loading-overlay {
+  display: flex;
+  justify-content: center;
+  padding: 4rem 0;
+}
+
+.error-message {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  padding: 2rem;
+  background: rgba($warn, 0.1);
+  border-radius: 8px;
+  color: $warn;
+  
+  mat-icon {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .defense-details-container {
+    padding: 1rem;
+  }
+  
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .committee-members {
+    grid-template-columns: 1fr;
+  }
+  
+  .member-card {
+    flex-direction: column;
+    align-items: flex-start !important;
+  }
+  // defense-details.component.scss
+.committee-card {
+    margin-top: 2rem;
+    border-radius: 12px !important;
+
+    .committee-members {
+        padding: 1.5rem;
+        display: grid;
+        gap: 1.5rem;
+
+        .member-card {
+            padding: 1.5rem;
+            background: rgba($primary, 0.03);
+            border-radius: 8px;
+            transition: background 0.2s ease;
+
+            .member-header {
+                display: flex;
+                align-items: center;
+                gap: 1.5rem;
+
+                .member-icon {
+                    font-size: 2.5rem;
+                    color: $accent;
+                    width: 60px;
+                    height: 60px;
+                }
+
+                .member-info {
+                    .member-name {
+                        color: $primary;
+                        margin: 0 0 0.5rem;
+                        font-size: 1.2rem;
+                        font-weight: 500;
+                    }
+
+                    .member-details {
+                        display: flex;
+                        gap: 1.5rem;
+                        flex-wrap: wrap;
+
+                        span {
+                            display: flex;
+                            align-items: center;
+                            gap: 0.5rem;
+                            font-size: 0.95rem;
+
+                            mat-icon {
+                                font-size: 1.1rem;
+                                width: 1.1rem;
+                                height: 1.1rem;
+                                color: rgba($primary, 0.7);
+                            }
+                        }
+
+                        .member-role {
+                            color: rgba($primary, 0.9);
+                        }
+
+                        .member-department {
+                            color: rgba($primary, 0.7);
+                        }
+                    }
+                }
+            }
+
+            &:hover {
+                background: rgba($primary, 0.05);
+            }
+        }
+    }
+}
+}

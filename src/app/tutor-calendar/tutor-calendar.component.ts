@@ -7,6 +7,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router'; 
 @Component({
   selector: 'app-tutor-calendar',
   templateUrl: './tutor-calendar.component.html',
@@ -45,7 +46,9 @@ export class TutorCalendarComponent implements OnInit {
 
   constructor(
     private defenseService: DefenseService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private router: Router // Add router injection
+
   ) {}
 
   ngOnInit(): void {
@@ -54,11 +57,28 @@ export class TutorCalendarComponent implements OnInit {
 
   selectedEvent: any = null; // Holds the clicked event data
 
+  
   private handleEventClick(clickInfo: EventClickArg): void {
-    this.selectedEvent = {
-      title: clickInfo.event.title,
-      start: clickInfo.event.start,
-      extendedProps: clickInfo.event.extendedProps
+    const defenseId = clickInfo.event.extendedProps['idDefense'];
+    if (defenseId) {
+      this.router.navigate([`/defense-details/${defenseId}`]);
+    } else {
+      console.error('No defense ID found in event:', clickInfo.event);
+      // Optionally show error to user
+    }
+  }
+
+  private createCalendarEvent(defense: Defense): any {
+    console.log('Creating event for:', defense.idDefense); // Add debug log
+    return {
+      title: this.getEventTitle(defense),
+      start: this.parseDateTime(defense.defenseDate, defense.defenseTime),
+      allDay: false,
+      backgroundColor: this.getEventColor(defense.defenseDegree),
+      borderColor: 'transparent',
+      extendedProps: {
+        idDefense: defense.idDefense // Ensure this matches your API response
+      }
     };
   }
   
@@ -85,15 +105,6 @@ export class TutorCalendarComponent implements OnInit {
     });
   }
 
-  private createCalendarEvent(defense: Defense): any {
-    return {
-      title: this.getEventTitle(defense),
-      start: this.parseDateTime(defense.defenseDate, defense.defenseTime),
-      allDay: false,
-      backgroundColor: this.getEventColor(defense.defenseDegree),
-      borderColor: 'transparent'
-    };
-  }
 
   private getEventTitle(defense: Defense): string {
     const studentName = defense.student ? 
