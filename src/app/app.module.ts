@@ -1,6 +1,6 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import {FormsModule, ReactiveFormsModule,FormGroup} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -19,10 +19,13 @@ import { QuizEditComponent } from './quiz-edit/quiz-edit.component';
 import { QuizListUserComponent } from './quiz-list-user/quiz-list-user.component';
 import { QuizPassComponent } from './quiz-pass/quiz-pass.component';
 import { MatIconModule } from '@angular/material/icon';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import interactionPlugin from '@fullcalendar/interaction';
 
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import {MatDialogModule} from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 import { DocumentComponent } from './document/document.component';
 import { DocumentListComponent } from './document-list/document-list.component';
 import { DefenseComponent } from './defense/defense.component';
@@ -37,8 +40,7 @@ import { DefensesTutorsComponent } from './defenses-tutors/defenses-tutors.compo
 import { EvaluationFormComponent } from './evaluation-form/evaluation-form.component';
 import { StudentDefenseComponent } from './student-defense/student-defense.component';
 import { DefenseStatsComponent } from './defense-stats/defense-stats.component';
-
-
+import { TutorCalendarComponent } from './tutor-calendar/tutor-calendar.component';
 
 @NgModule({
   imports: [
@@ -53,14 +55,9 @@ import { DefenseStatsComponent } from './defense-stats/defense-stats.component';
     AppRoutingModule,
     NgbModule,
     NgxPaginationModule,
-
-
     ToastrModule.forRoot(),
-    ReactiveFormsModule,
     MatDialogModule,
-    ReactiveFormsModule,
     MatIconModule
-
   ],
   declarations: [
     AppComponent,
@@ -86,11 +83,11 @@ import { DefenseStatsComponent } from './defense-stats/defense-stats.component';
     EvaluationFormComponent,
     StudentDefenseComponent,
     DefenseStatsComponent,
-
-
-
+    TutorCalendarComponent
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
+
+
 export class AppModule { }

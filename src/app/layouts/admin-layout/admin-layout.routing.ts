@@ -37,6 +37,8 @@ import { DefensesTutorsComponent  } from '../../defenses-tutors/defenses-tutors.
 import { EvaluationFormComponent  } from '../../evaluation-form/evaluation-form.component';
 import { StudentDefenseComponent  } from  '../../student-defense/student-defense.component';
 import { DefenseStatsComponent } from '../../defense-stats/defense-stats.component';
+import { TutorCalendarComponent } from '../../tutor-calendar/tutor-calendar.component';
+
 
 
 
@@ -85,7 +87,9 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'defenses-tutors/:tutorId', component: DefensesTutorsComponent },
     { path: 'defenses/:defenseId/evaluate/:tutorId', component: EvaluationFormComponent },
     { path: 'student-defense/:studentId', component: StudentDefenseComponent },
-    { path: 'defense-stats', component: DefenseStatsComponent }
+    { path: 'defense-stats', component: DefenseStatsComponent },
+    { path: 'tutor-calendar', component: TutorCalendarComponent }
+
 
 
 
