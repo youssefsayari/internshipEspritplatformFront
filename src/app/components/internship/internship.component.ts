@@ -29,7 +29,7 @@ export class InternshipComponent implements OnInit {
 
   displayedColumnsInternship: string[] = ['title', 'description', 'internshipState', 'action'];
 
-  displayedColumnsTutor: string[] = ['studentName', 'classe', 'title', 'internshipState','typeInternship', 'action'];
+  displayedColumnsTutor: string[] = ['studentName', 'classe', 'title', 'internshipState','typeInternship', 'role', 'action'];
 
   dataSource!: MatTableDataSource<any>;
 
@@ -39,6 +39,7 @@ export class InternshipComponent implements OnInit {
   isSummerInternship: boolean = false;
   isGraduationInternship: boolean = false;
   isTutor: boolean = false;
+  isValidatorrr: boolean = false;
   remarks: Remark[] = [];
   userId: number;
   AgreementApproved: boolean = false;
@@ -47,6 +48,8 @@ export class InternshipComponent implements OnInit {
   timelines: TimeLine[] = [];
   private timelineApprovalStatus: boolean[] = [];
   selectedTimelineIndex: number = -1;
+  selectedStudent: any;
+  showStudentProcess: boolean = false;
   constructor(private router: Router, private internshipService: InternshipService, private timeLineService: TimeLineService ,private userService: UserService,private dialog: MatDialog,
   private internshipRemarkService: InternshipRemarkService, private agreementService: AgreementService, private documentService: DocumentService) {}
 
@@ -115,7 +118,6 @@ export class InternshipComponent implements OnInit {
       next: (userDetails) => {
         if (userDetails.id) {
           const idUser = userDetails.id;
-
           this.internshipService.getInternshipsForTutor(idUser).subscribe({
             next: (data) => {
               console.log("All Data :", data);
@@ -368,25 +370,72 @@ export class InternshipComponent implements OnInit {
   }
 
   validateTimeline(timeline: TimeLine) {
-    this.timeLineService.acceptStep(timeline.title, this.userId).subscribe(
-      () => {
-        const currentIndex = this.timelines.findIndex(t => t.id === timeline.id);
-        if (currentIndex < this.timelines.length - 1) {
-          this.timelineApprovalStatus[currentIndex + 1] = true;
+    if (timeline.title === 'Validation Technique' || timeline.title === 'Depot Rapport') {
+      Swal.fire({
+        title: 'Please enter a note for validation',
+        html: '<input type="number" id="note" class="swal2-input" min="0" max="20" step="0.1">',
+        showCancelButton: true,
+        confirmButtonText: 'Validate',
+        cancelButtonText: 'Cancel',
+        preConfirm: () => {
+          const note = (document.getElementById('note') as HTMLInputElement).value;
+          if (!note || isNaN(Number(note))) {
+            Swal.showValidationMessage('Please enter a valid number');
+            return false;
+          }
+          return Number(note);
         }
-        Swal.fire('Success', 'Timeline step validated successfully', 'success');
-      },
-      error => {
-        console.error('Error validating timeline:', error);
-        Swal.fire('Error', 'Failed to validate timeline step', 'error');
-      }
-    );
+      }).then((result) => {
+        if (result.isConfirmed && result.value) {
+          const note = result.value;
+          this.timeLineService.acceptStep(timeline.title, timeline.studentId, note).subscribe(
+            () => {
+              const currentIndex = this.timelines.findIndex(t => t.id === timeline.id);
+              if (currentIndex < this.timelines.length - 1) {
+                this.timelineApprovalStatus[currentIndex + 1] = true;
+                this.fetchTimelines(timeline.studentId);
+              }
+              Swal.fire('Success', 'Timeline step validated successfully', 'success');
+            },
+            error => {
+              console.error('Error validating timeline:', error);
+              Swal.fire('Error', 'Failed to validate timeline step', 'error');
+            }
+          );
+        }
+      });
+    } else {
+      this.timeLineService.acceptStep(timeline.title, timeline.studentId, 0).subscribe(
+        () => {
+          const currentIndex = this.timelines.findIndex(t => t.id === timeline.id);
+          if (currentIndex < this.timelines.length - 1) {
+            this.timelineApprovalStatus[currentIndex + 1] = true;
+            this.fetchTimelines(timeline.studentId);
+          }
+          Swal.fire('Success', 'Timeline step validated successfully', 'success');
+        },
+        error => {
+          console.error('Error validating timeline:', error);
+          Swal.fire('Error', 'Failed to validate timeline step', 'error');
+        }
+      );
+    }
   }
+  
 
   rejectTimeline(timeline: TimeLine) {
-    this.timeLineService.rejectStep(timeline.title, this.userId).subscribe(
+    const note = 0;
+    this.timeLineService.rejectStep(timeline.title, timeline.studentId, note).subscribe(
       () => {
-        Swal.fire('Success', 'Timeline step rejected successfully', 'success');
+        Swal.fire({
+          icon: 'success',
+          title: 'Step Rejected',
+          html: `Assign tasks to help the student improve.`,
+          timer: 2500,
+          showConfirmButton: false
+        }).then(() => {
+          this.router.navigate(['/Tasks']);
+        });
       },
       error => {
         console.error('Error rejecting timeline:', error);
@@ -394,6 +443,7 @@ export class InternshipComponent implements OnInit {
       }
     );
   }
+  
 
   toggleTimelineDetails(index: number): void {
     this.selectedTimelineIndex = index;
@@ -454,7 +504,6 @@ export class InternshipComponent implements OnInit {
       next: (agreement) => {
         if (agreement) {
           this.agreement = agreement;
-          console.log('Agreement fetched:', agreement);
         } else {
           Swal.fire({
             icon: 'info',
@@ -474,5 +523,12 @@ export class InternshipComponent implements OnInit {
     });
   }
 
+  Validation(row: any) {
+    this.selectedStudent = row;
+    this.showStudentProcess = true;
+    this.fetchTimelines(row.studentId);
+    this.getAgreement(row.studentId);
+    this.isValidatorrr = row.isValidator;
+  }
 
 }

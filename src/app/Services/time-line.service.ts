@@ -24,17 +24,20 @@ export class TimeLineService {
     );
   }
 
-  acceptStep(title: string, userId: number): Observable<any> {
+  acceptStep(title: string, userId: number, note: number): Observable<any> {
     return this.http.put(`${API_URL}/accept-step`, null, {
-      params: { title, userId }
+      params: { title, userId: userId.toString(), note: note.toString() },
+      responseType: 'text' as 'json'
     });
   }
-
-  rejectStep(title: string, userId: number): Observable<any> {
+  
+  rejectStep(title: string, userId: number, note: number): Observable<any> {
     return this.http.put(`${API_URL}/reject-step`, null, {
-      params: { title, userId }
+      params: { title, userId: userId.toString(), note: note.toString() },
+      responseType: 'text' as 'json'
     });
   }
+  
 
 
 

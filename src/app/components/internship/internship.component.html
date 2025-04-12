@@ -287,18 +287,6 @@
                         </div>
                       </div>
                     </div>
-
-                    <div class="validation-section" *ngIf="isTutor && timelines[selectedTimelineIndex].documentId">
-                      <h3>Validation</h3>
-                      <div class="validation-actions">
-                        <button class="btn btn-success" (click)="validateTimeline(timelines[selectedTimelineIndex])">
-                          <i class="fas fa-check"></i> Validate
-                        </button>
-                        <button class="btn btn-danger" (click)="rejectTimeline(timelines[selectedTimelineIndex])">
-                          <i class="fas fa-times"></i> Reject
-                        </button>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -374,16 +362,26 @@
                     {{ getStateLabel(row.internshipState) }}
                   </td>
                 </ng-container>
+<!-- Role Column -->
+<ng-container matColumnDef="role">
+  <th mat-header-cell *matHeaderCellDef mat-sort-header> Role </th>
+  <td mat-cell *matCellDef="let row">
+    <ng-container *ngIf="!row.isValidator">
+      <span class="badge bg-primary me-1">Tutor</span>
+    </ng-container>
+    <ng-container *ngIf="row.isValidator">
+      <span class="badge bg-success">Validator</span>
+    </ng-container>
+  </td>
+</ng-container>
 
                 <!-- Action Column -->
                 <ng-container matColumnDef="action">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
-                  <td mat-cell *matCellDef="let row"> <button class="btn btn-info" (click)="showDetails(row)">
-                    Details
-                  </button> </td>
-                  <td mat-cell *matCellDef="let row"> <button class="btn btn-info" (click)="Validation(row)">
-                    Validation
-                  </button> </td>
+                  <td mat-cell *matCellDef="let row">
+                    <button class="btn btn-info me-2" (click)="showDetails(row)">Details</button>
+                    <button class="btn btn-success" (click)="Validation(row)">Validation</button>
+                  </td>
                 </ng-container>
 
                 <tr mat-header-row *matHeaderRowDef="displayedColumnsTutor"></tr>
@@ -401,6 +399,126 @@
               </mat-paginator>
             </div>
 
+            <!-- Process Timeline Section for Tutor -->
+            <div *ngIf="showStudentProcess && selectedStudent" class="mt-4">
+              <div class="card">
+                <div class="card-header">
+                  <h4 class="card-title">Process Timeline for {{selectedStudent.studentName}}</h4>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <!-- Timeline Container -->
+                    <div class="col-md-12">
+                      <div *ngIf="timelines?.length > 0; else noTimelines">
+                        <div class="timeline-container">
+                          <div *ngFor="let timeLine of timelines; let i = index"
+                               class="timeline-item"
+                               [class.visible]="true"
+                               [class.locked]="!isTimelineUnlocked(i)"
+                               [class.unlocked]="isTimelineUnlocked(i)"
+                               (click)="toggleTimelineDetails(i)">
+                            <div class="timeline-circle">
+                              <i class="timeline-icon">{{ getIcon(timeLine.title) }}</i>
+                            </div>
+                            <div class="timeline-content">
+                              <div class="timeline-title">{{ timeLine.title }}</div>
+                              <div class="timeline-date">{{ timeLine.dateLimite | date:'shortDate' }}</div>
+                            </div>
+                            <div *ngIf="i < timelines.length - 1"
+                                 class="timeline-line"
+                                 [class.visible]="isTimelineUnlocked(i)"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Details Panel Container -->
+                    <div class="col-md-12">
+                      <div class="details-panel" *ngIf="selectedTimelineIndex !== -1">
+                        <div class="panel-content">
+                          <div class="description-section">
+                            <h3>Description</h3>
+                            <p>{{ timelines[selectedTimelineIndex].description }}</p>
+                          </div>
+                          <div class="agreement-section"
+                         *ngIf="isTimelineUnlocked(selectedTimelineIndex) && timelines[selectedTimelineIndex].title === 'Demande Convention'">
+                      <h3 class="agreement-title">Agreement Details</h3>
+                      <div class="agreement-details">
+                        <div class="detail-row">
+                          <strong class="detail-label">Company Name:</strong>
+                          <span class="detail-value">{{ agreement?.companyName }}</span>
+                        </div>
+                        <div class="detail-row">
+                          <strong class="detail-label">Representative Name:</strong>
+                          <span class="detail-value">{{ agreement?.companyRepresentative }}</span>
+                        </div>
+                        <div class="detail-row">
+                          <strong class="detail-label">Agreement Start Date:</strong>
+                          <span class="detail-value">{{ agreement?.startDate | date }}</span>
+                        </div>
+                        <div class="detail-row">
+                          <strong class="detail-label">Agreement End Date:</strong>
+                          <span class="detail-value">{{ agreement?.endDate | date }}</span>
+                        </div>
+                        <div class="detail-row">
+                          <strong class="detail-label">Agreement Creation Date:</strong>
+                          <span class="detail-value">{{ agreement?.creationDate | date: 'yyyy-MM-dd HH:mm:ss' }}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div *ngIf="isTimelineUnlocked(selectedTimelineIndex) && timelines[selectedTimelineIndex].title === 'Validation Technique'">
+                      <div class="agreement-section">
+                        <h3 class="agreement-title">Validation Details</h3>
+                        <div class="agreement-details">
+                          <div class="detail-row">
+                            <strong class="detail-label">Validator Name:</strong>
+                            <span class="detail-value">{{ agreement?.validatorName }}</span>
+                          </div>
+                          <div class="detail-row">
+                            <strong class="detail-label">Validation Date:</strong>
+                            <span class="detail-value">{{ timelines[selectedTimelineIndex].dateLimite | date: 'shortDate' }}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="validation-section" *ngIf="isValidatorrr && timelines[selectedTimelineIndex].timeLaneState !== 'ACCEPTED'">
+                        <h3>Validation</h3>
+                        <div class="validation-actions">
+                          <button class="btn btn-success" (click)="validateTimeline(timelines[selectedTimelineIndex])">
+                            <i class="fas fa-check"></i> Validate
+                          </button>
+                          <button class="btn btn-danger" (click)="rejectTimeline(timelines[selectedTimelineIndex])">
+                            <i class="fas fa-times"></i> Reject
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                          <div class="validation-section" *ngIf="timelines[selectedTimelineIndex].documentId && !isValidatorrr && timelines[selectedTimelineIndex].timeLaneState !== 'ACCEPTED'">
+                            <h3>Validation</h3>
+                            <div class="validation-actions">
+                              <button class="btn btn-success" (click)="validateTimeline(timelines[selectedTimelineIndex])">
+                                <i class="fas fa-check"></i> Validate
+                              </button>
+                              <button class="btn btn-danger" (click)="rejectTimeline(timelines[selectedTimelineIndex])">
+                                <i class="fas fa-times"></i> Reject
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <ng-template #noTimelines>
+                    <div class="no-timelines">
+                      <i class="fas fa-clock"></i>
+                      No timelines available yet for this student.
+                    </div>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 

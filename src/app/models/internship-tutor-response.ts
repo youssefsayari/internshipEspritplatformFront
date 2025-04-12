@@ -10,4 +10,6 @@ export class InternshipTutorResponse {
   content!: string;
   companyName!: string;
   skills!: Skill[];
+  studentId!: number;
+  isValidator!: boolean;
 }
