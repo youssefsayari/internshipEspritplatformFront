@@ -75,6 +75,7 @@ export class NavbarComponent implements OnInit {
           this.userType = userDetails.role;
           this.userConnecte = userDetails.id;
 
+
           resolve();
         },
         error: (err) => {
@@ -96,18 +97,22 @@ export class NavbarComponent implements OnInit {
   
 
   loadNotifications() {
-    const userId = this.userConnecte || 2; // Utilise l'ID de l'utilisateur connecté ou une valeur par défaut
+    const userId = this.userConnecte || 2;
     this.notificationService.getNotificationsForUser(userId).subscribe(
       (notifications) => {
         this.notifications = notifications;
         this.unreadNotifications = notifications.filter(n => !n.vue).length;
+
+        // Si des notifications non lues, jouer le son
+        if (this.unreadNotifications > 0) {
+          this.playNotificationSound();
+        }
       },
       (error) => {
         console.error('Erreur lors de la récupération des notifications', error);
       }
     );
   }
-  
 
   markAsRead(notificationId: number) {
     this.notificationService.markAsRead(notificationId).subscribe(
@@ -272,6 +277,7 @@ export class NavbarComponent implements OnInit {
       this.mobile_menu_visible = 1;
     }
   }
+  
 
   getTitle() {
     var titlee = this.location.prepareExternalUrl(this.location.path());
@@ -287,6 +293,20 @@ export class NavbarComponent implements OnInit {
     }
     return titlee;
   }
+  markAllAsRead() {
+    this.notifications.forEach(n => {
+      if (!n.vue) this.markAsRead(n.id);
+    });
+  }
+  clearReadNotifications() {
+    this.notifications = this.notifications.filter(n => !n.vue);
+  }
+  playNotificationSound() {
+    const audio = new Audio('assets/Son de notification snapchat.mp3');
+    audio.play();
+  }
+  
+  
 
   logout() {
     localStorage.clear();

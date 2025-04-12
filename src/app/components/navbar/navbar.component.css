@@ -228,3 +228,54 @@
     right: -50px;
   }
 }
+/* Pour les liens dans la section des notifications */
+.notification-actions a {
+  color: #007bff;  /* Couleur bleue comme Facebook */
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 14px;
+  margin: 0 10px;
+  transition: color 0.3s ease;
+}
+
+.notification-actions a:hover {
+  color: #0056b3;  /* Couleur plus sombre au survol */
+  text-decoration: underline;
+}
+
+/* Pour une meilleure visibilité du nombre de notifications */
+.notification-count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: #ff4c5b;
+  color: white;
+  border-radius: 50%;
+  padding: 5px 10px;
+  font-size: 12px;
+}
+
+/* Style de l'avatar de notification */
+.notification-avatar {
+  background-color: #ff4c5b; /* Un fond rouge-orangé similaire */
+  color: white;
+  border-radius: 50%;
+  padding: 10px;
+}
+
+/* Style de l'élément de notification */
+.notification-item {
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.notification-item:hover {
+  background-color: #f4f6f9; /* Fond clair au survol */
+}
+
+/* Texte de notification non lu */
+.unread {
+  font-weight: bold;
+  background-color: #e8f4fe;
+}
