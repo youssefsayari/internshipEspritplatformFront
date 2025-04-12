@@ -55,6 +55,9 @@ export class UserService {
   getAllUsers(): Observable<User[]> {
     return this.http.get<User[]>(`${API_URL}/getAllUsers`);
   }
+  getUserById(userId: number): Observable<User> {
+    return this.http.get<User>(`${API_URL}/getUserById/${userId}`);
+  }
   // user.service.ts
 getAllTutors(): Observable<User[]> {
   return this.http.get<User[]>(`${API_URL}/getAllTutors`);
