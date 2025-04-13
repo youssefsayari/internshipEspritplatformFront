@@ -11,7 +11,8 @@ export class DefenseStatsComponent implements OnInit {
   defenseStats: { [key: string]: Defense[] } = {
     Excellent: [],
     Average: [],
-    Bad: []
+    Bad: [],
+    'Not Evaluated': [] // Add the Not Evaluated category
   };
   isLoading = true;
   hasError = false;
@@ -23,25 +24,26 @@ export class DefenseStatsComponent implements OnInit {
       case 'excellent': return 'emoji_events';
       case 'average': return 'trending_flat';
       case 'bad': return 'warning';
+      case 'not evaluated': return 'hourglass_empty'; // Add icon for Not Evaluated
       default: return 'person';
     }
   }
 
- // In your DefenseStatsComponent class
-getStudentName(defense: Defense): string {
-  if (!defense?.student) return 'Unnamed Student';
-  const firstName = defense.student.firstName?.trim() || '';
-  const lastName = defense.student.lastName?.trim() || '';
-  const fullName = `${firstName} ${lastName}`.trim();
-  return fullName || 'Unnamed Student';
-}
+  // In your DefenseStatsComponent class
+  getStudentName(defense: Defense): string {
+    if (!defense?.student) return 'Unnamed Student';
+    const firstName = defense.student.firstName?.trim() || '';
+    const lastName = defense.student.lastName?.trim() || '';
+    const fullName = `${firstName} ${lastName}`.trim();
+    return fullName || 'Unnamed Student';
+  }
 
-getStudentInitial(defense: Defense): string {
-  if (!defense?.student) return '?';
-  const firstInitial = defense.student.firstName?.[0]?.toUpperCase() || '';
-  const lastInitial = defense.student.lastName?.[0]?.toUpperCase() || '';
-  return `${firstInitial}${lastInitial}` || '?';
-}
+  getStudentInitial(defense: Defense): string {
+    if (!defense?.student) return '?';
+    const firstInitial = defense.student.firstName?.[0]?.toUpperCase() || '';
+    const lastInitial = defense.student.lastName?.[0]?.toUpperCase() || '';
+    return `${firstInitial}${lastInitial}` || '?';
+  }
 
   validateScore(degree: number): number {
     return Math.min(Math.max(degree || 0, 0), 20);
@@ -56,7 +58,7 @@ getStudentInitial(defense: Defense): string {
   }
 
   getTotalStudents(): number {
-    return ['Excellent', 'Average', 'Bad'].reduce(
+    return ['Excellent', 'Average', 'Bad', 'Not Evaluated'].reduce(
       (total, category) => total + this.getCategoryCount(category), 0
     );
   }
@@ -67,7 +69,8 @@ getStudentInitial(defense: Defense): string {
         this.defenseStats = {
           Excellent: stats.Excellent || [],
           Average: stats.Average || [],
-          Bad: stats.Bad || []
+          Bad: stats.Bad || [],
+          'Not Evaluated': stats['Not Evaluated'] || [] // Handle the Not Evaluated category
         };
         this.isLoading = false;
       },

@@ -127,8 +127,10 @@ export class TutorCalendarComponent implements OnInit {
   }
 
   private getEventColor(grade: number): string {
-    if (grade >= 16) return '#2ecc71';
-    if (grade >= 10) return '#f1c40f';
-    return '#e74c3c';
+    if (grade === 0) return '#bdc3c7'; // Not Evaluated: Grey
+    if (grade >= 16) return '#2ecc71'; // Excellent: Green
+    if (grade >= 10) return '#f1c40f'; // Average: Yellow
+    return '#e74c3c'; // Needs Improvement: Red
   }
+  
 }

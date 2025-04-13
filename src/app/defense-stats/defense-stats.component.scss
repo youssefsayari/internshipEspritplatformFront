@@ -2,7 +2,8 @@
 $excellent: #4CAF50;
 $average: #FFC107;
 $bad: #F44336;
-$background: #f8fafc;
+$notEvaluated: #009bcf50; // Blue color for "Not Evaluated"
+$background: #e7f0f8;
 $text: #2c3e50;
 
 .stats-dashboard {
@@ -118,6 +119,7 @@ $text: #2c3e50;
       &.excellent { background: $excellent; }
       &.average { background: $average; }
       &.bad { background: $bad; }
+      &.not-evaluated { background: $notEvaluated; } // Added blue for "Not Evaluated"
       
       .bar-percentage {
         position: absolute;
@@ -152,6 +154,7 @@ $text: #2c3e50;
         &.excellent { background: $excellent; }
         &.average { background: $average; }
         &.bad { background: $bad; }
+        &.not-evaluated { background: $notEvaluated; } // Added blue for "Not Evaluated"
       }
     }
   }
@@ -172,6 +175,7 @@ $text: #2c3e50;
     &.excellent { border-top: 4px solid $excellent; }
     &.average { border-top: 4px solid $average; }
     &.bad { border-top: 4px solid $bad; }
+    &.not-evaluated { border-top: 4px solid $notEvaluated; } // Blue border for "Not Evaluated"
 
     .card-header {
       padding: 1.5rem;
@@ -194,6 +198,7 @@ $text: #2c3e50;
         .excellent & { background: rgba($excellent, 0.1); color: $excellent; }
         .average & { background: rgba($average, 0.1); color: $average; }
         .bad & { background: rgba($bad, 0.1); color: $bad; }
+        .not-evaluated & { background: rgba($notEvaluated, 0.1); color: $notEvaluated; } // Added blue for "Not Evaluated"
       }
       
       .category-info {
@@ -261,6 +266,7 @@ $text: #2c3e50;
           .excellent & { background: rgba($excellent, 0.1); color: $excellent; }
           .average & { background: rgba($average, 0.1); color: $average; }
           .bad & { background: rgba($bad, 0.1); color: $bad; }
+          .not-evaluated & { background: rgba($notEvaluated, 0.1); color: $notEvaluated; } // Blue for "Not Evaluated"
         }
       }
       
@@ -306,50 +312,6 @@ $text: #2c3e50;
   .empty-state {
     mat-icon {
       color: #bdbdbd !important;
-    }
-  }
-  // Add these styles for better error handling
-.student-details {
-    h3 {
-      color: #2c3e50;
-      font-size: 1.1rem;
-      
-      &::after {
-        content: '⚠️';
-        margin-left: 8px;
-        display: inline-block;
-        visibility: hidden;
-      }
-      
-      &:empty::after {
-        visibility: visible;
-      }
-    }
-    
-    p {
-      color: #666;
-      font-size: 0.9rem;
-      
-      &::before {
-        content: 'Score: ';
-        color: #888;
-      }
-    }
-  }
-  .category-icon {
-    mat-icon {
-      font-size: 24px;
-      width: auto;
-      height: auto;
-    }
-  }
-  
-  .empty-state {
-    mat-icon {
-      font-size: 48px;
-      width: auto;
-      height: auto;
-      color: rgba($text, 0.3);
     }
   }
 }

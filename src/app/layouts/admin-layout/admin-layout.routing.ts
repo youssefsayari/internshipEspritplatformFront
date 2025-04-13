@@ -90,7 +90,9 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'student-defense/:studentId', component: StudentDefenseComponent },
     { path: 'defense-stats', component: DefenseStatsComponent },
     { path: 'tutor-calendar', component: TutorCalendarComponent },
-    { path: 'defense-details/:id', component: DefenseDetailsComponent }
+    { path: 'defense-details/:id', component: DefenseDetailsComponent },
+    { path: 'update-defense/:id', component: UpdateDefenseComponent }
+
 
 
 

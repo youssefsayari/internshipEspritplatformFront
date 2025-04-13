@@ -61,7 +61,7 @@ export class EvaluationFormComponent implements OnInit {
       error: (err) => {
         console.error('Error loading defense:', err);
         Swal.fire('Error', 'Failed to load defense details', 'error');
-        this.router.navigate(['/defenses']);
+        this.router.navigate([`/defenses-tutors/${this.tutorId}`]);
         this.isLoading = false;
       }
     });
@@ -114,7 +114,7 @@ export class EvaluationFormComponent implements OnInit {
           text: 'Your evaluation has been successfully submitted.',
           confirmButtonColor: '#3085d6'
         }).then(() => {
-          this.router.navigate(['/defenses']);
+          this.router.navigate([`/defenses-tutors/${this.tutorId}`]);
         });
       },
       error: (err) => {

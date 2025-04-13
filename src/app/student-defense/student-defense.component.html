@@ -13,13 +13,14 @@
     </div>
   
     <!-- Defense Details -->
-    <div *ngIf="defense && !isLoading" class="defense-details">
-      <header class="defense-header">
-        <h2>Defense Overview</h2>
-        <div class="status-indicator" [class.complete]="areAllEvaluationsSubmitted()">
-          {{ areAllEvaluationsSubmitted() ? 'Complete' : 'In Progress' }}
-        </div>
-      </header>
+  <div *ngIf="defense && !isLoading" class="defense-details">
+    <header class="defense-header">
+      <h2>Defense Overview</h2>
+      <div class="status-indicator" [class.complete]="defense.defenseDegree !== 0">
+        <!-- Check if defenseDegree is 0, display 'In Progress', otherwise 'Complete' -->
+        {{ defense.defenseDegree === 0 ? 'In Progress' : 'Complete' }}
+      </div>
+    </header>
   
       <div class="details-grid">
         <!-- Date & Time Card -->
@@ -56,20 +57,20 @@
           </div>
         </div>
   
-        <!-- Results Card -->
-        <div class="detail-card results-card">
-          <div class="card-icon">📊</div>
-          <div class="card-content">
-            <h3>Results</h3>
-            <div class="grade-display">
-              <span class="score">{{ defense.defenseDegree }}</span>
-              <span class="max-score">/ 20</span>
-            </div>
-            <p class="evaluation-status">
-              {{ areAllEvaluationsSubmitted() ? 'All evaluations submitted' : 'Pending evaluations' }}
-            </p>
-          </div>
-        </div>
-      </div>
+       <!-- Results Card -->
+<div class="detail-card results-card">
+  <div class="card-icon">📊</div>
+  <div class="card-content">
+    <h3>Results</h3>
+    <div class="grade-display">
+      <!-- Check if defenseDegree is 0, display 'Not evaluated' -->
+      <span class="score">
+        {{ defense.defenseDegree === 0 ? 'Not evaluated' : (defense.defenseDegree ?? 'Pending') }}
+      </span>
+      <span class="max-score">/ 20</span>
     </div>
+    <p class="evaluation-status">
+      {{ areAllEvaluationsSubmitted() ? 'All evaluations submitted' : 'Pending evaluations' }}
+    </p>
   </div>
+</div>

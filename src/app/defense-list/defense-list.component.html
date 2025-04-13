@@ -1,4 +1,10 @@
-<div class="defense-dashboard">
+<div class="defense-dashboard">*
+  <!-- Add Defense Button -->
+  <div class="add-defense-btn-container">
+    <button class="btn btn-primary mb-3" (click)="addDefense()">
+      <i class="fas fa-plus"></i> Add New Defense
+    </button>
+  </div>
   <!-- Defense cards grid -->
   <div *ngIf="!isLoading && defenses.length > 0" class="defense-grid">
     <div *ngFor="let defense of paginatedDefenses" class="defense-card">
@@ -54,9 +60,11 @@
         <button class="action-btn view" (click)="viewDefenseDetails(defense.idDefense)">
           <span class="action-icon">👁️</span> Details
         </button>
+      
         <button class="action-btn edit" (click)="editDefense(defense.idDefense)">
           <span class="action-icon">✏️</span> Edit
         </button>
+        
         <button class="action-btn delete" (click)="onDelete(defense.idDefense)">
           <span class="action-icon">🗑️</span> Delete
         </button>

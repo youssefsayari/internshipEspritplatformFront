@@ -57,18 +57,19 @@
       </mat-card>
 
       <!-- Final Grade -->
-      <mat-card class="detail-card" @slideIn>
-        <mat-card-header>
-          <mat-icon>grade</mat-icon>
-          <mat-card-title>Final Grade</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <div class="final-grade">
-            {{ defense.defenseDegree ?? 'Pending' }} / 20
-          </div>
-        </mat-card-content>
-      </mat-card>
+<mat-card class="detail-card" @slideIn>
+  <mat-card-header>
+    <mat-icon>grade</mat-icon>
+    <mat-card-title>Final Grade</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="final-grade">
+      <!-- Check if defenseDegree is 0 or not available, and display 'Not evaluated' -->
+      {{ defense.defenseDegree === 0 ? 'Not evaluated' : (defense.defenseDegree ?? 'Pending') }} / 20
     </div>
+  </mat-card-content>
+</mat-card>
+</div>
 
     <!-- Tutors -->
     <mat-card class="committee-card" @fadeIn>

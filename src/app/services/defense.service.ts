@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Defense } from '../models/defense';
 
@@ -23,10 +23,15 @@ export class DefenseService {
     return this.http.post(`${this.baseUrl}/defense/${studentId}/defenses`, defenseRequest);
   }
   
-
-  updateDefense(defense: Defense): Observable<Defense> {
-    return this.http.put<Defense>(`${this.baseUrl}/updateDefense`, defense);
+  updateDefense(defenseId: number, defenseRequest: any): Observable<any> {
+    return this.http.put(
+      `${this.baseUrl}/update/${defenseId}`,
+      defenseRequest
+    );
   }
+  
+
+  
 
   deleteDefenseById(idDefense: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/deleteDefenseById/${idDefense}`);

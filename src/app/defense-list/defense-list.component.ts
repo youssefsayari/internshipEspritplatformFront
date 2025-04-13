@@ -44,8 +44,9 @@ export class DefenseListComponent implements OnInit {
   }
 
   viewDefenseDetails(id: number): void {
-    this.router.navigate(['/defenses', id]);
+    this.router.navigate(['/defense-details', id]);
   }
+  
  
 
 
@@ -76,6 +77,14 @@ export class DefenseListComponent implements OnInit {
       }
     });
   }
+  editDefense(id: number): void {
+    this.router.navigate(['/update-defense', id]);
+  }
+  addDefense(): void {
+    this.router.navigate(['/add-defense']);
+  }
+  
+  
 
   get paginatedDefenses(): Defense[] {
     const startIndex = (this.page - 1) * this.itemsPerPage;
