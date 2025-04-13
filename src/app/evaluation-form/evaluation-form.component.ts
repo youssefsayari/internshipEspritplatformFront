@@ -186,4 +186,12 @@ export class EvaluationFormComponent implements OnInit {
       return 'Invalid time';
     }
   }
+  goBack(): void {
+    if (this.tutorId) {
+      this.router.navigate([`/defenses-tutors/${this.tutorId}`]);
+    } else {
+      // Fallback in case tutorId isn't available for some reason
+      this.router.navigate(['/defenses-tutors']);
+    }
+  }
 }

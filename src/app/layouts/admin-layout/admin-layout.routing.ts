@@ -39,6 +39,8 @@ import { StudentDefenseComponent  } from  '../../student-defense/student-defense
 import { DefenseStatsComponent } from '../../defense-stats/defense-stats.component';
 import { TutorCalendarComponent } from '../../tutor-calendar/tutor-calendar.component';
 import { DefenseDetailsComponent } from '../../defense-details/defense-details.component';
+import { EvaluationViewComponent } from '../../evaluation-view/evaluation-view.component';
+
 
 
 
@@ -91,7 +93,10 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'defense-stats', component: DefenseStatsComponent },
     { path: 'tutor-calendar', component: TutorCalendarComponent },
     { path: 'defense-details/:id', component: DefenseDetailsComponent },
-    { path: 'update-defense/:id', component: UpdateDefenseComponent }
+    { path: 'update-defense/:id', component: UpdateDefenseComponent },
+    { path: 'defenses-tutors/:tutorId/evaluation-view/:defenseId', component: EvaluationViewComponent }
+
+
 
 
 

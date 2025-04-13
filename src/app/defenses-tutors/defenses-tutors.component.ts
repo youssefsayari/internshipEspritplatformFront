@@ -130,4 +130,31 @@ export class DefensesTutorsComponent implements OnInit {
   getTutorEvaluation(defense: Defense): Evaluation | undefined {
     return defense.evaluations?.find(e => e.tutorId === this.currentTutorId);
   }
+  viewEvaluation(defenseId: number): void {
+    const defense = this.defenses.find(d => d.idDefense === defenseId);
+    
+    // Check if evaluation exists for this tutor
+    const tutorEvaluation = defense?.evaluations?.find(e => e.tutorId === this.currentTutorId);
+    
+    if (tutorEvaluation && tutorEvaluation.status === 'SUBMITTED') {
+      // Navigate to evaluation view
+      this.router.navigate([`/defenses-tutors/${this.currentTutorId}/evaluation-view/${defenseId}`]);
+    } else {
+      Swal.fire({
+        icon: 'info',
+        title: 'No Evaluation Found',
+        text: 'You have not submitted an evaluation for this defense yet.',
+        confirmButtonColor: '#3085d6'
+      });
+    }
+  }
+  viewDefenseOrEvaluation(defense: Defense): void {
+    if (this.hasEvaluated(defense)) {
+      // Navigate to evaluation view if evaluation exists
+      this.router.navigate([`/defenses-tutors/${this.currentTutorId}/evaluation-view/${defense.idDefense}`]);
+    } else {
+      // Navigate to regular defense details if no evaluation exists
+      this.viewDefenseDetails(defense.idDefense);
+    }
+  }
 }

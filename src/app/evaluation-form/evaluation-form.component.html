@@ -1,9 +1,8 @@
 <div class="evaluation-container">
   <div class="card evaluation-card" *ngIf="!isLoading">
-    <div class="card-header bg-primary text-white">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
       <h2 class="mb-0">Defense Evaluation</h2>
-    </div>
-    
+    </div>    
     <div class="card-body">
       <div *ngIf="defense" class="defense-info mb-4">
         <h4>Defense Details</h4>
@@ -46,8 +45,8 @@
         </div>
   
         <div class="d-flex justify-content-between">
-          <button type="button" class="btn btn-secondary" (click)="router.navigate(['/defenses-tutors'])">
-            <i class="fas fa-arrow-left me-2"></i>Back to List
+          <button class="btn btn-light btn-sm" (click)="goBack()">
+            <i class="fas fa-arrow-left me-1"></i>Back
           </button>
           <button type="submit" class="btn btn-primary" [disabled]="isSubmitting || evaluationForm.invalid">
             <span *ngIf="!isSubmitting">
@@ -82,8 +81,8 @@
         </div>
   
         <div class="text-center mt-4">
-          <button class="btn btn-primary" (click)="router.navigate(['/defenses-tutors'])">
-            <i class="fas fa-arrow-left me-2"></i>Back to Defenses List
+          <button class="btn btn-light btn-sm" (click)="goBack()">
+            <i class="fas fa-arrow-left me-1"></i>Back
           </button>
         </div>
       </div>

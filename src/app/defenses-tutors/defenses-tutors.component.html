@@ -81,9 +81,11 @@
         </div>
 
         <div class="card-actions">
-          <button class="action-btn view" (click)="viewDefenseDetails(defense.idDefense)">
-            <span class="action-icon">👁️</span> Details
-          </button>
+          <button class="action-btn view" 
+        (click)="viewDefenseOrEvaluation(defense)">
+  <span class="action-icon">👁️</span> 
+  {{ hasEvaluated(defense) ? 'View Evaluation' : 'Details' }}
+</button>
           <button class="action-btn evaluate" 
                   (click)="evaluateDefense(defense.idDefense)"
                   [disabled]="hasEvaluated(defense)">
