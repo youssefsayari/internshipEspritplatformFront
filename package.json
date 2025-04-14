@@ -34,7 +34,7 @@
     "@ng-bootstrap/ng-bootstrap": "^12.0.1",
     "@popperjs/core": "^2.11.4",
     "@tabler/icons": "^3.30.0",
-    "@types/ol": "^6.5.0",
+    "@types/ol": "6.5.0",
     "ajv": "7.0.1",
     "ajv-keywords": "4.0.0",
     "angular-tabler-icons": "^1.53.1",
