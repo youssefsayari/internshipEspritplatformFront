@@ -184,17 +184,17 @@
   transform: translateY(-5px);
 }
 
-.gradient-purple {
-  background: linear-gradient(135deg, #6c5ce7 0%, #a363d9 100%);
+.gradient-red {
+  background: linear-gradient(135deg, #dc3545 0%, #ff5b5b 100%);
 }
 
-.gradient-blue {
-  background: linear-gradient(135deg, #4CAF50 0%, #2196F3 100%);
+.gradient-orange {
+  background: linear-gradient(135deg, #ea783a 0%, #c82b08 100%);
 }
 
 .sector-chip {
   background: rgba(108, 92, 231, 0.1);
-  color: #6c5ce7;
+  color: #dc3545;
   padding: 0.5rem 1rem;
   border-radius: 25px;
   display: inline-flex;
@@ -226,7 +226,7 @@
 }
 
 .partnership-btn {
-  background: linear-gradient(135deg, #6c5ce7 0%, #a363d9 100%);
+  background: linear-gradient(135deg, #d71c1c 0%, #ff9191 100%);
   color: white;
   border: none;
   padding: 1rem 2rem;
@@ -493,7 +493,7 @@
 .smart-form label {
   display: block;
   margin-bottom: 0.5rem;
-  color: #6c5ce7;
+  color: #dc3545;
   font-weight: 600;
 }
 
@@ -504,7 +504,7 @@
 }
 
 .swal2-input:focus, .swal2-textarea:focus {
-  border-color: #6c5ce7 !important;
+  border-color: #dc3545 !important;
   box-shadow: 0 0 8px rgba(108, 92, 231, 0.2) !important;
 }
 /* Ajouter ces styles */
@@ -521,9 +521,3 @@
   background: #FF6B6B20 !important;
   color: #FF6B6B !important;
 }
-
-
-
-
-
-
