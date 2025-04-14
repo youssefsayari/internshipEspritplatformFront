@@ -45,6 +45,7 @@ import { AddTaskComponent } from './Tutors/add-task/add-task.component';
 import { AddCompanyComponent } from './add-company/add-company.component';
 import { ImageComponent } from './image/image.component';
 import { MyProfileCardComponent } from './my-profile-card/my-profile-card.component';
+import { GlobeComponent } from './globe/globe.component';
 
 
 
@@ -104,6 +105,7 @@ import { MyProfileCardComponent } from './my-profile-card/my-profile-card.compon
     AddCompanyComponent,
     ImageComponent,
     MyProfileCardComponent,
+    GlobeComponent,
 
    ],
   exports: [

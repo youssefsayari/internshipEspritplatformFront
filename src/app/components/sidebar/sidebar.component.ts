@@ -16,6 +16,8 @@ export const ROUTES: RouteInfo[] = [
   { path: '/dashboard', title: 'Dashboard', icon: 'business_chart-bar-32', class: '', roles: ['Admin'] },
   { path: '/user-profile', title: 'My Profile', icon: 'users_single-02', class: '', roles: ['Student', 'Tutor','Company'] },
   { path: '/student', title: 'Students', icon: 'education_glasses', class: '', roles: ['Admin'] },
+  { path: '/globe', title: 'Companies Analytics', icon: 'location_map-big', class: '', roles: ['Admin'] },
+
   //{ path: '/Posts', title: 'Post Management',  icon:'education_atom', class: '', roles: ['Tutor','Company'] },
   //ala
   { path: '/quiz-list', title: 'All Quizzes',  icon:'ui-2_chat-round', class: '' ,  roles: ['Company']},

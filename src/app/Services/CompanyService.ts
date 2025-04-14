@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { Company } from '../Model/Company'; // Assure-toi d'avoir le modèle Comment
+import { CompanyAnalyticsDto } from '../Model/Company'; // Assure-toi d'avoir le modèle Comment
 import { catchError, map } from 'rxjs/operators';
 import { User } from '../Model/User'; // Ensure the correct path to the User model
 
@@ -150,5 +151,19 @@ deleteCompany(companyId: number): Observable<{success: boolean, message: string}
       return throwError(() => new Error(errorMsg));
     })
   );
+}
+
+// Ajoutez cette méthode dans votre CompanyService
+getCompaniesAnalytics(): Observable<CompanyAnalyticsDto[]> {
+  return this.http.get<CompanyAnalyticsDto[]>(`${this.baseUrl}/analytics`).pipe(
+    catchError(error => {
+      console.error('Error fetching companies analytics:', error);
+      return throwError(() => new Error('Failed to fetch companies analytics: ' + error.message));
+    })
+  );
+}
+
+sendPartnershipEmail(email: string, message: string): Observable<any> {
+  return this.http.post(`${this.baseUrl}/sendPartnershipEmail`, { email, message });
 }
 }
