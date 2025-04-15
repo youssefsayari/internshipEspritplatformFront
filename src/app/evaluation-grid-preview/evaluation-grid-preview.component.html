@@ -1,17 +1,5 @@
 <div class="evaluation-grid-container">
-  <div class="header">
-    <h1>Evaluation Grid Preview</h1>
-    <div class="action-buttons">
-      <button mat-raised-button class="back-button" (click)="goBack()">
-        <mat-icon>arrow_back</mat-icon>
-        <span>Go Back</span>
-      </button>
-      <button mat-raised-button class="download-button" (click)="downloadEvaluationGrid()">
-        <mat-icon>download</mat-icon>
-        <span>Download PDF</span>
-      </button>
-    </div>
-  </div>
+  <h1 class="title">Evaluation Grid Preview</h1>
 
   <div *ngIf="isLoading" class="loading-spinner">
     <mat-spinner diameter="50"></mat-spinner>
@@ -27,6 +15,13 @@
     <button mat-raised-button color="primary" (click)="loadEvaluationGrid()">
       <mat-icon>refresh</mat-icon>
       Try Again
+    </button>
+  </div>
+
+  <div class="action-buttons">
+    <button mat-raised-button class="back-button" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+      <span>Go Back</span>
     </button>
   </div>
 </div>
