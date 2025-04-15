@@ -60,9 +60,8 @@ export class DefenseListComponent implements OnInit {
     });
   }
 
-  viewDefenseDetails(id: number): void {
-    this.router.navigate(['/defense-details', id]);
-  }
+  viewDefenseDetails(defenseId: number): void {
+    this.router.navigate(['/defense-details'], { state: { defenseId: defenseId } });  }
   
  
 
@@ -94,8 +93,8 @@ export class DefenseListComponent implements OnInit {
       }
     });
   }
-  editDefense(id: number): void {
-    this.router.navigate(['/update-defense', id]);
+  editDefense(defenseId: number): void {
+    this.router.navigate(['/update-defense'], { state: { defenseId: defenseId } });
   }
   addDefense(): void {
     this.router.navigate(['/add-defense']);

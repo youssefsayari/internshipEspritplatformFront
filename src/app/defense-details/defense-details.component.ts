@@ -26,7 +26,8 @@ export class DefenseDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const defenseId = this.route.snapshot.paramMap.get('id');
+    const defenseId = history.state.defenseId;
+  
     if (defenseId) {
       this.loadDefense(+defenseId);
     } else {
@@ -34,6 +35,7 @@ export class DefenseDetailsComponent implements OnInit {
       this.isLoading = false;
     }
   }
+  
 
   private loadDefense(id: number): void {
     this.defenseService.getDefenseById(id).subscribe({

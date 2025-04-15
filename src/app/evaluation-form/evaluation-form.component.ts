@@ -43,9 +43,18 @@ export class EvaluationFormComponent implements OnInit {
       this.userService.decodeTokenRole(token).subscribe({
         next: (user) => {
           this.tutorId = user.id;
-          this.defenseId = +this.route.snapshot.paramMap.get('defenseId')!;
-          this.loadDefenseDetails();
-          this.checkExistingEvaluation();
+          
+          // Get defenseId from the navigation state
+          const defenseId = history.state?.defenseId;
+          
+          if (defenseId) {
+            this.defenseId = +defenseId;
+            this.loadDefenseDetails();
+            this.checkExistingEvaluation();
+          } else {
+            console.error("No defense ID found in state.");
+            this.router.navigate(['/defenses']);
+          }
         },
         error: (err) => {
           console.error("Token decoding error:", err);
@@ -56,6 +65,7 @@ export class EvaluationFormComponent implements OnInit {
       this.router.navigate(['/login']);
     }
   }
+  
 
   loadDefenseDetails(): void {
     this.isLoading = true;

@@ -88,8 +88,11 @@ export class DefensesTutorsComponent implements OnInit {
       });
       return;
     }
-    this.router.navigate([`/defenses/${defenseId}/evaluate`]); 
+  
+    // Navigate with defenseId in state
+    this.router.navigate(['/defenses/evaluate'], { state: { defenseId } });
   }
+  
 
   viewDefenseDetails(id: number): void {
     this.router.navigate(['/defenses', id]);

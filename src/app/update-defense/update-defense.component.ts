@@ -34,7 +34,13 @@ export class UpdateDefenseComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const id = +this.route.snapshot.paramMap.get('id');
+    const id = history.state.defenseId;
+
+if (!id) {
+  this.toastr.error('No defense ID found in navigation state.', 'Error');
+  this.router.navigate(['/defenses']);
+  return;
+}
     this.loadDefense(id);
   }
 
