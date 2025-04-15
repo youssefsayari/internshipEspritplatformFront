@@ -6,6 +6,7 @@ import { User } from '../models/user';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
+import {TimeLineService} from "../Services/time-line.service";
 
 @Component({
   selector: 'app-add-defense',
@@ -15,7 +16,7 @@ import { DatePipe } from '@angular/common';
 })
 export class AddDefenseComponent implements OnInit {
   defenseForm!: FormGroup;
-  students: User[] = [];
+  students: any[] = [];
   tutors: User[] = [];
   isSubmitting = false;
   isLoading = false;
@@ -29,7 +30,8 @@ export class AddDefenseComponent implements OnInit {
     private defenseService: DefenseService,
     private userService: UserService,
     private router: Router,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private timeLineService: TimeLineService 
   ) {}
 
   ngOnInit(): void {
@@ -76,26 +78,61 @@ export class AddDefenseComponent implements OnInit {
 
   loadUsers(): void {
     this.isLoading = true;
+  
     this.userService.getAllUsers().subscribe({
-      next: (data: User[]) => {
-        this.students = data.filter(u => u.typeUser === 'Student')
+      next: (data: any[]) => {
+        const students = data.filter(u => u.typeUser === 'Student');
+        const tutors = data.filter(u => u.typeUser === 'Tutor')
           .sort((a, b) => (a.lastName || '').localeCompare(b.lastName || ''));
-        this.tutors = data.filter(u => u.typeUser === 'Tutor')
-          .sort((a, b) => (a.lastName || '').localeCompare(b.lastName || ''));
-        this.isLoading = false;
+  console.log('Tutors:', tutors);
+        console.log('Students:', students);
+        this.tutors = tutors;
+        this.students = [];
+  
+        let pending = students.length;
+  
+        if (pending === 0) {
+          this.isLoading = false;
+          return;
+        }
+  
+        students.forEach(student => {
+          this.timeLineService.getTimeLinesByUserId(student.idUser).subscribe({
+            next: (timelines) => {
+              const allApproved = timelines.length > 0 && timelines.every(t => t.timeLaneState === 'ACCEPTED');
+              if (allApproved) {
+                this.students.push(student);
+                this.students.sort((a, b) => (a.lastName || '').localeCompare(b.lastName || ''));
+              }
+  
+              pending--;
+              if (pending === 0) {
+                this.isLoading = false;
+              }
+            },
+            error: (err) => {
+              console.error(`Error fetching timelines for student ID ${student.id}:`, err);
+              pending--;
+              if (pending === 0) {
+                this.isLoading = false;
+              }
+            }
+          });
+        });
       },
       error: (error) => {
         console.error('Error loading users:', error);
         this.isLoading = false;
         Swal.fire({
           icon: 'error',
-          title: 'Error',
-          text: 'Failed to load users. Please try again.',
+          title: 'Erreur',
+          text: 'Impossible de charger les utilisateurs.',
           confirmButtonColor: '#4361ee'
         });
       }
     });
   }
+  
 
   onTutorSelectionChange(event: Event): void {
     const selectElement = event.target as HTMLSelectElement;

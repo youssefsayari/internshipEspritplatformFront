@@ -1,118 +1,127 @@
-<div class="defense-dashboard">*
-  <!-- Add Defense Button -->
-  <div class="dashboard-actions">
-    <button class="btn btn-primary" (click)="addDefense()">
-      <i class="fas fa-plus"></i> Add New Defense
-    </button>
-    <button class="view-stats-btn" (click)="DefenseStats()">
-      <i class="fas fa-chart-bar"></i> View Stats
-    </button>
+
+<div class="panel-header panel-header-sm">
+</div>
+<div class="defense-dashboard">
+  <!-- Header Section -->
+  <div class="dashboard-header">
+    <h1>Defense Management</h1>
+    <div class="dashboard-actions">
+      <button class="btn btn-primary" (click)="addDefense()">
+        <i class="fas fa-plus"></i> Add Defense
+      </button>
+      <button class="btn btn-secondary" (click)="DefenseStats()">
+        <i class="fas fa-chart-pie"></i> View Stats
+      </button>
+    </div>
   </div>
-  <!-- Defense cards grid -->
-  <div *ngIf="!isLoading && defenses.length > 0" class="defense-grid">
-    <div *ngFor="let defense of paginatedDefenses" class="defense-card">
-      <div class="card-header">
-        <h3 class="card-title">
-          <span class="role-icon student">🎓</span>
-          {{ defense.student?.firstName }} {{ defense.student?.lastName }}
-        </h3>
-        <div class="card-meta">
-          <span class="meta-item">📍 {{ defense.classroom }}</span>
-          <span class="meta-divider">•</span>
-          <span class="meta-item">{{ formatDate(defense.defenseDate) }}</span>
-          <span class="meta-divider">•</span>
-          <span class="meta-item">{{ defense.defenseTime }}</span>
-        </div>
+
+  <!-- Main Content -->
+  <div class="dashboard-content">
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading defenses...</p>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!isLoading && defenses.length === 0" class="empty-state">
+      <div class="empty-icon">
+        <i class="fas fa-calendar-times"></i>
       </div>
+      <h3>No Defenses Scheduled</h3>
+      <p>There are currently no defenses scheduled. Add a new defense to get started.</p>
+      <button class="btn btn-primary" (click)="addDefense()">
+        <i class="fas fa-plus"></i> Add First Defense
+      </button>
+    </div>
 
-      <div class="card-body">
-        <div class="info-section" *ngIf="defense.thesisTitle">
-          <div class="info-label">Thesis Title</div>
-          <div class="info-value">{{ defense.thesisTitle }}</div>
-        </div>
-
-        <div class="tutors-section">
-          <div class="info-label">
-            <span class="role-icon tutor">👨🏫</span> Evaluation Committee
+    <!-- Defense Cards Grid -->
+    <div *ngIf="!isLoading && defenses.length > 0" class="defense-grid">
+      <div *ngFor="let defense of paginatedDefenses" class="defense-card">
+        <div class="card-header">
+          <div class="student-avatar">
+            {{ defense.student?.firstName?.charAt(0) || 'S' }}{{ defense.student?.lastName?.charAt(0) || 'T' }}
           </div>
-          
-          <!-- Debug information (can be removed after testing) -->
-          <div *ngIf="!defense.tutors" class="debug-info" style="color: red;">
-            ❌ Tutors array is missing!
-          </div>
-          
-          <div *ngIf="defense.tutors?.length === 0" class="no-tutors" style="color: orange;">
-            ⚠️ No tutors assigned to this defense
-          </div>
-          
-          <div *ngIf="defense.tutors?.length > 0" class="tutors-list">
-            <div *ngFor="let tutor of defense.tutors" class="tutor-chip">
-              <span class="tutor-avatar">
-                {{ tutor.firstName?.charAt(0) || '' }}{{ tutor.lastName?.charAt(0) || '' }}
-              </span>
-              <span class="tutor-name">
-                <span class="role-icon tutor-small">👨🏫</span>
-                {{ tutor.firstName || 'Unknown' }} {{ tutor.lastName || '' }}
-              </span>
+          <div class="student-info">
+            <h3>{{ defense.student?.firstName }} {{ defense.student?.lastName }}</h3>
+            <div class="defense-meta">
+              <span><i class="fas fa-map-marker-alt"></i> {{ defense.classroom }}</span>
+              <span><i class="fas fa-calendar-day"></i> {{ formatDate(defense.defenseDate) }}</span>
+              <span><i class="fas fa-clock"></i> {{ defense.defenseTime }}</span>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="card-actions">
-        <button class="action-btn view" (click)="viewDefenseDetails(defense.idDefense)">
-          <span class="action-icon">👁️</span> Details
+        <div class="card-body">
+          <div class="thesis-info">
+            <label>Thesis Title</label>
+            <p>{{ defense.thesisTitle || 'No title provided' }}</p>
+          </div>
+
+          <div class="committee-section">
+            <label>Evaluation Committee</label>
+            <div *ngIf="!defense.tutors" class="error-message">
+              <i class="fas fa-exclamation-circle"></i> Tutors data missing
+            </div>
+            <div *ngIf="defense.tutors?.length === 0" class="warning-message">
+              <i class="fas fa-exclamation-triangle"></i> No tutors assigned
+            </div>
+            <div *ngIf="defense.tutors?.length > 0" class="committee-members">
+              <div *ngFor="let tutor of defense.tutors" class="member">
+                <div class="member-avatar">
+                  {{ tutor.firstName?.charAt(0) || 'T' }}{{ tutor.lastName?.charAt(0) || 'M' }}
+                </div>
+                <div class="member-info">
+                  <span class="name">{{ tutor.firstName }} {{ tutor.lastName }}</span>
+                  <span class="role">Professor</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <button class="action-btn view" (click)="viewDefenseDetails(defense.idDefense)">
+            <i class="fas fa-eye"></i> View
+          </button>
+          <button class="action-btn edit" (click)="editDefense(defense.idDefense)">
+            <i class="fas fa-edit"></i> Edit
+          </button>
+          <button class="action-btn delete" (click)="onDelete(defense.idDefense)">
+            <i class="fas fa-trash-alt"></i> Delete
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div *ngIf="!isLoading && defenses.length > 0" class="pagination">
+      <div class="pagination-info">
+        Showing {{ paginatedDefenses.length }} of {{ totalDefenses }} defenses
+      </div>
+      <div class="pagination-controls">
+        <button (click)="onPageChange(1)" [disabled]="page === 1">
+          <i class="fas fa-angle-double-left"></i>
         </button>
-      
-        <button class="action-btn edit" (click)="editDefense(defense.idDefense)">
-          <span class="action-icon">✏️</span> Edit
+        <button (click)="onPageChange(page - 1)" [disabled]="page === 1">
+          <i class="fas fa-angle-left"></i>
         </button>
         
-        <button class="action-btn delete" (click)="onDelete(defense.idDefense)">
-          <span class="action-icon">🗑️</span> Delete
+        <div class="page-numbers">
+          <span *ngFor="let p of getPages()" 
+                [class.active]="p === page"
+                (click)="onPageChange(p)">
+            {{ p }}
+          </span>
+        </div>
+        
+        <button (click)="onPageChange(page + 1)" [disabled]="page === totalPages">
+          <i class="fas fa-angle-right"></i>
+        </button>
+        <button (click)="onPageChange(totalPages)" [disabled]="page === totalPages">
+          <i class="fas fa-angle-double-right"></i>
         </button>
       </div>
     </div>
-  </div>
-
-  <!-- Pagination -->
-  <div *ngIf="!isLoading && defenses.length > 0" class="pagination-container">
-    <div class="pagination-controls">
-      <button class="page-nav" (click)="onPageChange(1)" [disabled]="page === 1">
-        ⏮️ First
-      </button>
-      <button class="page-nav" (click)="onPageChange(page - 1)" [disabled]="page === 1">
-        ◀️ Previous
-      </button>
-      
-      <div class="page-numbers">
-        <span *ngFor="let p of getPages()" 
-              class="page-number" 
-              [class.active]="p === page"
-              (click)="onPageChange(p)">
-          {{ p }}
-        </span>
-      </div>
-      
-      <button class="page-nav" (click)="onPageChange(page + 1)" [disabled]="page === totalPages">
-        Next ▶️
-      </button>
-      <button class="page-nav" (click)="onPageChange(totalPages)" [disabled]="page === totalPages">
-        Last ⏭️
-      </button>
-    </div>
-    <div class="page-info">
-      Showing {{ paginatedDefenses.length }} of {{ totalDefenses }} defenses (Page {{ page }} of {{ totalPages }})
-    </div>
-  </div>
-
-  <!-- Loading spinner -->
-  <div *ngIf="isLoading" class="loading-spinner">
-    <mat-spinner diameter="50"></mat-spinner>
-  </div>
-
-  <!-- No defenses message -->
-  <div *ngIf="!isLoading && defenses.length === 0" class="no-defenses">
-    <p>No defenses available.</p>
   </div>
 </div>
