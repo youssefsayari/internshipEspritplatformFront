@@ -1,0 +1,27 @@
+<div class="evaluation-grid-container">
+  <h1 class="title">Evaluation Grid Preview</h1>
+
+  <div *ngIf="isLoading" class="loading-spinner">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Loading evaluation grid...</p>
+  </div>
+
+  <div *ngIf="pdfUrl && !isLoading" class="pdf-viewer">
+    <iframe [src]="pdfUrl" width="100%" height="800px" style="border: none;"></iframe>
+  </div>
+
+  <div *ngIf="!pdfUrl && !isLoading" class="error-message">
+    <p>Unable to load the evaluation grid.</p>
+    <button mat-raised-button color="primary" (click)="loadEvaluationGrid()">
+      <mat-icon>refresh</mat-icon>
+      Try Again
+    </button>
+  </div>
+
+  <div class="action-buttons">
+    <button mat-raised-button class="back-button" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+      <span>Go Back</span>
+    </button>
+  </div>
+</div>

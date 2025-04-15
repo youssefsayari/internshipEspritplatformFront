@@ -1,0 +1,76 @@
+<div class="defense-container">
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading Defense Details...</p>
+    </div>
+  
+    <!-- Error State -->
+    <div *ngIf="hasError" class="error-state">
+      <div class="error-icon">!</div>
+      <h3>Unable to Load Details</h3>
+      <p>Please try refreshing the page or contact support</p>
+    </div>
+  
+    <!-- Defense Details -->
+  <div *ngIf="defense && !isLoading" class="defense-details">
+    <header class="defense-header">
+      <h2>Defense Overview</h2>
+      <div class="status-indicator" [class.complete]="defense.defenseDegree !== 0">
+        <!-- Check if defenseDegree is 0, display 'In Progress', otherwise 'Complete' -->
+        {{ defense.defenseDegree === 0 ? 'In Progress' : 'Complete' }}
+      </div>
+    </header>
+  
+      <div class="details-grid">
+        <!-- Date & Time Card -->
+        <div class="detail-card time-card">
+          <div class="card-icon">📅</div>
+          <div class="card-content">
+            <h3>Schedule</h3>
+            <div class="time-info">
+              <p class="date">{{ getFormattedDate(defense.defenseDate) }}</p>
+              <p class="time">{{ getFormattedTime(defense.defenseTime) }}</p>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Location Card -->
+        <div class="detail-card location-card">
+          <div class="card-icon">📍</div>
+          <div class="card-content">
+            <h3>Location</h3>
+            <p class="classroom">{{ defense.classroom || 'To be determined' }}</p>
+          </div>
+        </div>
+  
+        <!-- Committee Card -->
+        <div class="detail-card committee-card">
+          <div class="card-icon">👥</div>
+          <div class="card-content">
+            <h3>Evaluation Committee</h3>
+            <div class="tutors-list">
+              <div *ngFor="let tutor of defense.tutors" class="tutor-item">
+                {{ tutor.firstName }} {{ tutor.lastName }}
+              </div>
+            </div>
+          </div>
+        </div>
+  
+       <!-- Results Card -->
+<div class="detail-card results-card">
+  <div class="card-icon">📊</div>
+  <div class="card-content">
+    <h3>Results</h3>
+    <div class="grade-display">
+      <!-- Check if defenseDegree is 0, display 'Not evaluated' -->
+      <span class="score">
+        {{ defense.defenseDegree === 0 ? 'Not evaluated' : (defense.defenseDegree ?? 'Pending') }}
+      </span>
+      <span class="max-score">/ 20</span>
+    </div>
+    <p class="evaluation-status">
+      {{ areAllEvaluationsSubmitted() ? 'All evaluations submitted' : 'Pending evaluations' }}
+    </p>
+  </div>
+</div>

@@ -1,0 +1,98 @@
+<div class="evaluation-container">
+  <div class="card evaluation-card" *ngIf="!isLoading">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+      <h2 class="mb-0">Defense Evaluation</h2>
+    </div>    
+    <div class="card-body">
+      <div *ngIf="defense" class="defense-info mb-4">
+        <h4>Defense Details</h4>
+        <div class="row">
+          <div class="col-md-6">
+            <p><strong>Student:</strong> {{ getStudentName() }}</p>
+            <p><strong>Date:</strong> {{ formatDate(defense.defenseDate) }}</p>
+            <p><strong>Time:</strong> {{ formatTime(defense.defenseTime) }}</p>
+          </div>
+          <div class="col-md-6">
+            <p><strong>Classroom:</strong> {{ defense.classroom || 'N/A' }}</p>
+            <p><strong>Current Degree:</strong> 
+              {{ defense.defenseDegree ? (defense.defenseDegree | number: '1.1-2') : 'Not yet evaluated' }}
+            </p>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Evaluation Form (visible if no existing submitted evaluation) -->
+      <form [formGroup]="evaluationForm" (ngSubmit)="onSubmit()" *ngIf="!existingEvaluation || existingEvaluation.status === 'PENDING'">
+        <div class="form-group mb-3">
+          <label for="grade" class="form-label">Grade (out of 20)</label>
+          <input type="number" class="form-control" id="grade" formControlName="grade" 
+                 [class.is-invalid]="grade.invalid && (grade.dirty || grade.touched)"
+                 step="0.1" min="0" max="20">
+          <div *ngIf="grade.invalid && (grade.dirty || grade.touched)" class="invalid-feedback">
+            <div *ngIf="grade.errors?.['required']">Grade is required</div>
+            <div *ngIf="grade.errors?.['min'] || grade.errors?.['max']">Grade must be between 0 and 20</div>
+          </div>
+        </div>
+  
+        <div class="form-group mb-4">
+          <label for="remarks" class="form-label">Evaluation Remarks</label>
+          <textarea class="form-control" id="remarks" rows="5" formControlName="remarks"
+                    [class.is-invalid]="remarks.invalid && (remarks.dirty || remarks.touched)"></textarea>
+          <div *ngIf="remarks.invalid && (remarks.dirty || remarks.touched)" class="invalid-feedback">
+            <div *ngIf="remarks.errors?.['required']">Remarks are required</div>
+            <div *ngIf="remarks.errors?.['minlength']">Remarks must be at least 10 characters</div>
+          </div>
+        </div>
+  
+        <div class="d-flex justify-content-between">
+          <button class="btn btn-light btn-sm" (click)="goBack()">
+            <i class="fas fa-arrow-left me-1"></i>Back
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="isSubmitting || evaluationForm.invalid">
+            <span *ngIf="!isSubmitting">
+              <i class="fas fa-paper-plane me-2"></i>Submit Evaluation
+            </span>
+            <span *ngIf="isSubmitting">
+              <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              Submitting...
+            </span>
+          </button>
+        </div>
+      </form>
+  
+      <!-- Display of already submitted evaluation -->
+      <div *ngIf="existingEvaluation?.status === 'SUBMITTED'" class="submitted-evaluation">
+        <div class="alert alert-success">
+          <h4><i class="fas fa-check-circle me-2"></i>Evaluation Submitted</h4>
+          <p>You have already submitted your evaluation for this defense.</p>
+        </div>
+  
+        <div class="evaluation-details card mt-3">
+          <div class="card-header bg-light">
+            <h5 class="mb-0">Your Evaluation</h5>
+          </div>
+          <div class="card-body">
+            <p><strong>Grade:</strong> {{ existingEvaluation.grade }}/20</p>
+            <p><strong>Remarks:</strong></p>
+            <div class="remarks-box p-3 bg-light rounded">
+              {{ existingEvaluation.remarks }}
+            </div>
+          </div>
+        </div>
+  
+        <div class="text-center mt-4">
+          <button class="btn btn-light btn-sm" (click)="goBack()">
+            <i class="fas fa-arrow-left me-1"></i>Back
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div *ngIf="isLoading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-3">Loading evaluation form...</p>
+  </div>
+</div>

@@ -1,0 +1,317 @@
+// Color Scheme
+$excellent: #4CAF50;
+$average: #FFC107;
+$bad: #F44336;
+$notEvaluated: #009bcf50; // Blue color for "Not Evaluated"
+$background: #e7f0f8;
+$text: #2c3e50;
+
+.stats-dashboard {
+  padding: 2rem;
+  min-height: 100vh;
+  background: $background;
+  font-family: 'Inter', sans-serif;
+}
+
+// Loading State
+.loading-state {
+  text-align: center;
+  padding: 4rem;
+  
+  .spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid rgba($excellent, 0.2);
+    border-top-color: $excellent;
+    border-radius: 50%;
+    margin: 0 auto 1rem;
+    animation: spin 1s linear infinite;
+  }
+  
+  p {
+    color: $text;
+    font-size: 1.2rem;
+    font-weight: 500;
+  }
+}
+
+// Error State
+.error-state {
+  text-align: center;
+  padding: 3rem;
+  background: lighten($bad, 40%);
+  border-radius: 16px;
+  max-width: 600px;
+  margin: 2rem auto;
+  
+  .error-icon {
+    font-size: 3rem;
+    color: $bad;
+    margin-bottom: 1rem;
+  }
+  
+  h3 {
+    color: darken($bad, 10%);
+    margin: 0 0 0.5rem;
+  }
+  
+  p {
+    color: darken($bad, 5%);
+    margin: 0;
+  }
+}
+
+// Dashboard Header
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.5rem;
+  
+  .dashboard-title {
+    color: $text;
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 700;
+  }
+  
+  .total-students {
+    text-align: center;
+    padding: 1rem 2rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    
+    .total-count {
+      display: block;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: $excellent;
+    }
+  }
+}
+
+// Visualization Section
+.visualization-section {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 2rem;
+  margin-bottom: 3rem;
+  background: white;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+
+  .performance-chart {
+    display: flex;
+    align-items: flex-end;
+    height: 300px;
+    gap: 1.5rem;
+    padding: 1rem;
+    
+    .chart-bar {
+      flex: 1;
+      background: rgba($text, 0.1);
+      border-radius: 8px 8px 0 0;
+      position: relative;
+      transition: height 0.5s ease;
+      
+      &.excellent { background: $excellent; }
+      &.average { background: $average; }
+      &.bad { background: $bad; }
+      &.not-evaluated { background: $notEvaluated; } // Added blue for "Not Evaluated"
+      
+      .bar-percentage {
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 0.5rem;
+        background: white;
+        border-radius: 4px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
+    }
+  }
+
+  .chart-legend {
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      background: rgba($text, 0.03);
+      border-radius: 8px;
+      
+      .legend-color {
+        width: 20px;
+        height: 20px;
+        border-radius: 4px;
+        
+        &.excellent { background: $excellent; }
+        &.average { background: $average; }
+        &.bad { background: $bad; }
+        &.not-evaluated { background: $notEvaluated; } // Added blue for "Not Evaluated"
+      }
+    }
+  }
+}
+
+// Category Grid
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+
+  .category-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    overflow: hidden;
+    
+    &.excellent { border-top: 4px solid $excellent; }
+    &.average { border-top: 4px solid $average; }
+    &.bad { border-top: 4px solid $bad; }
+    &.not-evaluated { border-top: 4px solid $notEvaluated; } // Blue border for "Not Evaluated"
+
+    .card-header {
+      padding: 1.5rem;
+      background: rgba($text, 0.03);
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      
+      .category-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+        
+        mat-icon { font-size: 1.8rem; }
+        
+        .excellent & { background: rgba($excellent, 0.1); color: $excellent; }
+        .average & { background: rgba($average, 0.1); color: $average; }
+        .bad & { background: rgba($bad, 0.1); color: $bad; }
+        .not-evaluated & { background: rgba($notEvaluated, 0.1); color: $notEvaluated; } // Added blue for "Not Evaluated"
+      }
+      
+      .category-info {
+        h2 {
+          margin: 0;
+          font-size: 1.4rem;
+          color: $text;
+        }
+        
+        .student-count {
+          color: lighten($text, 30%);
+          font-size: 0.9rem;
+        }
+      }
+    }
+    
+    .student-list {
+      padding: 1.5rem;
+      max-height: 400px;
+      overflow-y: auto;
+      
+      .student-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        background: rgba($text, 0.03);
+        border-radius: 8px;
+        
+        .student-avatar {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background: $excellent;
+          color: white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 600;
+        }
+        
+        .student-details {
+          flex: 1;
+          
+          h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            color: $text;
+          }
+          
+          p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: lighten($text, 30%);
+          }
+        }
+        
+        .performance-badge {
+          padding: 0.5rem 1rem;
+          border-radius: 20px;
+          font-weight: 600;
+          font-size: 0.9rem;
+          
+          .excellent & { background: rgba($excellent, 0.1); color: $excellent; }
+          .average & { background: rgba($average, 0.1); color: $average; }
+          .bad & { background: rgba($bad, 0.1); color: $bad; }
+          .not-evaluated & { background: rgba($notEvaluated, 0.1); color: $notEvaluated; } // Blue for "Not Evaluated"
+        }
+      }
+      
+      .empty-state {
+        text-align: center;
+        padding: 2rem;
+        color: lighten($text, 40%);
+        
+        mat-icon {
+          font-size: 2rem;
+          margin-bottom: 1rem;
+        }
+      }
+    }
+  }
+}
+
+// Animations
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+// Mobile Responsive
+@media (max-width: 768px) {
+  .visualization-section {
+    grid-template-columns: 1fr;
+    
+    .performance-chart {
+      height: 200px;
+    }
+  }
+  
+  .dashboard-header {
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: center;
+  }
+  .student-avatar {
+    background: #e0e0e0; // Add fallback background
+    color: #666; // Add fallback text color
+  }
+  
+  .empty-state {
+    mat-icon {
+      color: #bdbdbd !important;
+    }
+  }
+}

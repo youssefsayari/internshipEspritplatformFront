@@ -1,0 +1,227 @@
+@import '~@angular/material/theming';
+
+$primary: #2A4A7B;
+$accent: #4ECDC4;
+$warn: #e74c3c;
+$background: #f9fafb;
+
+.defense-details-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 80vh;
+}
+
+.defense-card {
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08) !important;
+  overflow: hidden;
+
+  .card-header {
+    background: linear-gradient(135deg, $primary 0%, darken($primary, 10%) 100%);
+    color: white;
+    padding: 2rem;
+
+    .header-content {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+
+      .header-icon {
+        font-size: 2.5rem;
+        width: 3rem;
+        height: 3rem;
+        color: white;
+      }
+
+      .card-title {
+        font-size: 1.8rem;
+        font-weight: 600;
+      }
+
+      .card-subtitle {
+        font-size: 1.1rem;
+        opacity: 0.9;
+      }
+    }
+  }
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem;
+}
+
+.detail-card {
+  border-radius: 12px;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+
+  mat-card-header {
+    background: rgba($primary, 0.05);
+    border-bottom: 1px solid rgba($primary, 0.1);
+    mat-icon {
+      color: $primary;
+    }
+    mat-card-title {
+      font-size: 1.2rem;
+      font-weight: 500;
+    }
+  }
+
+  mat-card-content {
+    padding: 1.5rem;
+
+    .location-info,
+    .student-name,
+    .student-id {
+      color: $primary;
+      font-size: 1.1rem;
+    }
+
+    .student-id {
+      color: rgba($primary, 0.7);
+      font-size: 0.9rem;
+    }
+
+    .classroom {
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+
+    .campus {
+      font-size: 0.9rem;
+      color: rgba($primary, 0.7);
+    }
+  }
+}
+
+.committee-card {
+  margin: 2rem;
+  border-radius: 12px;
+
+  mat-card-header {
+    padding: 1.5rem;
+    mat-icon {
+      color: $primary;
+    }
+
+    mat-card-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+
+    mat-card-subtitle {
+      color: rgba($primary, 0.8);
+    }
+  }
+
+  .committee-members {
+    padding: 1.5rem;
+    display: grid;
+    gap: 1.5rem;
+
+    .member-card {
+      padding: 1.5rem;
+      background: rgba($primary, 0.03);
+      border-radius: 8px;
+      transition: background 0.2s ease;
+
+      &:hover {
+        background: rgba($primary, 0.05);
+      }
+
+      .member-header {
+        display: flex;
+        gap: 1rem;
+
+        .member-icon {
+          font-size: 2.5rem;
+          color: $accent;
+        }
+
+        .member-info {
+          .member-name {
+            font-weight: 600;
+            color: $primary;
+          }
+
+          .member-details {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+
+            span {
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+              font-size: 0.95rem;
+              color: rgba($primary, 0.8);
+
+              mat-icon {
+                font-size: 1rem;
+                color: rgba($primary, 0.6);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.loading-overlay {
+  display: flex;
+  justify-content: center;
+  padding: 4rem 0;
+}
+
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba($warn, 0.1);
+  color: $warn;
+  border-radius: 8px;
+}
+
+.go-back-wrapper {
+  margin-right: 16px; // Space between button and calendar icon
+  
+  .go-back-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 16px;
+    border-radius: 20px; // Rounded corners
+    transition: all 0.3s ease;
+    border-width: 1.5px;
+    font-weight: 500;
+    
+    &:hover {
+      background-color: rgba(63, 81, 181, 0.08); // Light primary color on hover
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    &:active {
+      transform: translateY(0);
+    }
+    
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+      margin-right: 4px;
+    }
+  }
+}
+
+
+

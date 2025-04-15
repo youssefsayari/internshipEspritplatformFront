@@ -1,0 +1,85 @@
+<div class="stats-dashboard">
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-state">
+    <div class="spinner"></div>
+    <p>Analyzing Defense Performance...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="hasError" class="error-state">
+    <mat-icon class="error-icon">error</mat-icon>
+    <h3>Data Unavailable</h3>
+    <p>Unable to retrieve defense statistics at this time</p>
+  </div>
+
+  <!-- Main Content -->
+  <div *ngIf="!isLoading && !hasError" class="dashboard-content">
+    <!-- Header -->
+    <div class="dashboard-header">
+      <h1 class="dashboard-title">Defense Performance Analysis</h1>
+      <div class="total-students">
+        <span class="total-count">{{ getTotalStudents() }}</span>
+        Total Students
+      </div>
+    </div>
+
+    <!-- Visualization Section -->
+    <div class="visualization-section">
+      <div class="performance-chart">
+        <div *ngFor="let category of ['Excellent', 'Average', 'Bad', 'Not Evaluated']" 
+             class="chart-bar"
+             [style.height.%]="(getCategoryCount(category) / (getTotalStudents() || 1)) * 100"
+             [class]="category.toLowerCase()">
+          <span class="bar-percentage">
+            {{ (getCategoryCount(category) / (getTotalStudents() || 1)) * 100 | number:'1.0-0' }}%
+          </span>
+        </div>
+      </div>
+      <div class="chart-legend">
+        <div *ngFor="let category of ['Excellent', 'Average', 'Bad', 'Not Evaluated']" class="legend-item">
+          <span class="legend-color" [class]="category.toLowerCase()"></span>
+          {{ category }} ({{ getCategoryCount(category) }})
+        </div>
+      </div>
+    </div>
+
+    <!-- Category Cards -->
+    <div class="category-grid">
+      <div *ngFor="let category of ['Excellent', 'Average', 'Bad', 'Not Evaluated']" 
+           class="category-card"
+           [class]="category.toLowerCase()">
+        <div class="card-header">
+          <div class="category-icon">
+            <mat-icon>{{ getCategoryIcon(category) }}</mat-icon>
+          </div>
+          <div class="category-info">
+            <h2>{{ category }} Performance</h2>
+            <div class="student-count">
+              {{ getCategoryCount(category) }} 
+              {{ getCategoryCount(category) === 1 ? 'Student' : 'Students' }}
+            </div>
+          </div>
+        </div>
+        
+        <div class="student-list">
+          <div *ngFor="let defense of defenseStats[category]" class="student-item">
+              <div class="student-avatar">{{ getStudentInitial(defense) }}</div>
+              <div class="student-details">
+                <h3>{{ getStudentName(defense) }}</h3>
+                <p>Score: {{ formatScore(defense.defenseDegree) }}/20</p>
+              </div>
+            <div class="performance-badge">
+              {{ formatScore(defense.defenseDegree) }}
+            </div>
+          </div>
+          
+          <div *ngIf="!defenseStats[category]?.length" class="empty-state">
+            <mat-icon>people_outline</mat-icon>
+            <p>No students in this category</p>
+            <small>Students will appear here once categorized</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
