@@ -189,7 +189,7 @@
                       </div>
                     </div>
 
-                    <div *ngIf="isTimelineUnlocked(selectedTimelineIndex) && timelines[selectedTimelineIndex].title === 'Validation Technique'">
+                    <div *ngIf="isTimelineUnlocked(selectedTimelineIndex) && timelines[selectedTimelineIndex].title === 'Technical Validation'">
                       <div class="agreement-section">
                         <h3 class="agreement-title">Validation Details</h3>
                         <div class="agreement-details">
@@ -207,7 +207,7 @@
 
                     <!-- Agreement Section Only for "Demande Convention" -->
                     <div class="agreement-section"
-                         *ngIf="isTimelineUnlocked(selectedTimelineIndex) && timelines[selectedTimelineIndex].title === 'Demande Convention'">
+                         *ngIf="isTimelineUnlocked(selectedTimelineIndex) && timelines[selectedTimelineIndex].title === 'Agreement Request'">
                       <h3 class="agreement-title">Agreement Details</h3>
                       <div class="agreement-details">
                         <div class="detail-row">
@@ -236,8 +236,8 @@
 
                     <div class="document-section"
                          *ngIf="isTimelineUnlocked(selectedTimelineIndex) &&
-                        (timelines[selectedTimelineIndex].title === 'Remise Plan de Travail' ||
-                         timelines[selectedTimelineIndex].title === 'Depot Rapport')">
+                        (timelines[selectedTimelineIndex].title === 'Work Plan Submission' ||
+                         timelines[selectedTimelineIndex].title === 'Report Submission')">
                       <h3>Document Management</h3>
                       <div class="document-table">
                         <div class="table-header">
@@ -251,8 +251,7 @@
                             <i class="fas fa-download"></i> Download Template
                           </div>
                           <div class="table-cell">
-                    <span class="status-badge"
-                          [class.available]="timelines[selectedTimelineIndex].documentId">Available</span>
+                          <span class="status-badge available">Available</span>
                           </div>
                           <div class="table-cell">
                             <button class="btn btn-primary"
@@ -261,30 +260,43 @@
                             </button>
                           </div>
                         </div>
-
                         <div class="table-row">
                           <div class="table-cell">
                             <i class="fas fa-upload"></i> Upload Document
                           </div>
+
                           <div class="table-cell">
-                            <span class="status-badge"
-                          [class.uploaded]="timelines[selectedTimelineIndex].documentId">Not Uploaded</span>
+                              <span class="status-badge"
+                                    [class.uploaded]="timelines[selectedTimelineIndex].documentId">
+                                {{ timelines[selectedTimelineIndex].documentId ? 'Uploaded' : 'Not Uploaded' }}
+                              </span>
                           </div>
+
                           <div class="table-cell">
                             <div class="upload-container"
-                                 (dragover)="onDragOver($event)"
-                                 (dragleave)="onDragLeave($event)"
-                                 (drop)="onDrop($event, timelines[selectedTimelineIndex])">
-                              <input type="file" #fileInput style="display: none"
-                                     accept=".pdf,.doc,.docx"
-                                     (change)="onFileSelected($event, timelines[selectedTimelineIndex])">
-                              <button class="btn btn-success" (click)="fileInput.click()">
+                                 [class.disabled]="timelines[selectedTimelineIndex].documentId && timelines[selectedTimelineIndex].timeLaneState !== 'REJECTED'"
+                                 (dragover)="timelines[selectedTimelineIndex].documentId && timelines[selectedTimelineIndex].timeLaneState !== 'REJECTED' ? null : onDragOver($event)"
+                                 (dragleave)="timelines[selectedTimelineIndex].documentId && timelines[selectedTimelineIndex].timeLaneState !== 'REJECTED' ? null : onDragLeave($event)"
+                                 (drop)="timelines[selectedTimelineIndex].documentId && timelines[selectedTimelineIndex].timeLaneState !== 'REJECTED' ? null : onDrop($event, selectedTimelineIndex)">
+
+                              <input type="file"
+                                     #fileInput
+                                     style="display: none"
+                                     accept=".pdf"
+                                     [disabled]="timelines[selectedTimelineIndex].documentId && timelines[selectedTimelineIndex].timeLaneState !== 'REJECTED'"
+                                     (change)="onFileSelected($event, selectedTimelineIndex)">
+
+                              <button class="btn btn-success"
+                                      (click)="fileInput.click()"
+                                      [disabled]="timelines[selectedTimelineIndex].documentId && timelines[selectedTimelineIndex].timeLaneState !== 'REJECTED'">
                                 Choose File
                               </button>
-                              <p class="upload-hint">or drag and drop files here</p>
+
+                              <p class="upload-hint">or drag and drop PDF here</p>
                             </div>
                           </div>
                         </div>
+
                       </div>
                     </div>
                   </div>
@@ -304,16 +316,17 @@
         <div *ngIf="isGraduationInternship && AgreementApproved && areAllTimelinesApproved()">
           <div class="card-body text-center p-5">
             <h3 class="text-success mb-3">
-              ✅ Toutes les étapes sont validées
+              ✅ All steps have been approved
             </h3>
             <p class="lead">
-              Vous pouvez maintenant consulter la section <strong>soutenance</strong>.
+              You can now access the <strong>defense</strong> section.
             </p>
             <a routerLink="/defence" class="btn btn-primary mt-3">
-              Accéder à la partie Soutenance
+              Go to the Defense Section
             </a>
           </div>
         </div>
+
 
 
         <!-- **************************************Tutor*********************************** -->
@@ -441,7 +454,7 @@
                             <p>{{ timelines[selectedTimelineIndex].description }}</p>
                           </div>
                           <div class="agreement-section"
-                         *ngIf="isTimelineUnlocked(selectedTimelineIndex) && timelines[selectedTimelineIndex].title === 'Demande Convention'">
+                         *ngIf="isTimelineUnlocked(selectedTimelineIndex) && timelines[selectedTimelineIndex].title === 'Agreement Request'">
                       <h3 class="agreement-title">Agreement Details</h3>
                       <div class="agreement-details">
                         <div class="detail-row">
@@ -467,7 +480,7 @@
                       </div>
                     </div>
 
-                    <div *ngIf="isTimelineUnlocked(selectedTimelineIndex) && timelines[selectedTimelineIndex].title === 'Validation Technique'">
+                    <div *ngIf="isTimelineUnlocked(selectedTimelineIndex) && timelines[selectedTimelineIndex].title === 'Technical Validation'">
                       <div class="agreement-section">
                         <h3 class="agreement-title">Validation Details</h3>
                         <div class="agreement-details">
@@ -484,7 +497,7 @@
                       <div class="validation-section" *ngIf="isValidatorrr && timelines[selectedTimelineIndex].timeLaneState !== 'ACCEPTED'">
                         <h3>Validation</h3>
                         <div class="validation-actions">
-                          <button class="btn btn-success" (click)="validateTimeline(timelines[selectedTimelineIndex])">
+                          <button class="btn btn-success" (click)="validateTimeline(timelines[selectedTimelineIndex],selectedTimelineIndex)">
                             <i class="fas fa-check"></i> Validate
                           </button>
                           <button class="btn btn-danger" (click)="rejectTimeline(timelines[selectedTimelineIndex])">
@@ -494,10 +507,43 @@
                       </div>
                     </div>
 
+                          <div class="document-section"
+                               *ngIf="isTimelineUnlocked(selectedTimelineIndex) &&
+                        (timelines[selectedTimelineIndex].title === 'Work Plan Submission' ||
+                         timelines[selectedTimelineIndex].title === 'Report Submission')">
+                            <h3>Document Management</h3>
+                            <div class="document-table">
+                              <div class="table-header">
+                                <div class="header-cell">Action</div>
+                                <div class="header-cell">Status</div>
+                                <div class="header-cell">Operations</div>
+                              </div>
+
+                              <div class="table-row">
+                                <div class="table-cell">
+                                  <i class="fas fa-download"></i> Download Template
+                                </div>
+                                <div class="table-cell">
+                                    <span class="status-badge"
+                                          [class.available]="timelines[selectedTimelineIndex].documentId">
+                                      {{ timelines[selectedTimelineIndex].documentId ? 'Available' : 'Not Available' }}
+                                    </span>
+                                </div>
+                                <div class="table-cell">
+                                  <button class="btn btn-primary"
+                                          [disabled]="!timelines[selectedTimelineIndex].documentId"
+                                          (click)="downloadDocumentUpl(timelines[selectedTimelineIndex].documentId, selectedStudent.studentName,timelines[selectedTimelineIndex].title )">
+                                    Download
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
                           <div class="validation-section" *ngIf="timelines[selectedTimelineIndex].documentId && !isValidatorrr && timelines[selectedTimelineIndex].timeLaneState !== 'ACCEPTED'">
                             <h3>Validation</h3>
                             <div class="validation-actions">
-                              <button class="btn btn-success" (click)="validateTimeline(timelines[selectedTimelineIndex])">
+                              <button class="btn btn-success" (click)="validateTimeline(timelines[selectedTimelineIndex],selectedTimelineIndex)">
                                 <i class="fas fa-check"></i> Validate
                               </button>
                               <button class="btn btn-danger" (click)="rejectTimeline(timelines[selectedTimelineIndex])">
