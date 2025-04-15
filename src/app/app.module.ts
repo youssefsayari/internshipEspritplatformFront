@@ -68,7 +68,7 @@ import { AddDocumentComponent } from './add-document/add-document.component';
     QuizDetailsComponent,
     QuizEditComponent,
     QuizListUserComponent,
-    QuizPassComponent,
+    QuizPassComponent
 
 
 

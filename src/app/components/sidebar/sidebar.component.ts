@@ -38,6 +38,9 @@ export const ROUTES: RouteInfo[] = [
   { path: '/defence', title: 'My Defences', icon: 'education_hat', class: '', roles: ['Student'] },
   { path: '/setting', title: 'Settings', icon: 'ui-1_settings-gear-63', class: '', roles: ['Admin'] },
   { path: '/feedback', title: 'Feedback', icon: 'ui-1_send', class: 'active active-pro', roles: ['Student','Admin','Company'] },
+  { path: '/reclamations', title: 'Reclamations', icon: 'ui-2_chat-round', class: '', roles: ['Student', 'Admin', 'Company'] },
+
+
 ];
 
 @Component({

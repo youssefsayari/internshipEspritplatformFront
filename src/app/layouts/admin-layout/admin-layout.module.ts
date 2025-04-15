@@ -23,6 +23,8 @@ import {MatInputModule} from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import {MatDialogModule} from '@angular/material/dialog';
 import { ComponentsModule } from "../../components/components.module";
+import { ReclamationComponent } from '../../components/reclamation/reclamation.component';
+
 
 
 @NgModule({
@@ -59,6 +61,7 @@ import { ComponentsModule } from "../../components/components.module";
     NotificationsComponent,
     InternshipComponent,
     AgreementComponent,
+    ReclamationComponent
 
   ]
 })

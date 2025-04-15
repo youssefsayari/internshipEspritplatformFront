@@ -3,5 +3,6 @@ export class User {
   classe: string;
   id: number;
   email: string;
-  firstName?: string;  // 'name' est maintenant optionnelle
+  firstName?: string;
+  lastName?: string;  // 'name' est maintenant optionnelle
 }

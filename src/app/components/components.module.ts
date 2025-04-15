@@ -48,6 +48,7 @@ import { MyProfileCardComponent } from './my-profile-card/my-profile-card.compon
 
 
 
+
 @NgModule({
   imports: [
     CommonModule,
@@ -104,7 +105,7 @@ import { MyProfileCardComponent } from './my-profile-card/my-profile-card.compon
     AddCompanyComponent,
     ImageComponent,
     MyProfileCardComponent,
-
+  
    ],
   exports: [
     FooterComponent,
