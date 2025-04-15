@@ -155,12 +155,18 @@ export class DefensesTutorsComponent implements OnInit {
   }
 
   viewDefenseOrEvaluation(defense: Defense): void {
-    if (this.hasEvaluated(defense)) {
-      this.router.navigate([`/evaluation-view/${defense.idDefense}`]); 
-    } else {
-      this.viewDefenseDetails(defense.idDefense);
+    if (!this.hasEvaluated(defense)) {
+      Swal.fire({
+        icon: 'info',
+        title: 'Évaluation manquante',
+        text: 'Vous n\'avez pas encore soumis une évaluation pour cette soutenance.',
+        confirmButtonColor: '#3085d6'
+      });
     }
+  
+    this.router.navigate([`/evaluation-view/${defense.idDefense}`]);
   }
+  
 
   goToTutorCalendar(): void {
     this.router.navigate(['/tutor-calendar']); 

@@ -79,18 +79,18 @@ export class EvaluationViewComponent implements OnInit {
         if (tutorEvaluation) {
           this.evaluation = tutorEvaluation;
         } else {
-          // If no evaluation found, redirect back
-          this.router.navigate([`/defenses-tutors`]);
+          this.evaluation = null; // No evaluation yet
         }
         this.isLoading = false;
       },
       error: (err) => {
         console.error('Error loading evaluation:', err);
+        this.evaluation = null;
         this.isLoading = false;
-        this.router.navigate([`/defenses-tutors/`]);
       }
     });
   }
+  
 
   getStudentName(): string {
     if (!this.defense?.student) return 'N/A';
