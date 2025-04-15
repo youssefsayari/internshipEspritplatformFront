@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output,AfterViewChecked } from '@angular/core';
 import { PostService } from '../../Services/PostService'; // Assure-toi que le chemin est correct
 import { CommentService } from '../../Services/CommentService'; // Assure-toi que le chemin est correct
 import { CompanyService } from '../../Services/CompanyService'; // Assure-toi que le chemin est correct
@@ -13,6 +13,7 @@ import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
 import {UserService} from '../../Services/user.service';
 import { Image } from '../../Model/image';
+import { ModelPredictionService } from '../../Services/model-prediction.service';
 
 interface CommentUI {
   id?: number;
@@ -39,6 +40,8 @@ interface Timeline {
   averageRating?: number;  // Ajouter une propriété pour la note moyenne
   sector?: string;  // Ajouter une propriété pour l'entreprise
   expiryDateTime?: string; // ISO Date string (nullable)
+  isNew?: boolean; // Ajoutez cette ligne
+
 }
 interface QnAPair {
   question: string;
@@ -58,7 +61,7 @@ interface AnalysisState {
   styleUrls: ['./activity-timeline.component.css'],
   
 })
-export class ActivityTimelineComponent implements OnInit {
+export class ActivityTimelineComponent implements OnInit,AfterViewChecked  {
   @Output() profileSelected = new EventEmitter<{ userConnecte:number,companyIdSelected:number,companyIdConnected:number }>();
   mytimelines: Timeline[] = [];
 
@@ -103,8 +106,9 @@ export class ActivityTimelineComponent implements OnInit {
 
 
 
-
-  constructor(private postService: PostService,private internshipService: InternshipService   ,private commentService: CommentService, private userService: UserService ,private companyService: CompanyService ,private ratingService: RatingService,private cdr: ChangeDetectorRef,private toastr: ToastrService   ) {}
+  constructor(private postService: PostService,private internshipService: InternshipService   ,private commentService: CommentService, private userService: UserService ,private companyService: CompanyService ,private ratingService: RatingService,private cdr: ChangeDetectorRef,private toastr: ToastrService,
+    private modelpredictionService: ModelPredictionService
+     ) {}
 
   ngOnInit(): void {
     this.fetchUserDetails().then(() => {
@@ -408,7 +412,8 @@ clearFilters() {
       ratings: safeRatings,
       averageRating: this.calculateAverageRating(safeRatings),
       sector: post.company?.sector?.toUpperCase()?.trim() ?? 'OTHER',
-      expiryDateTime: post.expiryDateTime
+      expiryDateTime: post.expiryDateTime,
+      isNew: true // Ajoutez cette propriété
     };
   }
   
@@ -685,63 +690,129 @@ getTimeRemaining(expiryDateTime: string): string {
     return item.id || index;
   }
 
-  // Gestion de l'ouverture du modal pour un nouveau post
-  openPostModal(isEdit: boolean = false, postId?: number) {
-    if (isEdit && postId) {
-      this.editPost(postId); // Remplir les données pour l'édition
-      this.isPostEditModalOpen = true;
-    } else {
-      // Réinitialiser les champs lorsqu'on ouvre la modal pour un nouveau post
-      this.newPostTitle = '';  // Réinitialiser le titre
-      this.newPostContent = '';  // Réinitialiser le contenu
-      this.selectedPostId = null;  // Réinitialiser l'ID du post sélectionné
+// Remplacer les méthodes openPostModal et closePostModal par :
 
-      this.isPostCreateModalOpen = true;
+async openPostModal(isEdit: boolean = false, postId?: number) {
+  // Charger les données du post si on est en mode édition
+  if (isEdit && postId) {
+    const postToEdit = this.mytimelines.find(post => post.id === postId);
+    if (postToEdit) {
+      this.newPostTitle = postToEdit.title;
+      this.newPostContent = postToEdit.content;
+      this.newPostExpiryDateTime = postToEdit.expiryDateTime 
+        ? new Date(postToEdit.expiryDateTime).toISOString().slice(0, 16) 
+        : '';
     }
+  } else {
+    // Réinitialiser les champs pour une nouvelle création
+    this.newPostTitle = '';
+    this.newPostContent = '';
+    this.newPostExpiryDateTime = '';
   }
 
-  closePostModal() {
-    this.isPostCreateModalOpen = false;
-    this.isPostEditModalOpen = false;
-  }
-
-  addNewPost() {
-    if (this.newPostContent.trim() === '' || this.newPostTitle.trim() === ''|| !this.companyId) {
-      return;
-    }
-
-
-    const newPost: Post = {
-     // id: Date.now(),
-      title: this.newPostTitle,
-      content: this.newPostContent,
-     // createdAt: new Date().toISOString(),
-      company: { id: this.companyId } as Company,
-      comments: [],
-      ratings: [],
-      expiryDateTime: this.newPostExpiryDateTime ? new Date(this.newPostExpiryDateTime).toISOString() : undefined
-
-    };
-
-    this.postService.addPostAndAffectToCompany(this.companyId, newPost).subscribe(
-      (savedPost: Post) => {
-        this.mytimelines.unshift(this.transformPostToTimeline(savedPost));
-        setTimeout(() => {
-          this.cdr.detectChanges();
-          this.applyAnimation();
-        }, 0);
-        this.newPostTitle = '';
-        this.newPostContent = '';
-        this.newPostExpiryDateTime = '';
-
-        this.closePostModal();
-        this.initPostAnalysis(savedPost.id, savedPost.content);
-      },
-      error => {
-        console.error('Erreur lors de l\'ajout du post :', error);
+  const { value: formValues } = await Swal.fire({
+    title: isEdit ? 'Edit Post' : 'New Post',
+    html: `
+      <input 
+        id="swal-title" 
+        class="swal2-input custom-title" 
+        placeholder="Title" 
+        value="${this.newPostTitle}"
+        required
+        minlength="3"
+        maxlength="255"
+      >
+      <textarea 
+        id="swal-content" 
+        class="swal2-textarea custom-content" 
+        placeholder="Content..." 
+        required
+        minlength="10"
+      >${this.newPostContent}</textarea>
+      <input 
+        type="datetime-local" 
+        id="swal-expiry" 
+        class="swal2-input custom-datetime" 
+        value="${this.newPostExpiryDateTime || ''}"
+        min="${this.minDateTime()}"
+      >
+    `,
+    focusConfirm: false,
+    showCancelButton: true,
+    confirmButtonColor: '#FF3636',
+    cancelButtonColor: '#6e7d88',
+    confirmButtonText: isEdit ? 'Update' : 'Post',
+    customClass: {
+      popup: 'swal-custom-popup',
+      validationMessage: 'swal-custom-validation'
+    },
+    preConfirm: () => {
+      const titleInput = document.getElementById('swal-title') as HTMLInputElement;
+      const contentInput = document.getElementById('swal-content') as HTMLTextAreaElement;
+      
+      // Validation manuelle
+      if (!titleInput.value || !contentInput.value) {
+        Swal.showValidationMessage('Title and content are required');
+        return false;
       }
-    );
+      
+      if (titleInput.value.length < 3) {
+        Swal.showValidationMessage('Title must be at least 3 characters');
+        return false;
+      }
+      
+      if (contentInput.value.length < 10) {
+        Swal.showValidationMessage('Content must be at least 10 characters');
+        return false;
+      }
+
+      return { 
+        title: titleInput.value,
+        content: contentInput.value,
+        expiry: (document.getElementById('swal-expiry') as HTMLInputElement).value
+      };
+    }
+  });
+
+  if (formValues) {
+    this.newPostTitle = formValues.title;
+    this.newPostContent = formValues.content;
+    this.newPostExpiryDateTime = formValues.expiry;
+
+    if (isEdit && postId) {
+      this.selectedPostId = postId;
+      this.updatePost();
+    } else {
+      this.addNewPost();
+    }
   }
+}
+// Ajouter ces méthodes de notification
+private showSuccessAlert(message: string) {
+  Swal.fire({
+    icon: 'success',
+    title: 'Success!',
+    text: message,
+    showConfirmButton: false,
+    timer: 2000,
+    background: '#f4f4f4',
+    customClass: {
+      icon: 'swal-custom-icon-success'
+    }
+  });
+}
+
+private showErrorAlert(message: string) {
+  Swal.fire({
+    icon: 'error',
+    title: 'Oops...',
+    text: message,
+    confirmButtonColor: '#FF3636',
+    background: '#f4f4f4'
+  });
+}
+
+
 
   applyAnimation() {
     setTimeout(() => {
@@ -797,39 +868,103 @@ getTimeRemaining(expiryDateTime: string): string {
     }
   }
 
-  updatePost(): void {
-    if (this.newPostTitle.trim() === '' || this.newPostContent.trim() === '' || !this.selectedPostId) {
-      return;
-    }
-
+  addNewPost() {
+    const newPost: Post = {
+      title: this.newPostTitle,
+      content: this.newPostContent,
+      company: { id: this.companyId } as Company,
+      expiryDateTime: this.newPostExpiryDateTime ? new Date(this.newPostExpiryDateTime).toISOString() : undefined
+    };
+  
+    this.postService.addPostAndAffectToCompany(this.companyId, newPost).subscribe({
+      next: (savedPost: Post) => {
+        // Créer une nouvelle timeline avec l'animation
+        const newTimeline = this.transformPostToTimeline(savedPost);
+        
+        // Ajouter au début du tableau
+        this.mytimelines.unshift(newTimeline);
+        
+        // Forcer la mise à jour de la vue
+        this.cdr.detectChanges();
+        
+        // Appliquer l'animation après un léger délai pour permettre au DOM de se mettre à jour
+        setTimeout(() => {
+          const newPostElement = document.getElementById(`post-${savedPost.id}`);
+          if (newPostElement) {
+            newPostElement.classList.add('show');
+          }
+        }, 50);
+        
+        // Afficher le message de succès
+        Swal.fire({
+          icon: 'success',
+          title: 'Success!',
+          text: 'Post created successfully',
+          timer: 2000,
+          showConfirmButton: false
+        });
+        
+        // Initialiser l'analyse du post
+        this.initPostAnalysis(savedPost.id, savedPost.content);
+      },
+      error: (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to create post: ' + (error.error?.message || 'Unknown error'),
+          confirmButtonColor: '#FF3636'
+        });
+      }
+    });
+  }
+  updatePost() {
+    if (!this.selectedPostId) return;
+  
     const updatedPost: Post = {
       id: this.selectedPostId,
       title: this.newPostTitle,
       content: this.newPostContent,
       expiryDateTime: this.newPostExpiryDateTime ? new Date(this.newPostExpiryDateTime).toISOString() : undefined
     };
-
-    this.postService.updatePost(updatedPost).subscribe(
-      (savedPost: Post) => {
-        // Recherche du post mis à jour et remplacement
-        const index = this.mytimelines.findIndex(post => post.id === updatedPost.id);
+  
+    this.postService.updatePost(updatedPost).subscribe({
+      next: (savedPost: Post) => {
+        // Trouver et mettre à jour le post dans le tableau
+        const index = this.mytimelines.findIndex(post => post.id === this.selectedPostId);
         if (index !== -1) {
           this.mytimelines[index] = this.transformPostToTimeline(savedPost);
+          this.cdr.detectChanges();
         }
-
-        // Réinitialise l'état des modaux et des champs
-        this.selectedPostId = null;
-        this.newPostTitle = '';
-        this.newPostContent = '';
-        this.newPostExpiryDateTime = '';
-        this.closePostModal();
+        
+        Swal.fire({
+          icon: 'success',
+          title: 'Success!',
+          text: 'Post updated successfully',
+          timer: 2000,
+          showConfirmButton: false
+        });
+        
         this.initPostAnalysis(savedPost.id, savedPost.content);
       },
-      (error) => {
-        console.error('Erreur lors de la mise à jour du post :', error);
+      error: (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to update post: ' + (error.error?.message || 'Unknown error'),
+          confirmButtonColor: '#FF3636'
+        });
       }
-    );
+    });
   }
+
+  private validatePost(): boolean {
+    if (!this.newPostTitle || !this.newPostContent) {
+      this.showErrorAlert('Title and content are required');
+      return false;
+    }
+    return true;
+  }
+
   toggleFollowedCompaniesFilter() {
     this.showOnlyFollowedCompanies = !this.showOnlyFollowedCompanies;
     // Réinitialiser le filtre de secteur si on active "Followed"
@@ -839,6 +974,17 @@ getTimeRemaining(expiryDateTime: string): string {
     this.filterPosts();
   }
   
+  ngAfterViewChecked() {
+    // Retirer la classe d'animation après qu'elle ait joué
+    this.mytimelines.forEach(timeline => {
+      if (timeline.isNew) {
+        setTimeout(() => {
+          timeline.isNew = false;
+          this.cdr.detectChanges();
+        }, 500);
+      }
+    });
+  }
 
 /*---------------------5edmet ghassen-----------------------*/ 
   addInternship(postId: number): void {

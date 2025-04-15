@@ -1,0 +1,120 @@
+<div class="panel-header panel-header-sm">
+</div>
+<div class="defense-planning-container">
+  <div class="planning-card">
+    
+    <div class="card-header">
+      <div class="header-icon">
+        <i class="fas fa-calendar-plus"></i>
+      </div>
+      <h2>Schedule New Defense</h2>
+      <p>Fill in the details to plan a student's defense session</p>
+    </div>
+
+    <form [formGroup]="defenseForm" (ngSubmit)="onSubmit()" class="defense-form">
+      <!-- Student Selection -->
+      <div class="form-group">
+        <label for="studentId">
+          <i class="fas fa-user-graduate"></i> Student
+        </label>
+        <select id="studentId" formControlName="studentId" class="form-control">
+          <option value="" disabled selected>Select a student</option>
+          <option *ngFor="let student of students" [value]="student.idUser">
+            {{ student.firstName }} {{ student.lastName }}
+          </option>
+        </select>
+        <div *ngIf="f['studentId'].touched && f['studentId'].errors" class="error-message">
+          <i class="fas fa-exclamation-circle"></i> Please select a student
+        </div>
+      </div>
+
+      <!-- Date and Time -->
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="defenseDate">
+              <i class="fas fa-calendar-day"></i> Defense Date
+            </label>
+            <input type="date" id="defenseDate" formControlName="defenseDate" 
+                  [min]="today" class="form-control">
+            <div *ngIf="f['defenseDate'].touched && f['defenseDate'].errors" class="error-message">
+              <i class="fas fa-exclamation-circle"></i>
+              <span *ngIf="f['defenseDate'].errors['required']">Date is required</span>
+              <span *ngIf="f['defenseDate'].errors['pastDate']">Date cannot be in the past</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="defenseTime">
+              <i class="fas fa-clock"></i> Defense Time (08:00 - 18:00)
+            </label>
+            <input type="time" id="defenseTime" formControlName="defenseTime" 
+                  [min]="minTime" [max]="maxTime" class="form-control">
+            <div *ngIf="f['defenseTime'].touched && f['defenseTime'].errors" class="error-message">
+              <i class="fas fa-exclamation-circle"></i>
+              <span *ngIf="f['defenseTime'].errors['required']">Time is required</span>
+              <span *ngIf="f['defenseTime'].errors['pattern']">Invalid time format</span>
+              <span *ngIf="f['defenseTime'].errors['invalidTime']">Must be between 08:00-18:00</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Classroom -->
+      <div class="form-group">
+        <label for="classroom">
+          <i class="fas fa-door-open"></i> Classroom
+        </label>
+        <input type="text" id="classroom" formControlName="classroom" class="form-control" 
+              placeholder="e.g., Room A12">
+        <div *ngIf="f['classroom'].touched && f['classroom'].errors" class="error-message">
+          <i class="fas fa-exclamation-circle"></i> Please specify a classroom
+        </div>
+      </div>
+
+      <!-- Tutors Selection -->
+      <div class="form-group">
+        <label>
+          <i class="fas fa-user-tie"></i> Select Evaluation Committee (3 tutors required)
+        </label>
+        <div *ngIf="isLoading" class="loading-message">
+          <i class="fas fa-spinner fa-spin"></i> Loading tutors...
+        </div>
+        
+        <select class="form-control" multiple size="5" 
+                (change)="onTutorSelectionChange($event)"
+                [class.is-invalid]="f['tutorIds'].touched && f['tutorIds'].invalid">
+          <option *ngFor="let tutor of tutors" 
+                  [value]="tutor.idUser"
+                  [selected]="selectedTutors.includes(tutor.idUser)">
+            {{ tutor.firstName }} {{ tutor.lastName }}
+          </option>
+        </select>
+        
+        <small class="form-text text-muted">
+          Hold Ctrl (Windows) or Command (Mac) to select multiple tutors
+        </small>
+        
+        <div *ngIf="f['tutorIds'].touched && f['tutorIds'].errors" class="error-message">
+          <i class="fas fa-exclamation-circle"></i> 
+          <span *ngIf="f['tutorIds'].errors['required']">Please select tutors</span>
+          <span *ngIf="f['tutorIds'].errors['invalidTutorCount']">
+            Exactly 3 tutors must be selected (currently {{ selectedTutors.length }})
+          </span>
+        </div>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button type="button" class="btn btn-back" (click)="goBack()">
+          <i class="fas fa-arrow-left"></i> Go Back
+        </button>
+        <button type="submit" class="btn btn-submit" [disabled]="isSubmitting">
+          <i class="fas fa-calendar-check"></i> 
+          {{ isSubmitting ? 'Scheduling...' : 'Schedule Defense' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

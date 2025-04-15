@@ -21,3 +21,17 @@ export interface Company {
   image?: Image; // Ajoutez ce champ
 
 }
+export interface CompanyAnalyticsDto {
+  id?: number;
+  name?: string;
+  address?: string;
+  sector?: string;
+  logoUrl?: string;
+  website?: string;
+  internshipCount?: number;
+  averageRating?: number;
+  foundingYear?: Date;
+  labelDate?: Date;
+  founders?: string;
+  email?: string;
+}

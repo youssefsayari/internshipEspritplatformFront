@@ -1,0 +1,149 @@
+<div class="panel-header panel-header-sm"></div>
+<div class="main-content">
+  <div class="row">
+    <div class="col-md-3">
+    <div class="sidebar1">
+      <!-- Header -->
+      <div class="sidebar-header">
+        <h2>Companies Map</h2>
+        <div class="search-bar">
+          <input type="text" 
+                [(ngModel)]="searchQuery" 
+                (input)="filterCompanies()"
+                placeholder="Search company or sector...">
+        </div>
+      </div>
+
+      <!-- Companies List -->
+      <div class="companies-list" *ngIf="!selectedCompany">
+        <div class="company-card" 
+            *ngFor="let company of filteredCompanies"
+            (click)="selectCompany(company)">
+          <div class="company-info">
+            <h3>{{company.name}}</h3>
+            <div class="company-meta">
+              <span class="sector-badge">{{company.sector}}</span>
+              <div>
+              <span class="compatibility-score">
+                {{calculateCompatibility(company)}}% Match
+              </span>
+            </div>
+              <span class="address">{{company.address}}</span>
+            </div>
+          </div>
+          <div class="company-stats">
+            <div class="stat">
+              <div class="stat-value">{{company.internshipCount}}</div>
+              <div class="stat-label">Internships</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Selected Company Details -->
+      <div class="company-details" *ngIf="selectedCompany">
+        <div class="details-header">
+          <div class="company-brand">
+            <img [src]="selectedCompany.logoUrl" alt="Logo" class="company-logo">
+            <h2>{{selectedCompany.name}}</h2>
+          </div>
+          <button class="close-btn" (click)="selectedCompany = null">&times;</button>
+        </div>
+      
+        <div class="details-content">
+          <div class="company-stats-grid">
+            <div class="stat-card gradient-red">
+              <i class="fas fa-briefcase"></i>
+              <div class="stat-content">
+                <h3>{{selectedCompany.internshipCount}}</h3>
+                <p>Active Opportunities</p>
+              </div>
+            </div>
+            
+            <div class="stat-card gradient-orange">
+              <i class="fas fa-star"></i>
+              <div class="stat-content">
+                <h3>{{selectedCompany.averageRating}}/5</h3>
+                <p>Engagement Score</p>
+              </div>
+            </div>
+          </div>
+      
+          <div class="sector-chip">
+            <i class="fas fa-industry"></i>
+            {{selectedCompany.sector}}
+          </div>
+      
+          <div class="company-info-section">
+            <div class="info-item">
+              <i class="fas fa-map-marked-alt"></i>
+              <p>{{selectedCompany.address}}</p>
+            </div>
+            <div class="info-item">
+              <i class="fas fa-globe"></i>
+              <a [href]="selectedCompany.website" target="_blank">{{selectedCompany.website}}</a>
+            </div>
+            <div class="info-item">
+              <i class="fas fa-users"></i>
+              <p>Founded in {{selectedCompany.foundingYear | date: 'yyyy'}}</p>
+            </div>
+          </div>
+      
+          <div class="partnership-section">
+            <h4>Smart Partnership Manager</h4>
+            <div class="compatibility-meter">
+              <!-- Modifier cette ligne -->
+                <div class="progress-bar" [style.width.%]="calculateCompatibility(selectedCompany)"></div>
+                <span>{{calculateCompatibility(selectedCompany)}} Compatibility Score</span>
+            </div>
+            
+            <button class="partnership-btn" (click)="openPartnershipDialog()">
+              <i class="fas fa-handshake"></i>
+              Init Partnership Intelligent
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-9">
+
+    <div class="map-container">
+      <!-- Sidebar -->
+      
+
+      <!-- Map Container -->
+      <div class="map-wrapper">
+        <div id="map" class="ol-map"></div>
+        
+        <!-- Floating Controls -->
+        <div class="floating-controls">
+          <button class="control-btn esprit" (click)="returnToEsprit()">
+            <i class="fas fa-university"></i>
+          </button>
+        </div>
+        
+        <div class="heatmap-controls">
+          <div class="heatmap-toggle">
+            <button (click)="initHeatmapLayer()">Activate Heatmap</button>
+            <button (click)="removeHeatmapLayer()">Deactivate</button>
+          </div>
+        </div>
+        
+        <div class="analytics-panel" *ngIf="selectedCompany">
+          <h4>Analytics</h4>
+          <div class="sector-distribution">
+            <div *ngFor="let sector of getSectors()" class="sector-item">
+              <div class="sector-color" [style.background]="getSectorColor(sector)"></div>
+              <span>{{sector}}</span>
+              <span>{{getSectorCount(sector)}}</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+ 
+</div>
+</div>

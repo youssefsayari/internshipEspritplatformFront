@@ -10,4 +10,6 @@ export interface User {
     telephone?: number;
     typeUser?: string;
     userInfo?:UserInfo
+    option?: string;
+  
   }

@@ -1,0 +1,114 @@
+<div class="defense-details-container" *ngIf="!isLoading && defense; else loadingOrError">
+    <mat-card class="defense-card" @fadeIn>
+    <div class="card-header">
+      <div class="header-content">
+        <mat-icon class="header-icon">school</mat-icon>
+        <div>
+          <div class="card-title">Defense of {{ defense.student?.firstName }} {{ defense.student?.lastName }}</div>
+          <div class="card-subtitle">{{ getFormattedDate() }} at {{ getFormattedTime() }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-grid">
+      <!-- Classroom -->
+      <mat-card class="detail-card" @slideIn>
+        <mat-card-header>
+          <mat-icon>location_on</mat-icon>
+          <mat-card-title>Classroom</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="classroom">{{ defense.classroom }}</div>
+          <div class="campus">ESPRIT Campus</div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Student -->
+      <mat-card class="detail-card" @slideIn>
+        <mat-card-header>
+          <mat-icon>person</mat-icon>
+          <mat-card-title>Student</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="student-name">{{ defense.student?.firstName }} {{ defense.student?.lastName }}</div>
+          <div class="student-email">{{ defense.student?.email }}</div>
+          <div class="student-phone">Phone: {{ defense.student?.telephone }}</div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Internship & Report Status -->
+      <mat-card class="detail-card" @slideIn>
+        <mat-card-header>
+          <mat-icon>assignment_turned_in</mat-icon>
+          <mat-card-title>Status</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div>Internship:
+            <mat-chip [color]="defense.internshipCompleted ? 'primary' : 'warn'" selected>
+              {{ defense.internshipCompleted ? 'Completed' : 'Not completed' }}
+            </mat-chip>
+          </div>
+          <div>Report:
+            <mat-chip [color]="defense.reportSubmitted ? 'primary' : 'warn'" selected>
+              {{ defense.reportSubmitted ? 'Submitted' : 'Not submitted' }}
+            </mat-chip>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Final Grade -->
+<mat-card class="detail-card" @slideIn>
+  <mat-card-header>
+    <mat-icon>grade</mat-icon>
+    <mat-card-title>Final Grade</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="final-grade">
+      <!-- Check if defenseDegree is 0 or not available, and display 'Not evaluated' -->
+      {{ defense.defenseDegree === 0 ? 'Not evaluated' : (defense.defenseDegree ?? 'Pending') }} / 20
+    </div>
+  </mat-card-content>
+</mat-card>
+</div>
+
+    <!-- Tutors -->
+    <mat-card class="committee-card" @fadeIn>
+      <mat-card-header>
+        <mat-icon>groups</mat-icon>
+        <mat-card-title>Committee</mat-card-title>
+        <mat-card-subtitle>Evaluating Professors</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content class="committee-members">
+        <div class="member-card" *ngFor="let tutor of defense.tutors" @fadeIn>
+          <div class="member-header">
+            <mat-icon class="member-icon">person_outline</mat-icon>
+            <div class="member-info">
+              <div class="member-name">{{ tutor.firstName }} {{ tutor.lastName }}</div>
+              <div class="member-details">
+                <div>Email: {{ tutor.email }}</div>
+                <div>Phone: {{ tutor.telephone }}</div>
+                <div>Role: {{ tutor.typeUser }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </mat-card>
+  
+  <div class="go-back-wrapper">
+    <button mat-stroked-button color="primary" (click)="goBack()" class="go-back-button">
+      <mat-icon>arrow_back</mat-icon> Go Back
+    </button>
+  </div>
+
+</div>
+
+<ng-template #loadingOrError>
+  <div class="loading-overlay" *ngIf="isLoading">
+    <mat-progress-spinner color="primary" mode="indeterminate"></mat-progress-spinner>
+  </div>
+  <div *ngIf="errorMessage" class="error-message">
+    <mat-icon>error</mat-icon> {{ errorMessage }}
+  </div>
+</ng-template>

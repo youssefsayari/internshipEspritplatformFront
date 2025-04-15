@@ -1,0 +1,96 @@
+<div class="evaluation-view-container">
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="loading-content">
+      <div class="spinner-border text-primary loading-spinner" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="loading-text">Loading evaluation details...</p>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading" class="evaluation-card-container">
+    <div class="card evaluation-card">
+      <div class="card-header bg-primary text-white">
+        <div class="header-content">
+          <h2 class="page-title">Evaluation Details</h2>
+          <button class="btn btn-outline-light back-button" (click)="goBack()">
+            <i class="fas fa-arrow-left me-1"></i> Back to List
+          </button>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <div *ngIf="defense" class="defense-info-section">
+          <h4 class="section-title">Defense Details</h4>
+          <div class="defense-details-grid">
+            <div class="detail-column">
+              <div class="detail-item">
+                <span class="detail-label">Student:</span>
+                <span class="detail-value">{{ getStudentName() }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">{{ formatDate(defense.defenseDate) }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Time:</span>
+                <span class="detail-value">{{ formatTime(defense.defenseTime) }}</span>
+              </div>
+            </div>
+            <div class="detail-column">
+              <div class="detail-item">
+                <span class="detail-label">Classroom:</span>
+                <span class="detail-value">{{ defense.classroom || 'N/A' }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="evaluation" class="evaluation-section">
+          <div class="alert alert-info evaluation-alert">
+            <div class="alert-content">
+              <i class="fas fa-info-circle alert-icon"></i>
+              <div>
+                <h4 class="alert-title">Evaluation Details</h4>
+                <p class="alert-message">Viewing submitted evaluation for this defense.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="evaluation-details-card card">
+            <div class="card-header evaluation-card-header">
+              <h5 class="evaluation-title">Evaluation</h5>
+            </div>
+            <div class="card-body evaluation-card-body">
+              <div class="evaluation-detail">
+                <span class="evaluation-label">Grade:</span>
+                <span class="evaluation-value">{{ evaluation.grade }}/20</span>
+              </div>
+              <div class="evaluation-detail">
+                <span class="evaluation-label">Status:</span>
+                <span class="badge status-badge bg-success">{{ evaluation.status }}</span>
+              </div>
+              <div class="evaluation-detail remarks-section">
+                <span class="evaluation-label">Remarks:</span>
+                <div class="remarks-content">
+                  {{ evaluation.remarks }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- No evaluation found -->
+        <div *ngIf="!evaluation" class="no-evaluation-section">
+          <div class="alert alert-warning mt-4">
+            <h5 class="mb-2">Not evaluated yet</h5>
+            <p class="mb-0" style="color: #999; font-style: italic;">
+              This defense has not been evaluated by you yet.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

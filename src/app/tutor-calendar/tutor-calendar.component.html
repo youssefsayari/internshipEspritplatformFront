@@ -1,0 +1,44 @@
+<div class="calendar-container">
+  <div class="calendar-header">
+    <div class="header-content">
+      <div class="title-group">
+        <mat-icon class="calendar-icon">calendar_today</mat-icon>
+        <h1 class="calendar-title">Defense Schedule</h1>
+      </div>
+      <div class="calendar-controls">
+        <button mat-stroked-button (click)="goToToday()">
+          <mat-icon>today</mat-icon>
+          Today
+        </button>
+      </div>
+    </div>
+    <p class="calendar-subtitle">Your upcoming student defenses at a glance</p>
+  </div>
+
+  <div class="calendar-wrapper">
+    <full-calendar 
+      #calendarComponent
+      [options]="calendarOptions"
+      class="custom-calendar">
+    </full-calendar>
+  </div>
+  
+  <div class="calendar-legend">
+    <div class="legend-item">
+      <span class="color-dot excellent"></span>
+      <span>High Score (16-20)</span>
+    </div>
+    <div class="legend-item">
+      <span class="color-dot average"></span>
+      <span>Average Score (10-15)</span>
+    </div>
+    <div class="legend-item">
+      <span class="color-dot poor"></span>
+      <span>Needs Improvement (0-9)</span>
+    </div>
+    <div class="legend-item">
+      <span class="color-dot not-evaluated"></span>
+      <span>Not Evaluated (0)</span>
+    </div>
+  </div>    
+</div>

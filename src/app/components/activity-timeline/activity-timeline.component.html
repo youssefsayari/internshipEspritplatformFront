@@ -44,105 +44,11 @@
   </button>
 
 </div>
-
-
-
-<!-- Modal for creation -->
-<div class="modal-overlay" *ngIf="isPostCreateModalOpen" (click)="closePostModal()"></div>
-<div class="modal-post" *ngIf="isPostCreateModalOpen">
-  <h3>Post Creation</h3>
-
-  <form #postForm="ngForm" (ngSubmit)="addNewPost()">
-    <!-- Title input -->
-    <input [(ngModel)]="newPostTitle" name="title" placeholder="Title" class="title-input" required minlength="3" maxlength="255" #title="ngModel" />
-    <div *ngIf="title.invalid && (title.dirty || title.touched)" class="error-message">
-      <div *ngIf="title.errors?.['required']">Title is required.</div>
-      <div *ngIf="title.errors?.['minlength']">Title must be at least 3 characters long.</div>
-      <div *ngIf="title.errors?.['maxlength']">Title must be at most 255 characters long.</div>
-    </div>
-
-    <!-- Content input -->
-    <textarea [(ngModel)]="newPostContent" name="content" placeholder="Content..." required minlength="10" #content="ngModel"></textarea>
-    <div *ngIf="content.invalid && (content.dirty || content.touched)" class="error-message">
-      <div *ngIf="content.errors?.['required']">Content is required.</div>
-      <div *ngIf="content.errors?.['minlength']">Content must be at least 10 characters long.</div>
-    </div>
-
-    <!-- Expiry DateTime input -->
-    <label for="expiryDateTime">Expiry Date & Time:</label>
-    <input 
-      type="datetime-local" 
-      id="expiryDateTime" 
-      [(ngModel)]="newPostExpiryDateTime" 
-      name="expiryDateTime" 
-      #expiryDateTime="ngModel"
-      [min]="minDateTime()"
-    />
-    <div *ngIf="expiryDateTime.invalid && (expiryDateTime.dirty || expiryDateTime.touched)" class="error-message">
-      <div *ngIf="expiryDateTime.errors?.['min']">Expiry date must be in the future.</div>
-    </div>
-
-    <div class="modal-actions">
-      <button class="btn-cancel" (click)="closePostModal()">Cancel</button>
-      <button class="btn-submit" type="submit" [disabled]="postForm.invalid">Post</button>
-    </div>
-  </form>
-</div>
-
-
-
-
-<!-- Modal pour l'édition -->
-<div class="modal-overlay" *ngIf="isPostEditModalOpen" (click)="closePostModal()"></div>
-<div class="modal-post" *ngIf="isPostEditModalOpen">
-  <h3>Post Edit</h3>
-
-  <form #editForm="ngForm" (ngSubmit)="updatePost()">
-    <!-- Title input -->
-    <input [(ngModel)]="newPostTitle" name="title" placeholder="Title" class="title-input" required minlength="3" maxlength="255" #title="ngModel" />
-    <div *ngIf="title.invalid && (title.dirty || title.touched)" class="error-message">
-      <div *ngIf="title.errors?.['required']">Title is required.</div>
-      <div *ngIf="title.errors?.['minlength']">Title must be at least 3 characters long.</div>
-      <div *ngIf="title.errors?.['maxlength']">Title must be no longer than 255 characters.</div>
-    </div>
-
-    <!-- Content input -->
-    <textarea [(ngModel)]="newPostContent" name="content" placeholder="Content..." required minlength="10" #content="ngModel"></textarea>
-    <div *ngIf="content.invalid && (content.dirty || content.touched)" class="error-message">
-      <div *ngIf="content.errors?.['required']">Content is required.</div>
-      <div *ngIf="content.errors?.['minlength']">Content must be at least 10 characters long.</div>
-    </div>
-
-    <!-- Expiry DateTime input -->
-    <label for="expiryDateTime">Expiry Date & Time:</label>
-    <input 
-      type="datetime-local" 
-      id="expiryDateTime" 
-      [(ngModel)]="newPostExpiryDateTime" 
-      name="expiryDateTime" 
-      #expiryDateTime="ngModel"
-      [min]="minDateTime()"
-    />
-    <div *ngIf="expiryDateTime.invalid && (expiryDateTime.dirty || expiryDateTime.touched)" class="error-message">
-      <div *ngIf="expiryDateTime.errors?.['min']">Expiry date must be in the future.</div>
-    </div>
-
-    <div class="modal-actions">
-      <button class="btn-cancel" (click)="closePostModal()">Cancel</button>
-      <button class="btn-submit" type="submit" [disabled]="editForm.invalid">Update</button>
-    </div>
-  </form>
-</div>
-
-
-
-
-
-
-
                               
 <div *ngFor="let timeline of mytimelines || [] ; trackBy: trackByFn" class="timeline-card card p-3 mb-3 shadow-sm rounded"        
-[id]="'post-' + timeline.id">
+    [id]="'post-' + timeline.id"
+    [class.new-post-animation]="timeline.isNew"
+    [class.show]="!timeline.isNew">
   
   
   <div class="btn-container" *ngIf="timeline.ownerId === companyId || userType === 'Admin'">

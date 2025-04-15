@@ -16,6 +16,8 @@ export const ROUTES: RouteInfo[] = [
   { path: '/dashboard', title: 'Dashboard', icon: 'business_chart-bar-32', class: '', roles: ['Admin'] },
   { path: '/user-profile', title: 'My Profile', icon: 'users_single-02', class: '', roles: ['Student', 'Tutor','Company'] },
   { path: '/student', title: 'Students', icon: 'education_glasses', class: '', roles: ['Admin'] },
+  { path: '/globe', title: 'Companies Analytics', icon: 'location_map-big', class: '', roles: ['Admin'] },
+
   //{ path: '/Posts', title: 'Post Management',  icon:'education_atom', class: '', roles: ['Tutor','Company'] },
   //ala
   { path: '/quiz-list', title: 'All Quizzes',  icon:'ui-2_chat-round', class: '' ,  roles: ['Company']},
@@ -24,6 +26,9 @@ export const ROUTES: RouteInfo[] = [
 //Amin kabobi
     { path: '/predefined-documents', title: 'My Documents',  icon:'files_single-copy-04', class: '',  roles: ['Student']},
     { path: '/document-list', title: 'Document List',  icon:'files_paper', class: '',  roles: ['Admin']},
+    { path: '/defenses-tutors', title: 'My Defenses', icon: 'files_paper', class: '', roles: ['Tutor'] },
+    { path: '/student-defense', title: 'My Defenses', icon: 'files_paper', class: '', roles: ['Student'] },
+    { path: '/defenses', title: 'My Defenses', icon: 'files_paper', class: '', roles: ['Admin'] },
   { path: '/post', title: 'Internships', icon: 'education_paper', class: '', roles: ['Admin'] },
   { path: '/internship-request', title: 'Internship Request', icon: 'education_paper', class: '', roles: ['Company'] },
   { path: '/agreement', title: 'My Agreement', icon: 'education_paper', class: '', roles: ['Student'] },
@@ -32,10 +37,9 @@ export const ROUTES: RouteInfo[] = [
   { path: '/MyMeeting', title: 'My Meeting', icon: 'education_atom', class: '' ,roles:['Tutor']},
   { path: '/StudentMeeting', title: 'My Meeting', icon: 'education_atom', class: '' ,roles:['Student']},
   { path: '/internship', title: 'Internship', icon: 'business_briefcase-24', class: '', roles: ['Tutor'] },
+
   { path: '/MyTasks', title: 'My Tasks', icon: 'design_vector', class: '', roles: ['Student'] },
   { path: '/Tasks', title: 'Tasks', icon: 'design_vector', class: '', roles: ['Tutor'] },
-
-  { path: '/defence', title: 'My Defences', icon: 'education_hat', class: '', roles: ['Student'] },
   { path: '/setting', title: 'Settings', icon: 'ui-1_settings-gear-63', class: '', roles: ['Admin'] },
   { path: '/feedback', title: 'Feedback', icon: 'ui-1_send', class: 'active active-pro', roles: ['Student','Admin','Company'] },
   { path: '/reclamations', title: 'Reclamations', icon: 'ui-2_chat-round', class: '', roles: ['Student', 'Admin', 'Company'] },

@@ -1,57 +1,97 @@
-
-<nav class="navbar navbar-expand-lg navbar-transparent  navbar-absolute bg-primary fixed-top">
-    <div class="container-fluid">
-        <div class="navbar-wrapper">
-            <div class="navbar-toggle">
-                <button type="button" class="navbar-toggler" (click)="sidebarToggle()">
-                    <span class="navbar-toggler-bar bar1"></span>
-                    <span class="navbar-toggler-bar bar2"></span>
-                    <span class="navbar-toggler-bar bar3"></span>
-                </button>
-            </div>
-            <a class="navbar-brand" href="#pablo">{{getTitle()}}</a>
-        </div>
-        <button class="navbar-toggler" type="button" (click)="collapse()"
-          [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample">
-          <span class="navbar-toggler-bar navbar-kebab"></span>
-          <span class="navbar-toggler-bar navbar-kebab"></span>
-          <span class="navbar-toggler-bar navbar-kebab"></span>
+<nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute bg-primary fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-wrapper">
+      <div class="navbar-toggle">
+        <button type="button" class="navbar-toggler" (click)="sidebarToggle()">
+          <span class="navbar-toggler-bar bar1"></span>
+          <span class="navbar-toggler-bar bar2"></span>
+          <span class="navbar-toggler-bar bar3"></span>
         </button>
-        <div class="collapse navbar-collapse justify-content-end" id="collapseExample" [ngbCollapse]="isCollapsed">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <a class="nav-link" href="/posts">
-                <i class="now-ui-icons location_world"></i>
-                <p>
-                  <span class="d-lg-none d-md-block">Post</span>
-                </p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                <i class="now-ui-icons sport_trophy"></i>
-                <p>
-                  <span class="d-lg-none d-md-block">Event</span>
-                </p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                <i class="now-ui-icons ui-1_bell-53"></i>
-                <p>
-                  <span class="d-lg-none d-md-block">Notification</span>
-                </p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" (click)="logout()">
-                <i class="now-ui-icons media-1_button-power"></i>
-                <p>
-                  <span class="d-lg-none d-md-block">Log out</span>
-                </p>
-              </a>
-            </li>
-          </ul>
-        </div>
+      </div>
+      <a class="navbar-brand" href="#pablo">{{getTitle()}}</a>
     </div>
+    <button class="navbar-toggler" type="button" (click)="collapse()"
+      [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample">
+      <span class="navbar-toggler-bar navbar-kebab"></span>
+      <span class="navbar-toggler-bar navbar-kebab"></span>
+      <span class="navbar-toggler-bar navbar-kebab"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="collapseExample" [ngbCollapse]="isCollapsed">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="/posts">
+            <i class="now-ui-icons location_world"></i>
+            <p>
+              <span class="d-lg-none d-md-block">Post</span>
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <i class="now-ui-icons sport_trophy"></i>
+            <p>
+              <span class="d-lg-none d-md-block">Event</span>
+            </p>
+          </a>
+        </li>
+
+        <li class="nav-item notification-wrapper">
+          <div class="notification-icon" (click)="toggleNotifications()">
+            <i class="fas fa-bell"></i>
+            <span *ngIf="unreadNotifications > 0" class="notification-count">{{ unreadNotifications }}</span>
+          </div>
+          
+          <div class="notifications-dropdown" [class.show]="notificationsVisible">
+            <div class="notification-header">
+              <div class="d-flex justify-content-between align-items-center w-100">
+                <h3>Notifications</h3>
+                <span class="badge badge-pill badge-primary">{{notifications.length}}</span>
+              </div>
+            </div>
+            
+            <div class="notification-scroll-container">
+              <ul class="notification-list">
+                <li *ngFor="let notification of notifications" 
+                    class="notification-item" 
+                    [class.unread]="!notification.vue"
+                    (click)="markAsRead(notification.id)">
+                  
+                  <div class="notification-avatar bg-gradient-primary">
+                    <i class="fas fa-bell"></i>
+                  </div>
+                  
+                  <div class="notification-content">
+                    <div class="notification-text">{{ notification.message }}</div>
+                    <div class="notification-meta">
+                      <span class="notification-time">
+                        <i class="far fa-clock mr-1"></i>
+                        {{ formatTimeAgo(notification.dateEnvoi) }}
+                      </span>
+                      <span *ngIf="!notification.vue" class="unread-badge">Nouveau</span>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            
+            <!-- Actions sous forme de liens style Facebook -->
+            <div class="notification-actions text-center mt-3">
+              <a href="#" (click)="markAllAsRead()" class="mark-all-read">Tout marquer comme lu</a>
+              <br />
+            </div>
+          
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" (click)="logout()">
+            <i class="now-ui-icons media-1_button-power"></i>
+            <p>
+              <span class="d-lg-none d-md-block">Log out</span>
+            </p>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
 </nav>

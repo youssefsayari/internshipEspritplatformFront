@@ -28,9 +28,22 @@ import { QuizDetailsComponent } from '../../quiz-details/quiz-details.component'
 import { QuizEditComponent } from '../../quiz-edit/quiz-edit.component';
 import { QuizListUserComponent } from '../../quiz-list-user/quiz-list-user.component';
 import { QuizPassComponent } from '../../quiz-pass/quiz-pass.component';
+import { DefenseListComponent } from '../../defense-list/defense-list.component'; // Add this import
+import { AddDefenseComponent } from '../../add-defense/add-defense.component';
+import { UpdateDefenseComponent  } from '../../update-defense/update-defense.component';
+import { DefensesTutorsComponent  } from '../../defenses-tutors/defenses-tutors.component';
+import { EvaluationFormComponent  } from '../../evaluation-form/evaluation-form.component';
+import { StudentDefenseComponent  } from  '../../student-defense/student-defense.component';
+import { DefenseStatsComponent } from '../../defense-stats/defense-stats.component';
+import { TutorCalendarComponent } from '../../tutor-calendar/tutor-calendar.component';
+import { DefenseDetailsComponent } from '../../defense-details/defense-details.component';
+import { EvaluationViewComponent } from '../../evaluation-view/evaluation-view.component';
+import { EvaluationGridPreviewComponent } from '../../evaluation-grid-preview/evaluation-grid-preview.component';
 import { TasksListComponent } from '../../components/Students/tasks-list/tasks-list.component';
 import { TutorTaskListComponent } from '../../components/Tutors/tutor-task-list/tutor-task-list.component';
 import { ReclamationComponent } from '../../components/reclamation/reclamation.component';
+import { GlobeComponent } from '../../components/globe/globe.component';
+
 
 
 export const AdminLayoutRoutes: Routes = [
@@ -72,5 +85,20 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'quiz-details/:id', component: QuizDetailsComponent },
     { path: 'quiz-edit/:id', component: QuizEditComponent },
     { path: 'quiz/:id', component: QuizPassComponent },
+    { path: 'defenses',       component: DefenseListComponent },
+    { path: 'add-defense', component: AddDefenseComponent },
+    { path: 'update-defense', component: UpdateDefenseComponent },
+    { path: 'defenses-tutors', component: DefensesTutorsComponent },
+    { path: 'defenses/evaluate', component: EvaluationFormComponent },
+    { path: 'student-defense', component: StudentDefenseComponent },
+    { path: 'defense-stats', component: DefenseStatsComponent },
+    { path: 'tutor-calendar', component: TutorCalendarComponent },
+    { path: 'defense-details', component: DefenseDetailsComponent },
+    { path: 'update-defense', component: UpdateDefenseComponent },
+    { path: 'evaluation-view/:defenseId', component: EvaluationViewComponent },
+    { path: 'evaluation-grid-preview/:defenseId', component: EvaluationGridPreviewComponent },
+    { path: 'globe', component: GlobeComponent },
+
+
 
 ];

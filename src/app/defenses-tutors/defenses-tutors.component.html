@@ -1,0 +1,150 @@
+<div class="tutor-dashboard">
+  <div class="dashboard-header">
+    <div class="header-content">
+      <div class="title-group">
+        <div class="shield-icon">📝</div>
+        <h1>My Defense Evaluations</h1>
+        <p class="subtitle">Review and evaluate your assigned student defenses</p>
+      </div>
+      <button mat-raised-button class="calendar-button" (click)="goToTutorCalendar()">
+        <mat-icon>calendar_today</mat-icon>
+        <span>My Calendar</span>
+      </button>
+      
+      
+    </div>
+    <div class="header-wave"></div>
+  </div>
+
+  <div class="dashboard-content">
+    <!-- Defense cards grid -->
+    <div *ngIf="!isLoading && defenses.length > 0" class="defense-grid">
+      <div *ngFor="let defense of paginatedDefenses" class="defense-card">
+        <div class="card-header">
+          <h3 class="card-title">
+            <span class="role-icon student">🎓</span>
+            {{ defense.student?.firstName }} {{ defense.student?.lastName }}
+          </h3>
+          <div class="card-meta">
+            <span class="meta-item">📍 {{ defense.classroom }}</span>
+            <span class="meta-divider">•</span>
+            <span class="meta-item">{{ formatDate(defense.defenseDate) }}</span>
+            <span class="meta-divider">•</span>
+            <span class="meta-item">{{ defense.defenseTime }}</span>
+          </div>
+
+          <div class="card-badge" [ngClass]="{
+            'completed': hasEvaluated(defense),
+            'pending': !hasEvaluated(defense)
+          }">
+            {{ hasEvaluated(defense) ? 'Evaluated' : 'Pending' }}
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div class="info-section">
+            <div class="info-label">Defense Status</div>
+            <div class="info-value">
+              <span [ngClass]="{
+                'status-completed': defense.internshipCompleted && defense.reportSubmitted,
+                'status-pending': !defense.internshipCompleted || !defense.reportSubmitted
+              }">
+                {{ defense.internshipCompleted && defense.reportSubmitted ? 'Ready for defense' : 'Requirements pending' }}
+              </span>
+            </div>
+          </div>
+
+          <div class="progress-section">
+            <div class="info-label">Evaluation Progress</div>
+            <div class="progress-bar">
+              <div class="progress-fill" 
+                   [style.width]="getEvaluationProgress(defense) + '%'"
+                   [ngClass]="{
+                     'progress-complete': getEvaluationProgress(defense) === 100,
+                     'progress-partial': getEvaluationProgress(defense) > 0 && getEvaluationProgress(defense) < 100
+                   }">
+                <span class="progress-text">
+                  {{ getSubmittedEvaluationsCount(defense) }}/3 evaluations submitted
+                </span>
+              </div>
+            </div>
+            <div class="status-text">
+              {{ getEvaluationProgress(defense) === 100 ? 'COMPLETED' : 'PENDING' }}
+            </div>
+          </div>
+
+          <div class="grade-section" *ngIf="hasEvaluated(defense)">
+            <div class="info-label">Your Evaluation</div>
+            <div class="grade-display">
+              <span class="grade-value">
+                {{ getTutorEvaluation(defense)?.grade || '--' }}/20
+              </span>
+              <span class="grade-remarks" *ngIf="getTutorEvaluation(defense)?.remarks">
+                "{{ getTutorEvaluation(defense)?.remarks }}"
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="card-actions">
+          <button class="action-btn view" (click)="viewDefenseOrEvaluation(defense)">
+            <span class="action-icon">👁️</span> 
+            {{ hasEvaluated(defense) ? 'View Evaluation' : 'Details' }}
+          </button>
+          <button class="action-btn evaluate" 
+                  (click)="evaluateDefense(defense.idDefense)"
+                  [disabled]="hasEvaluated(defense)">
+            <span class="action-icon">⭐</span> 
+            {{ hasEvaluated(defense) ? 'Evaluation Submitted' : 'Submit Evaluation' }}
+          </button>
+          <!-- Add this new button -->
+          <button class="action-btn generate" 
+                  (click)="generateEvaluationGrid(defense.idDefense)">
+            <span class="action-icon">📊</span> 
+            Generate Grid
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div *ngIf="!isLoading && defenses.length > 0" class="pagination-container">
+      <div class="pagination-controls">
+        <button class="page-nav" (click)="onPageChange(1)" [disabled]="page === 1">
+          ⏮️ First
+        </button>
+        <button class="page-nav" (click)="onPageChange(page - 1)" [disabled]="page === 1">
+          ◀️ Previous
+        </button>
+        
+        <div class="page-numbers">
+          <span *ngFor="let p of getPages()" 
+                class="page-number" 
+                [class.active]="p === page"
+                (click)="onPageChange(p)">
+            {{ p }}
+          </span>
+        </div>
+        
+        <button class="page-nav" (click)="onPageChange(page + 1)" [disabled]="page === totalPages">
+          Next ▶️
+        </button>
+        <button class="page-nav" (click)="onPageChange(totalPages)" [disabled]="page === totalPages">
+          Last ⏭️
+        </button>
+      </div>
+      <div class="page-info">
+        Showing {{ paginatedDefenses.length }} of {{ totalDefenses }} defenses (Page {{ page }} of {{ totalPages }})
+      </div>
+    </div>
+
+    <!-- Loading spinner -->
+    <div *ngIf="isLoading" class="loading-spinner">
+      <mat-spinner diameter="50"></mat-spinner>
+    </div>
+
+    <!-- No defenses message -->
+    <div *ngIf="!isLoading && defenses.length === 0" class="no-defenses">
+      <p>No defenses available.</p>
+    </div>
+  </div>
+</div>
