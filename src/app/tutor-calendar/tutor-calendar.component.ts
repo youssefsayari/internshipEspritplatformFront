@@ -85,11 +85,12 @@ export class TutorCalendarComponent implements OnInit {
   private handleEventClick(clickInfo: EventClickArg): void {
     const defenseId = clickInfo.event.extendedProps['idDefense'];
     if (defenseId) {
-      this.router.navigate([`/defense-details/${defenseId}`]);
+      this.router.navigate(['/defense-details'], { state: { defenseId: defenseId } });
     } else {
       console.error('No defense ID found in event:', clickInfo.event);
     }
   }
+  
 
   private loadCalendarData(): void {
     this.defenseService.getDefensesByTutorId(this.tutorId).subscribe({
