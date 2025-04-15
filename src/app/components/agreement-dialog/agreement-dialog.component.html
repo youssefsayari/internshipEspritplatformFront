@@ -1,0 +1,43 @@
+<h2 mat-dialog-title>Internship Agreement Details</h2>
+<mat-dialog-content class="mat-typography">
+  <div class="agreement-detail">
+    <div class="detail-row">
+      <strong>Company Name:</strong> <span>{{ agreement.companyName }}</span>
+    </div>
+
+    <div class="detail-row">
+      <strong>Representative Name:</strong> <span>{{ agreement.companyRepresentative }}</span>
+    </div>
+
+    <div class="detail-row">
+      <strong>Agreement Start Date:</strong> <span>{{ agreement.startDate | date }}</span>
+    </div>
+
+    <div class="detail-row">
+      <strong>Agreement End Date:</strong> <span>{{ agreement.endDate | date }}</span>
+    </div>
+
+    <div class="detail-row">
+      <strong>Agreement Status:</strong> <span>{{ agreement.agreementState }}</span>
+    </div>
+
+    <div class="detail-row">
+      <strong>Agreement creation date:</strong> <span>{{ agreement?.creationDate | date: 'yyyy-MM-dd HH:mm:ss' }}</span>
+    </div>
+  </div>
+</mat-dialog-content>
+
+
+<mat-dialog-actions align="center">
+  <button mat-button color="primary" (click)="acceptAgreement()" *ngIf="agreement.agreementState !== 'ACCEPTED' && agreement.agreementState !== 'REJECTED' && agreement.agreementState !== 'APPROVED'">
+    Accepted
+  </button>
+
+  <button mat-button color="warn" (click)="rejectAgreement()" *ngIf="agreement.agreementState !== 'ACCEPTED' && agreement.agreementState !== 'REJECTED' && agreement.agreementState !== 'APPROVED'">
+    Rejected
+  </button>
+
+  <button mat-button color="primary" (click)="approvedAgreement()" *ngIf="agreement.agreementState == 'ACCEPTED'">
+    Approved
+  </button>
+</mat-dialog-actions>

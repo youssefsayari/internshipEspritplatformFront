@@ -90,6 +90,9 @@
                             <div class="action-buttons d-flex gap-2">
                               <button class="btn btn-danger" (click)="deleteInternship(row.idInternship)">Delete</button>
                               <button class="btn btn-warning" (click)="openDialog(row, post)">Edit</button>
+                              <button *ngIf="row.internshipState === 'APPROVED'" class="btn btn-success" (click)="openAgreement(row)">
+                                Agreement
+                              </button>
                             </div>
                           </td>
                         </ng-container>

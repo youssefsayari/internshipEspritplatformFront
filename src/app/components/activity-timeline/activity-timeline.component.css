@@ -3,16 +3,12 @@
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   background-color: #fff;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) ease-in-out;
   opacity: 0;
   transform: translateY(20px);
-
   position: relative; /* nécessaire pour positionner le bouton en absolu */
   padding: 20px;
-
-
 }
-
 
 /* Conteneur pour les boutons (edit et delete) */
 .timeline-card .btn-container {
@@ -91,40 +87,31 @@
   padding-bottom: 10px;
 }
 
-
-
-
-
-
-
-
-
-
-
 /* Animation d'apparition de la timeline */
 .timeline-card.show {
   opacity: 1;
   transform: translateY(0);
+  transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 /* Hover effect pour la timeline */
 .timeline-card:hover {
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/* Animation pour le nouveau post */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.new-post-animation {
+  animation: slideIn 0.5s ease-out forwards;
+}
 
 /* 🔹 Conteneur d'évaluation par étoiles */
 
@@ -220,23 +207,6 @@
     padding: 8px 16px;
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /* 🔹 Conteneur des commentaires */
 .comment {
@@ -339,29 +309,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* Fake input container */
 .fake-input {
   display: flex;
@@ -406,14 +353,14 @@
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.4);
-  z-index: 1000;
+  z-index: 1100;
 }
 
 
 /* Fenêtre du modal */
 .modal-post {
   position: fixed;
-  top: 50%;
+  top: 15%;
   left: 50%;
   transform: translate(-50%, -50%);
   background: white;
@@ -421,7 +368,7 @@
   width: 400px;
   border-radius: 10px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
+  z-index: 1200;
 }
 
 .modal-post h3 {
@@ -466,20 +413,6 @@
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-/* title field */
-
 .title-input {
   width: 100%;
   padding: 8px;
@@ -487,17 +420,6 @@
   border: 1px solid #ccc;
   border-radius: 5px;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -512,16 +434,6 @@
   opacity: 0;
   transform: scale(0.9); /* Rétrécir l'élément avant qu'il ne disparaisse */
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -550,16 +462,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
 .error-message {
   color: red;
   font-size: 12px;
@@ -569,11 +471,6 @@
 .btn-submit:disabled {
   background-color: gray;
 }
-
-
-
-
-
 
 
 
@@ -596,16 +493,6 @@
 .comment.other-user {
   border-left: 5px solid #808080; /* Gris pour les autres utilisateurs */
 }
-
-
-
-
-
-
-
-
-
-
 
 /* Conteneur général de l'évaluation par étoiles */
 .rating-container {
@@ -662,12 +549,6 @@
 }
 
 
-
-
-
-
-
-
 /* Styles du filtre */
 .filter-container {
   display: flex;
@@ -715,16 +596,6 @@
 }
 
 
-
-
-
-
-
-
-
-
-
-
 /* Button Style */
 .delete-btn {
   background-color: #dc3545;
@@ -751,13 +622,6 @@
 
 
 
-
-
-
-
-
-
-
 .text-center {
   display: flex;
   justify-content: center;
@@ -778,6 +642,158 @@
   background-color: #bd5a5a;
 }
 
+/* ---------------------------------------------Styles pour la section Q&A */
+.qna-section {
+  margin-top: 2rem;
+  background: linear-gradient(145deg, #f8f9fa, #ffffff);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
 
+.qna-title {
+  color: #2c3e50;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
 
+.loading-spinner {
+  font-size: 0.9rem;
+  color: #7f8c8d;
+  margin-left: auto;
+}
 
+.qna-error {
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.qna-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.question-card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.question-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.question-content {
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.question-icon {
+  color: #FF3636;
+  font-size: 1.5rem;
+}
+
+.question-text {
+  flex: 1;
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.toggle-icon {
+  color: #7f8c8d;
+  transition: transform 0.3s ease;
+}
+
+.answer-card {
+  max-height: 0;
+  overflow: hidden;
+  background: #f8f9fa;
+  transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.answer-card.expanded {
+  max-height: 500px;
+}
+
+.answer-content {
+  padding: 1.25rem;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.answer-icon {
+  color: #ff416c;
+  font-size: 1.2rem;
+  margin-top: 0.2rem;
+}
+
+.answer-text {
+  color: #34495e;
+  line-height: 1.6;
+  flex: 1;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.qna-item {
+  animation: fadeIn 0.5s ease-out;
+}
+.qna-section:empty {
+  display: none;
+}
+/* Custom SweetAlert2 Styles */
+.swal-custom-popup {
+  border-radius: 15px !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15) !important;
+  border: 1px solid #eee !important;
+  width: 600px !important;
+  max-width: 90% !important;
+}
+
+.swal2-input.custom-title,
+.swal2-input.custom-datetime {
+  border-radius: 8px !important;
+  border: 2px solid #e0e0e0 !important;
+  transition: all 0.3s ease !important;
+  width: 80% !important;
+  margin: 1rem auto !important;
+}
+
+.swal2-textarea.custom-content {
+  border-radius: 8px !important;
+  border: 2px solid #e0e0e0 !important;
+  transition: all 0.3s ease !important;
+  width: 80% !important;
+  margin: 1rem auto !important;
+  min-height: 120px !important;
+  resize: vertical !important;
+  padding: 10px !important;
+}
+
+.swal2-input.custom-title:focus,
+.swal2-textarea.custom-content:focus,
+.swal2-input.custom-datetime:focus {
+  border-color: #FF3636 !important;
+  box-shadow: 0 0 8px rgba(255, 54, 54, 0.2) !important;
+}
+
+.swal-custom-validation {
+  color: #FF3636 !important;
+  font-weight: 500 !important;
+}

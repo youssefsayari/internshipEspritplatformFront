@@ -1,0 +1,88 @@
+<div class="panel-header panel-header-sm"></div>
+
+<div class="main-content p-4">
+  <h2 class="task-title mb-4">👨‍🏫 Tutor Task Management</h2>
+
+  <!-- Student selection box with Add button -->
+  <div class="student-box">
+    <div class="left">
+      <label for="studentDropdown">👨‍🎓 Select a Student</label>
+      <select
+        id="studentDropdown"
+        [(ngModel)]="selectedStudentId"
+        (change)="onStudentChange()"
+      >
+        <option [ngValue]="null" disabled selected>Select a student</option>
+        <option *ngFor="let student of students" [ngValue]="student.idUser">
+          {{ student.firstName }} {{ student.lastName }}
+        </option>
+      </select>
+    </div>
+    <div *ngIf="topStudent" class="top-student-box">
+      <h3>🏆 Top Performer: {{ topStudent.firstName }} {{ topStudent.lastName }}</h3>
+    </div>
+  
+
+    <button class="btn btn-primary details-btn" (click)="showStudentDetails()">📋 Details</button>
+    <button class="btn btn-primary add-btn" (click)="openAddTask()">➕ Add Task</button>
+
+  </div>
+
+  <!-- Tasks Columns -->
+  <div class="task-container">
+    <div
+      class="task-box"
+      *ngFor="let status of statuses"
+      [id]="status"
+      cdkDropList
+      [cdkDropListData]="getTasksByStatus(status)"
+      [cdkDropListConnectedTo]="statuses"
+      (cdkDropListDropped)="onTaskDrop($event, status)"
+    >
+      <h3>
+        <i class="{{ iconForStatus(status) }}"></i> {{ statusLabel(status) }}
+      </h3>
+
+      <div
+        class="task"
+        *ngFor="let task of getTasksByStatus(status)"
+        cdkDrag
+        [cdkDragData]="task"
+        [ngClass]="{
+          'todo': task.status === 'TODO',
+          'inprogress': task.status === 'INPROGRESS',
+          'done': task.status === 'DONE'
+        }"
+      >
+        <div class="task-header">
+          <h4>{{ task.title }}</h4>
+          <p *ngIf="task.deadline"><strong>📅 Deadline:</strong> {{ task.deadline | date: 'longDate' }}</p>
+
+        </div>
+        <div class="task-top">
+          <p *ngIf="task.status === 'DONE' && task.mark !== undefined" class="task-note">
+            ⭐ <strong>Mark:</strong> {{ task.mark }}/100
+          </p>
+                  </div>
+        <p>{{ task.description }}</p>
+
+
+
+        <div class="task-actions">
+          <button class="btn-action edit" (click)="editTask(task)">✏️</button>
+          <button class="btn-action delete" (click)="deleteTask(task.idTask)">🗑️</button>
+          <button
+          class="btn-action rate"
+          *ngIf="task.status === 'DONE'"
+          (click)="rateTask(task)"
+          title="Rate Task"
+        >⭐</button>
+        </div>
+      </div>
+
+      <div *ngIf="getTasksByStatus(status).length === 0" class="no-tasks">
+        <em>No tasks available.</em>
+      </div>
+    </div>
+  </div>
+</div>

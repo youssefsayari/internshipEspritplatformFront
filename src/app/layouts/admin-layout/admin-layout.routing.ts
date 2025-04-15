@@ -13,7 +13,6 @@ import {PostComponent} from "../../components/post/post.component";
 import {StudentComponent} from "../../components/student/student.component";
 import {SettingComponent} from "../../components/setting/setting.component";
 import { MeetingComponent } from '../../components/meeting/meeting.component';
-import { TasksListComponent } from '../../components/tasks/tasks-list/tasks-list.component';
 import { StudentMeetingsComponent } from '../../components/Students/student-meetings/student-meetings.component';
 import { DocumentListComponent } from '../../document-list/document-list.component';
 import { DocumentComponent } from '../../document/document.component';
@@ -41,15 +40,9 @@ import { TutorCalendarComponent } from '../../tutor-calendar/tutor-calendar.comp
 import { DefenseDetailsComponent } from '../../defense-details/defense-details.component';
 import { EvaluationViewComponent } from '../../evaluation-view/evaluation-view.component';
 import { EvaluationGridPreviewComponent } from '../../evaluation-grid-preview/evaluation-grid-preview.component';
-
-
-
-
-
-
-
-
-
+import { TasksListComponent } from '../../components/Students/tasks-list/tasks-list.component';
+import { TutorTaskListComponent } from '../../components/Tutors/tutor-task-list/tutor-task-list.component';
+import { GlobeComponent } from '../../components/globe/globe.component';
 
 
 export const AdminLayoutRoutes: Routes = [
@@ -70,6 +63,11 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'internship-request',        component: PostComponent },
       { path: 'MyMeeting',        component: MeetingComponent },
     { path: 'StudentMeeting', component: StudentMeetingsComponent },
+    { path: 'MyTasks', component: TasksListComponent },
+    {path : "Tasks" , component : TutorTaskListComponent},
+
+
+
     { path: 'document-list', component: DocumentListComponent },
   { path: 'document', component: DocumentComponent },
   { path: 'document-details/:id', component: DocumentDetailsComponent },
@@ -98,13 +96,7 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'update-defense', component: UpdateDefenseComponent },
     { path: 'evaluation-view/:defenseId', component: EvaluationViewComponent },
     { path: 'evaluation-grid-preview/:defenseId', component: EvaluationGridPreviewComponent },
-
-
-
-
-
-
-
+    { path: 'globe', component: GlobeComponent },
 
 
 

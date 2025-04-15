@@ -1,13 +1,9 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output,AfterViewChecked } from '@angular/core';
 import { PostService } from '../../Services/PostService'; // Assure-toi que le chemin est correct
 import { CommentService } from '../../Services/CommentService'; // Assure-toi que le chemin est correct
 import { CompanyService } from '../../Services/CompanyService'; // Assure-toi que le chemin est correct
 import { RatingService } from '../../Services/RatingService'; // Assure-toi que le chemin est correct
 import {InternshipService} from "../../Services/internship.service";
-
-
-
-
 import { Post } from '../../Model/Post';
 import { Company } from '../../Model/Company';
 import { ChangeDetectorRef } from '@angular/core';
@@ -16,11 +12,7 @@ import { Rating } from '../../Model/Rating';
 import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
 import {UserService} from '../../Services/user.service';
-
-
-
-
-
+import { Image } from '../../Model/image';
 
 interface CommentUI {
   id?: number;
@@ -30,40 +22,46 @@ interface CommentUI {
   createdAt: string; // Ajouter la date de création
 }
 
-
-
-
 interface Timeline {
-  id: number;
-  from: string;
-  time: string;
-  image: string;
-  title: string;
-  content: string;
-  comments: CommentUI[];
-  newComment: string;
-  selectedRating: number;
-  hoverRating: number;
-  feedbackGiven: Boolean;
-  ownerId: number ; // Déclare une variable pour stocker l'ID de l'utilisateur
-
+  id?: number;
+  from?: string;
+  time?: string;
+  image?: Image;
+  title?: string;
+  content?: string;
+  comments?: CommentUI[];
+  newComment?: string;
+  selectedRating?: number;
+  hoverRating?: number;
+  feedbackGiven?: Boolean;
+  ownerId?: number ; // Déclare une variable pour stocker l'ID de l'utilisateur
   ratings?: Rating[];  // Changer cela de number[] à Rating[]
   averageRating?: number;  // Ajouter une propriété pour la note moyenne
   sector?: string;  // Ajouter une propriété pour l'entreprise
-
   expiryDateTime?: string; // ISO Date string (nullable)
-
+  isNew?: boolean; // Ajoutez cette ligne
 
 }
+interface QnAPair {
+  question: string;
+  answer: string;
+  expanded: boolean;
+}
 
+interface AnalysisState {
+  loading: boolean;
+  qna: QnAPair[];
+  attempts: { valid: boolean }[];
+  currentValidStreak: number;
+}
 @Component({
   selector: 'app-activity-timeline',
   templateUrl: './activity-timeline.component.html',
-  styleUrls: ['./activity-timeline.component.css']
+  styleUrls: ['./activity-timeline.component.css'],
+  
 })
-export class ActivityTimelineComponent implements OnInit {
-
-  @Output() profileSelected = new EventEmitter<{ image: string; from: string }>();
+export class ActivityTimelineComponent implements OnInit,AfterViewChecked  {
+  @Output() profileSelected = new EventEmitter<{ userConnecte:number,companyIdSelected:number,companyIdConnected:number }>();
   mytimelines: Timeline[] = [];
 
   // Utilisateur connecté, statique à 1 pour l'instant
@@ -96,19 +94,21 @@ export class ActivityTimelineComponent implements OnInit {
   searchText: string = ''; // Pour le texte de recherche
   selectedSector: string = ''; // Pour le secteur sélectionné
 
-
-
-
-
   userType: string= '';
   userConnecte: number= null;
+
+  showOnlyFollowedCompanies: boolean = false;
+
+   // Ajoutez cette propriété
+   postAnalysis = new Map<number, AnalysisState>();
+  postAnalysisRetries = new Map<number, number>();
+
 
 
   constructor(private postService: PostService,private internshipService: InternshipService   ,private commentService: CommentService, private userService: UserService ,private companyService: CompanyService ,private ratingService: RatingService,private cdr: ChangeDetectorRef,private toastr: ToastrService   ) {}
 
   ngOnInit(): void {
     this.fetchUserDetails().then(() => {
-        console.error('userConnecte après récupération', this.userConnecte);
         this.checkUserCompany();
         this.loadPosts();
         
@@ -136,10 +136,6 @@ fetchUserDetails(): Promise<void> {
               this.userType = userDetails.role;
               this.userConnecte = userDetails.id;
 
-              console.error('userDetailsId', userDetails.id);
-              console.error('userDetailsRole', userDetails.role);
-              console.error('userType', this.userType);
-              console.error('userConnecte', this.userConnecte);
               
               resolve();
           },
@@ -166,6 +162,12 @@ fetchUserDetails(): Promise<void> {
         console.error('userConnecte est null, impossible de vérifier l\'entreprise');
         return;
     }
+        // Si l'utilisateur est admin, on set companyId à -1 et on sort
+        if (this.userType === 'Admin') {
+          this.companyId = -1;
+          this.isUserInCompany = false;
+          return;
+      }
 
     this.companyService.isUserInCompany(this.userConnecte).subscribe(
         (isInCompany: boolean) => {
@@ -189,159 +191,174 @@ fetchUserDetails(): Promise<void> {
     );
 }
 
-
-
-
-
-
-
   /**
    * 🔥 Récupère les posts et les transforme en Timeline
    */
 
 
   loadPosts() {
-    this.postService.getAllPosts().subscribe(
-      (posts: Post[]) => {
-        console.log("Posts récupérés :", posts);
-
-        // Trier les posts du plus récent au plus ancien
-        posts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-
-        this.mytimelines = posts.map(post => {
-          const timeline = this.transformPostToTimeline(post);
-
-          // Calculer la note moyenne pour chaque post
-          timeline.averageRating = this.calculateAverageRating(timeline.ratings);
-
-          return timeline;
+    this.postService.getAllPosts().subscribe({
+      next: (posts: Post[]) => {
+        this.mytimelines = (posts || [])
+          .sort((a, b) => new Date(b?.createdAt).getTime() - new Date(a?.createdAt).getTime())
+          .map(post => this.transformPostToTimeline(post));
+  
+        this.origanalTimelines = [...this.mytimelines];
+        
+        // Schedule analysis calls with 5-second delay between each
+        this.mytimelines.forEach((timeline, index) => {
+          setTimeout(() => {
+            this.initPostAnalysis(timeline.id, timeline.content);
+          }, index * 5000); // 5-second interval between each analysis
         });
-
-
-        this.origanalTimelines = [...this.mytimelines]; // Sauvegarder les posts originaux
-
-
-
-        // Maintenant que les timelines sont chargées, récupérez la note
-        this.mytimelines.forEach(timeline => {
-          this.ratingService.getMyRatingForPost(timeline.id, this.userConnecte).subscribe(
-            (data) => {
-              timeline.selectedRating = data ? data.stars : 0;  // Met à jour la note si elle existe
-            },
-            (error) => {
-              console.error('Erreur lors de la récupération de la note:', error);
-            }
-          );
-        });
+  
+        this.loadRatingsForTimelines();
       },
-      error => {
-        console.error('Erreur lors de la récupération des posts :', error);
+      error: (error) => {
+        console.error('Error loading posts:', error);
+        this.mytimelines = [];
+        this.origanalTimelines = [];
       }
-    );
+    });
+  }
+ 
+  // Modifier la méthode d'initialisation
+  private initPostAnalysis(postId: number, content: string) {
+    const state: AnalysisState = {
+      loading: true,
+      qna: [],
+      attempts: [],
+      currentValidStreak: 0
+    };
+  
+    this.postAnalysis.set(postId, state);
+  
+    this.postService.analyzeInternshipOffer(content).subscribe({
+      next: (result) => {
+        const newState: AnalysisState = {
+          loading: false,
+          qna: result?.size > 0 ? 
+            Array.from(result.entries()).map(([q, a]) => ({
+              question: q, 
+              answer: a, 
+              expanded: false 
+            })) : [],
+          attempts: [...state.attempts, { valid: result?.size > 0 }],
+          currentValidStreak: result?.size > 0 ? 1 : 0
+        };
+        this.postAnalysis.set(postId, newState);
+      },
+      error: () => {
+        this.postAnalysis.set(postId, {
+          ...state,
+          loading: false,
+          attempts: [...state.attempts, { valid: false }]
+        });
+      }
+    });
   }
 
-
-  // Récupérer et filtrer les posts dans une seule méthode
-getPostsAndFilterByCompany(companyId: number) {
-  this.postService.getPostsByCompany(companyId).subscribe(
-    (posts: Post[]) => {
-      console.log("Posts récupérés :", posts);
-
-      // Trier les posts du plus récent au plus ancien
-      posts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-
-      this.mytimelines = posts.map(post => {
-        const timeline = this.transformPostToTimeline(post);
-
-        // Calculer la note moyenne pour chaque post
-        timeline.averageRating = this.calculateAverageRating(timeline.ratings);
-
-        return timeline;
-      });
-
-      this.origanalTimelines = [...this.mytimelines]; // Sauvegarder les posts originaux
-
-
-      // Maintenant que les timelines sont chargées, récupérez la note
-      this.mytimelines.forEach(timeline => {
-        this.ratingService.getMyRatingForPost(timeline.id, this.userConnecte).subscribe(
-          (data) => {
-            timeline.selectedRating = data ? data.stars : 0;  // Met à jour la note si elle existe
-          },
-          (error) => {
-            console.error('Erreur lors de la récupération de la note:', error);
-          }
-        );
-      });
-    },
-    error => {
-      console.error('Erreur lors de la récupération des posts :', error);
+    // Ajoutez cette méthode pour basculer les réponses
+    toggleAnswer(postId: number, index: number) {
+      const state = this.postAnalysis.get(postId);
+      if (state && state.qna[index]) {
+        state.qna[index].expanded = !state.qna[index].expanded;
+      }
     }
-  );
-}
 
-filterPosts() {
-  this.mytimelines = [...this.origanalTimelines]; // Sauvegarder les posts originaux
-  // Si un secteur est sélectionné, filtrer les posts en fonction du texte de recherche et du secteur
-  this.mytimelines = this.mytimelines.filter(post => {
-    const matchesSearchText = post.title.toLowerCase().includes(this.searchText.toLowerCase()) ||
-                              post.content.toLowerCase().includes(this.searchText.toLowerCase());
+  getPostsAndFilterByCompany(companyId: number) {
+    this.postService.getPostsByCompany(companyId).subscribe(
+      (posts: Post[]) => {
+        this.origanalTimelines = posts
+          .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+          .map(post => this.transformPostToTimeline(post));
+        
+        // Réinitialiser les autres filtres
+        this.searchText = '';
+        this.selectedSector = '';
+        this.showOnlyFollowedCompanies = false;
+        
+        // Appliquer les filtres
+        this.mytimelines = [...this.origanalTimelines];
+      },
+      error => console.error('Error loading company posts:', error)
+    );
+  }
+  private loadRatingsForTimelines() {
+    this.mytimelines.forEach(timeline => {
+      this.ratingService.getMyRatingForPost(timeline.id, this.userConnecte).subscribe(
+        (data) => timeline.selectedRating = data ? data.stars : 0,
+        (error) => console.error('Erreur lors de la récupération de la note:', error)
+      );
+    });
+  }
 
-    // Normaliser les valeurs pour éviter des problèmes de casse ou d'espaces superflus
-    const matchesSector = this.selectedSector
-      ? post.sector.trim().toLowerCase() === this.selectedSector.trim().toLowerCase()
-      : true;
+  filterPosts() {
+    // Toujours partir des données originales
+    let filteredPosts = [...this.origanalTimelines];
+  
+    // Appliquer le filtre par secteur si sélectionné
+    if (this.selectedSector) {
+      filteredPosts = filteredPosts.filter(post => 
+        post.sector && post.sector.toUpperCase() === this.selectedSector.toUpperCase()
+      );
+    }
+  
+    // Appliquer le filtre par texte si saisi
+    if (this.searchText) {
+      filteredPosts = filteredPosts.filter(post => 
+        post.title.toLowerCase().includes(this.searchText.toLowerCase()) || 
+        post.content.toLowerCase().includes(this.searchText.toLowerCase())
+      );
+    }
+  
+    // Appliquer le filtre par entreprises suivies si activé
+    if (this.showOnlyFollowedCompanies && this.userType === 'Student') {
+      this.applyFollowedCompaniesFilter(filteredPosts);
+    } else {
+      this.mytimelines = filteredPosts;
+    }
+  }
+  
+  private applyFollowedCompaniesFilter(postsToFilter: Timeline[]) {
+    this.companyService.getCompaniesFollowedByUser(this.userConnecte).subscribe({
+      next: (followedCompanies) => {
+        const followedCompanyIds = followedCompanies.map(c => c.id);
+        this.mytimelines = postsToFilter.filter(post => 
+          followedCompanyIds.includes(post.ownerId)
+        );
+      },
+      error: (err) => {
+        console.error('Error loading followed companies:', err);
+        this.mytimelines = postsToFilter;
+      }
+    });
+  }
+  onSectorChange(newSector: string) {
+    this.selectedSector = newSector;
+    this.showOnlyFollowedCompanies = false;
+    this.filterPosts();
+    this.cdr.detectChanges(); // Forcer la détection des changements
+  }
 
-    return matchesSearchText && matchesSector;
-  });
-
-  console.log('Filtered Timelines:', this.filteredTimelines); // Vérifiez si le tableau est correctement filtré
-  this.cdr.detectChanges();
-
-}
 
 ngOnChanges() {
   // Cette méthode se déclenche lorsqu'il y a un changement dans le secteur sélectionné
   this.filterPosts();
 }
 
-
-
 clearFilters() {
-  this.searchText = '';
-  this.selectedSector = '';
-  this.filteredTimelines = [...this.mytimelines]; // Réinitialiser les posts
 
-  // Recharger la page
   window.location.reload();
 }
-
-
-
-
-
-
-
-
-
 
     // Méthode pour vérifier si la date d'expiration est dans le futur
     isExpired(expiryDateTime: string): boolean {
       return new Date(expiryDateTime) > new Date();
     }
 
-
-
-
-
-
-
-
-
-
     minDateTime(): string {
       const now = new Date();
-
       // Récupérer les composants de la date locale
       const year = now.getFullYear();
       const month = String(now.getMonth() + 1).padStart(2, '0'); // Mois commence à 0
@@ -353,58 +370,70 @@ clearFilters() {
       return `${year}-${month}-${day}T${hours}:${minutes}`;
     }
 
-
-
-
-
-
-
   /**
    * 🛠️ Convertit un Post en Timeline
    */
 
   private transformPostToTimeline(post: Post): Timeline {
-    const selectedRating = post.ratings && post.ratings.length > 0 ? post.ratings[0].stars : 0;
-
+    // Protection contre les posts null/undefined
+    if (!post) {
+      return this.getEmptyTimeline();
+    }
+  
+    // Protection pour les commentaires
+    const safeComments = (post.comments || []).map(c => ({
+      id: c?.id ?? 0,
+      user: c?.user ? `${c.user.firstName} ${c.user.lastName}` : 'Anonyme',
+      userId: c?.user?.idUser ?? 0,
+      text: c?.content ?? '',
+      createdAt: c?.createdAt ?? new Date().toISOString()
+    })).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  
+    // Protection pour les ratings
+    const safeRatings = post.ratings || [];
+    const selectedRating = safeRatings.length > 0 ? safeRatings[0].stars : 0;
+  
     return {
-      id: post.id,
+      id: post.id ?? 0,
       from: post.company?.name ?? 'Utilisateur inconnu',
       time: this.timeAgo(new Date(post.createdAt)),
-      image: 'assets/images/profile/user-1.jpg',
-      title: post.title,
+      image: post.company?.image ?? { imageUrl: 'assets/images/profile/default-company.png' },
+      title: post.title ?? 'No title',
       content: post.content ?? 'Aucun contenu disponible',
-      comments: post.comments
-        .map(c => ({
-          id: c.id ?? 0,
-          user: c.user ? `${c.user.firstName} ${c.user.lastName}` : 'Anonyme',
-          userId: c.user.idUser ?? 0,
-          text: c.content ?? '',
-          createdAt: c.createdAt
-        }))
-        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()),
+      comments: safeComments,
       newComment: '',
-      selectedRating: selectedRating,  // Initialiser avec la note
+      selectedRating: selectedRating,
       hoverRating: 0,
       feedbackGiven: false,
-      ownerId: post.company.id,
-      ratings: post.ratings,  // Directly assign the entire Rating[] array
-      sector: post.company?.sector,
-      expiryDateTime: post.expiryDateTime, // ISO Date string (nullable)
-
-
+      ownerId: post.company?.id ?? 0,
+      ratings: safeRatings,
+      averageRating: this.calculateAverageRating(safeRatings),
+      sector: post.company?.sector?.toUpperCase()?.trim() ?? 'OTHER',
+      expiryDateTime: post.expiryDateTime,
+      isNew: true // Ajoutez cette propriété
     };
   }
-
-
-
-
-
-
-
-
-
-
-
+  
+  private getEmptyTimeline(): Timeline {
+    return {
+      id: 0,
+      from: 'Unknown',
+      time: 'Just now',
+      image: { imageUrl: 'assets/images/profile/default-company.png' },
+      title: 'No title',
+      content: 'No content',
+      comments: [],
+      newComment: '',
+      selectedRating: 0,
+      hoverRating: 0,
+      feedbackGiven: false,
+      ownerId: 0,
+      ratings: [],
+      averageRating: 0,
+      sector: 'OTHER',
+      expiryDateTime: undefined
+    };
+  }
 
   timeAgo(date: Date): string {
     const now = new Date();
@@ -465,8 +494,10 @@ getTimeRemaining(expiryDateTime: string): string {
   // Clic sur l'image ou le nom de l'utilisateur
   onProfileClick(timeline: Timeline) {
     this.profileSelected.emit({
-      image: timeline.image,
-      from: timeline.from
+      companyIdConnected:this.companyId,
+      userConnecte : this.userConnecte,
+     companyIdSelected: timeline.ownerId
+     
     });
   }
 
@@ -572,16 +603,6 @@ getTimeRemaining(expiryDateTime: string): string {
     }
   }
 
-
-
-
-
-
-
-
-
-
-
   setRating(timeline: Timeline, rating: number) {
     // Vérifier si l'utilisateur a déjà noté ce post
     this.ratingService.hasUserRated(timeline.id, this.userConnecte).subscribe(
@@ -661,83 +682,134 @@ getTimeRemaining(expiryDateTime: string): string {
     return totalStars / ratings.length;
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   // Optimisation de la boucle *ngFor avec trackBy
   trackByFn(index: number, item: Timeline): number {
     return item.id || index;
   }
 
-  // Gestion de l'ouverture du modal pour un nouveau post
-  openPostModal(isEdit: boolean = false, postId?: number) {
-    if (isEdit && postId) {
-      this.editPost(postId); // Remplir les données pour l'édition
-      this.isPostEditModalOpen = true;
-    } else {
-      // Réinitialiser les champs lorsqu'on ouvre la modal pour un nouveau post
-      this.newPostTitle = '';  // Réinitialiser le titre
-      this.newPostContent = '';  // Réinitialiser le contenu
-      this.selectedPostId = null;  // Réinitialiser l'ID du post sélectionné
+// Remplacer les méthodes openPostModal et closePostModal par :
 
-      this.isPostCreateModalOpen = true;
+async openPostModal(isEdit: boolean = false, postId?: number) {
+  // Charger les données du post si on est en mode édition
+  if (isEdit && postId) {
+    const postToEdit = this.mytimelines.find(post => post.id === postId);
+    if (postToEdit) {
+      this.newPostTitle = postToEdit.title;
+      this.newPostContent = postToEdit.content;
+      this.newPostExpiryDateTime = postToEdit.expiryDateTime 
+        ? new Date(postToEdit.expiryDateTime).toISOString().slice(0, 16) 
+        : '';
     }
+  } else {
+    // Réinitialiser les champs pour une nouvelle création
+    this.newPostTitle = '';
+    this.newPostContent = '';
+    this.newPostExpiryDateTime = '';
   }
 
-
-
-  closePostModal() {
-    this.isPostCreateModalOpen = false;
-    this.isPostEditModalOpen = false;
-  }
-
-  addNewPost() {
-    if (this.newPostContent.trim() === '' || this.newPostTitle.trim() === ''|| !this.companyId) {
-      return;
-    }
-
-
-    const newPost: Post = {
-     // id: Date.now(),
-      title: this.newPostTitle,
-      content: this.newPostContent,
-     // createdAt: new Date().toISOString(),
-      company: { id: this.companyId } as Company,
-      comments: [],
-      ratings: [],
-      expiryDateTime: this.newPostExpiryDateTime ? new Date(this.newPostExpiryDateTime).toISOString() : undefined
-
-    };
-
-    this.postService.addPostAndAffectToCompany(this.companyId, newPost).subscribe(
-      (savedPost: Post) => {
-        this.mytimelines.unshift(this.transformPostToTimeline(savedPost));
-        setTimeout(() => {
-          this.cdr.detectChanges();
-          this.applyAnimation();
-        }, 0);
-        this.newPostTitle = '';
-        this.newPostContent = '';
-        this.newPostExpiryDateTime = '';
-
-        this.closePostModal();
-      },
-      error => {
-        console.error('Erreur lors de l\'ajout du post :', error);
+  const { value: formValues } = await Swal.fire({
+    title: isEdit ? 'Edit Post' : 'New Post',
+    html: `
+      <input 
+        id="swal-title" 
+        class="swal2-input custom-title" 
+        placeholder="Title" 
+        value="${this.newPostTitle}"
+        required
+        minlength="3"
+        maxlength="255"
+      >
+      <textarea 
+        id="swal-content" 
+        class="swal2-textarea custom-content" 
+        placeholder="Content..." 
+        required
+        minlength="10"
+      >${this.newPostContent}</textarea>
+      <input 
+        type="datetime-local" 
+        id="swal-expiry" 
+        class="swal2-input custom-datetime" 
+        value="${this.newPostExpiryDateTime || ''}"
+        min="${this.minDateTime()}"
+      >
+    `,
+    focusConfirm: false,
+    showCancelButton: true,
+    confirmButtonColor: '#FF3636',
+    cancelButtonColor: '#6e7d88',
+    confirmButtonText: isEdit ? 'Update' : 'Post',
+    customClass: {
+      popup: 'swal-custom-popup',
+      validationMessage: 'swal-custom-validation'
+    },
+    preConfirm: () => {
+      const titleInput = document.getElementById('swal-title') as HTMLInputElement;
+      const contentInput = document.getElementById('swal-content') as HTMLTextAreaElement;
+      
+      // Validation manuelle
+      if (!titleInput.value || !contentInput.value) {
+        Swal.showValidationMessage('Title and content are required');
+        return false;
       }
-    );
+      
+      if (titleInput.value.length < 3) {
+        Swal.showValidationMessage('Title must be at least 3 characters');
+        return false;
+      }
+      
+      if (contentInput.value.length < 10) {
+        Swal.showValidationMessage('Content must be at least 10 characters');
+        return false;
+      }
+
+      return { 
+        title: titleInput.value,
+        content: contentInput.value,
+        expiry: (document.getElementById('swal-expiry') as HTMLInputElement).value
+      };
+    }
+  });
+
+  if (formValues) {
+    this.newPostTitle = formValues.title;
+    this.newPostContent = formValues.content;
+    this.newPostExpiryDateTime = formValues.expiry;
+
+    if (isEdit && postId) {
+      this.selectedPostId = postId;
+      this.updatePost();
+    } else {
+      this.addNewPost();
+    }
   }
+}
+// Ajouter ces méthodes de notification
+private showSuccessAlert(message: string) {
+  Swal.fire({
+    icon: 'success',
+    title: 'Success!',
+    text: message,
+    showConfirmButton: false,
+    timer: 2000,
+    background: '#f4f4f4',
+    customClass: {
+      icon: 'swal-custom-icon-success'
+    }
+  });
+}
+
+private showErrorAlert(message: string) {
+  Swal.fire({
+    icon: 'error',
+    title: 'Oops...',
+    text: message,
+    confirmButtonColor: '#FF3636',
+    background: '#f4f4f4'
+  });
+}
+
+
 
   applyAnimation() {
     setTimeout(() => {
@@ -747,16 +819,9 @@ getTimeRemaining(expiryDateTime: string): string {
     }, 300);
   }
 
-
-
-
-
-
   isPostDisabled(): boolean {
     return this.newPostTitle.trim() === '' || this.newPostContent.trim() === '';
   }
-
-
 
   deletePost(postId: number): void {
     // Sélectionner l'élément HTML du post à supprimer
@@ -784,14 +849,6 @@ getTimeRemaining(expiryDateTime: string): string {
       }, 500);  // Temps d'attente pour la fin de l'animation (500ms)
     }
   }
-
-
-
-
-
-
-
-
   editPost(postId: number): void {
     const postToEdit = this.mytimelines.find(post => post.id === postId);
 
@@ -808,40 +865,124 @@ getTimeRemaining(expiryDateTime: string): string {
     }
   }
 
-
-
-  updatePost(): void {
-    if (this.newPostTitle.trim() === '' || this.newPostContent.trim() === '' || !this.selectedPostId) {
-      return;
-    }
-
+  addNewPost() {
+    const newPost: Post = {
+      title: this.newPostTitle,
+      content: this.newPostContent,
+      company: { id: this.companyId } as Company,
+      expiryDateTime: this.newPostExpiryDateTime ? new Date(this.newPostExpiryDateTime).toISOString() : undefined
+    };
+  
+    this.postService.addPostAndAffectToCompany(this.companyId, newPost).subscribe({
+      next: (savedPost: Post) => {
+        // Créer une nouvelle timeline avec l'animation
+        const newTimeline = this.transformPostToTimeline(savedPost);
+        
+        // Ajouter au début du tableau
+        this.mytimelines.unshift(newTimeline);
+        
+        // Forcer la mise à jour de la vue
+        this.cdr.detectChanges();
+        
+        // Appliquer l'animation après un léger délai pour permettre au DOM de se mettre à jour
+        setTimeout(() => {
+          const newPostElement = document.getElementById(`post-${savedPost.id}`);
+          if (newPostElement) {
+            newPostElement.classList.add('show');
+          }
+        }, 50);
+        
+        // Afficher le message de succès
+        Swal.fire({
+          icon: 'success',
+          title: 'Success!',
+          text: 'Post created successfully',
+          timer: 2000,
+          showConfirmButton: false
+        });
+        
+        // Initialiser l'analyse du post
+        this.initPostAnalysis(savedPost.id, savedPost.content);
+      },
+      error: (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to create post: ' + (error.error?.message || 'Unknown error'),
+          confirmButtonColor: '#FF3636'
+        });
+      }
+    });
+  }
+  updatePost() {
+    if (!this.selectedPostId) return;
+  
     const updatedPost: Post = {
       id: this.selectedPostId,
       title: this.newPostTitle,
       content: this.newPostContent,
       expiryDateTime: this.newPostExpiryDateTime ? new Date(this.newPostExpiryDateTime).toISOString() : undefined
     };
-
-    this.postService.updatePost(updatedPost).subscribe(
-      (savedPost: Post) => {
-        // Recherche du post mis à jour et remplacement
-        const index = this.mytimelines.findIndex(post => post.id === updatedPost.id);
+  
+    this.postService.updatePost(updatedPost).subscribe({
+      next: (savedPost: Post) => {
+        // Trouver et mettre à jour le post dans le tableau
+        const index = this.mytimelines.findIndex(post => post.id === this.selectedPostId);
         if (index !== -1) {
           this.mytimelines[index] = this.transformPostToTimeline(savedPost);
+          this.cdr.detectChanges();
         }
-
-        // Réinitialise l'état des modaux et des champs
-        this.selectedPostId = null;
-        this.newPostTitle = '';
-        this.newPostContent = '';
-        this.newPostExpiryDateTime = '';
-        this.closePostModal();
+        
+        Swal.fire({
+          icon: 'success',
+          title: 'Success!',
+          text: 'Post updated successfully',
+          timer: 2000,
+          showConfirmButton: false
+        });
+        
+        this.initPostAnalysis(savedPost.id, savedPost.content);
       },
-      (error) => {
-        console.error('Erreur lors de la mise à jour du post :', error);
+      error: (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to update post: ' + (error.error?.message || 'Unknown error'),
+          confirmButtonColor: '#FF3636'
+        });
       }
-    );
+    });
   }
+
+  private validatePost(): boolean {
+    if (!this.newPostTitle || !this.newPostContent) {
+      this.showErrorAlert('Title and content are required');
+      return false;
+    }
+    return true;
+  }
+
+  toggleFollowedCompaniesFilter() {
+    this.showOnlyFollowedCompanies = !this.showOnlyFollowedCompanies;
+    // Réinitialiser le filtre de secteur si on active "Followed"
+    if (this.showOnlyFollowedCompanies) {
+      this.selectedSector = '';
+    }
+    this.filterPosts();
+  }
+  
+  ngAfterViewChecked() {
+    // Retirer la classe d'animation après qu'elle ait joué
+    this.mytimelines.forEach(timeline => {
+      if (timeline.isNew) {
+        setTimeout(() => {
+          timeline.isNew = false;
+          this.cdr.detectChanges();
+        }, 500);
+      }
+    });
+  }
+
 /*---------------------5edmet ghassen-----------------------*/ 
   addInternship(postId: number): void {
     const token = localStorage.getItem('Token');
@@ -891,15 +1032,5 @@ getTimeRemaining(expiryDateTime: string): string {
       }
     });
   }
-
-
-
-
-
-
-
-
-
-
 
 }

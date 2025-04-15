@@ -7,7 +7,7 @@ export class Quiz {
     titre: string;
     description: string;
     date_passage: Date;
-    societe?: Societe; // Remplace 'any' par le type correct si nécessaire
+    societe?: Societe; 
     questions?: QuestionReponse[];
   }
   

@@ -1,108 +1,283 @@
+/* Main Card Styles - Version Blanc/Noir */
+.company-profile-card {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 
+.card {
+  background: #ffffff; /* Fond blanc */
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid #e0e0e0; /* Bordure grise claire */
+  color: #333333; /* Texte principal noir */
+}
 
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
 
+/* Loading and Error States */
+.loading-overlay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  color: #666666;
+}
 
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top: 4px solid #FF3636; /* Rouge pour le spinner */
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 15px;
+}
 
+.error-message {
+  padding: 20px;
+  background: #ffeeee; /* Fond rouge très clair */
+  color: #FF3636; /* Texte rouge */
+  text-align: center;
+  border-radius: 8px;
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #ffcdd2;
+}
 
+.retry-button {
+  margin-top: 10px;
+  padding: 8px 16px;
+  background: #FF3636;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
 
+.retry-button:hover {
+  background: #ff416c;
+}
 
+/* Cover Image */
+.cover-image {
+  height: 150px;
+  overflow: hidden;
+  background: #f5f5f5; /* Fond gris très clair */
+}
 
+.cover-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.9;
+}
 
+.default-cover {
+  height: 150px;
+  background: linear-gradient(135deg, #f5f5f5, #e0e0e0); /* Dégradé gris */
+}
 
+/* Profile Section */
+.profile-section {
+  position: relative;
+  padding: 0 20px 20px;
+  text-align: center;
+  margin-top: -50px;
+}
 
-/* Style général de la carte */
-.cardWithShadow {
-    border-radius: 8px; /* Bordures arrondies */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre portée légère */
-    background-color: #fff; /* Fond blanc */
-    overflow: hidden; /* Pour gérer les débordements */
-    margin: 20px; /* Espacement autour de la carte */
-    width: 100%; /* Assurez-vous que la carte prend toute la largeur disponible */
-  }
-  
-  /* Style de l'image de fond */
-  .profile-bg-height {
-    width: 100%;
-    height: 200px;
-    object-fit: cover; /* Pour que l'image couvre bien l'espace sans déformer */
-  }
-  
-  /* Contenu de la carte */
-  .card-content {
-    padding: 24px;
-    text-align: center;
-  }
-  
-  /* Style de l'image du profil */
-  .pro-img img {
-    border-radius: 50%;
-    border: 4px solid #fff; /* Bordure blanche autour de l'image */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombre légère autour de l'image */
-  }
-  
-  /* Style des titres */
-  .f-s-20 {
-    font-size: 20px;
-  }
-  
-  .f-s-14 {
-    font-size: 14px;
-  }
-  
-  .f-w-500 {
-    font-weight: 500;
-  }
-  
-  .f-w-400 {
-    font-weight: 400;
-  }
-  
-  .m-t-30 {
-    margin-top: 30px;
-  }
-  
-  .m-b-0 {
-    margin-bottom: 0;
-  }
-  
-  .m-b-4 {
-    margin-bottom: 4px;
-  }
-  
-  /* Style du bouton Follow */
-  .follow-button {
-    background-color: #ff0000;
-    color: #fff;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .follow-button:hover {
-    background-color: #b30000; /* Changement de couleur au survol */
-  }
-  
-  /* Disposition des colonnes */
-  .row {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-  }
-  
-  .col-4 {
-    flex: 1;
-    text-align: center;
-  }
-  
-  /* Ajout de l'espacement vertical et horizontal */
-  .m-y-10 {
-    margin-top: 10px;
-    margin-bottom: 10px;
-  }
-  
-  .p-24 {
-    padding: 24px;
-  }
-  
+.logo-container {
+  display: inline-block;
+  margin-bottom: 15px;
+}
+
+.company-logo {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 4px solid #ffffff; /* Bordure blanche */
+  object-fit: cover;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  background: #f5f5f5;
+}
+
+.default-logo {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 4px solid #ffffff;
+  background: linear-gradient(135deg, #eeeeee, #cccccc); /* Dégradé gris */
+  color: #333333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  font-weight: bold;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Text Styles */
+.basic-info {
+  margin-bottom: 20px;
+}
+
+.company-name {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  color: #000000; /* Texte noir */
+}
+
+.company-abbreviation {
+  margin: 5px 0;
+  color: #666666; /* Texte gris moyen */
+  font-size: 16px;
+}
+
+.company-sector {
+  margin: 5px 0;
+  color: #757575; /* Texte gris */
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+/* Follow Button - Style rouge */
+.follow-button {
+  background: linear-gradient(135deg, #FF3636, #ff416c);
+  color: white;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 25px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 auto;
+  position: relative;
+
+}
+
+.follow-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
+}
+
+.follow-button.unfollow {
+  background: linear-gradient(135deg, #666666, #333333);
+}
+
+.follow-button.unfollow:hover {
+  box-shadow: 0 5px 15px rgba(102, 102, 102, 0.3);
+}
+.follow-button .spinner-border {
+  position: absolute;
+  right: 10px;
+}
+
+/* Details Section */
+.details-section {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid #e0e0e0; /* Séparateur gris clair */
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  color: #424242; /* Texte gris foncé */
+  font-size: 14px;
+}
+
+.detail-item i {
+  color: #ff416c; /* Icônes rouges */
+  width: 20px;
+  text-align: center;
+}
+
+.detail-item a {
+  color: #ff416c; /* Liens rouge */
+  text-decoration: none;
+}
+
+.detail-item a:hover {
+  color: #FF3636;
+  text-decoration: underline;
+}
+
+/* Stats Section */
+.stats-section {
+  display: flex;
+  justify-content: space-around;
+  padding: 15px 0;
+  background: #f5f5f5; /* Fond gris très clair */
+  border-top: 1px solid #e0e0e0;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 20px;
+  font-weight: 600;
+  color: #000000; /* Texte noir */
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #757575; /* Texte gris */
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 3px;
+}
+
+/* Animation */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+/* Style pour le bouton de fermeture */
+.close-button {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+.close-button:hover {
+  background-color: #FF3636;
+  color: white;
+  transform: rotate(90deg);
+  border-color: rgba(255, 255, 255, 0.3);
+}

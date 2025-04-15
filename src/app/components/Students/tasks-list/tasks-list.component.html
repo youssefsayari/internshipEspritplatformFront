@@ -1,0 +1,56 @@
+<div class="panel-header panel-header-sm"></div> 
+
+<!-- Section Title -->
+<h2 class="task-title">🗂️ My Tasks</h2>
+
+<div class="task-container">
+  <div
+    class="task-box"
+    *ngFor="let status of statuses"
+    [id]="status"
+    cdkDropList
+    [cdkDropListData]="getTasksByStatus(status)"
+    [cdkDropListConnectedTo]="statuses"
+    (cdkDropListDropped)="onTaskDrop($event, status)"
+  >
+    <h3>
+      <i class="{{ iconForStatus(status) }}"></i>
+      {{ statusLabel(status) }}
+    </h3>
+
+    <div
+      class="task"
+      *ngFor="let task of getTasksByStatus(status)"
+      cdkDrag
+      [cdkDragData]="task"
+      [ngClass]="{
+        'todo': task.status === 'TODO',
+        'inprogress': task.status === 'INPROGRESS',
+        'done': task.status === 'DONE'
+      }"
+    >
+      <h4>{{ task.title }}</h4>
+      <p *ngIf="task.deadline"><strong>📅 Deadline:</strong> {{ task.deadline | date: 'longDate' }}</p>
+
+      <div class="task-top">
+        <p *ngIf="task.status === 'DONE' && task.mark !== undefined" class="task-note">
+          ⭐ <strong>Mark:</strong> {{ task.mark }}/100
+        </p>
+      </div>
+      <p>{{ task.description }}</p>
+
+      <!-- ❓ Help Button (only for TODO and INPROGRESS) -->
+      <div class="task-actions" *ngIf="task.status === 'TODO' || task.status === 'INPROGRESS'">
+        <button class="ai-btn" (click)="openAISuggestionDialog(task)">🤖</button> 
+        <button class="help-btn" (click)="openHelpDialog(task)">
+          ❓
+        </button>
+        
+      </div>
+    </div>
+
+    <div *ngIf="getTasksByStatus(status).length === 0" class="no-tasks">
+      <em>No tasks available.</em>
+    </div>
+  </div>
+</div>

@@ -1,76 +1,180 @@
 <div class="panel-header panel-header-sm">
 </div>
 <div class="main-content">
-  <div class="row">
+  <div class="row" *ngIf="checkFinished">
     <div class="col-md-12">
-      <div class="card ">
-        <div class="card-header ">
-          Request for agreement
-        </div>
-        <div class="card-body ">
-          <form>
-            <div class="row">
-              <div class="col-md-12">
-                <div class="form-group">
-                  <label for="email">Email address*</label>
-                  <input name="email" id="email" type="email" class="form-control" placeholder="Email">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6 pr-1">
-                <div class="form-group">
-                  <label>Start date*</label>
-                  <input type="date" class="form-control" [value]="today">
-                </div>
-              </div>
-              <div class="col-md-6 pl-1">
-                <div class="form-group">
-                  <label>End date*</label>
-                  <input type="date" class="form-control" [value]="endDate" (ngModelChange)="onDateChange()" [(ngModel)]="endDate">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-12">
-                <div *ngIf="showWarning" class="alert alert-warning">
-                <span>
-                  <b> Warning - </b>For durations under 6 months, please submit a complaint, and it will be handled by the internship manager.</span>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-12">
-                <div class="form-group">
-                  <label>Company address*</label>
-                  <input type="email" class="form-control" placeholder="Company address">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-12">
-                <div class="form-group">
-                  <label>Company Phone*</label>
-                  <input type="number" class="form-control" placeholder="Company Phone">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-12">
-                <div class="form-group">
-                  <label>Company Representative*</label>
-                  <input type="text" class="form-control" placeholder="Company Representative">
-                </div>
-              </div>
-            </div>
-          </form>
+      <div class="card" *ngIf="isFifthYearStudent && hasInternship && !hasExistingAgreement && !AgreementApproved; else showErrorMessage">
+      <div class="card-header">Request for agreement</div>
+        <div class="card-body">
           <div class="row">
-            <div class="col-md-12 text-right">
-             <button class="btn btn-primary">Submit</button>
+            <!-- Left side: the form -->
+            <div class="col-md-8 border-right pr-4">
+              <form [formGroup]="agreementForm" (ngSubmit)="onSubmit()">
+                <div class="form-group mb-3">
+                  <label for="internship" class="text-dark" style="font-size: 16px;">Select Internship*</label>
+                  <select formControlName="internship" class="form-control" [(ngModel)]="selectedInternship" (change)="onInternshipChange()">
+                    <option *ngFor="let internship of internships" [ngValue]="internship">
+                      {{ internship.internshipTitle }} - {{ internship.companyName }}
+                    </option>
+                  </select>
+                  <div *ngIf="agreementForm.get('internship')?.touched && agreementForm.get('internship')?.invalid" class="text-danger" style="font-size: 14px;">
+                    <div *ngIf="agreementForm.get('internship')?.hasError('required')">Please select an internship.</div>
+                  </div>
+                </div>
+
+
+
+                <div class="form-group mb-3">
+                  <label for="email" class="text-dark" style="font-size: 16px;">Email address*</label>
+                  <input formControlName="email" id="email" type="email" class="form-control" placeholder="Email">
+                  <div *ngIf="agreementForm.get('email')?.touched && agreementForm.get('email')?.invalid" class="text-danger" style="font-size: 14px;">
+                    <div *ngIf="agreementForm.get('email')?.hasError('required')">Email is required.</div>
+                    <div *ngIf="agreementForm.get('email')?.hasError('email')">Please enter a valid email address.</div>
+                  </div>
+                </div>
+
+                <div class="form-group mb-3">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <label class="text-dark" style="font-size: 16px;">Start date*</label>
+                      <input formControlName="startDate" type="date" class="form-control" [value]="today">
+                      <div *ngIf="agreementForm.get('startDate')?.touched && agreementForm.get('startDate')?.invalid" class="text-danger" style="font-size: 14px;">
+                        <div *ngIf="agreementForm.get('startDate')?.hasError('required')">Start date is required.</div>
+                        <div *ngIf="agreementForm.get('startDate')?.hasError('dateBeforeToday')">Start date cannot be in the past.</div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <label class="text-dark" style="font-size: 16px;">End date*</label>
+                      <input formControlName="endDate" type="date" class="form-control">
+                      <div *ngIf="agreementForm.get('endDate')?.touched && agreementForm.get('endDate')?.invalid" class="text-danger" style="font-size: 14px;">
+                        <div *ngIf="agreementForm.get('endDate')?.hasError('required')">End date is required.</div>
+                        <div *ngIf="agreementForm.get('endDate')?.hasError('endDateBeforeStartDate')">End date cannot be before start date.</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group mb-3">
+                  <label for="companyAddress" class="text-dark" style="font-size: 16px;">Company address*</label>
+                  <input formControlName="companyAddress" type="text" class="form-control" placeholder="Company address">
+                  <div *ngIf="agreementForm.get('companyAddress')?.touched && agreementForm.get('companyAddress')?.invalid" class="text-danger" style="font-size: 14px;">
+                    <div *ngIf="agreementForm.get('companyAddress')?.hasError('required')">Company address is required.</div>
+                  </div>
+                </div>
+
+                <div class="form-group mb-3">
+                  <label for="companyPhone" class="text-dark" style="font-size: 16px;">Company Phone*</label>
+                  <input formControlName="companyPhone" type="text" class="form-control" placeholder="Company Phone">
+                  <div *ngIf="agreementForm.get('companyPhone')?.touched && agreementForm.get('companyPhone')?.invalid" class="text-danger" style="font-size: 14px;">
+                    <div *ngIf="agreementForm.get('companyPhone')?.hasError('required')">Company phone is required.</div>
+                    <div *ngIf="agreementForm.get('companyPhone')?.hasError('pattern')">Please enter a valid phone number.</div>
+                  </div>
+                </div>
+
+                <div class="form-group mb-3">
+                  <label for="companyRep" class="text-dark" style="font-size: 16px;">Company Representative*</label>
+                  <input formControlName="companyRep" type="text" class="form-control" placeholder="Company Representative">
+                  <div *ngIf="agreementForm.get('companyRep')?.touched && agreementForm.get('companyRep')?.invalid" class="text-danger" style="font-size: 14px;">
+                    <div *ngIf="agreementForm.get('companyRep')?.hasError('required')">Company representative is required.</div>
+                  </div>
+                </div>
+
+                <div class="text-right mt-4">
+                  <button class="btn btn-primary px-4 py-2" [disabled]="!agreementForm.valid">Submit</button>
+                </div>
+              </form>
             </div>
+            <div class="col-md-4">
+              <div *ngIf="!hasExistingAgreement && agreementInfo?.agreementState === 'REJECTED'" class="alert alert-danger mt-3" style="color: black; background-color: #f8d7da;">
+                <b style="color: black;">❌ Your request has been rejected.</b>
+                <p>Reason:</p>
+                <p>{{ rejectionRemarks[0].remark }}</p>
+              </div>
+
+
+              <div class="alert alert-warning" style="color: black; background-color: #cdcdcd;">
+                <b style="color: black;">Warning :</b> For durations under 6 months, please submit a complaint. It will be handled by the internship manager.
+              </div>
+
+              <div class="alert alert-info mt-3" style="color: black; background-color: #cdcdcd;">
+                <b style="color: black;">Need help?</b><br>
+                Contact us at: <br>
+                📞 <strong>70 500 500</strong><br>
+                🏢 Bloc A, 1st Floor, Room A102
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
+
+      <!-- Fallback messages -->
+      <ng-template #showErrorMessage>
+        <div class="card">
+        <div *ngIf="isFifthYearStudent && !hasInternship">
+          <div class="card-body text-center p-5">
+            <h3 class="text-success mb-3">
+              🚀 Good luck finding an internship!
+            </h3>
+            <p class="lead">
+              You must have an approved internship before requesting an agreement.
+            </p>
+          </div>
+        </div>
+
+        <div *ngIf="!isFifthYearStudent">
+          <div class="card-body text-center p-5">
+            <h3 class="text-success mb-3">
+              ❌ Access Denied
+            </h3>
+            <p class="lead">
+              Only 5th-year students can request an agreement.
+            </p>
+          </div>
+        </div>
+
+        <div *ngIf="hasExistingAgreement && agreementInfo?.agreementState === 'PENDING'">
+          <div class="card-body text-center p-5">
+            <h3 class="text-success mb-3">
+              Agreement
+            </h3>
+            <p class="lead">
+              Your agreement request is currently being processed. Please wait.
+            </p>
+          </div>
+        </div>
+
+        <div *ngIf="hasExistingAgreement && agreementInfo?.agreementState === 'ACCEPTED'">
+          <div class="card-body text-center p-5">
+            <h3 class="text-success mb-3">
+              ✅ Agreement Accepted!
+            </h3>
+            <p class="lead">
+              You can download your agreement below:
+            </p>
+            <button class="btn btn-primary mt-2" (click)="downloadAgreement()">Download Agreement</button>
+            <p class="lead">
+              📄 Once signed by you and the company, please return the agreement to the office 🏢 Bloc A, 1st Floor, Room A102.
+            </p>
+          </div>
+        </div>
+
+        <div *ngIf="AgreementApproved && agreementInfo?.agreementState === 'APPROVED'">
+          <div class="card-body text-center p-5">
+            <h3 class="text-success mb-3">
+              🎉 Congratulations!
+            </h3>
+            <p class="lead">
+              Good luck with your internship! We wish you success!
+            </p>
+          </div>
+        </div>
+
+
+        </div>
+      </ng-template>
+
     </div>
   </div>
 </div>
+

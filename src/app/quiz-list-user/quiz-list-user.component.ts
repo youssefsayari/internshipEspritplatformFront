@@ -32,7 +32,7 @@ export class QuizListUserComponent implements OnInit {
     const quizPassDate = new Date(quizDate);
 
     // Réinitialise l'heure du quiz à 9h00
-    quizPassDate.setHours(6, 48, 0, 0);
+    quizPassDate.setHours(14, 29, 0, 0);
 
     // La période de validité du quiz est de 1 minute
     const quizExpiryDate = new Date(quizPassDate.getTime() + 1 * 60 * 1000); // Ajoute 1 minute
