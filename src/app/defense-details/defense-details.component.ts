@@ -1,9 +1,10 @@
-// defense-details.component.ts
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router'; 
 import { DefenseService } from '../Services/defense.service';
 import { Defense } from '../models/defense';
 import { DatePipe } from '@angular/common';
+import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-defense-details',
@@ -19,8 +20,10 @@ export class DefenseDetailsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private defenseService: DefenseService,
-    private datePipe: DatePipe
-  ) { }
+    private datePipe: DatePipe,
+    private router: Router,
+    private location: Location 
+  ) {}
 
   ngOnInit(): void {
     const defenseId = this.route.snapshot.paramMap.get('id');
@@ -56,5 +59,9 @@ export class DefenseDetailsComponent implements OnInit {
     if (!this.defense?.defenseTime) return 'Not scheduled';
     const time = new Date(`1970-01-01T${this.defense.defenseTime}`);
     return this.datePipe.transform(time, 'shortTime') || 'Invalid time';
+  }
+
+  goBack(): void {
+    this.location.back(); // Goes to the previous page in history
   }
 }

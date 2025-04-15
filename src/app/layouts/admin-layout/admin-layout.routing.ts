@@ -40,6 +40,8 @@ import { DefenseStatsComponent } from '../../defense-stats/defense-stats.compone
 import { TutorCalendarComponent } from '../../tutor-calendar/tutor-calendar.component';
 import { DefenseDetailsComponent } from '../../defense-details/defense-details.component';
 import { EvaluationViewComponent } from '../../evaluation-view/evaluation-view.component';
+import { EvaluationGridPreviewComponent } from '../../evaluation-grid-preview/evaluation-grid-preview.component';
+
 
 
 
@@ -87,14 +89,15 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'defenses',       component: DefenseListComponent },
     { path: 'add-defense', component: AddDefenseComponent },
     { path: 'update-defense', component: UpdateDefenseComponent },
-    { path: 'defenses-tutors/:tutorId', component: DefensesTutorsComponent },
-    { path: 'defenses/:defenseId/evaluate/:tutorId', component: EvaluationFormComponent },
-    { path: 'student-defense/:studentId', component: StudentDefenseComponent },
+    { path: 'defenses-tutors', component: DefensesTutorsComponent },
+    { path: 'defenses/:defenseId/evaluate', component: EvaluationFormComponent },
+    { path: 'student-defense', component: StudentDefenseComponent },
     { path: 'defense-stats', component: DefenseStatsComponent },
     { path: 'tutor-calendar', component: TutorCalendarComponent },
     { path: 'defense-details/:id', component: DefenseDetailsComponent },
     { path: 'update-defense/:id', component: UpdateDefenseComponent },
-    { path: 'defenses-tutors/:tutorId/evaluation-view/:defenseId', component: EvaluationViewComponent }
+    { path: 'evaluation-view/:defenseId', component: EvaluationViewComponent },
+    { path: 'evaluation-grid-preview/:defenseId', component: EvaluationGridPreviewComponent },
 
 
 

@@ -234,6 +234,14 @@ $transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
           }
         }
         
+        &.generate {
+          color: $warning-color;
+        
+          &:hover:not(:disabled) {
+            background: rgba($warning-color, 0.1);
+          }
+        }
+        
         &.evaluate {
           color: $success-color;
           
@@ -434,4 +442,27 @@ $transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     line-height: 20px;
     text-shadow: 0 0 2px rgba(0,0,0,0.5);
   }
+  .calendar-button {
+    background-color: #4285f4;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+  
+  .calendar-button:hover {
+    background-color: #3367d6;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+  
+  .calendar-button mat-icon {
+    font-size: 18px;
+    height: 18px;
+    width: 18px;
+  }
+  
 }

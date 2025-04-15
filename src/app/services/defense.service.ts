@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Defense } from '../models/defense';
+
 
 @Injectable({
   providedIn: 'root'
@@ -30,9 +31,27 @@ export class DefenseService {
     );
   }
   
+  generateEvaluationGrid(defenseId: number): Observable<Blob> {
+    return this.http.get<Blob>(`${this.baseUrl}/generate-evaluation-grid/${defenseId}`, {
+      headers: new HttpHeaders({
+        'Accept': 'application/pdf',
+      }),
+      responseType: 'blob' as 'json',
+    });
+  }
+
+  // Download evaluation grid (returns PDF as a byte array with filename)
+  downloadEvaluationGrid(defenseId: number): Observable<HttpResponse<Blob>> {
+    return this.http.get<Blob>(`${this.baseUrl}/download-evaluation-grid/${defenseId}`, {
+      headers: new HttpHeaders({
+        'Accept': 'application/pdf',
+      }),
+      observe: 'response',
+      responseType: 'blob' as 'json',
+    });
+  }
 
   
-
   deleteDefenseById(idDefense: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/deleteDefenseById/${idDefense}`);
   }
@@ -50,6 +69,5 @@ getDefensesByStudentId(studentId: number): Observable<Defense[]> {
 getDefenseStats(): Observable<{ [key: string]: Defense[] }> {
   return this.http.get<{ [key: string]: Defense[] }>(`${this.baseUrl}/stats`);
 }
-
 
 }

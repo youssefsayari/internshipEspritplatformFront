@@ -1,8 +1,11 @@
 <div class="defense-dashboard">*
   <!-- Add Defense Button -->
-  <div class="add-defense-btn-container">
-    <button class="btn btn-primary mb-3" (click)="addDefense()">
+  <div class="dashboard-actions">
+    <button class="btn btn-primary" (click)="addDefense()">
       <i class="fas fa-plus"></i> Add New Defense
+    </button>
+    <button class="view-stats-btn" (click)="DefenseStats()">
+      <i class="fas fa-chart-bar"></i> View Stats
     </button>
   </div>
   <!-- Defense cards grid -->

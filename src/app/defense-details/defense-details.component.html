@@ -1,5 +1,5 @@
 <div class="defense-details-container" *ngIf="!isLoading && defense; else loadingOrError">
-  <mat-card class="defense-card" @fadeIn>
+    <mat-card class="defense-card" @fadeIn>
     <div class="card-header">
       <div class="header-content">
         <mat-icon class="header-icon">school</mat-icon>
@@ -95,6 +95,13 @@
       </mat-card-content>
     </mat-card>
   </mat-card>
+  
+  <div class="go-back-wrapper">
+    <button mat-stroked-button color="primary" (click)="goBack()" class="go-back-button">
+      <mat-icon>arrow_back</mat-icon> Go Back
+    </button>
+  </div>
+
 </div>
 
 <ng-template #loadingOrError>

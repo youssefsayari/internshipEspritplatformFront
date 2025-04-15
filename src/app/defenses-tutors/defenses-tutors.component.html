@@ -6,6 +6,12 @@
         <h1>My Defense Evaluations</h1>
         <p class="subtitle">Review and evaluate your assigned student defenses</p>
       </div>
+      <button mat-raised-button class="calendar-button" (click)="goToTutorCalendar()">
+        <mat-icon>calendar_today</mat-icon>
+        <span>My Calendar</span>
+      </button>
+      
+      
     </div>
     <div class="header-wave"></div>
   </div>
@@ -79,18 +85,22 @@
             </div>
           </div>
         </div>
-
         <div class="card-actions">
-          <button class="action-btn view" 
-        (click)="viewDefenseOrEvaluation(defense)">
-  <span class="action-icon">👁️</span> 
-  {{ hasEvaluated(defense) ? 'View Evaluation' : 'Details' }}
-</button>
+          <button class="action-btn view" (click)="viewDefenseOrEvaluation(defense)">
+            <span class="action-icon">👁️</span> 
+            {{ hasEvaluated(defense) ? 'View Evaluation' : 'Details' }}
+          </button>
           <button class="action-btn evaluate" 
                   (click)="evaluateDefense(defense.idDefense)"
                   [disabled]="hasEvaluated(defense)">
             <span class="action-icon">⭐</span> 
             {{ hasEvaluated(defense) ? 'Evaluation Submitted' : 'Submit Evaluation' }}
+          </button>
+          <!-- Add this new button -->
+          <button class="action-btn generate" 
+                  (click)="generateEvaluationGrid(defense.idDefense)">
+            <span class="action-icon">📊</span> 
+            Generate Grid
           </button>
         </div>
       </div>

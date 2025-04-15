@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DefenseService } from '../Services/defense.service';
 import { Defense } from '../models/defense';
 import { DatePipe } from '@angular/common';
+import { UserService } from '../Services/user.service';
 
 @Component({
   selector: 'app-my-defense',
@@ -18,41 +19,56 @@ export class StudentDefenseComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private defenseService: DefenseService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private userService: UserService,
+    private router: Router
   ) { }
 
   get tutors() {
     return this.defense?.tutors || [];
   }
 
-ngOnInit(): void {
-    const studentId = this.route.snapshot.paramMap.get('studentId');
-    if (studentId) {
-      this.defenseService.getDefensesByStudentId(+studentId).subscribe({
-        next: (defenses) => {
-          if (defenses.length > 0) {
-            this.defense = {
-              ...defenses[0],
-              // Ensure tutors is always an array
-              tutors: defenses[0].tutors || [],
-              validate: function () {
-                if (!this.tutors || this.tutors.length !== 3) {
-                  throw new Error('A defense must have exactly 3 tutors');
-                }
-                if (!this.internshipCompleted) {
-                  throw new Error('Cannot schedule defense for incomplete internship');
-                }
-              }
-            };
-          }
-          this.isLoading = false;
-          console.log('Loaded defense:', this.defense); // Debug log
+  ngOnInit(): void {
+    const token = localStorage.getItem('Token');
+    if (token) {
+      this.userService.decodeTokenRole(token).subscribe({
+        next: (user) => {
+          this.loadDefenseForStudent(user.id);
         },
         error: (err) => {
-          this.handleError(err);
+          console.error("Token decoding error:", err);
+          this.router.navigate(['/login']);
         }
       });
+    } else {
+      this.router.navigate(['/login']);
     }
+  }
+
+  private loadDefenseForStudent(studentId: number): void {
+    this.defenseService.getDefensesByStudentId(studentId).subscribe({
+      next: (defenses) => {
+        if (defenses.length > 0) {
+          this.defense = {
+            ...defenses[0],
+            tutors: defenses[0].tutors || [],
+            validate: function () {
+              if (!this.tutors || this.tutors.length !== 3) {
+                throw new Error('A defense must have exactly 3 tutors');
+              }
+              if (!this.internshipCompleted) {
+                throw new Error('Cannot schedule defense for incomplete internship');
+              }
+            }
+          };
+        }
+        this.isLoading = false;
+        console.log('Loaded defense:', this.defense); // Debug log
+      },
+      error: (err) => {
+        this.handleError(err);
+      }
+    });
   }
 
   private handleError(error: any): void {
@@ -60,8 +76,9 @@ ngOnInit(): void {
     this.hasError = true;
     this.isLoading = false;
   }
-   // Add these methods for safer array access
-   get evaluations() {
+
+  // Add these methods for safer array access
+  get evaluations() {
     return this.defense?.evaluations || [];
   }
 
@@ -81,6 +98,7 @@ ngOnInit(): void {
     return this.defense?.evaluations?.length === 3 && 
            this.defense.evaluations.every(e => e?.status === 'SUBMITTED');
   }
+
   maxEvaluationGrade(): number {
     return Math.max(...this.defense.evaluations.map(e => e.grade));
   }
@@ -88,6 +106,4 @@ ngOnInit(): void {
   minEvaluationGrade(): number {
     return Math.min(...this.defense.evaluations.map(e => e.grade));
   }
-  
-  
 }

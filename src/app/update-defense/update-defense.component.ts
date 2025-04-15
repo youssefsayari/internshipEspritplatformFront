@@ -154,4 +154,7 @@ export class UpdateDefenseComponent implements OnInit {
     this.toastr.error(errorMessage, 'Update Error');
     console.error('Defense update error:', error);
   }
+  goBack(): void {
+    this.router.navigate(['/defenses']);
+  }
 }

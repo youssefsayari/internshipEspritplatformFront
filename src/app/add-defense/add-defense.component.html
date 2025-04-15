@@ -1,5 +1,6 @@
 <div class="defense-planning-container">
   <div class="planning-card">
+    
     <div class="card-header">
       <div class="header-icon">
         <i class="fas fa-calendar-plus"></i>
@@ -104,6 +105,9 @@
 
       <!-- Form Actions -->
       <div class="form-actions">
+        <button type="button" class="btn btn-back" (click)="goBack()">
+          <i class="fas fa-arrow-left"></i> Go Back
+        </button>
         <button type="submit" class="btn btn-submit" [disabled]="isSubmitting">
           <i class="fas fa-calendar-check"></i> 
           {{ isSubmitting ? 'Scheduling...' : 'Schedule Defense' }}

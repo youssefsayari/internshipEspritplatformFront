@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { DefenseService } from '../Services/defense.service';
 import { EvaluationService } from '../Services/evaluation.service';
+import { UserService } from '../Services/user.service';
 import { Defense } from '../models/defense';
 import { Evaluation } from '../models/evaluation';
 import Swal from 'sweetalert2';
@@ -22,16 +23,26 @@ export class DefensesTutorsComponent implements OnInit {
   constructor(
     private defenseService: DefenseService,
     private evaluationService: EvaluationService,
-    private router: Router,
-    private activatedRoute: ActivatedRoute // Inject ActivatedRoute to get the tutor ID from URL
+    private userService: UserService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    // Get tutorId from the URL and load defenses
-    this.activatedRoute.params.subscribe(params => {
-      this.currentTutorId = +params['tutorId']; // Assuming tutorId is part of the route parameters
-      this.loadDefenses();
-    });
+    const token = localStorage.getItem('Token');
+    if (token) {
+      this.userService.decodeTokenRole(token).subscribe({
+        next: (user) => {
+          this.currentTutorId = user.id;
+          this.loadDefenses();
+        },
+        error: (err) => {
+          console.error("Token decoding error:", err);
+          this.router.navigate(['/login']);
+        }
+      });
+    } else {
+      this.router.navigate(['/login']);
+    }
   }
 
   loadDefenses(): void {
@@ -41,7 +52,6 @@ export class DefensesTutorsComponent implements OnInit {
         this.defenses = data;
         this.totalDefenses = this.defenses.length;
         this.isLoading = false;
-        console.log('Defenses loaded for tutor:', this.defenses);
       },
       error: (error) => {
         console.error('Error fetching defenses:', error);
@@ -57,17 +67,14 @@ export class DefensesTutorsComponent implements OnInit {
   }
 
   hasEvaluated(defense: Defense): boolean {
-    if (!defense.evaluations) return false;
-    return defense.evaluations.some(e => 
-      e.tutorId === this.currentTutorId && 
-      e.status === 'SUBMITTED'
-    );
+    return defense.evaluations?.some(e =>
+      e.tutorId === this.currentTutorId && e.status === 'SUBMITTED'
+    ) ?? false;
   }
 
   getEvaluationProgress(defense: Defense): number {
-    if (!defense.evaluations) return 0;
-    const submittedCount = defense.evaluations.filter(e => e.status === 'SUBMITTED').length;
-    return (submittedCount / 3) * 100; // Assuming 3 tutors per defense
+    const submittedCount = defense.evaluations?.filter(e => e.status === 'SUBMITTED').length || 0;
+    return (submittedCount / 3) * 100;
   }
 
   evaluateDefense(defenseId: number): void {
@@ -81,9 +88,7 @@ export class DefensesTutorsComponent implements OnInit {
       });
       return;
     }
-  
-    // Navigate with both defenseId and tutorId
-    this.router.navigate([`/defenses/${defenseId}/evaluate/${this.currentTutorId}`]);
+    this.router.navigate([`/defenses/${defenseId}/evaluate`]); 
   }
 
   viewDefenseDetails(id: number): void {
@@ -106,7 +111,6 @@ export class DefensesTutorsComponent implements OnInit {
   }
 
   formatDate(dateString: string): string {
-    if (!dateString) return 'N/A';
     return new Date(dateString).toLocaleDateString();
   }
 
@@ -120,7 +124,7 @@ export class DefensesTutorsComponent implements OnInit {
       start = Math.max(1, end - maxVisiblePages + 1);
     }
 
-    return Array.from({length: end - start + 1}, (_, i) => start + i);
+    return Array.from({ length: end - start + 1 }, (_, i) => start + i);
   }
 
   getSubmittedEvaluationsCount(defense: Defense): number {
@@ -130,15 +134,13 @@ export class DefensesTutorsComponent implements OnInit {
   getTutorEvaluation(defense: Defense): Evaluation | undefined {
     return defense.evaluations?.find(e => e.tutorId === this.currentTutorId);
   }
+
   viewEvaluation(defenseId: number): void {
     const defense = this.defenses.find(d => d.idDefense === defenseId);
-    
-    // Check if evaluation exists for this tutor
     const tutorEvaluation = defense?.evaluations?.find(e => e.tutorId === this.currentTutorId);
-    
-    if (tutorEvaluation && tutorEvaluation.status === 'SUBMITTED') {
-      // Navigate to evaluation view
-      this.router.navigate([`/defenses-tutors/${this.currentTutorId}/evaluation-view/${defenseId}`]);
+
+    if (tutorEvaluation?.status === 'SUBMITTED') {
+      this.router.navigate([`/evaluation-view/${defenseId}`]); 
     } else {
       Swal.fire({
         icon: 'info',
@@ -148,13 +150,41 @@ export class DefensesTutorsComponent implements OnInit {
       });
     }
   }
+
   viewDefenseOrEvaluation(defense: Defense): void {
     if (this.hasEvaluated(defense)) {
-      // Navigate to evaluation view if evaluation exists
-      this.router.navigate([`/defenses-tutors/${this.currentTutorId}/evaluation-view/${defense.idDefense}`]);
+      this.router.navigate([`/evaluation-view/${defense.idDefense}`]); 
     } else {
-      // Navigate to regular defense details if no evaluation exists
       this.viewDefenseDetails(defense.idDefense);
     }
+  }
+
+  goToTutorCalendar(): void {
+    this.router.navigate(['/tutor-calendar']); 
+  } 
+  
+  generateEvaluationGrid(defenseId: number, tutorId: number): void {
+    this.defenseService.generateEvaluationGrid(defenseId).subscribe({
+      next: (response) => {
+        // Store the PDF URL in local storage (or use another method to pass data)
+        const reader = new FileReader();
+        reader.onload = () => {
+          const base64Data = reader.result as string;
+          localStorage.setItem('evaluationGrid', base64Data);
+        };
+        reader.readAsDataURL(response);
+        // Navigate to the evaluation grid preview page
+        this.router.navigate([`/evaluation-grid-preview/${defenseId}`]);
+      },
+      error: (error) => {
+        console.error('Error generating evaluation grid:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'There was an issue generating the evaluation grid.',
+          confirmButtonColor: '#d33'
+        });
+      }
+    });
   }
 }

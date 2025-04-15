@@ -6,8 +6,10 @@ import { Defense } from '../models/defense';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router'; 
+import { Router } from '@angular/router';
+import { UserService } from '../Services/user.service';
+import Swal from 'sweetalert2';
+
 @Component({
   selector: 'app-tutor-calendar',
   templateUrl: './tutor-calendar.component.html',
@@ -15,7 +17,7 @@ import { Router } from '@angular/router';
 })
 export class TutorCalendarComponent implements OnInit {
   @ViewChild('calendar') calendarComponent!: FullCalendarComponent;
-  isLoading = true;
+  tutorId: number = 0;
 
   calendarOptions: CalendarOptions = {
     initialView: 'dayGridMonth',
@@ -42,34 +44,73 @@ export class TutorCalendarComponent implements OnInit {
     }
   };
 
-  tutorId = 2;
-
   constructor(
     private defenseService: DefenseService,
-    private dialog: MatDialog,
-    private router: Router // Add router injection
-
+    private userService: UserService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.loadCalendarData();
+    const token = localStorage.getItem('Token');
+    if (token) {
+      this.userService.decodeTokenRole(token).subscribe({
+        next: (user) => {
+          this.tutorId = user.id;
+          this.loadCalendarData();
+        },
+        error: (err) => {
+          console.error('Token decoding error:', err);
+          Swal.fire({
+            icon: 'error',
+            title: 'Authentication Failed',
+            text: 'You must be logged in as a tutor.',
+            confirmButtonColor: '#d33'
+          }).then(() => this.router.navigate(['/login']));
+        }
+      });
+    } else {
+      this.router.navigate(['/login']);
+    }
   }
 
-  selectedEvent: any = null; // Holds the clicked event data
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      if (this.calendarComponent) {
+        const calendarApi = this.calendarComponent.getApi();
+        calendarApi.render();
+      }
+    }, 0);
+  }
 
-  
   private handleEventClick(clickInfo: EventClickArg): void {
     const defenseId = clickInfo.event.extendedProps['idDefense'];
     if (defenseId) {
       this.router.navigate([`/defense-details/${defenseId}`]);
     } else {
       console.error('No defense ID found in event:', clickInfo.event);
-      // Optionally show error to user
     }
   }
 
+  private loadCalendarData(): void {
+    this.defenseService.getDefensesByTutorId(this.tutorId).subscribe({
+      next: (defenses: Defense[]) => {
+        this.calendarOptions.events = defenses.map(defense =>
+          this.createCalendarEvent(defense)
+        );
+      },
+      error: (err) => {
+        console.error('Error loading defenses:', err);
+        Swal.fire({
+          icon: 'error',
+          title: 'Loading Failed',
+          text: 'Could not load your defenses.',
+          confirmButtonColor: '#d33'
+        });
+      }
+    });
+  }
+
   private createCalendarEvent(defense: Defense): any {
-    console.log('Creating event for:', defense.idDefense); // Add debug log
     return {
       title: this.getEventTitle(defense),
       start: this.parseDateTime(defense.defenseDate, defense.defenseTime),
@@ -77,40 +118,15 @@ export class TutorCalendarComponent implements OnInit {
       backgroundColor: this.getEventColor(defense.defenseDegree),
       borderColor: 'transparent',
       extendedProps: {
-        idDefense: defense.idDefense // Ensure this matches your API response
+        idDefense: defense.idDefense
       }
     };
   }
-  
-
-  private loadCalendarData(): void {
-    console.log('Loading defenses for tutor:', this.tutorId);
-    
-    this.defenseService.getDefensesByTutorId(this.tutorId).subscribe({
-      next: (defenses: Defense[]) => {
-        console.log('Received defenses:', defenses);
-        
-        this.calendarOptions.events = defenses.map(defense => {
-          const event = this.createCalendarEvent(defense);
-          console.log('Created event:', event);
-          return event;
-        });
-
-        // Proper calendar refresh
-        const calendarApi = this.calendarComponent.getApi();
-        calendarApi.refetchEvents();
-        calendarApi.render();
-      },
-      error: (err) => console.error('Error loading defenses:', err)
-    });
-  }
-
 
   private getEventTitle(defense: Defense): string {
-    const studentName = defense.student ? 
-      `${defense.student.firstName || 'Unknown'} ${defense.student.lastName || 'Student'}` : 
-      'Unknown Student';
-      
+    const studentName = defense.student
+      ? `${defense.student.firstName || 'Unknown'} ${defense.student.lastName || 'Student'}`
+      : 'Unknown Student';
     return `📘 ${studentName} - ${defense.classroom || 'No Classroom'}`;
   }
 
@@ -122,15 +138,26 @@ export class TutorCalendarComponent implements OnInit {
       return `${isoDate}T${formattedTime}`;
     } catch (error) {
       console.error('Error parsing date/time:', error);
-      return new Date().toISOString(); // Fallback to current date
+      return new Date().toISOString();
     }
   }
 
   private getEventColor(grade: number): string {
-    if (grade === 0) return '#bdc3c7'; // Not Evaluated: Grey
-    if (grade >= 16) return '#2ecc71'; // Excellent: Green
-    if (grade >= 10) return '#f1c40f'; // Average: Yellow
-    return '#e74c3c'; // Needs Improvement: Red
+    if (grade === 0) return '#bdc3c7'; // gray
+    if (grade >= 16) return '#2ecc71'; // green
+    if (grade >= 10) return '#f1c40f'; // yellow
+    return '#e74c3c'; // red
   }
-  
+
+  goToToday(): void {
+    this.calendarComponent.getApi().today();
+  }
+
+  goToPrev(): void {
+    this.calendarComponent.getApi().prev();
+  }
+
+  goToNext(): void {
+    this.calendarComponent.getApi().next();
+  }
 }

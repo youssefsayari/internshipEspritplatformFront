@@ -3,11 +3,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EvaluationService } from '../Services/evaluation.service';
 import { DefenseService } from '../Services/defense.service';
+import { UserService } from '../Services/user.service';
 import Swal from 'sweetalert2';
 import { Evaluation } from '../models/evaluation';
 import { Defense } from '../models/defense';
-import { User } from '../models/user';
-
 
 @Component({
   selector: 'app-evaluation-form',
@@ -22,15 +21,15 @@ export class EvaluationFormComponent implements OnInit {
   existingEvaluation: Evaluation | null = null;
   isLoading: boolean = true;
   isSubmitting: boolean = false;
-  categories = ['Excellent', 'Average', 'Bad']; // Ensure correct spelling
-
+  categories = ['Excellent', 'Average', 'Bad'];
 
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private evaluationService: EvaluationService,
-    private defenseService: DefenseService
+    private defenseService: DefenseService,
+    private userService: UserService
   ) {
     this.evaluationForm = this.fb.group({
       grade: ['', [Validators.required, Validators.min(0), Validators.max(20)]],
@@ -39,15 +38,23 @@ export class EvaluationFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Extract defenseId and tutorId from the URL path
-    this.defenseId = +this.route.snapshot.paramMap.get('defenseId')!;
-    this.tutorId = +this.route.snapshot.paramMap.get('tutorId')!;
-    
-    console.log('Defense ID:', this.defenseId);  // Debug log
-    console.log('Tutor ID:', this.tutorId);  // Debug log
-
-    this.loadDefenseDetails();
-    this.checkExistingEvaluation();
+    const token = localStorage.getItem('Token');
+    if (token) {
+      this.userService.decodeTokenRole(token).subscribe({
+        next: (user) => {
+          this.tutorId = user.id;
+          this.defenseId = +this.route.snapshot.paramMap.get('defenseId')!;
+          this.loadDefenseDetails();
+          this.checkExistingEvaluation();
+        },
+        error: (err) => {
+          console.error("Token decoding error:", err);
+          this.router.navigate(['/login']);
+        }
+      });
+    } else {
+      this.router.navigate(['/login']);
+    }
   }
 
   loadDefenseDetails(): void {
@@ -55,13 +62,12 @@ export class EvaluationFormComponent implements OnInit {
     this.defenseService.getDefenseById(this.defenseId).subscribe({
       next: (defense) => {
         this.defense = defense;
-        console.log('Defense details:', defense); // Debug log
         this.isLoading = false;
       },
       error: (err) => {
         console.error('Error loading defense:', err);
         Swal.fire('Error', 'Failed to load defense details', 'error');
-        this.router.navigate([`/defenses-tutors/${this.tutorId}`]);
+        this.router.navigate(['/defenses-tutors']);
         this.isLoading = false;
       }
     });
@@ -77,7 +83,6 @@ export class EvaluationFormComponent implements OnInit {
             grade: tutorEvaluation.grade,
             remarks: tutorEvaluation.remarks
           });
-          
           if (tutorEvaluation.status === 'SUBMITTED') {
             this.evaluationForm.disable();
           }
@@ -114,7 +119,7 @@ export class EvaluationFormComponent implements OnInit {
           text: 'Your evaluation has been successfully submitted.',
           confirmButtonColor: '#3085d6'
         }).then(() => {
-          this.router.navigate([`/defenses-tutors/${this.tutorId}`]);
+          this.router.navigate(['/defenses-tutors']);
         });
       },
       error: (err) => {
@@ -137,6 +142,7 @@ export class EvaluationFormComponent implements OnInit {
   get remarks() {
     return this.evaluationForm.get('remarks');
   }
+
   getStudentName(): string {
     if (!this.defense?.student) return 'N/A';
     const firstName = this.defense.student.firstName || '';
@@ -144,8 +150,7 @@ export class EvaluationFormComponent implements OnInit {
     return `${firstName} ${lastName}`.trim() || 'N/A';
   }
 
-   // Format date for display
-   formatDate(dateString: string): string {
+  formatDate(dateString: string): string {
     if (!dateString) return 'N/A';
     try {
       const date = new Date(dateString);
@@ -159,39 +164,26 @@ export class EvaluationFormComponent implements OnInit {
       return 'Invalid date';
     }
   }
-  getCategoryIcon(category: string): string {
-    switch(category.toLowerCase()) {
-      case 'excellent': return 'emoji_events'; // Fixed typo
-      case 'average': return 'trending_flat';
-      case 'bad': return 'warning';
-      default: return 'person';
-    }
-  }
 
-  // Format time for display
   formatTime(timeString: string): string {
     if (!timeString) return 'N/A';
     try {
       const [hours, minutes] = timeString.split(':');
       const date = new Date();
-      date.setHours(Number(hours));
-      date.setMinutes(Number(minutes));
-      return date.toLocaleTimeString('en-US', {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: true
-      });
+      date.setHours(+hours, +minutes);
+      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     } catch (e) {
       console.error('Error formatting time:', e);
       return 'Invalid time';
     }
   }
-  goBack(): void {
-    if (this.tutorId) {
-      this.router.navigate([`/defenses-tutors/${this.tutorId}`]);
-    } else {
-      // Fallback in case tutorId isn't available for some reason
-      this.router.navigate(['/defenses-tutors']);
+
+  getCategoryIcon(category: string): string {
+    switch (category.toLowerCase()) {
+      case 'excellent': return 'emoji_events';
+      case 'average': return 'trending_flat';
+      case 'bad': return 'warning';
+      default: return 'person';
     }
   }
 }

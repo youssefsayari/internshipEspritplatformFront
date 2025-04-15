@@ -43,6 +43,7 @@ import { DefenseStatsComponent } from './defense-stats/defense-stats.component';
 import { TutorCalendarComponent } from './tutor-calendar/tutor-calendar.component';
 import { DefenseDetailsComponent } from './defense-details/defense-details.component';
 import { EvaluationViewComponent } from './evaluation-view/evaluation-view.component';
+import { EvaluationGridPreviewComponent } from './evaluation-grid-preview/evaluation-grid-preview.component';
 
 @NgModule({
   imports: [
@@ -87,7 +88,8 @@ import { EvaluationViewComponent } from './evaluation-view/evaluation-view.compo
     DefenseStatsComponent,
     TutorCalendarComponent,
     DefenseDetailsComponent,
-    EvaluationViewComponent
+    EvaluationViewComponent,
+    EvaluationGridPreviewComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

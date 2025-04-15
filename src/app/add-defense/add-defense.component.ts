@@ -176,4 +176,8 @@ export class AddDefenseComponent implements OnInit {
   }
 
   get f() { return this.defenseForm.controls; }
+
+  goBack(): void {
+    this.router.navigate(['/defenses']);
+  }
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DefenseService } from '../Services/defense.service';
 import { Defense } from '../models/defense';
+import {UserService} from "../Services/user.service";
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 
@@ -16,11 +17,27 @@ export class DefenseListComponent implements OnInit {
   totalDefenses: number = 0;
   isLoading: boolean = true;
 
-  constructor(private defenseService: DefenseService, private router: Router) {}
+  constructor(private defenseService: DefenseService, private router: Router,private userService: UserService) {}
 
   ngOnInit(): void {
+    const token = localStorage.getItem('Token');
     this.loadDefenses();
+    this.fetchUser(token!);
   }
+
+  fetchUser(token: string) {
+      this.userService.decodeTokenRole(token).subscribe({
+        next: (userDetails) => {
+          if (userDetails.id) {
+            const idUser = userDetails.id;
+          }
+        },
+        error: (err) => {
+          console.error("Erreur lors du décodage du token :", err);
+          this.router.navigate(['/login']);
+        }
+      });
+    }
 
   loadDefenses(): void {
     this.isLoading = true;
@@ -82,6 +99,10 @@ export class DefenseListComponent implements OnInit {
   }
   addDefense(): void {
     this.router.navigate(['/add-defense']);
+  }
+
+  DefenseStats(): void {
+    this.router.navigate(['/defense-stats']);
   }
   
   

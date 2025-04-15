@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DocumentService } from '../Services/document.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { Location } from '@angular/common'; // ✅ Import Location
+
 
 
 @Component({
@@ -17,7 +19,9 @@ export class DocumentDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private documentService: DocumentService,
     private router: Router,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private location: Location // ✅ Inject Location
+
   ) {}
 
   ngOnInit(): void {
@@ -26,6 +30,8 @@ export class DocumentDetailsComponent implements OnInit {
       this.getDocumentDetails(+documentId); // ✅ Convert ID to number
     }
   }
+
+  
 
   getDocumentDetails(id: number): void {
     this.documentService.getDocumentById(id).subscribe(

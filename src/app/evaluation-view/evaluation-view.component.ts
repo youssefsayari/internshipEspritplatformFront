@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EvaluationService } from '../Services/evaluation.service';
 import { DefenseService } from '../Services/defense.service';
+import { UserService } from '../Services/user.service'; // Import the UserService
 import { Evaluation } from '../models/evaluation';
 import { Defense } from '../models/defense';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-evaluation-view',
@@ -21,21 +23,36 @@ export class EvaluationViewComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private evaluationService: EvaluationService,
-    private defenseService: DefenseService
+    private defenseService: DefenseService,
+    private userService: UserService // Inject UserService
   ) { }
 
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      this.defenseId = +params['defenseId'];
-      this.tutorId = +params['tutorId'];
+    // Get the defenseId from the route params
+    this.defenseId = +this.route.snapshot.paramMap.get('defenseId')!;
+    
+    // Fetch the tutor ID from the token
+    const token = localStorage.getItem('Token');
+    if (token) {
+      this.userService.decodeTokenRole(token).subscribe({
+        next: (userDetails) => {
+          this.tutorId = userDetails.id; // Use the tutor's ID from the token
 
-      if (isNaN(this.defenseId) || isNaN(this.tutorId)) {
-        this.router.navigate(['/']);
-        return;
-      }
+          if (isNaN(this.defenseId) || isNaN(this.tutorId)) {
+            this.router.navigate(['/']);
+            return;
+          }
 
-      this.loadData();
-    });
+          this.loadData();
+        },
+        error: (err) => {
+          console.error("Error decoding token:", err);
+          this.router.navigate(['/login']);
+        }
+      });
+    } else {
+      this.router.navigate(['/login']);
+    }
   }
 
   loadData(): void {
@@ -50,7 +67,7 @@ export class EvaluationViewComponent implements OnInit {
       error: (err) => {
         console.error('Error loading defense:', err);
         this.isLoading = false;
-        this.router.navigate([`/defenses-tutors/${this.tutorId}`]);
+        this.router.navigate([`/defenses-tutors`]); // Redirect to tutor view
       }
     });
   }
@@ -63,14 +80,14 @@ export class EvaluationViewComponent implements OnInit {
           this.evaluation = tutorEvaluation;
         } else {
           // If no evaluation found, redirect back
-          this.router.navigate([`/defenses-tutors/${this.tutorId}`]);
+          this.router.navigate([`/defenses-tutors`]);
         }
         this.isLoading = false;
       },
       error: (err) => {
         console.error('Error loading evaluation:', err);
         this.isLoading = false;
-        this.router.navigate([`/defenses-tutors/${this.tutorId}`]);
+        this.router.navigate([`/defenses-tutors/`]);
       }
     });
   }
@@ -116,6 +133,6 @@ export class EvaluationViewComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate([`/defenses-tutors/${this.tutorId}`]);
+    this.router.navigate([`/defenses-tutors`]);
   }
 }

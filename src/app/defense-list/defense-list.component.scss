@@ -13,6 +13,41 @@ $dark-color: #212529;
   padding: 2rem;
   max-width: 1400px;
   margin: 0 auto;
+  .view-stats-btn {
+    background: $success-color;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 4px 12px rgba($success-color, 0.2);
+    margin-left: 1rem;
+  
+    &:hover {
+      background: darken($success-color, 5%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba($success-color, 0.3);
+    }
+  
+    i {
+      font-size: 1rem;
+    }
+  }
+  
+  // For responsive adjustment
+  @media (max-width: 768px) {
+    .view-stats-btn {
+      width: 100%;
+      justify-content: center;
+      margin-left: 0;
+      margin-top: 1rem;
+    }
+  }
   
   .header-section {
     display: flex;
@@ -336,4 +371,5 @@ $dark-color: #212529;
       justify-content: center;
     }
   }
+  
 }
