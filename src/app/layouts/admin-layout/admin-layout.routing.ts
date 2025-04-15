@@ -41,7 +41,9 @@ import { EvaluationViewComponent } from '../../evaluation-view/evaluation-view.c
 import { EvaluationGridPreviewComponent } from '../../evaluation-grid-preview/evaluation-grid-preview.component';
 import { TasksListComponent } from '../../components/Students/tasks-list/tasks-list.component';
 import { TutorTaskListComponent } from '../../components/Tutors/tutor-task-list/tutor-task-list.component';
+import { ReclamationComponent } from '../../components/reclamation/reclamation.component';
 import { GlobeComponent } from '../../components/globe/globe.component';
+
 
 
 export const AdminLayoutRoutes: Routes = [
@@ -65,6 +67,7 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'MyTasks', component: TasksListComponent },
     {path : "Tasks" , component : TutorTaskListComponent},
 
+{ path: 'reclamations', component: ReclamationComponent },
 
 
     { path: 'document-list', component: DocumentListComponent },

@@ -49,6 +49,7 @@ import { GlobeComponent } from './globe/globe.component';
 
 
 
+
 @NgModule({
   imports: [
     CommonModule,
@@ -106,7 +107,6 @@ import { GlobeComponent } from './globe/globe.component';
     ImageComponent,
     MyProfileCardComponent,
     GlobeComponent,
-
    ],
   exports: [
     FooterComponent,

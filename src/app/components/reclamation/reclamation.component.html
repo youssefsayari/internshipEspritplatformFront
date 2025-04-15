@@ -1,0 +1,108 @@
+<div class="panel-header panel-header-sm"></div>
+<div class="reclamation-container">
+  <h2>📢 Do you wanna write a complaint?</h2>
+
+  <!-- Formulaire utilisateur -->
+  <form *ngIf="isUser()" (ngSubmit)="createOrUpdateReclamation()" class="reclamation-form">
+    <input [(ngModel)]="newReclamation.subject" name="subject" placeholder="Sujet" required />
+    <textarea [(ngModel)]="newReclamation.description" name="description" placeholder="Description" required></textarea>
+    <button class="add-btn" type="submit">+ Ajouter</button>
+  </form>
+
+  <!-- ✅ Filtres visibles uniquement pour l’admin -->
+  <div *ngIf="isAdminUser()" class="filter-buttons" style="text-align:center; margin: 1rem 0;">
+    <button (click)="onFilterChange('NEW')" [class.active]="selectedFilter === 'NEW'" class="edit-btn">
+      🆕 New Complaints
+    </button>
+    <button (click)="onFilterChange('IN_PROGRESS')" [class.active]="selectedFilter === 'IN_PROGRESS'" class="edit-btn">
+      🔧 My Complaints
+    </button>
+    <button (click)="toggleArchive()" class="edit-btn">
+      📦 Archive
+    </button>
+  </div>
+
+  <!-- ✅ Liste filtrée ADMIN -->
+  <ul class="reclamation-list" *ngIf="isAdminUser() && selectedFilter && !showArchive">
+    <li *ngFor="let r of filteredReclamations" class="reclamation-item">
+      <div class="reclamation-header">
+        <strong>• {{ r.subject }}</strong>
+        <span class="status" [ngClass]="r.status">{{ r.status }}</span>
+      </div>
+
+      <!-- ✅ Affiche ID utilisateur -->
+      <div><strong>👤 ID utilisateur :</strong> {{ r.userId }}</div>
+
+      <div>{{ r.description }}</div>
+
+      <!-- ADMIN - Actions sur PENDING -->
+      <div *ngIf="r.status === 'PENDING'" class="admin-actions">
+        <button class="edit-btn" (click)="progressReclamation(r)">✅ IN progress</button>
+        <button class="reject-btn" (click)="rejectByAdmin(r)">❌ Rejected</button>
+      </div>
+
+      <!-- ADMIN - Réponse en cours -->
+      <div *ngIf="r.status === 'IN_PROGRESS'">
+        <textarea [(ngModel)]="responseText[r.id!]" placeholder="Réponse admin"></textarea>
+        <button class="edit-btn" (click)="respondToReclamation(r)">✅ Resolved</button>
+      </div>
+    </li>
+  </ul>
+
+  <!-- ✅ Liste étudiante -->
+  <ul class="reclamation-list" *ngIf="isUser() && !showArchive">
+    <li *ngFor="let r of studentRelevantReclamations" class="reclamation-item">
+      <div class="reclamation-header">
+        <strong>• {{ r.subject }}</strong>
+        <span class="status" [ngClass]="r.status">{{ r.status }}</span>
+      </div>
+
+      <div>{{ r.description }}</div>
+
+      <!-- Résolu -->
+      <div *ngIf="r.status === 'RESOLVED'">
+        <strong>📝 Réponse admin :</strong>
+        <div>{{ r.response }}</div>
+      </div>
+
+      <!-- Rejetée -->
+      <div *ngIf="r.status === 'REJECTED'">
+        <div class="rejected-indicator">❗ Votre réclamation a été rejetée.</div>
+      </div>
+
+      <!-- Supprimer -->
+      <button class="reject-btn" (click)="deleteReclamation(r.id!)">🗑 Supprimer</button>
+
+      <!-- Modifier uniquement si PENDING -->
+      <button *ngIf="r.status === 'PENDING'" class="edit-btn" (click)="editReclamation(r)">
+        ✏️ Modifier
+      </button>
+    </li>
+  </ul>
+
+  <!-- ✅ ARCHIVE ADMIN / USER -->
+  <div *ngIf="showArchive && archivedReclamations && archivedReclamations.length > 0" class="archive-section">
+    <h3>📦 Historique des Réclamations Résolues</h3>
+    <ul class="reclamation-list">
+      <li *ngFor="let r of archivedReclamations" class="reclamation-item">
+        <div class="reclamation-header">
+          <strong>{{ r.subject }}</strong>
+          <span class="status RESOLVED">RESOLVED</span>
+        </div>
+
+        <!-- ✅ Affiche ID utilisateur -->
+        <div *ngIf="isAdminUser()"><strong>👤 ID utilisateur :</strong> {{ r.userId }}</div>
+
+        <div><strong>Description :</strong> {{ r.description }}</div>
+        <div><strong>Réponse :</strong> {{ r.response || 'Pas de réponse enregistrée.' }}</div>
+        <div><strong>Envoyée le :</strong> {{ r.createdAt ? formatDate(r.createdAt) : 'Non défini' }}</div>
+        <div><strong>Répondue le :</strong> {{ r.updatedAt ? formatDate(r.updatedAt) : 'Non défini' }}</div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Aucun résultat -->
+  <div *ngIf="isAdminUser() && selectedFilter && filteredReclamations && filteredReclamations.length === 0 && !showArchive" class="empty-state">
+    Aucune réclamation dans cette catégorie.
+  </div>
+</div>

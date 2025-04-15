@@ -90,6 +90,7 @@ import { EvaluationGridPreviewComponent } from './evaluation-grid-preview/evalua
     DefenseDetailsComponent,
     EvaluationViewComponent,
     EvaluationGridPreviewComponent
+
   ],
   providers: [],
   bootstrap: [AppComponent]
