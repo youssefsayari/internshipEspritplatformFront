@@ -13,6 +13,7 @@ import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
 import {UserService} from '../../Services/user.service';
 import { Image } from '../../Model/image';
+import { ModelPredictionService } from '../../Services/model-prediction.service';
 
 interface CommentUI {
   id?: number;
@@ -105,7 +106,9 @@ export class ActivityTimelineComponent implements OnInit,AfterViewChecked  {
 
 
 
-  constructor(private postService: PostService,private internshipService: InternshipService   ,private commentService: CommentService, private userService: UserService ,private companyService: CompanyService ,private ratingService: RatingService,private cdr: ChangeDetectorRef,private toastr: ToastrService   ) {}
+  constructor(private postService: PostService,private internshipService: InternshipService   ,private commentService: CommentService, private userService: UserService ,private companyService: CompanyService ,private ratingService: RatingService,private cdr: ChangeDetectorRef,private toastr: ToastrService,
+    private modelpredictionService: ModelPredictionService
+     ) {}
 
   ngOnInit(): void {
     this.fetchUserDetails().then(() => {
