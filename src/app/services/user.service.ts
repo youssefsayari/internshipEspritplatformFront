@@ -78,11 +78,17 @@ export class UserService {
     );
   }
   getAllUsers(): Observable<User[]> {
-    return this.http.get<User[]>(`${API_URL}/getAllUsers`);
+    return this.http.get<User[]>(`${API_URL}/getAllUsers`, {
+      headers: this.getAuthHeaders()
+    });
   }
+
   getUserById(userId: number): Observable<User> {
-    return this.http.get<User>(`${API_URL}/getUserById/${userId}`);
+    return this.http.get<User>(`${API_URL}/getUserById/${userId}`, {
+      headers: this.getAuthHeaders()
+    });
   }
+
   // user.service.ts
 getAllTutors(): Observable<User[]> {
   return this.http.get<User[]>(`${API_URL}/getAllTutors`);

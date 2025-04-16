@@ -42,10 +42,10 @@ export class CompanyService {
     const formData = new FormData();
     formData.append('company', new Blob([JSON.stringify(company)], { type: 'application/json' }));
     formData.append('file', file);
-    return this.http.post<Company>(`${this.baseUrl}/add`, formData, {
-      headers: new HttpHeaders({ 'Authorization': `Bearer ${localStorage.getItem('Token')}` }) // FormData => no content-type
-    });
+
+    return this.http.post<Company>(`${this.baseUrl}/add`, formData); // No headers
   }
+
 
   getCompanyByUserId(userId: number): Observable<Company> {
     return this.http.get<Company>(`${this.baseUrl}/getCompanyByUserId/${userId}`, {
@@ -103,9 +103,7 @@ export class CompanyService {
     if (website) params = params.append('website', website);
 
     return this.http.get<Company>(`${this.baseUrl}/api/autocomplete/enrich`, {
-      params,
-      headers: this.getAuthHeaders()
-    }).pipe(catchError(this.handleError));
+      params}).pipe(catchError(this.handleError));
   }
 
   deleteCompany(companyId: number): Observable<{ success: boolean, message: string }> {
