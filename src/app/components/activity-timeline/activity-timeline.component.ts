@@ -1,4 +1,5 @@
 import { Component, OnInit, EventEmitter, Output,AfterViewChecked } from '@angular/core';
+import { catchError } from 'rxjs/operators';
 import { PostService } from '../../Services/PostService'; // Assure-toi que le chemin est correct
 import { CommentService } from '../../Services/CommentService'; // Assure-toi que le chemin est correct
 import { CompanyService } from '../../Services/CompanyService'; // Assure-toi que le chemin est correct
@@ -14,6 +15,7 @@ import Swal from 'sweetalert2';
 import {UserService} from '../../Services/user.service';
 import { Image } from '../../Model/image';
 import { ModelPredictionService } from '../../Services/model-prediction.service';
+import { forkJoin, of } from 'rxjs';
 
 interface CommentUI {
   id?: number;
@@ -97,12 +99,17 @@ export class ActivityTimelineComponent implements OnInit,AfterViewChecked  {
 
   userType: string= '';
   userConnecte: number= null;
+  userConnecteOption: string= null;
+
 
   showOnlyFollowedCompanies: boolean = false;
 
    // Ajoutez cette propriété
    postAnalysis = new Map<number, AnalysisState>();
   postAnalysisRetries = new Map<number, number>();
+
+//  intégrer votre modèle d'IA
+predictions = new Map<number, string>();
 
 
 
@@ -135,10 +142,11 @@ fetchUserDetails(): Promise<void> {
           next: (userDetails) => {
               localStorage.setItem('userRole', userDetails.role);
               localStorage.setItem('userClasse', userDetails.classe);
-              
               this.userType = userDetails.role;
               this.userConnecte = userDetails.id;
 
+              const match = userDetails.classe.match(/[A-Z]+/);
+              this.userConnecteOption = match ? match[0] : '';
               
               resolve();
           },
@@ -207,6 +215,26 @@ fetchUserDetails(): Promise<void> {
           .map(post => this.transformPostToTimeline(post));
   
         this.origanalTimelines = [...this.mytimelines];
+
+              // Appel des prédictions
+      const predictionCalls = this.mytimelines.map(timeline => 
+        this.modelpredictionService.predict(
+          this.userConnecteOption,
+          timeline.title,
+          timeline.from
+        ).pipe(
+          catchError(error => of('❌ Prediction indisponible'))
+        )
+      );
+
+      forkJoin(predictionCalls).subscribe(results => {
+        results.forEach((result, index) => {
+            if (result && result.trim().length > 0) { // Ne stocke que les réponses non vides
+                const timeline = this.mytimelines[index];
+                this.predictions.set(timeline.id, result);
+            }
+        });
+    });
         
         // Schedule analysis calls with 5-second delay between each
         this.mytimelines.forEach((timeline, index) => {
@@ -223,6 +251,14 @@ fetchUserDetails(): Promise<void> {
         this.origanalTimelines = [];
       }
     });
+  }
+
+  getPredictionPercentage(postId: number): number {
+    const prediction = this.predictions.get(postId);
+    if (!prediction) return 0;
+    
+    const percentageMatch = prediction.match(/[\d.]+%/);
+    return percentageMatch ? parseFloat(percentageMatch[0]) : 0;
   }
  
   // Modifier la méthode d'initialisation
@@ -1037,3 +1073,5 @@ private showErrorAlert(message: string) {
   }
 
 }
+
+

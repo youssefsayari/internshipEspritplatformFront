@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+// En haut du fichier component.ts
+import { forkJoin, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +32,8 @@ export class ModelPredictionService {
       headers: this.getAuthHeaders(),
       params,
       responseType: 'text' 
-    });
+    }).pipe(
+      catchError(() => of('')) // Retourne une chaîne vide en cas d'erreur
+  );
   }
 }

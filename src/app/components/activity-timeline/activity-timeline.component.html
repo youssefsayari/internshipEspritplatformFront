@@ -173,11 +173,31 @@
         </button>
       </div>
       <!-- Bouton de candidature stylé -->
-      <div *ngIf="isExpired(timeline.expiryDateTime)" class="text-center mt-4">
-        <button class="btn-apply" (click)="addInternship(timeline.id)">
-          <i class="fas fa-file-alt"></i> Apply for this internship
-        </button>
+      <!-- Remplacez la section de candidature existante par : -->
+         <!-- Updated Prediction Section -->
+<div *ngIf="isExpired(timeline.expiryDateTime)" class="prediction-section">
+  <div class="prediction-guide">
+    <!-- Prediction Percentage (Only show if available) -->
+    <div *ngIf="predictions.get(timeline.id)?.trim()" class="probability-badge">
+      <div class="progress-circle" 
+          [style.background]="'conic-gradient(#ff6b6b ' + getPredictionPercentage(timeline.id) + '%, #f0f0f0 0)'">
+        <span class="percentage">{{ getPredictionPercentage(timeline.id) }}%</span>
       </div>
+      <div class="help-text">
+        <span class="label">Pre-employment</span>
+        <i class="fas fa-info-circle" 
+          matTooltip="Prediction based on your profile match with this position"></i>
+      </div>
+    </div>
+    
+    <!-- Always show Apply button if post isn't expired -->
+    <button class="modern-apply" (click)="addInternship(timeline.id)">
+      <i class="fas fa-rocket"></i>
+      <span>Apply For This Internship</span>
+      <div class="hover-effect"></div>
+    </button>
+  </div>
+</div>
       
     </div>
 
