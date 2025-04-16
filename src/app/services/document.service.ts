@@ -11,66 +11,106 @@ export class DocumentService {
 
   constructor(private http: HttpClient) {}
 
-  getAllDocuments(): Observable<Document[]> {
-    return this.http.get<Document[]>(`${this.baseUrl}/getAllDocuments`);
+  private getAuthHeaders(): { headers: HttpHeaders } {
+    const token = localStorage.getItem('Token');
+    return {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      })
+    };
   }
+
+  getAllDocuments(): Observable<Document[]> {
+    return this.http.get<Document[]>(`${this.baseUrl}/getAllDocuments`, this.getAuthHeaders());
+  }
+
 
   getDocumentById(id: number): Observable<Document> {
-    return this.http.get<Document>(`${this.baseUrl}/getDocumentById/${id}`);
+    return this.http.get<Document>(`${this.baseUrl}/getDocumentById/${id}`, this.getAuthHeaders());
   }
+
 
   addDocument(formData: FormData): Observable<Document> {
-    return this.http.post<Document>(`${this.baseUrl}/addDocument`, formData);
+    const token = localStorage.getItem('Token');
+    return this.http.post<Document>(`${this.baseUrl}/addDocument`, formData, {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${token}`
+      })
+    });
   }
-  
+
+
 
   uploadDocument(id: number): Observable<Blob> {
-    return this.http.get(`${this.baseUrl}/uploadDocument/${id}`, { responseType: 'blob' });
+    return this.http.get(`${this.baseUrl}/uploadDocument/${id}`, {
+      responseType: 'blob',
+      headers: new HttpHeaders({ 'Authorization': `Bearer ${localStorage.getItem('Token')}` })
+    });
   }
+
 
   updateDocument(document: Document): Observable<Document> {
-    return this.http.put<Document>(`${this.baseUrl}/updateDocument`, document);
+    return this.http.put<Document>(`${this.baseUrl}/updateDocument`, document, this.getAuthHeaders());
   }
+
 
   removeDocumentById(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/deleteDocument/${id}`);
+    return this.http.delete<void>(`${this.baseUrl}/deleteDocument/${id}`, this.getAuthHeaders());
   }
 
-  // ✅ Download Document by ID
+
   downloadDocument(id: number): Observable<Blob> {
     return this.http.get(`${this.baseUrl}/downloadDocument/${id}`, {
       responseType: 'blob',
-      headers: new HttpHeaders().set('Accept', 'application/octet-stream')
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${localStorage.getItem('Token')}`,
+        'Accept': 'application/octet-stream'
+      })
     });
   }
 
-  // ✅ Download Predefined Documents (lettre_affectation, demande_de_stage, journal, convention_de_stage)
+
   downloadPredefinedDocument(fileName: string): Observable<Blob> {
     return this.http.get(`${this.baseUrl}/download/${fileName}`, {
       responseType: 'blob',
-      headers: new HttpHeaders().set('Accept', 'application/octet-stream')
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${localStorage.getItem('Token')}`,
+        'Accept': 'application/octet-stream'
+      })
     });
   }
-  //uplod multiple documents 
+
   uploadDocuments(formData: FormData): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/uploadDocuments`, formData);
+    const token = localStorage.getItem('Token');
+    return this.http.post<any>(`${this.baseUrl}/uploadDocuments`, formData, {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${token}`
+      })
+    });
   }
-  // Method to generate student CV
-generateStudentCV(userId: number): Observable<Blob> {
-  return this.http.get(`${this.baseUrl}/generateStudentCV/${userId}`, {
-    responseType: 'blob',
-    headers: new HttpHeaders().set('Accept', 'application/pdf')
-  });
-}
 
-// Method to download student CV
-downloadStudentCV(userId: number): Observable<Blob> {
-  return this.http.get(`${this.baseUrl}/downloadStudentCV/${userId}`, {
-    responseType: 'blob',
-    headers: new HttpHeaders().set('Accept', 'application/pdf')
-  });
-}
+  generateStudentCV(userId: number): Observable<Blob> {
+    return this.http.get(`${this.baseUrl}/generateStudentCV/${userId}`, {
+      responseType: 'blob',
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${localStorage.getItem('Token')}`,
+        'Accept': 'application/pdf'
+      })
+    });
+  }
 
- 
-  
+  downloadStudentCV(userId: number): Observable<Blob> {
+    return this.http.get(`${this.baseUrl}/downloadStudentCV/${userId}`, {
+      responseType: 'blob',
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${localStorage.getItem('Token')}`,
+        'Accept': 'application/pdf'
+      })
+    });
+  }
+
+
+
+
 }

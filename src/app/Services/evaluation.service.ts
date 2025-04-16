@@ -12,21 +12,36 @@ export class EvaluationService {
 
   constructor(private http: HttpClient) { }
 
-  submitEvaluation(evaluation: Evaluation): Observable<Evaluation> {
-    return this.http.post<Evaluation>(this.baseUrl, evaluation);
+  private getAuthHeaders(): { headers: any } {
+    const token = localStorage.getItem('Token');
+    return {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    };
   }
+
+
+  submitEvaluation(evaluation: Evaluation): Observable<Evaluation> {
+    return this.http.post<Evaluation>(this.baseUrl, evaluation, this.getAuthHeaders());
+  }
+
 
   getDefenseEvaluations(defenseId: number): Observable<Evaluation[]> {
-    return this.http.get<Evaluation[]>(`${this.baseUrl}/defense/${defenseId}`);
+    return this.http.get<Evaluation[]>(`${this.baseUrl}/defense/${defenseId}`, this.getAuthHeaders());
   }
 
+
   getEvaluation(evaluationId: number): Observable<Evaluation> {
-    return this.http.get<Evaluation>(`${this.baseUrl}/${evaluationId}`);
+    return this.http.get<Evaluation>(`${this.baseUrl}/${evaluationId}`, this.getAuthHeaders());
   }
+
   getEvaluationByDefenseAndTutor(defenseId: number, tutorId: number): Observable<Evaluation> {
-    return this.http.get<Evaluation>(`${this.baseUrl}/defense/${defenseId}/tutor/${tutorId}`);
+    return this.http.get<Evaluation>(`${this.baseUrl}/defense/${defenseId}/tutor/${tutorId}`, this.getAuthHeaders());
   }
-  
-  
- 
+
+
+
+
 }

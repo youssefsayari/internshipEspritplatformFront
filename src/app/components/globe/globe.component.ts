@@ -54,7 +54,7 @@ export class GlobeComponent implements AfterViewInit, OnInit {
     this.fetchUserDetails().then(() => {
       if(this.userType!=='Admin') {
       this.router.navigate(['/login']);
-      } 
+      }
       this.loadCompanies();
       interval(300000).subscribe(() => this.loadCompanies());
     }).catch((error) => {
@@ -69,15 +69,15 @@ export class GlobeComponent implements AfterViewInit, OnInit {
           this.router.navigate(['/login']); // Redirige vers /login si le token est absent
           return reject('Token non trouvé');
         }
-    
+
         this.userService.decodeTokenRole(token).subscribe({
           next: (userDetails) => {
             localStorage.setItem('userRole', userDetails.role);
             localStorage.setItem('userClasse', userDetails.classe);
-    
+
             this.userType = userDetails.role;
             this.userConnecte = userDetails.id;
-    
+
             resolve();
           },
           error: (err) => {
@@ -91,7 +91,7 @@ export class GlobeComponent implements AfterViewInit, OnInit {
                 confirmButton: 'swal-custom-button',
               },
             });
-    
+
             this.router.navigate(['/login']); // Redirige vers /login en cas d'erreur
             reject(err);
           },
@@ -117,9 +117,9 @@ export class GlobeComponent implements AfterViewInit, OnInit {
   // Add this method in the class
   openPartnershipDialog() {
     if (!this.selectedCompany) return;
-  
+
     const score = this.calculateCompatibility(this.selectedCompany);
-    
+
     Swal.fire({
       title: `Collaborate with ${this.selectedCompany?.name} ✨`,
       html: `
@@ -128,38 +128,38 @@ export class GlobeComponent implements AfterViewInit, OnInit {
             <div class="score">${score}%</div>
             <small>Strategic Alignment</small>
           </div>
-  
+
           <div class="smart-form">
             <div class="form-group">
               <label>Contact Email</label>
               <input id="email" type="email" value="${this.selectedCompany?.email}" class="swal2-input" readonly>
             </div>
-  
+
             <div class="form-group">
               <label>Proposed Collaboration</label>
               <textarea id="message" class="swal2-textarea" rows="6">
   Dear ${this.selectedCompany?.name} Team,
-  
+
   Our compatibility analysis reveals exciting opportunities for collaboration (${score}% alignment)! 🚀
-  
+
   As Tunisia's leading tech university, we propose:
-  
+
   🌟 Exclusive access to our Talent Hub:
   - Real-time internship opportunity management
   - Smart candidate matching based on 15+ skill dimensions
   - Automated application processing & student analytics
-  
+
   🎯 Benefits for ${this.selectedCompany?.name}:
   - Early access to top ESPRIT graduates
   - Brand visibility across 5000+ tech students
   - Curated candidate shortlists within 48h
   - Partnership badge on student profiles
-  
+
   Let's discuss how we can:
   ✅ Streamline your recruitment pipeline
   ✅ Enhance your employer brand
   ✅ Co-create internship programs
-  
+
   Available for a 30-min discovery call this week?
               </textarea>
             </div>
@@ -191,7 +191,7 @@ export class GlobeComponent implements AfterViewInit, OnInit {
 
 public calculateCompatibility(company: CompanyAnalyticsDto | null): number {
   if (!company) return 0;
-  
+
   const weights = {
     sector: this.getSectorWeight(company.sector),
     successRate: Math.min(company.internshipCount * 2, 40),
@@ -216,12 +216,12 @@ private autoImproveMessage(event: Event) {
   const textarea = event.target as HTMLTextAreaElement;
   textarea.style.height = 'auto';
   textarea.style.height = textarea.scrollHeight + 'px';
-  
+
   // Example of automatic enhancement
   const improvedText = textarea.value
     .replace(/hello/gi, 'Hello')
     .replace(/(\d+%)/g, '<strong>$1</strong>');
-  
+
   textarea.innerHTML = improvedText;
 }
 
@@ -229,14 +229,14 @@ private sendPartnershipRequest(data: any) {
   // Use the email service here
   this.companyService.sendPartnershipEmail(data.email, data.message).subscribe({
     next: () => {
-      Swal.fire('Success!', 'Partnership request sent with AI boost', 'success');
+      Swal.fire('Success!', 'Partnership request sent', 'success');
     },
     error: () => {
-      Swal.fire('Error', 'Failed to send, our AI is analyzing the issue...', 'error');
+      Swal.fire('Error', 'Failed to send, We are analyzing the issue...', 'error');
     }
   });
 }
-  
+
   private getEspritStyle(): Style {
     return new Style({
       image: new Icon({
@@ -265,7 +265,7 @@ private sendPartnershipRequest(data: any) {
   private initClickInteraction() {
     this.map.on('click', (evt) => {
       const feature = this.map.forEachFeatureAtPixel(evt.pixel, f => f);
-      
+
       if (feature) {
         if (feature.get('isEspritLocation')) return;
         const companyData = feature.getProperties() as CompanyAnalyticsDto;
@@ -279,7 +279,7 @@ private sendPartnershipRequest(data: any) {
     this.vectorLayer.getSource().getFeatures().forEach((feature, index) => {
       const style = feature.getStyle() as Style;
       const image = style.getImage();
-      
+
       if (image instanceof Icon) {
         const iconElement = image.getImage(1);
         setTimeout(() => {
@@ -306,7 +306,7 @@ private sendPartnershipRequest(data: any) {
     const tooltip = document.createElement('div');
     tooltip.className = 'ol-tooltip';
     document.body.appendChild(tooltip);
-  
+
     this.map.on('pointermove', (e) => {
       const feature = this.map.forEachFeatureAtPixel(e.pixel, f => f);
       if (feature) {
@@ -333,13 +333,13 @@ private sendPartnershipRequest(data: any) {
       source: new VectorSource(),
       visible: true // <-- S'assurer que la couche est visible
     });
-  
+
     this.map = new OlMap({
       target: 'map',
       layers: [
-        new TileLayer({ 
+        new TileLayer({
           source: new OSM(),
-          visible: true 
+          visible: true
         }),
         this.vectorLayer
       ],
@@ -360,14 +360,14 @@ private sendPartnershipRequest(data: any) {
     const source = this.vectorLayer.getSource();
     source.getFeatures().forEach(feature => {
       const featureCompany = feature.getProperties() as CompanyAnalyticsDto; // Extract company data
-      const style = featureCompany.id === company.id 
-      ? this.getHighlightedStyle(featureCompany) 
+      const style = featureCompany.id === company.id
+      ? this.getHighlightedStyle(featureCompany)
       : this.getMarkerStyle(featureCompany); // <-- Style normal avec icône
       feature.setStyle(style);
     });
   }
 
-  
+
   private getHighlightedStyle(company: CompanyAnalyticsDto): Style {
     return new Style({
       image: new Icon({
@@ -391,57 +391,57 @@ private sendPartnershipRequest(data: any) {
   showAnalytics() {
     const sectorDistribution = this.calculateSectorDistribution();
     const successRates = this.calculateSuccessRates();
-    
+
     console.log('Sector Distribution:', sectorDistribution);
     console.log('Success Rates:', successRates);
-    
+
     this.initHeatmapLayer();
   }
   initHeatmapLayer() {
     this.removeHeatmapLayer();
-  
+
     const heatmap = new HeatmapLayer({
       source: this.vectorLayer.getSource(),
       blur: 35,
       radius: 25,
       weight: (feature) => {
         if (feature.get('isEsprit')) return 0;
-        
+
         const company = feature.getProperties() as CompanyAnalyticsDto;
         return this.calculateCompanyImpactScore(company);
       },
       gradient: ['#00ff0020', '#ff0000ff']
     });
-  
+
     this.map.addLayer(heatmap);
   }
-  
+
   private calculateCompanyImpactScore(company: CompanyAnalyticsDto): number {
     // Combine nombre de stages réussis et réputation
     const baseScore = company.internshipCount * (company.averageRating || 1);
-    
+
     // Ajoute un bonus sectoriel
     const sectorBonus = this.getSectorWeight(company.sector) / 10;
-    
+
     // Applique une courbe logarithmique pour lisser les valeurs
     return Math.log(baseScore + 1) * sectorBonus;
   }
 
   private generateDensityPoints() {
     const source = this.vectorLayer.getSource();
-    
+
     // Pour chaque entreprise, ajoutez des points aléatoires autour
     this.companies.forEach(company => {
       const coords = this.companyCoordinates.get(company.id);
       if (coords) {
         // Ajoutez 5-10 points aléatoires autour de chaque entreprise
         const pointCount = 5 + Math.floor(Math.random() * 5);
-        
+
         for (let i = 0; i < pointCount; i++) {
           // Décalage aléatoire (environ 500m autour)
           const offsetLng = (Math.random() - 0.5) * 0.01;
           const offsetLat = (Math.random() - 0.5) * 0.01;
-          
+
           const point = new Feature({
             geometry: new Point(fromLonLat([
               coords.lng + offsetLng,
@@ -450,7 +450,7 @@ private sendPartnershipRequest(data: any) {
             isDensityPoint: true,
             weight: company.internshipCount * (0.7 + Math.random() * 0.6) // Poids aléatoire basé sur le nombre de stages
           });
-          
+
           source.addFeature(point);
         }
       }
@@ -460,14 +460,14 @@ private sendPartnershipRequest(data: any) {
   private calculateInternshipScore(company: CompanyAnalyticsDto): number {
     return (company.internshipCount || 0) * (company.averageRating || 0);
   }
-  
+
   // Ajoutez cette méthode pour nettoyer la heatmap
   removeHeatmapLayer() {
     this.map.getLayers().getArray()
       .filter(layer => layer instanceof HeatmapLayer)
       .forEach(layer => this.map.removeLayer(layer));
   }
-  
+
   private calculateSectorDistribution() {
     return this.companies.reduce((acc, company) => {
       acc[company.sector] = (acc[company.sector] || 0) + 1;
@@ -482,7 +482,7 @@ private sendPartnershipRequest(data: any) {
   }
   selectCompany(company: CompanyAnalyticsDto) {
     const coords = this.companyCoordinates.get(company.id);
-    
+
     if (coords && !isNaN(coords.lat) && !isNaN(coords.lng)) {
       this.selectedCompany = { ...company }; // Crée un nouvel objet pour forcer la détection
       this.map.getView().animate({
@@ -504,46 +504,46 @@ private sendPartnershipRequest(data: any) {
   }
   private async loadInitialCompanies() {
     console.log('Début du chargement des entreprises', this.companies);
-    
+
     if (!this.companies.length) {
       console.error('Aucune entreprise à charger !');
       this.loading = false;
       return;
     }
-  
+
     try {
       // 1. Géocodage parallèle des adresses
       const geocodingPromises = this.companies.map(async company => {
         const coords = await this.geocodeAddress(company.address);
         this.companyCoordinates.set(company.id, coords);
       });
-  
+
       await Promise.all(geocodingPromises);
-      
+
       // 2. Initialisation des marqueurs après géocodage
       this.initializeMarkers();
-      
+
       // 3. Forcer le rafraîchissement après le rendu initial
       this.forceDataRefresh();
-      
+
       // 4. Filtrage initial
       this.filterCompanies();
-  
+
     } catch (error) {
       console.error('Erreur de chargement:', error);
       this.error = 'Erreur de chargement des coordonnées';
       this.loading = false;
     }
   }
-  
+
   private forceDataRefresh() {
     // 1. Rafraîchir la source vectorielle
     const source = this.vectorLayer.getSource();
     source.changed();
-    
+
     // 2. Mettre à jour la taille de la carte
     this.map.updateSize();
-    
+
     // 3. Réinitialiser le feature overlay
     if (this.selectedCompany) {
       const temp = this.selectedCompany;
@@ -552,28 +552,28 @@ private sendPartnershipRequest(data: any) {
         this.selectedCompany = temp;
       }, 50);
     }
-    
+
     // 4. Forcer un nouveau rendu de la carte
     this.map.renderSync();
   }
   private async geocodeAddress(address: string): Promise<CompanyLocation> {
-    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&countrycodes=tn,fr`;  
+    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&countrycodes=tn,fr`;
     try {
       const response: any = await this.http.get(url).toPromise();
       console.log('Geocoding response:', response);
-      
+
       if (!response?.length) {
         console.error('No results for address:', address);
         throw new Error('Aucun résultat');
-      }      
+      }
       const bestMatch = response.find((r: any) => r.type.match(/street|building/)) || response[0];
       console.log('Best match:', bestMatch); // <-- Log
-      
+
       return {
         lat: parseFloat(bestMatch.lat),
         lng: parseFloat(bestMatch.lon)
       };
-      
+
     } catch (error) {
       console.error('Geocoding failed:', error);
       return { lat: 36.899117, lng: 10.189273 }; // Coordonnées ESPRIT par défaut
@@ -587,14 +587,14 @@ private sendPartnershipRequest(data: any) {
   private addMarker(company: CompanyAnalyticsDto, coords: CompanyLocation) {
   console.log('Création du marqueur pour', company.name);
   console.log('Coordonnées brutes:', coords);
-  
+
   const projectedCoords = fromLonLat([coords.lng, coords.lat]);
   console.log('Coordonnées projetées:', projectedCoords);
       const feature = new Feature({
       geometry: new Point(fromLonLat([coords.lng, coords.lat]))
     });
     feature.setProperties(company);
-    
+
     // Utiliser le nom au lieu de l'ID pour plus de fiabilité
     if (company.name.toLowerCase() === 'esprit') { // <-- Correction ici
       console.log('Setting ESPRIT style');
@@ -603,7 +603,7 @@ private sendPartnershipRequest(data: any) {
       console.log('Setting company style with color:', this.getSectorColor(company.sector));
       feature.setStyle(this.getMarkerStyle(company)); // <-- Utiliser getMarkerStyle
     }
-    
+
     const source = this.vectorLayer.getSource();
     if (source) {
       source.addFeature(feature);
@@ -618,16 +618,16 @@ private sendPartnershipRequest(data: any) {
         scale: 0.8,
         anchor: [0.5, 1],
         color: this.getSectorColor(company.sector),
-        crossOrigin: 'anonymous' 
+        crossOrigin: 'anonymous'
       }),
       text: new Text({
         text: company.name,
         offsetY: -25,
         fill: new Fill({ color: '#2c3e50' }),
         font: 'bold 12px Poppins',
-        stroke: new Stroke({ 
-          color: 'rgba(255,255,255,0.9)', 
-          width: 3 
+        stroke: new Stroke({
+          color: 'rgba(255,255,255,0.9)',
+          width: 3
         })
       })
     });
@@ -645,8 +645,8 @@ private sendPartnershipRequest(data: any) {
 
   filterCompanies() {
     this.filteredCompanies = this.companies
-      .filter(c => 
-        c.name.toLowerCase().includes(this.searchQuery.toLowerCase()) || 
+      .filter(c =>
+        c.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
         c.sector.toLowerCase().includes(this.searchQuery.toLowerCase())
       )
       .sort((a, b) => this.calculateCompatibility(b) - this.calculateCompatibility(a));
@@ -669,7 +669,7 @@ private sendPartnershipRequest(data: any) {
   private initializeMarkers() {
     this.vectorLayer.getSource().clear();
     this.addEspritMarker(); // Ajouter le marqueur fixe
-    
+
     // Ajout des entreprises avec vérification de coordonnées
     this.companies.forEach(company => {
       const coords = this.companyCoordinates.get(company.id);
@@ -683,12 +683,12 @@ private sendPartnershipRequest(data: any) {
       geometry: new Point(fromLonLat([coords.lng, coords.lat])),
       ...company // Attache toutes les données
     });
-    
-    feature.setProperties({ 
+
+    feature.setProperties({
       ...company,
       isCompany: true // Marqueur personnalisé
     });
-    
+
     feature.setStyle(this.getMarkerStyle(company));
     this.vectorLayer.getSource().addFeature(feature);
   }
@@ -713,7 +713,7 @@ private sendPartnershipRequest(data: any) {
       distance: 40,
       source: this.vectorLayer.getSource()
     });
-  
+
     const clusterLayer = new VectorLayer({
       source: clusterSource,
       style: (feature) => {
@@ -722,18 +722,18 @@ private sendPartnershipRequest(data: any) {
         const sectorsArray = Array.from(new Set<string>(
           companies.map(f => f.getProperties().sector)
         ));
-        const sectorColor = sectorsArray.length > 1 ? 
-          '#FF6B6B' : 
+        const sectorColor = sectorsArray.length > 1 ?
+          '#FF6B6B' :
           this.getSectorColor(sectorsArray[0]);
         return new Style({
           image: new Circle({
             radius: 15 + Math.log(size) * 3,
-            fill: new Fill({ 
+            fill: new Fill({
               color: sectorColor
             }),
-            stroke: new Stroke({ 
-              color: 'white', 
-              width: 2 
+            stroke: new Stroke({
+              color: 'white',
+              width: 2
             })
           }),
           text: new Text({
@@ -753,10 +753,10 @@ private addPulseEffect() {
     const style = feature.getStyle() as Style;
     const icon = style.getImage() as Icon;
     const baseColor = icon.getColor() || '#4CAF50';
-    
+
     let opacity = 0.8;
     icon.setOpacity(opacity);
-    
+
     setInterval(() => {
       opacity = 0.6 + Math.abs(Math.sin(Date.now() / 500)) * 0.4;
       icon.setOpacity(opacity);
@@ -822,7 +822,7 @@ private getDynamicStyle(company: CompanyAnalyticsDto, zoom: number): Style {
       geometry: new Point(this.espritLocation),
       isEspritLocation: true // Nouvelle propriété d'identification
     });
-    
+
     espritFeature.setStyle(new Style({
       image: new Icon({
         src: 'assets/esprit-marker.png',
@@ -838,7 +838,7 @@ private getDynamicStyle(company: CompanyAnalyticsDto, zoom: number): Style {
         font: 'bold 12px Poppins'
       })
     }));
-    
+
     this.vectorLayer.getSource().addFeature(espritFeature);
   }
 }
