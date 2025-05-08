@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
-// En haut du fichier component.ts
-import { forkJoin, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 @Injectable({
@@ -10,16 +8,14 @@ import { catchError } from 'rxjs/operators';
 })
 export class ModelPredictionService {
 
-  private baseUrl = 'http://localhost:8089/innoxpert/modelprediction'; 
+  private baseUrl = 'http://localhost:8089/innoxpert/modelprediction';
 
   constructor(private http: HttpClient) {}
 
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('Token');
-    return new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    });
+    const headers = new HttpHeaders();
+    return token ? headers.set('Authorization', `Bearer ${token}`) : headers;
   }
 
   predict(option: string, subject: string, company: string): Observable<string> {
@@ -31,9 +27,9 @@ export class ModelPredictionService {
     return this.http.post(this.baseUrl, null, {
       headers: this.getAuthHeaders(),
       params,
-      responseType: 'text' 
+      responseType: 'text'
     }).pipe(
-      catchError(() => of('')) // Retourne une chaîne vide en cas d'erreur
-  );
+      catchError(() => of('⚠️ Une erreur est survenue lors de la prédiction.'))
+    );
   }
 }
