@@ -9,6 +9,7 @@ import { catchError } from 'rxjs/operators';
 export class ModelPredictionService {
 
   private baseUrl = 'http://localhost:8089/innoxpert/modelprediction';
+  private flaskUrl = 'http://127.0.0.1:5000/recommend';
 
   constructor(private http: HttpClient) {}
 
@@ -30,6 +31,19 @@ export class ModelPredictionService {
       responseType: 'text'
     }).pipe(
       catchError(() => of('⚠️ Une erreur est survenue lors de la prédiction.'))
+    );
+  }
+  getRecommendations(skills: string, top_n: number = 5): Observable<any> {
+    const body = {
+      skills: skills,
+      top_n: top_n
+    };
+
+    return this.http.post(this.flaskUrl, body, {
+      headers: this.getAuthHeaders(),
+      responseType: 'json'
+    }).pipe(
+      catchError(() => of({ error: '⚠️ Une erreur est survenue lors de la récupération des recommandations.' }))
     );
   }
 }
