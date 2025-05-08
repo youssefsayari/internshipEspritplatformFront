@@ -1072,6 +1072,114 @@ private showErrorAlert(message: string) {
     });
   }
 
+
+
+  //khidmet l kthiireeyyy
+  openRecommendationModal() {
+    const allSkills = [
+      "AI", "ANDROID", "ANGULAR", "AWS", "AZURE", "BIG DATA", "BLOCKCHAIN", "CLOUD COMPUTING",
+      "CNN", "CSS", "CYBERSECURITY", "DATA ANALYSIS", "DATA VISUALIZATION", "DEEP LEARNING",
+      "DEVOPS", "DJANGO", "DOCKER", "ENCRYPTION", "ETHEREUM", "FIREWALL", "FLASK", "GIT", "HTML",
+      "IOT", "JAVA", "JAVASCRIPT", "KERAS", "KOTLIN", "KUBERNETES", "LINUX", "MOBILE APP",
+      "MONGODB", "MYSQL", "NEURAL NETWORKS", "NODEJS", "NLP", "NUMPY", "OPENCV", "PANDAS",
+      "PYTHON", "RASPBERY PI", "REACT", "RNN", "SCIKIT-LEARN", "SECURITY", "SMART CONTRACT",
+      "SOLIDITY", "SPRING", "SQL", "STATISTICS", "SWIFT", "TENSORFLOW", "TEXT PROCESSING",
+      "WIRELESS COMMUNICATION", "WIRELESS SYSTEMS", "CI/CD"
+    ];
+    
+    let selectedSkills: string[] = [];
+  
+    Swal.fire({
+      title: 'Choose your skills',
+      html: `
+        <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+          ${allSkills.map(skill => `
+            <button class="swal2-skill-btn" data-skill="${skill}">${skill}</button>
+          `).join('')}
+        </div>
+        <div id="selected-skills" style="margin-top: 20px; font-weight: bold;"></div>
+      `,
+      confirmButtonText: 'Get Recommendations',
+      cancelButtonText: 'Cancel',
+      showCancelButton: true,
+      didOpen: () => {
+        const buttons = Swal.getHtmlContainer().querySelectorAll('.swal2-skill-btn');
+        const selectedDiv = document.getElementById('selected-skills');
+        buttons.forEach(btn => {
+          btn.addEventListener('click', () => {
+            const skill = btn.getAttribute('data-skill');
+            if (!selectedSkills.includes(skill)) {
+              selectedSkills.push(skill);
+              selectedDiv!.textContent = `Selected: ${selectedSkills.join(', ')}`;
+              btn.classList.add('selected');
+            } else {
+              selectedSkills = selectedSkills.filter(s => s !== skill);
+              selectedDiv!.textContent = `Selected: ${selectedSkills.join(', ')}`;
+              btn.classList.remove('selected');
+            }
+          });
+        });
+      }
+    }).then(result => {
+      if (result.isConfirmed && selectedSkills.length > 0) {
+        this.fetchRecommendations(selectedSkills.join(', '));
+      } else if (result.isConfirmed) {
+        Swal.fire('Please select at least one skill.', '', 'warning');
+      }
+    });
+  }
+
+
+
+
+  fetchRecommendations(skills: string) {
+    this.modelpredictionService.getRecommendations(skills, 5).subscribe({
+      next: (response) => {
+        console.log('👉 Received response:', response);
+  
+        const titles = response?.recommendations;
+  
+        if (titles && Array.isArray(titles)) {
+          // Format the recommendations into visually appealing cards
+          const formattedRecommendations = titles.map(title => `
+            <div style="background-color: #f0f8ff; border-radius: 8px; padding: 12px 18px; margin: 8px 0; font-size: 18px; font-weight: bold; color: #333; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+              ${title}
+            </div>
+          `).join('');
+  
+          // Show them in a styled SweetAlert popup
+          Swal.fire({
+            icon: 'info',
+            title: 'Top Recommendations',
+            html: `
+              <div style="padding: 20px; text-align: center;">
+                <h3 style="font-size: 22px; color: #333; margin-bottom: 15px;">Recommended Fields Based on Your Skills:</h3>
+                ${formattedRecommendations}
+              </div>
+            `,
+            confirmButtonText: 'Got it!',
+            showConfirmButton: true
+          });
+        } else {
+          Swal.fire('No recommendations found.', '', 'warning');
+        }
+      },
+      error: (err) => {
+        console.error('Error fetching recommendations:', err);
+        Swal.fire('Recommendation request failed.', '', 'error');
+      }
+    });
+  }
+
+  
+
+
+
+
+
+
+  
+  
 }
 
 

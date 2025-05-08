@@ -43,6 +43,11 @@
     <i class="fas fa-sync-alt"></i> Reset All
   </button>
 
+  <button class="btn btn-warning" (click)="openRecommendationModal()">
+    <i class="fas fa-magic"></i> Recommend
+  </button>
+  
+
 </div>
                               
 <div *ngFor="let timeline of mytimelines || [] ; trackBy: trackByFn" class="timeline-card card p-3 mb-3 shadow-sm rounded"        

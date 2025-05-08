@@ -85,4 +85,11 @@ export class PostService {
       })
     );
   }
+  getPostsByTitles(titles: string[]): Observable<Post[]> {
+    return this.http.post<Post[]>(`${this.baseUrl}/byTitles`, titles, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+
 }
