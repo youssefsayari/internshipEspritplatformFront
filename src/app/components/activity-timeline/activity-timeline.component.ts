@@ -1131,47 +1131,95 @@ private showErrorAlert(message: string) {
 
 
 
+fetchRecommendations(skills: string) {
+  this.modelpredictionService.getRecommendations(skills, 5).subscribe({
+    next: (response) => {
+      console.log('👉 Received response:', response);
 
-  fetchRecommendations(skills: string) {
-    this.modelpredictionService.getRecommendations(skills, 5).subscribe({
-      next: (response) => {
-        console.log('👉 Received response:', response);
-  
-        const titles = response?.recommendations;
-  
-        if (titles && Array.isArray(titles)) {
-          // Format the recommendations into visually appealing cards
-          const formattedRecommendations = titles.map(title => `
-            <div style="background-color: #f0f8ff; border-radius: 8px; padding: 12px 18px; margin: 8px 0; font-size: 18px; font-weight: bold; color: #333; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-              ${title}
+      const titles = response?.recommendations;
+
+      if (titles && Array.isArray(titles) && titles.length > 0) {
+        // Display titles first in a styled SweetAlert
+        const formattedRecommendations = titles.map(title => `
+          <div style="background-color: #f0f8ff; border-radius: 8px; padding: 12px 18px; margin: 8px 0; font-size: 18px; font-weight: bold; color: #333; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+            ${title}
+          </div>
+        `).join('');
+
+        Swal.fire({
+          icon: 'info',
+          title: 'Top Recommendations',
+          html: `
+            <div style="padding: 20px; text-align: center;">
+              <h3 style="font-size: 22px; color: #333; margin-bottom: 15px;">Recommended Fields Based on Your Skills:</h3>
+              ${formattedRecommendations}
             </div>
-          `).join('');
-  
-          // Show them in a styled SweetAlert popup
-          Swal.fire({
-            icon: 'info',
-            title: 'Top Recommendations',
-            html: `
-              <div style="padding: 20px; text-align: center;">
-                <h3 style="font-size: 22px; color: #333; margin-bottom: 15px;">Recommended Fields Based on Your Skills:</h3>
-                ${formattedRecommendations}
-              </div>
-            `,
-            confirmButtonText: 'Got it!',
-            showConfirmButton: true
-          });
-        } else {
-          Swal.fire('No recommendations found.', '', 'warning');
-        }
-      },
-      error: (err) => {
-        console.error('Error fetching recommendations:', err);
-        Swal.fire('Recommendation request failed.', '', 'error');
-      }
-    });
-  }
+          `,
+          confirmButtonText: 'Load Matching Posts'
+        }).then(result => {
+          if (result.isConfirmed) {
+            // After user confirms, fetch posts by title
+            this.postService.getPostsByTitles(titles).subscribe({
+              next: (posts: Post[]) => {
+                if (posts.length > 0) {
+                  this.mytimelines = posts
+                    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+                    .map(post => this.transformPostToTimeline(post));
 
-  
+                  this.origanalTimelines = [...this.mytimelines];
+
+                  this.applyAnimation();
+                  this.loadRatingsForTimelines();
+
+                  Swal.fire({
+                    icon: 'success',
+                    title: 'Recommendations Loaded!',
+                    text: 'Posts have been updated based on your skills.',
+                    timer: 2000,
+                    showConfirmButton: false
+                  });
+
+                  this.mytimelines.forEach((timeline, index) => {
+                    setTimeout(() => {
+                      this.initPostAnalysis(timeline.id, timeline.content);
+                      this.modelpredictionService.predict(
+                        this.userConnecteOption,
+                        timeline.title,
+                        timeline.from
+                      ).pipe(
+                        catchError(() => of('❌ Prediction indisponible'))
+                      ).subscribe(result => {
+                        if (result && result.trim().length > 0) {
+                          this.predictions.set(timeline.id, result);
+                        }
+                      });
+                    }, index * 5000);
+                  });
+
+                } else {
+                  Swal.fire('No posts found for these recommendations.', '', 'warning');
+                }
+              },
+              error: (err) => {
+                console.error('Error fetching posts by title:', err);
+                Swal.fire('Failed to load recommended posts.', '', 'error');
+              }
+            });
+          }
+        });
+
+      } else {
+        Swal.fire('No recommendations found.', '', 'warning');
+      }
+    },
+    error: (err) => {
+      console.error('Error fetching recommendations:', err);
+      Swal.fire('Recommendation request failed.', '', 'error');
+    }
+  });
+}
+
+
 
 
 
