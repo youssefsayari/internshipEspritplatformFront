@@ -52,7 +52,9 @@ export class AddCompanyComponent implements OnInit {
       website: ['', [Validators.required, Validators.pattern('https?://.+')]],
       founders: ['', [Validators.required, Validators.minLength(1)]],
       secretKey: ['', [Validators.required, Validators.minLength(8), Validators.pattern('^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9]).{8,}$')]],
-      image: ['', Validators.required]
+      image: ['', Validators.required],
+      numEmployees: ['', [Validators.required, Validators.min(1)]]
+
     });
   }
 
@@ -119,26 +121,36 @@ export class AddCompanyComponent implements OnInit {
     this.assistantMessage = 'Filling the form with available information...';
     
     const fieldsToFill = [
-      { name: 'abbreviation', value: company.abbreviation },
-      { name: 'sector', value: company.sector },
-      { name: 'email', value: company.email },
-      { name: 'phone', value: company.phone.toString() },
-      { name: 'address', value: company.address },
-      { name: 'founders', value: company.founders },
-      { name: 'foundingYear', value: this.formatDateForInput(company.foundingYear) },
-      { name: 'secretKey', value: company.secretKey }
-    ];
+    { name: 'abbreviation', value: company.abbreviation },
+    { name: 'sector', value: company.sector },
+    { name: 'email', value: company.email },
+    { name: 'phone', value: company.phone?.toString() || '' },
+    { name: 'address', value: company.address },
+    { name: 'founders', value: company.founders },
+    { name: 'foundingYear', value: this.formatDateForInput(company.foundingYear) },
+    { name: 'numEmployees', value: company.numEmployees?.toString() || '10' }, // Ensure it's a string
+    { name: 'labelDate', value: this.formatDateForInput(company.labelDate) },
+    { name: 'secretKey', value: company.secretKey }
+  ];
   
     let promises: Promise<void>[] = [];
     
-    fieldsToFill.forEach((field, index) => {
-      const promise = new Promise<void>((resolve) => {
-        setTimeout(() => {
+     fieldsToFill.forEach((field, index) => {
+    const promise = new Promise<void>((resolve) => {
+      setTimeout(() => {
+        if (field.name === 'numEmployees') {
+          // Special handling for numeric fields
+          this.companyForm.get(field.name)?.setValue(parseInt(field.value, 10));
+          this.companyForm.get(field.name)?.updateValueAndValidity();
+          this.companyForm.get(field.name)?.markAsTouched();
+          resolve();
+        } else {
           this.typeField(field.name, field.value).then(resolve);
-        }, 1000 + (index * 1500));
-      });
-      promises.push(promise);
+        }
+      }, 1000 + (index * 1500));
     });
+    promises.push(promise);
+  });
   
     Promise.all(promises).then(() => {
       // Vérifier toutes les erreurs après remplissage
@@ -218,6 +230,16 @@ typeField(fieldName: string, value: any): Promise<void> {
     this.isTyping = true;
     this.assistantMessage = `Filling ${fieldName.replace(/([A-Z])/g, ' $1').toLowerCase()}...`;
     
+  // Skip typing animation for numeric fields
+    if (fieldName === 'numEmployees') {
+      this.companyForm.get(fieldName)?.setValue(parseInt(value, 10));
+      this.companyForm.get(fieldName)?.updateValueAndValidity();
+      this.companyForm.get(fieldName)?.markAsTouched();
+      this.isTyping = false;
+      resolve();
+      return;
+    }
+
     let currentValue = '';
     let i = 0;
     const typingInterval = setInterval(() => {

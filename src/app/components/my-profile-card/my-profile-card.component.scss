@@ -199,6 +199,17 @@
       }
     }
   }
+   .fa-users {
+    color: #4e73df; // Couleur bleue pour l'icône
+  }
+  
+  input[type="number"] {
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
 }
 
 .error-message {

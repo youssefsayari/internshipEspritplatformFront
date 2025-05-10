@@ -135,6 +135,14 @@
           The founding year must be between 1900 and {{ currentYear }}
         </div>
       </div>
+              <!-- Après le champ Founders -->
+        <div class="input-group num-employees">
+          <label>Number of Employees</label>
+          <input type="number" formControlName="numEmployees" placeholder="Enter number of employees" required min="1">
+          <div *ngIf="companyForm.get('numEmployees')?.invalid && companyForm.get('numEmployees')?.touched" class="error-message">
+            Please enter a valid number (minimum 1)
+          </div>
+        </div>
       <div class="input-group label-date">
         <label>Label Date</label>
         <input type="date" formControlName="labelDate" required>
@@ -160,34 +168,38 @@
           </div>
         </div>
 
-    <div class="input-group logo-upload">
-      <label>Company Logo</label>
-      <div class="file-input-container">
-        <div class="file-input-wrapper">
-          <input type="file" #fileInput (change)="onFileChange($event)" accept="image/*" required>
-          <span class="file-display">
-            <span class="file-name">{{selectedFileName || 'Choose File'}}</span>
-            <span class="browse-btn">Browse</span>
-          </span>
-        </div>
-      </div>
-      <div *ngIf="companyForm.get('image')?.invalid && companyForm.get('image')?.touched" class="error-message">
-        Company logo is required
+    
+<!-- Replace the current logo-upload and image-preview-wrapper sections with this: -->
+<div class="input-row">
+  <!-- Company Logo Upload -->
+  <div class="input-group logo-upload">
+    <label>Company Logo</label>
+    <div class="file-input-container">
+      <div class="file-input-wrapper">
+        <input type="file" #fileInput (change)="onFileChange($event)" accept="image/*" required>
+        <span class="file-display">
+          <span class="file-name">{{selectedFileName || 'Choose File'}}</span>
+          <span class="browse-btn">Browse</span>
+        </span>
       </div>
     </div>
-
-  <!-- Aperçu du logo -->
-  <div class="image-preview-wrapper" *ngIf="imagePreview">
-    <div class="image-preview-container">
-      <div class="preview-controls">
-        <span>Logo Preview</span>
-        <button type="button" class="remove-image-btn" (click)="clearImage()" aria-label="Remove logo">
-          <i class="fa fa-trash-o" aria-hidden="true"></i> Remove
-        </button>
-      </div>
-      <img [src]="imagePreview" alt="Company Logo Preview" class="preview-image">
+    <div *ngIf="companyForm.get('image')?.invalid && companyForm.get('image')?.touched" class="error-message">
+      Company logo is required
     </div>
   </div>
+
+  <!-- Logo Preview -->
+  <div class="input-group logo-preview" *ngIf="imagePreview">
+    <label>Logo Preview</label>
+    <div class="image-preview-container">
+      <img [src]="imagePreview" alt="Company Logo Preview" class="preview-image">
+      <button type="button" class="remove-image-btn" (click)="clearImage()" aria-label="Remove logo">
+        <i class="fa fa-trash-o" aria-hidden="true"></i> Remove
+      </button>
+    </div>
+  </div>
+</div>
+
 
 
       <div class="button-group">

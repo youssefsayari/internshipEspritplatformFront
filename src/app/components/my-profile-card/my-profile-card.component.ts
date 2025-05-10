@@ -124,7 +124,9 @@ formatCompanyData(company: Company): void {
       name: 'default'
     },
     // Formater le secteur
-    sectorDisplay: this.getSectorDisplayName(company.sector)
+    sectorDisplay: this.getSectorDisplayName(company.sector),
+    numEmployees: company.numEmployees || 'N/A' // Ajout du nouveau champ
+
   };
 }
 
@@ -171,6 +173,8 @@ saveChanges(): void {
     // Send dates as they were originally (don't convert to just years)
     foundingYear: this.company.foundingYear,
     labelDate: this.company.labelDate,
+    numEmployees: Number(this.updatedCompany.numEmployees), // Conversion en number
+
     // Include required fields that might be missing
     secretKey: this.company.secretKey
   };

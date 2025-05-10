@@ -22,11 +22,20 @@
           <div class="company-info">
             <h3>{{company.name}}</h3>
             <div class="company-meta">
+              
               <span class="sector-badge">{{company.sector}}</span>
               <div>
               <span class="compatibility-score">
                 {{calculateCompatibility(company)}}% Match
               </span>
+              
+                <span class="classification-badge" 
+              [ngClass]="{'startup': companyClassifications.get(company.id) === '🚀 Startup',
+                          'error': companyClassifications.get(company.id) === '❌ Erreur'}">
+          {{companyClassifications.get(company.id)}}
+        </span>
+
+        
             </div>
               <span class="address">{{company.address}}</span>
             </div>
@@ -86,6 +95,11 @@
             <div class="info-item">
               <i class="fas fa-users"></i>
               <p>Founded in {{selectedCompany.foundingYear | date: 'yyyy'}}</p>
+            </div>
+            <!-- Dans la section company-details -->
+            <div class="info-item">
+              <i class="fas fa-users"></i>
+              <p>{{selectedCompany.numEmployees}} employees</p>
             </div>
           </div>
       

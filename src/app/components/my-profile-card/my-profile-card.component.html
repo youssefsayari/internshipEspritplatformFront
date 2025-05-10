@@ -68,6 +68,7 @@
         <h3 class="m-b-4 f-s-20 f-w-500">{{formattedCompany?.foundingYear || 'N/A'}}</h3>
         <span class="f-s-14">Founded</span>
       </div>
+     
       <div class="col-4">
         <h3 class="m-b-4 f-s-20 f-w-500">{{formattedCompany?.labelDate || 'N/A'}}</h3>
         <span class="f-s-14">Label Date</span>
@@ -106,6 +107,15 @@
     <span *ngIf="!isEditing">Founded by {{formattedCompany?.founders || 'unknown founders'}}</span>
     <input *ngIf="isEditing" [(ngModel)]="updatedCompany.founders" class="form-control">
   </p>
+
+  <!-- Ajoutez cette section après les autres détails -->
+      <p class="f-s-14">
+        <i class="fas fa-users"></i>
+        <span *ngIf="!isEditing">{{formattedCompany?.numEmployees || 'Number of employees not specified'}}</span>
+        <input *ngIf="isEditing" [(ngModel)]="updatedCompany.numEmployees" 
+              type="number" min="1" class="form-control">
+      </p>
+
 </div>
   </div>
 </div>

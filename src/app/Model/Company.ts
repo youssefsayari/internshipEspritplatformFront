@@ -19,6 +19,7 @@ export interface Company {
   owner?: User;
   followers?: User[];
   image?: Image; // Ajoutez ce champ
+  numEmployees?: number;
 
 }
 export interface CompanyAnalyticsDto {
@@ -34,4 +35,5 @@ export interface CompanyAnalyticsDto {
   labelDate?: Date;
   founders?: string;
   email?: string;
+  numEmployees?: number;
 }

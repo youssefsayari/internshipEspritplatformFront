@@ -521,3 +521,35 @@
   background: #FF6B6B20 !important;
   color: #FF6B6B !important;
 }
+
+
+/* Styles pour les badges de classification */
+.classification-badge, .classification-result {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.9em;
+  margin-left: 8px;
+  background: #f0f0f0;
+  color: #333;
+  transition: all 0.3s ease;
+}
+
+.classification-badge.startup, 
+.classification-result.startup {
+  background: linear-gradient(135deg, #4CAF50, #8BC34A);
+  color: white;
+  font-weight: bold;
+}
+
+.classification-badge.error,
+.classification-result.error {
+  background: #f44336;
+  color: white;
+}
+
+/* Animation pendant l'analyse */
+.classification-badge:not(.startup):not(.error) {
+  animation:  1.5s infinite;
+}
+
