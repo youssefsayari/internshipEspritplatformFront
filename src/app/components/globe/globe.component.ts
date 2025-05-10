@@ -18,6 +18,8 @@ import { CompanyService } from '../../Services/CompanyService';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import {UserService} from '../../Services/user.service';
+import { ModelClassificationService } from '../../Services/model-classification.service';
+
 
 
 
@@ -33,6 +35,10 @@ interface CompanyLocation {
 })
 export class GlobeComponent implements AfterViewInit, OnInit {
   companies: CompanyAnalyticsDto[] = [];
+
+  companyClassifications: Map<number, string> = new Map();
+
+
   loading = true;
   error: string | null = null;
   selectedCompany: CompanyAnalyticsDto | null = null;
@@ -47,7 +53,8 @@ export class GlobeComponent implements AfterViewInit, OnInit {
 
 
 
-  constructor(private http: HttpClient,private companyService: CompanyService, private router: Router,private userService:UserService) {}
+  constructor(private http: HttpClient,private companyService: CompanyService, private router: Router,private userService:UserService,    private modelService: ModelClassificationService
+) {}
 
 
   ngOnInit(): void {
@@ -62,6 +69,28 @@ export class GlobeComponent implements AfterViewInit, OnInit {
     });
   }
 
+private classifyAllCompanies() {
+  // Initialiser toutes les entreprises avec "Analyse..."
+  this.companies.forEach(company => {
+    this.companyClassifications.set(company.id, 'Analyse...');
+  });
+
+  // Classifier chaque entreprise une par une
+  this.companies.forEach(company => {
+    this.modelService.classifyCompany({
+      sector: company.sector,
+      foundingYear: company.foundingYear,
+      numEmployees: company.numEmployees || 10
+    }).subscribe({
+      next: (classification) => {
+        this.companyClassifications.set(company.id, classification);
+      },
+      error: () => {
+        this.companyClassifications.set(company.id, '❌ Erreur');
+      }
+    });
+  });
+}
    fetchUserDetails(): Promise<void> {
       return new Promise((resolve, reject) => {
         const token = localStorage.getItem('Token');
@@ -100,12 +129,19 @@ export class GlobeComponent implements AfterViewInit, OnInit {
     }
 
     private loadCompanies() {
+        this.loading = true;
       this.companyService.getCompaniesAnalytics().subscribe({
         next: (data) => {
           this.companies = data; // Conserver toutes les entreprises
           this.filteredCompanies = [...this.companies];
           this.loading = false;
           this.loadInitialCompanies();
+          // Initialiser avant la classification
+      this.companies.forEach(c => this.companyClassifications.set(c.id, 'Analyse...'));
+      
+      // Démarrer la classification après un léger délai
+      setTimeout(() => this.classifyAllCompanies(), 500);
+
         },
         error: (err) => {
           this.error = 'Failed to load companies data';

@@ -1,58 +1,72 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-
+import { catchError, map } from 'rxjs/operators';
+// model-classification.service.ts
 @Injectable({
   providedIn: 'root'
 })
 export class ModelClassificationService {
-
   private baseUrl = 'http://localhost:8089/innoxpert/classification';
 
   constructor(private http: HttpClient) {}
 
-  private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('Token');
-    const headers = new HttpHeaders();
-    return token ? headers.set('Authorization', `Bearer ${token}`) : headers;
-  }
-
-  classifyEntreprise(
-    secteur: string,
-    annee: number,
-    employes: number,
-    estTech: number,
-    dynamisme: number
-  ): Observable<string> {
-    const headers = this.getAuthHeaders();
+  classifyCompany(company: any): Observable<string> {
+    const currentYear = new Date().getFullYear();
+    const foundingYear = new Date(company.foundingYear).getFullYear();
     
-    // Utilisation de HttpParams pour les paramètres de requête
+    const dynamisme = this.calculateDynamisme(
+      company.numEmployees,
+      company.sector === 'TECHNOLOGY' ? 1 : 0,
+      foundingYear,
+      currentYear
+    );
+
     const params = new HttpParams()
-      .set('secteur', secteur)
-      .set('annee', annee.toString())
-      .set('employes', employes.toString())
-      .set('estTech', estTech.toString())
+      .set('secteur', company.sector)
+      .set('annee', foundingYear.toString())
+      .set('employes', company.numEmployees.toString())
+      .set('estTech', (company.sector === 'TECHNOLOGY' ? 1 : 0).toString())
       .set('dynamisme', dynamisme.toString());
 
     return this.http.post<string>(
       this.baseUrl,
-      null, // Corps vide car tout est dans les paramètres
+      null,
       {
-        headers: headers,
         params: params,
-        responseType: 'text' as 'json' // Pour gérer la réponse comme texte
+        responseType: 'text' as 'json'
       }
     ).pipe(
-      catchError(this.handleError<string>('classifyEntreprise', '❌ Erreur lors de la classification'))
+      map(response => {
+            if (response.includes('Erreur') || response.includes('❌')) {
+              return '❌ Erreur';
+            }
+            if (response.includes('Non-Startup')) {
+              return '🏢 Non-Startup';
+            }
+            if (response.includes('Startup')) {
+              return '🚀 Startup';
+            }
+            return '❌ Erreur';
+          })
+,
+      catchError(() => of('❌ Erreur'))
     );
   }
 
-  private handleError<T>(operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
-      console.error(`${operation} failed: ${error.message}`);
-      // Vous pouvez envoyer l'erreur à un service de logging ici
-      return of(result as T);
-    };
+  private calculateDynamisme(
+    nombreEmployes: number,
+    estTech: number,
+    anneeCreation: number,
+    currentYear: number
+  ): number {
+    const maxEmployes = 500;
+    const minAnneeCreation = 1800;
+    
+    return (
+      0.4 * (nombreEmployes / maxEmployes) +
+      0.3 * estTech +
+      0.3 * ((currentYear - anneeCreation) / (currentYear - minAnneeCreation))
+    );
   }
 }
