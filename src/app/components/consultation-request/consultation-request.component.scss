@@ -1,0 +1,172 @@
+/* General Styles */
+.wrapper {
+    padding: 40px 0;
+    background-color: #F5F7FD;
+    min-height: 100vh;
+  }
+  
+  .main-panel {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    padding: 30px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .container {
+    width: 100%;
+  }
+  
+  .modify-project {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  /* Form Header */
+  .modify-project h2 {
+    font-size: 2rem;
+    color: #7B6ADA; /* Custom purple color */
+    margin-bottom: 30px;
+    text-align: center;
+    font-weight: 600;
+  }
+  
+  /* Form Styles */
+  form {
+    width: 100%;
+  }
+  
+  /* Form Group */
+  .form-group {
+    margin-bottom: 25px;
+    width: 100%;
+  }
+  
+  .form-group label {
+    font-size: 1rem;
+    color: #2A2F5B; /* Kaiadmin body text color */
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+    background-color: #f9f9f9;
+  }
+  
+  .form-group input:focus {
+    border-color: #7B6ADA; /* Custom purple color */
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(123, 106, 218, 0.1);
+    background-color: white;
+  }
+  
+  .error-message {
+    color: #F25961; /* Kaiadmin danger color */
+    font-size: 0.9rem;
+    margin-top: 8px;
+  }
+  
+  /* File Input */
+  .form-group input[type="file"] {
+    padding: 10px;
+    background-color: white;
+    border: 1px dashed #7B6ADA; /* Custom purple color */
+  }
+  
+  /* Selected File Text */
+  .form-group div {
+    font-size: 0.9rem;
+    color: #575962; /* Kaiadmin body-text-color */
+    margin-top: 8px;
+  }
+  
+  /* Submit Button */
+  .actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+  }
+  
+  .save-button {
+    background-color: #7B6ADA; /* Custom purple color */
+    color: white;
+    font-size: 1rem;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    min-width: 180px;
+  }
+  
+  .save-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .save-button:hover:not(:disabled) {
+    background-color: #6A59C2; /* Darker purple */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(123, 106, 218, 0.25);
+  }
+  
+  .btn-back {
+    background-color: transparent;
+    color: #7B6ADA; /* Custom purple color */
+    border: 1px solid #7B6ADA;
+    font-size: 1rem;
+    padding: 12px 30px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    min-width: 180px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .btn-back:hover {
+    background-color: #f8f9fa;
+    color: #6A59C2; /* Darker purple */
+    transform: translateY(-2px);
+  }
+  
+  /* Responsive Styles */
+  @media screen and (max-width: 768px) {
+    .main-panel {
+      padding: 20px;
+      margin: 0 15px;
+    }
+  
+    .modify-project h2 {
+      font-size: 1.5rem;
+    }
+  
+    .form-group input {
+      padding: 10px;
+    }
+  
+    .actions {
+      flex-direction: column;
+    }
+  
+    .save-button, .btn-back {
+      width: 100%;
+    }
+  }
+  

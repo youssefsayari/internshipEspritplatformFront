@@ -21,6 +21,7 @@ import { ImageComponent } from './components/image/image.component';
 const routes: Routes =[
   { path: 'login', component: LoginComponent },
   { path: 'add-company', component: AddCompanyComponent },
+
   { path: 'upload', component: ImageComponent },
 
   {path: '', redirectTo: '/user-profile', pathMatch: 'full',},

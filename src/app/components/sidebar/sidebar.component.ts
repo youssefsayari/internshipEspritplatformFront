@@ -40,6 +40,13 @@ export const ROUTES: RouteInfo[] = [
   { path: '/defence', title: 'My Defences', icon: 'education_hat', class: '', roles: ['Student'] },
   { path: '/setting', title: 'Settings', icon: 'ui-1_settings-gear-63', class: '', roles: ['Admin'] },
   { path: '/feedback', title: 'Feedback', icon: 'ui-1_send', class: 'active active-pro', roles: ['Student','Admin','Company'] },
+  // CHAMS
+  //{ path: '/job-offers', title: 'Job Offers', icon: 'business_briefcase-24', class: '', roles: ['Company', 'Admin', 'Student'] },
+  { path: '/consultant-list', title: 'Consultant List', icon: 'business_briefcase-24', class: '', roles: [ 'Admin'] },
+  { path: '/add-client', title: 'Refer Client for consultation', icon: 'business_badge', class: '', roles: ['Admin', 'Student'] },
+  { path: '/client-list', title: 'Client List', icon: 'files_paper', class: '', roles: ['Admin'] },
+  { path: '/all-consultations', title: 'Consultations', icon: 'files_paper', class: '', roles: ['Admin'] },
+
 ];
 
 @Component({

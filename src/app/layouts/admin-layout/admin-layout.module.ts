@@ -23,6 +23,8 @@ import {MatInputModule} from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import {MatDialogModule} from '@angular/material/dialog';
 import { ComponentsModule } from "../../components/components.module";
+import { ListClientsComponent } from '../../components/list-clients/list-clients.component';
+import { EditClientComponent } from '../../components/edit-client/edit-client.component';
 
 
 @NgModule({
@@ -59,6 +61,8 @@ import { ComponentsModule } from "../../components/components.module";
     NotificationsComponent,
     InternshipComponent,
     AgreementComponent,
+    ListClientsComponent,
+    EditClientComponent
 
   ]
 })

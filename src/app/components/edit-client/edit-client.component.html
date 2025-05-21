@@ -1,0 +1,65 @@
+<div class="container mt-4">
+    <h2>Edit Client</h2>
+  
+    <!-- Back to List -->
+    <!-- <div class="mb-3">
+      <a routerLink="/clients" class="btn btn-secondary">← Back to Clients List</a>
+    </div> -->
+  
+    <!-- Success Message -->
+    <div *ngIf="successMessage" class="alert alert-success">
+      {{ successMessage }}
+    </div>
+  
+    <!-- Error Message -->
+    <div *ngIf="errorMessage" class="alert alert-danger">
+      {{ errorMessage }}
+    </div>
+  
+    <form [formGroup]="clientForm" (ngSubmit)="onUpdateClient()" novalidate>
+      <!-- Full Name -->
+      <div class="form-group mb-3">
+        <label for="fullName">Full Name</label>
+        <input
+          type="text"
+          id="fullName"
+          formControlName="fullName"
+          class="form-control"
+          [ngClass]="{
+            'is-invalid': clientForm.get('fullName')?.invalid && clientForm.get('fullName')?.touched
+          }"
+        />
+        <div class="invalid-feedback" *ngIf="clientForm.get('fullName')?.errors?.['required']">
+          Full name is required.
+        </div>
+        <div class="invalid-feedback" *ngIf="clientForm.get('fullName')?.errors?.['minlength']">
+          Full name must be at least 3 characters.
+        </div>
+      </div>
+  
+      <!-- Email -->
+      <div class="form-group mb-3">
+        <label for="email">Email</label>
+        <input
+          type="email"
+          id="email"
+          formControlName="email"
+          class="form-control"
+          [ngClass]="{
+            'is-invalid': clientForm.get('email')?.invalid && clientForm.get('email')?.touched
+          }"
+        />
+        <div class="invalid-feedback" *ngIf="clientForm.get('email')?.errors?.['required']">
+          Email is required.
+        </div>
+        <div class="invalid-feedback" *ngIf="clientForm.get('email')?.errors?.['email']">
+          Enter a valid email address.
+        </div>
+      </div>
+  
+     
+  
+      <button type="submit" class="btn btn-success">Update Client</button>
+    </form>
+  </div>
+  

@@ -1,0 +1,31 @@
+table {
+    width: 100%;
+    padding: 5px;
+  }
+  
+  .mat-form-field {
+    font-size: 14px;
+    width: 100%;
+  }
+  .btn-floating {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #28a745;
+    color: white;
+    padding: 12px 20px;  // Adjusted padding for a more rectangular shape
+    border-radius: 25px;  // Rounded corners, but not fully circular
+    font-size: 18px;      // Slightly smaller font size to fit better
+    font-weight: 600;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s ease, transform 0.3s ease;
+  
+    &:hover {
+      background-color: #218838;
+      transform: translateY(-3px);
+    }
+  
+    i {
+      margin-right: 8px;
+    }
+  }  

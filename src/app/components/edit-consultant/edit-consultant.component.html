@@ -1,0 +1,111 @@
+<div class="panel-header panel-header-sm"></div>
+<div class="main-content">
+  <div class="row justify-content-center">
+    <div class="col-lg-10 col-md-12">
+      <div class="card shadow-lg border-0 rounded-lg">
+        <div class="card-header bg-gradient-primary text-white text-center py-3">
+          <h4 class="mb-0"><i class="fas fa-user-edit"></i> Edit Consultant</h4>
+        </div>
+
+        <div class="card-body p-4">
+          <form (ngSubmit)="onUpdate()" #consultantForm="ngForm">
+
+            <!-- Full Name -->
+            <div class="form-group">
+              <label for="fullName"><i class="fas fa-user"></i> Full Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="fullName"
+                [(ngModel)]="consultant.fullName"
+                name="fullName"
+                required
+                minlength="3"
+                maxlength="100"
+                #fullName="ngModel"
+              />
+              <div *ngIf="fullName.invalid && (fullName.dirty || fullName.touched)" class="text-danger mt-1">
+                <small *ngIf="fullName.errors?.['required']">Full Name is required.</small>
+                <small *ngIf="fullName.errors?.['minlength']">Must be at least 3 characters.</small>
+                <small *ngIf="fullName.errors?.['maxlength']">Cannot exceed 100 characters.</small>
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+              <label for="email"><i class="fas fa-envelope"></i> Email</label>
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                [(ngModel)]="consultant.email"
+                name="email"
+                required
+                email
+                #email="ngModel"
+                (blur)="validateEmail()"
+              />
+              <div *ngIf="email.invalid && (email.dirty || email.touched)" class="text-danger mt-1">
+                <small *ngIf="email.errors?.['required']">Email is required.</small>
+                <small *ngIf="email.errors?.['email']">Invalid email format.</small>
+              </div>
+              <div *ngIf="emailTaken" class="text-danger mt-1">
+                <small>Email already in use.</small>
+              </div>
+            </div>
+
+            <!-- Specialty -->
+            <div class="form-group">
+              <label for="specialty"><i class="fas fa-briefcase"></i> Specialty</label>
+              <input
+                type="text"
+                class="form-control"
+                id="specialty"
+                [(ngModel)]="consultant.specialty"
+                name="specialty"
+                required
+                minlength="3"
+                maxlength="100"
+                #specialty="ngModel"
+              />
+              <div *ngIf="specialty.invalid && (specialty.dirty || specialty.touched)" class="text-danger mt-1">
+                <small *ngIf="specialty.errors?.['required']">Specialty is required.</small>
+                <small *ngIf="specialty.errors?.['minlength']">Must be at least 3 characters.</small>
+                <small *ngIf="specialty.errors?.['maxlength']">Cannot exceed 100 characters.</small>
+              </div>
+            </div>
+
+            <!-- Profile Description -->
+            <div class="form-group">
+              <label for="profileDescription"><i class="fas fa-info-circle"></i> Profile Description</label>
+              <textarea
+                class="form-control"
+                id="profileDescription"
+                rows="4"
+                [(ngModel)]="consultant.profileDescription"
+                name="profileDescription"
+                required
+                minlength="10"
+                maxlength="500"
+                #profileDescription="ngModel"
+              ></textarea>
+              <div *ngIf="profileDescription.invalid && (profileDescription.dirty || profileDescription.touched)" class="text-danger mt-1">
+                <small *ngIf="profileDescription.errors?.['required']">Profile Description is required.</small>
+                <small *ngIf="profileDescription.errors?.['minlength']">Must be at least 10 characters.</small>
+                <small *ngIf="profileDescription.errors?.['maxlength']">Cannot exceed 500 characters.</small>
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center mt-4">
+              <button type="submit" class="btn btn-success btn-lg px-4 rounded-pill" [disabled]="consultantForm.invalid">
+                <i class="fas fa-check-circle"></i> Update Consultant
+              </button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

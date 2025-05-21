@@ -1,0 +1,74 @@
+<div class="panel-header panel-header-sm"></div>
+<div class="main-content">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">Client Management</h4>
+        </div>
+        <div class="card-body">
+          <mat-form-field appearance="standard">
+            <input matInput (keyup)="applyFilter($event)" placeholder="Filter clients" #filterInput />
+          </mat-form-field>
+
+          <div class="mat-elevation-z8">
+            <table mat-table [dataSource]="dataSource" matSort class="mat-table">
+
+              <!-- Index Column -->
+              <ng-container matColumnDef="index">
+                <th mat-header-cell *matHeaderCellDef>#</th>
+                <td mat-cell *matCellDef="let row; let i = index">{{ i + 1 }}</td>
+              </ng-container>
+
+              <!-- Full Name Column -->
+              <ng-container matColumnDef="fullName">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Full Name</th>
+                <td mat-cell *matCellDef="let row">{{ row.fullName }}</td>
+              </ng-container>
+
+              <!-- Email Column -->
+              <ng-container matColumnDef="email">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+                <td mat-cell *matCellDef="let row">{{ row.email }}</td>
+              </ng-container>
+
+              <!-- Actions Column -->
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef>Actions</th>
+                <td mat-cell *matCellDef="let row">
+                  <div class="action-buttons d-flex gap-2">
+                    <button class="btn btn-info btn-sm" [routerLink]="['/consultation-list', row.id]">
+                      <i class="fas fa-calendar-alt"></i>
+                    </button>
+                    <button class="btn btn-warning btn-sm" [routerLink]="['/client-edit', row.id]">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-danger btn-sm" (click)="deleteClient(row.id)">
+                      <i class="fas fa-trash-alt"></i>
+                    </button>
+                  </div>
+                </td>
+              </ng-container>
+
+              <!-- Header and Row Declarations -->
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+              <!-- No data row -->
+              <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" colspan="4">No data matching the filter "{{ filterInput.value }}"</td>
+              </tr>
+            </table>
+
+            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+          </div>
+        </div>
+      </div>
+
+      <!-- Floating Add Button -->
+      <a [routerLink]="'/add-client'" class="btn btn-floating">
+        <i class="fas fa-plus"></i> Add Client
+      </a>
+    </div>
+  </div>
+</div>

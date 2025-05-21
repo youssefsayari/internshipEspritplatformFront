@@ -1,0 +1,86 @@
+<div class="panel-header panel-header-sm"></div>
+<div class="main-content">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">Consultation List</h4>
+          <button mat-button (click)="toggleView()">Toggle View</button>
+        </div>
+        <div class="card-body">
+          <mat-form-field appearance="standard">
+            <input matInput (keyup)="applyFilter($event)" placeholder="Filter" #filterInput>
+          </mat-form-field>
+
+          <!-- Toggle between calendar and table views -->
+          <div *ngIf="showCalendarView">
+            <full-calendar [options]="calendarOptions" class="full-calendar"></full-calendar>
+          </div>
+
+          <div *ngIf="!showCalendarView" class="mat-elevation-z8">
+            <table mat-table [dataSource]="dataSource" matSort class="mat-table">
+              <!-- Index Column -->
+              <ng-container matColumnDef="index">
+                <th mat-header-cell *matHeaderCellDef>#</th>
+                <td mat-cell *matCellDef="let row; let i = index">{{ i + 1 }}</td>
+              </ng-container>
+
+              <!-- Client Column -->
+              <ng-container matColumnDef="client">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Client</th>
+                <td mat-cell *matCellDef="let row">{{ row.client.fullName }}</td>
+              </ng-container>
+
+              <!-- Consultant Column -->
+              <ng-container matColumnDef="consultant">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Consultant</th>
+                <td mat-cell *matCellDef="let row">{{ row.consultant.fullName }}</td>
+              </ng-container>
+
+              <!-- Specialty Column -->
+              <ng-container matColumnDef="specialty">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Specialty</th>
+                <td mat-cell *matCellDef="let row">{{ row.consultant.specialty }}</td>
+              </ng-container>
+
+              <!-- Status Column -->
+              <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+                <td mat-cell *matCellDef="let row">{{ row.status }}</td>
+              </ng-container>
+
+              <!-- Meeting Link Column -->
+              <ng-container matColumnDef="meetingLink">
+                <th mat-header-cell *matHeaderCellDef>Meeting Link</th>
+                <td mat-cell *matCellDef="let row">
+                  <a *ngIf="row.meetingLink" [href]="row.meetingLink" target="_blank">Join</a>
+                </td>
+              </ng-container>
+
+              <!-- Start Time Column -->
+              <ng-container matColumnDef="startTime">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Start Time</th>
+                <td mat-cell *matCellDef="let row">{{ row.slot.startTime | date: 'short' }}</td>
+              </ng-container>
+
+              <!-- End Time Column -->
+              <ng-container matColumnDef="endTime">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>End Time</th>
+                <td mat-cell *matCellDef="let row">{{ row.slot.endTime | date: 'short' }}</td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+              <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" colspan="8">No data matching the filter "{{ filterInput.value }}"</td>
+              </tr>
+            </table>
+
+            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

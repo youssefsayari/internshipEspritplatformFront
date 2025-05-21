@@ -71,7 +71,6 @@ import { AddDocumentComponent } from './add-document/add-document.component';
     QuizPassComponent,
 
 
-
   ],
   providers: [],
   bootstrap: [AppComponent]
